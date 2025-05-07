@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>📦 Painel de Estoque</title>
+  <link rel="stylesheet" href="/static/css/neon.css">
+  <style>
+    body {
+      background: #0e0f1a;
+      color: #ffffff;
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 20px;
+    }
+    h1 {
+      font-size: 2.5em;
+      color: #00e0ff;
+      margin-bottom: 30px;
+    }
+    .card-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+    .card {
+      background: linear-gradient(145deg, #1f2235, #2c2f4a);
+      box-shadow: 0 0 12px #00e0ff44, inset 0 0 8px #00e0ff33;
+      border-radius: 16px;
+      padding: 25px;
+      min-width: 220px;
+      flex: 1;
+      transition: transform 0.3s;
+    }
+    .card:hover {
+      transform: scale(1.03);
+    }
+    .card h2 {
+      font-size: 1.4em;
+      color: #ffffff;
+      margin: 0;
+    }
+    .card p {
+      font-size: 1.8em;
+      color: #00e0ff;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>📦 Painel de Estoque - Grupo Fisgar</h1>
+
+  <div class="card-container">
+    <div class="card">
+      <h2>Estoque Total</h2>
+      <p>-- un</p>
+    </div>
+    <div class="card">
+      <h2>Baixo Estoque</h2>
+      <p>-- produtos</p>
+    </div>
+    <div class="card">
+      <h2>Produtos Parados</h2>
+      <p>-- itens</p>
+    </div>
+    <div class="card">
+      <h2>Mais Vendido</h2>
+      <p>--</p>
+    </div>
+  </div>
+</body>
+</html>

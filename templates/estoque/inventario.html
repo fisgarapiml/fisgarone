@@ -1,0 +1,17 @@
+<html><head><title>Inventário</title><link rel='stylesheet' href='/static/css/tema_fisgar.css'></head><body>
+<aside class='menu'>
+<h2>Estoque</h2>
+<a href='/estoque'>Dashboard</a>
+<a href='/estoque/inventario'>Inventário</a>
+<a href='/estoque/adicionar'>Novo Produto</a>
+</aside>
+<main>
+<h1>Inventário</h1>
+<table><tr><th>ID</th><th>Nome</th><th>Qtd</th><th>Ações</th></tr>
+{% for p in produtos %}<tr>
+<td>{{ p[0] }}</td><td>{{ p[2] }}</td><td>{{ p[4] }}</td>
+<td><a href='/estoque/editar/{{ p[0] }}'>✏️</a> <a href='/estoque/excluir/{{ p[0] }}'>🗑️</a></td>
+</tr>{% endfor %}
+</table>
+</main>
+</body></html>

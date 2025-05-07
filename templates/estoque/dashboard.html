@@ -1,0 +1,16 @@
+<html><head><title>Painel Estoque</title><link rel='stylesheet' href='/static/css/tema_fisgar.css'></head><body>
+<aside class='menu'>
+<h2>Estoque</h2>
+<a href='/estoque'>Dashboard</a>
+<a href='/estoque/inventario'>Inventário</a>
+<a href='/estoque/adicionar'>Novo Produto</a>
+</aside>
+<main>
+<h1>Dashboard</h1>
+<div class='cards'>
+<div class='card'><h3>Total</h3><p>{{ total }}</p></div>
+<div class='card'><h3>Abaixo Mínimo</h3><p>{{ abaixo }}</p></div>
+<div class='card'><h3>Zerados</h3><p>{{ zerados }}</p></div>
+</div>
+</main>
+</body></html>

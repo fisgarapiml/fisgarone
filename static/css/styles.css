@@ -1,0 +1,56 @@
+:root {
+  /* Cores - Modo Claro (padrão) */
+  --primary: #0066ff;
+  --secondary: #7b2dff;
+  --accent: #ff2d7b;
+  --bg: #f8fafc;
+  --card-bg: #ffffff;
+  --text: #2d3748;
+  --text-secondary: #718096;
+  --border: #e2e8f0;
+
+  /* Status */
+  --status-paid: #00c853;
+  --status-pending: #ffab00;
+  --status-overdue: #ff3d00;
+
+  /* Tipografia */
+  --font: 'Roboto', sans-serif;
+}
+
+/* Estilos base */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  padding: 2rem;
+  transition: all 0.3s ease;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 3rem;
+  position: relative;
+}
+
+.header h1 {
+  font-size: 1.8rem;
+  font-weight: 500;
+  color: var(--primary);
+  margin-bottom: 1rem;
+}
+
+/* Adicione aqui outros estilos globais */

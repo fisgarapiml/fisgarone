@@ -1,0 +1,1503 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <title>Painel NF-e - FisgarOne</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      /* Cores FisgarOne - Modo Claro */
+      --primary: #0066ff;
+      --secondary: #7b2dff;
+      --highlight: #ff2d7b;
+      --bg-color: #f8fafc;
+      --card-bg: #ffffff;
+      --text-color: #2d3748;
+      --text-muted: #718096;
+      --border-color: #e2e8f0;
+      --hover-bg: rgba(0, 0, 0, 0.05);
+      --success: #00cc99;
+      --warning: #ff9900;
+      --danger: #ff2d7b;
+
+      /* Tipografia */
+      --title-size: 1.8rem;
+      --subtitle-size: 1rem;
+      --body-size: 0.9rem;
+      --secondary-size: 0.8rem;
+
+      /* Espaçamentos */
+      --space-sm: 0.5rem;
+      --space-md: 1rem;
+      --space-lg: 1.5rem;
+      --space-xl: 2rem;
+
+      /* Bordas */
+      --border-radius: 12px;
+      --border-radius-sm: 6px;
+    }
+
+    /* Modo Escuro */
+    [data-theme="dark"] {
+      --primary: #0066ff;
+      --secondary: #7b2dff;
+      --highlight: #ff2d7b;
+      --bg-color: #1a202c;
+      --card-bg: #2d3748;
+      --text-color: #f7fafc;
+      --text-muted: #a0aec0;
+      --border-color: #4a5568;
+      --hover-bg: rgba(255, 255, 255, 0.05);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+    }
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* Header - Estilo FisgarOne */
+    .header {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: white;
+      padding: var(--space-lg) var(--space-xl);
+      font-size: 1.5rem;
+      font-weight: 600;
+      position: relative;
+      overflow: hidden;
+      z-index: 10;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .header::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(
+        to bottom right,
+        transparent,
+        transparent,
+        transparent,
+        rgba(255, 255, 255, 0.1)
+      );
+      transform: rotate(30deg);
+      animation: shine 6s infinite linear;
+    }
+
+    @keyframes shine {
+      0% { transform: rotate(30deg) translate(-30%, -30%); }
+      100% { transform: rotate(30deg) translate(30%, 30%); }
+    }
+
+    /* Container Principal */
+    .container {
+      max-width: 1800px;
+      margin: 0 auto;
+      padding: var(--space-xl);
+    }
+
+    /* Cards do Topo - Estilo FisgarOne */
+    .cards-dashboard {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: var(--space-md);
+      margin-bottom: var(--space-xl);
+    }
+
+    .card-dashboard {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: var(--border-radius);
+      padding: var(--space-lg);
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .card-dashboard::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+    }
+
+    .card-dashboard:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    .card-dashboard h3 {
+      margin: 0 0 var(--space-sm);
+      font-size: var(--subtitle-size);
+      font-weight: 500;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-sm);
+    }
+
+    .card-dashboard .value {
+      font-size: var(--title-size);
+      font-weight: 700;
+      color: var(--text-color);
+    }
+
+    /* Grid de Produtos */
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+      gap: var(--space-md);
+    }
+
+    .product-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: var(--border-radius);
+      padding: var(--space-lg);
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      position: relative;
+      overflow: hidden;
+      animation: fadeIn 0.5s ease-in-out;
+    }
+
+    .product-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary), var(--success));
+      opacity: 0.7;
+    }
+
+    .product-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .product-card.saved {
+      border-color: var(--success);
+      box-shadow: 0 0 0 1px var(--success);
+    }
+
+    .product-card.saved::after {
+      content: "✓ SALVO";
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background-color: var(--success);
+      color: white;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 0.7rem;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .product-card h3 {
+      margin: 0 0 var(--space-sm);
+      font-size: 1.1rem;
+      color: var(--primary);
+      font-weight: 600;
+      padding-right: 40px;
+    }
+
+    .product-card .product-info {
+      font-size: var(--secondary-size);
+      margin: 6px 0;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+
+    .product-card .product-info i {
+      width: 20px;
+      color: var(--primary);
+      opacity: 0.8;
+    }
+
+    /* Bloco de Inputs */
+    .input-group {
+      width: 100%;
+      margin: var(--space-lg) 0;
+      background: var(--hover-bg);
+      padding: var(--space-md);
+      border-radius: var(--border-radius-sm);
+      border: 1px solid var(--border-color);
+    }
+
+    .input-group:hover {
+      border-color: var(--primary);
+    }
+
+    .input-group label {
+      display: block;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-bottom: var(--space-sm);
+      font-weight: 500;
+    }
+
+    .input-group input[type="number"] {
+      width: 100%;
+      padding: var(--space-sm) var(--space-md);
+      font-size: var(--body-size);
+      border-radius: var(--border-radius-sm);
+      border: 1px solid var(--border-color);
+      background-color: var(--card-bg);
+      color: var(--text-color);
+    }
+
+    .input-group input[type="number"]:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px rgba(0, 102, 255, 0.1);
+    }
+
+    /* Resultados */
+    .results {
+      font-size: var(--secondary-size);
+      margin-top: var(--space-md);
+      color: var(--text-color);
+      background: var(--hover-bg);
+      padding: var(--space-md);
+      border-radius: var(--border-radius-sm);
+      border: 1px solid var(--border-color);
+    }
+
+    .results:hover {
+      border-color: var(--success);
+    }
+
+    .results .result-item {
+      margin: var(--space-sm) 0;
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+
+    .results .result-item i {
+      width: 20px;
+      color: var(--success);
+      opacity: 0.8;
+    }
+
+    /* Botões */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-sm);
+      border: none;
+      border-radius: var(--border-radius-sm);
+      padding: var(--space-sm) var(--space-md);
+      font-weight: 600;
+      font-size: var(--body-size);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: var(--secondary);
+      transform: translateY(-2px);
+    }
+
+    .btn-primary:disabled {
+      background: var(--border-color);
+      color: var(--text-muted);
+      cursor: not-allowed;
+    }
+
+    .btn-save {
+      width: 100%;
+      padding: var(--space-md);
+      margin-top: var(--space-md);
+    }
+
+    /* Checkbox */
+    .checkbox-container {
+      position: absolute;
+      top: var(--space-md);
+      right: var(--space-md);
+    }
+
+    .checkbox-container input[type="checkbox"] {
+      appearance: none;
+      width: 20px;
+      height: 20px;
+      border: 2px solid var(--border-color);
+      border-radius: var(--border-radius-sm);
+      cursor: pointer;
+      position: relative;
+    }
+
+    .checkbox-container input[type="checkbox"]:checked {
+      background-color: var(--primary);
+      border-color: var(--primary);
+    }
+
+    .checkbox-container input[type="checkbox"]:checked::after {
+      content: '✓';
+      position: absolute;
+      color: white;
+      font-size: 12px;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    /* Controles */
+    .controls {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: var(--space-xl);
+      align-items: center;
+      flex-wrap: wrap;
+      gap: var(--space-md);
+    }
+
+    .select-all {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      font-size: var(--body-size);
+      cursor: pointer;
+      color: var(--text-color);
+      padding: var(--space-sm) var(--space-md);
+      border-radius: var(--border-radius-sm);
+      background: var(--hover-bg);
+      border: 1px solid var(--border-color);
+    }
+
+    .select-all:hover {
+      background: var(--hover-bg);
+      border-color: var(--primary);
+    }
+
+    .select-all input[type="checkbox"] {
+      appearance: none;
+      width: 18px;
+      height: 18px;
+      border: 2px solid var(--border-color);
+      border-radius: 5px;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .select-all input[type="checkbox"]:checked {
+      background-color: var(--primary);
+      border-color: var(--primary);
+    }
+
+    .select-all input[type="checkbox"]:checked::after {
+      content: '✓';
+      position: absolute;
+      color: white;
+      font-size: 10px;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    /* Select */
+    .select {
+      padding: var(--space-sm) var(--space-md);
+      border-radius: var(--border-radius-sm);
+      border: 1px solid var(--border-color);
+      font-size: var(--body-size);
+      background-color: var(--card-bg);
+      color: var(--text-color);
+      min-width: 220px;
+      cursor: pointer;
+      appearance: none;
+      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23718096' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+      background-repeat: no-repeat;
+      background-position: right 10px center;
+      background-size: 15px;
+    }
+
+    [data-theme="dark"] .select {
+      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23a0aec0' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    }
+
+    .select:hover {
+      border-color: var(--primary);
+    }
+
+    .select:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px rgba(0, 102, 255, 0.1);
+    }
+
+    /* Botão Flutuante */
+    .floating-btn {
+      position: fixed;
+      bottom: var(--space-xl);
+      right: var(--space-xl);
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 50px;
+      padding: var(--space-md) var(--space-lg);
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: none;
+      z-index: 100;
+      align-items: center;
+      gap: var(--space-sm);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .floating-btn:hover {
+      background: var(--secondary);
+      transform: translateY(-3px);
+    }
+
+    .floating-btn:disabled {
+      background: var(--border-color);
+      color: var(--text-muted);
+      cursor: not-allowed;
+    }
+
+    /* Notificações */
+    .notification {
+      position: fixed;
+      bottom: var(--space-lg);
+      left: var(--space-lg);
+      background: var(--success);
+      color: white;
+      padding: var(--space-md) var(--space-lg);
+      border-radius: var(--border-radius-sm);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      gap: var(--space-md);
+      font-weight: 500;
+      transform: translateX(-150%);
+      transition: transform 0.3s ease;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .notification.show {
+      transform: translateX(0);
+    }
+
+    .notification.error {
+      background: var(--danger);
+    }
+
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-content {
+      background: var(--card-bg);
+      border-radius: var(--border-radius);
+      width: 90%;
+      max-width: 800px;
+      max-height: 90vh;
+      overflow: auto;
+      border: 1px solid var(--primary);
+      padding: var(--space-xl);
+      position: relative;
+    }
+
+    .close-modal {
+      position: absolute;
+      top: var(--space-md);
+      right: var(--space-md);
+      font-size: 1.5rem;
+      color: var(--text-muted);
+      cursor: pointer;
+    }
+
+    .close-modal:hover {
+      color: var(--highlight);
+    }
+
+    /* Animações */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .loading {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top-color: white;
+      animation: spin 1s ease-in-out infinite;
+    }
+
+    /* Responsividade */
+    @media (max-width: 768px) {
+      .container {
+        padding: var(--space-md);
+      }
+
+      .cards-dashboard {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .products-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .controls {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .select {
+        width: 100%;
+      }
+
+      .floating-btn {
+        bottom: var(--space-md);
+        right: var(--space-md);
+        padding: var(--space-sm) var(--space-md);
+        font-size: 0.9rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .header {
+        flex-direction: column;
+        gap: var(--space-sm);
+        text-align: center;
+        padding: var(--space-md);
+      }
+
+      .cards-dashboard {
+        grid-template-columns: 1fr;
+      }
+    }
+    .unidade-selector {
+      display: flex;
+      gap: var(--space-sm);
+      margin-bottom: var(--space-md);
+    }
+
+    .unidade-btn {
+      flex: 1;
+      padding: var(--space-sm);
+      border: 1px solid var(--border-color);
+      border-radius: var(--border-radius-sm);
+      background: var(--card-bg);
+      color: var(--text-color);
+      cursor: pointer;
+      text-align: center;
+      font-size: var(--secondary-size);
+      transition: all 0.3s ease;
+    }
+
+    .unidade-btn.active {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    .unidade-btn:hover:not(.active) {
+      border-color: var(--primary);
+    }
+
+    .modal-product-config {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      z-index: 1001;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-product-config-content {
+      background: var(--card-bg);
+      border-radius: var(--border-radius);
+      width: 90%;
+      max-width: 500px;
+      padding: var(--space-xl);
+      position: relative;
+    }
+
+    .product-config-form {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+    }
+
+    .product-config-form h3 {
+      margin: 0 0 var(--space-md);
+      color: var(--primary);
+    }
+
+    .product-config-form label {
+      display: block;
+      margin-bottom: var(--space-sm);
+      font-weight: 500;
+    }
+
+    .product-config-form select,
+    .product-config-form input {
+      width: 100%;
+      padding: var(--space-sm);
+      border: 1px solid var(--border-color);
+      border-radius: var(--border-radius-sm);
+      background: var(--card-bg);
+      color: var(--text-color);
+    }
+
+    .product-config-buttons {
+      display: flex;
+      gap: var(--space-md);
+      margin-top: var(--space-lg);
+    }
+
+    .product-config-buttons .btn {
+      flex: 1;
+    }
+
+    .product-new-badge {
+      position: absolute;
+      top: 10px;
+      right: 40px;
+      background-color: var(--highlight);
+      color: white;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 0.7rem;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    /* No painel.css */
+.product-card {
+    position: relative;
+    overflow: visible; /* Alterado de hidden para visible */
+}
+
+.btn-salvo {
+    background-color: var(--success);
+    position: relative;
+    z-index: 2;
+}
+
+.btn-erro {
+    background-color: var(--danger);
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 3;
+    padding: 5px 10px;
+    font-size: 0.8rem;
+    display: none; /* Só aparece quando há erro */
+}
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div>
+      <i class="fas fa-file-invoice"></i> Painel de NF-e – FisgarOne
+    </div>
+    <button class="btn btn-primary theme-switcher" onclick="toggleTheme()">
+      <i class="fas fa-moon"></i> Modo Escuro
+    </button>
+  </header>
+
+  <div class="container">
+    <!-- Cards do Topo -->
+<div class="cards-dashboard">
+  <div class="card-dashboard" onclick="openModal('products')">
+    <h3><i class="fas fa-boxes"></i> Total de Produtos</h3>
+    <div class="value">{{ total_produtos|default(0) }}</div>
+  </div>
+
+  <div class="card-dashboard" onclick="openModal('review')">
+    <h3><i class="fas fa-search"></i> Produtos p/ Revisar</h3>
+    <div class="value" id="review-count">{{ total_produtos|default(0) }}</div>
+  </div>
+
+  <div class="card-dashboard">
+    <h3><i class="fas fa-money-bill-wave"></i> Valor Total</h3>
+    <div class="value">
+      {% if valor_total is defined and valor_total is not none %}
+        R$ {{ "%.2f"|format(valor_total)|replace(".", "X")|replace(",", ".")|replace("X", ",") }}
+      {% else %}
+        R$ 0,00
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="card-dashboard" onclick="openModal('new')">
+    <h3><i class="fas fa-star"></i> Produtos Novos</h3>
+    <div class="value" id="new-count">0</div>
+  </div>
+
+  <div class="card-dashboard" onclick="openModal('changed')">
+    <h3><i class="fas fa-exclamation-triangle"></i> Preços Alterados</h3>
+    <div class="value" id="changed-count">0</div>
+  </div>
+</div>
+
+    <!-- Controles -->
+    <div class="controls">
+      <div style="display: flex; gap: var(--space-md); flex-wrap: wrap;">
+        <select class="select" id="supplier-filter">
+          <option value="">Todos os Fornecedores</option>
+          {% for fornecedor in fornecedores_unicos %}
+            <option value="{{ fornecedor }}">{{ fornecedor }}</option>
+          {% endfor %}
+        </select>
+
+        <select class="select" id="nfe-filter">
+          <option value="">Todas as NF-e</option>
+          {% for nfe in numeros_nfe %}
+            <option value="{{ nfe }}">{{ nfe }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="select-all" onclick="selectAll()">
+        <input type="checkbox" id="select-all">
+        <label for="select-all">Selecionar todos desta NF-e</label>
+      </div>
+    </div>
+
+    <!-- Grid de Produtos -->
+    <div class="products-grid">
+      {% for produto in produtos %}
+      <div class="product-card fade-in {% if produto.status in ['salvo', 'preenchido'] %}saved{% endif %} {% if not produto.qtd_por_volume_sugerido %}produto-novo{% endif %}"
+           data-id="{{ produto.id }}"
+           data-code="{{ produto.codigo_fornecedor }}"
+           data-supplier="{{ produto.fornecedor }}"
+           data-nfe="{{ produto.numero_nfe }}"
+           data-emission="{{ produto.data_emissao }}"
+           data-value="{{ produto.valor_total }}"
+           data-ipi="{{ produto.ipi }}"
+           data-quantity="{{ produto.quantidade }}"
+           data-path="{{ produto.caminho_xml }}"
+           data-status="{{ produto.status or 'pending' }}">
+
+        {% if not produto.qtd_por_volume_sugerido %}
+        <div class="product-new-badge">NOVO</div>
+        {% endif %}
+
+        <div class="checkbox-container">
+          <input type="checkbox" class="product-checkbox" {% if produto.status == 'salvo' %}disabled{% endif %}>
+        </div>
+
+        <h3>{{ produto.nome }}</h3>
+        <div class="product-info"><i class="fas fa-barcode"></i> {{ produto.codigo_fornecedor }}</div>
+        <div class="product-info"><i class="fas fa-truck"></i> {{ produto.fornecedor }}</div>
+        <div class="product-info"><i class="fas fa-hashtag"></i> NF-e: {{ produto.numero_nfe }}</div>
+
+        <!-- Seletor de Tipo de Unidade -->
+        <div class="unidade-selector" id="unidade-selector-{{ produto.id }}">
+          <button class="unidade-btn {% if produto.unidade_estoque == 'UN' %}active{% endif %}" data-unidade="UN">UNIDADE</button>
+          <button class="unidade-btn {% if produto.unidade_estoque == 'CX' %}active{% endif %}" data-unidade="CX">CAIXA</button>
+          <button class="unidade-btn {% if produto.unidade_estoque == 'FARDO' %}active{% endif %}" data-unidade="FARDO">FARDO</button>
+          <button class="unidade-btn {% if produto.unidade_estoque == 'SACO' %}active{% endif %}" data-unidade="SACO">SACO</button>
+          <button class="unidade-btn {% if produto.unidade_estoque == 'PC' %}active{% endif %}" data-unidade="PC">PACOTE</button>
+          <button class="unidade-btn {% if produto.unidade_estoque == 'DP' %}active{% endif %}" data-unidade="DP">DISPLAY</button>
+        </div>
+
+        <div class="input-group">
+          <label><i class="fas fa-box"></i> Qtd Volumes:</label>
+          <input type="number" class="quantity-volumes" placeholder="Ex: 10"
+                 {% if produto.status == 'salvo' %}disabled{% endif %}
+                 value="{{ produto.qtd_volumes if produto.qtd_volumes is not none else '' }}">
+
+          <label><i class="fas fa-boxes"></i> Qtd por Volume:</label>
+          <input type="number" class="quantity-per-volume" placeholder="Ex: 100"
+                 {% if produto.status == 'salvo' %}disabled{% endif %}
+                 value="{{
+                   produto.qtd_por_volume
+                     if produto.qtd_por_volume is not none
+                     else produto.qtd_por_volume_sugerido if produto.qtd_por_volume_sugerido is not none
+                     else ''
+                 }}">
+        </div>
+
+        <div class="results">
+          <div class="result-item"><i class="fas fa-box-open"></i> Qtd Total: {{ produto.quantidade }} UN</div>
+          <div class="result-item"><i class="fas fa-tag"></i> Valor Total: R$ {{ "{:,.2f}".format(produto.valor_total).replace(".", "X").replace(",", ".").replace("X", ",") }}</div>
+          {% if produto.status == 'salvo' %}
+            <div class="result-item"><i class="fas fa-boxes"></i> Custo por Volume: R$ {{ "{:,.2f}".format(produto.custo_volume or 0).replace(".", "X").replace(",", ".").replace("X", ",") }}</div>
+            <div class="result-item"><i class="fas fa-cube"></i> Custo Unitário: R$ {{ "{:,.4f}".format(produto.custo_unitario or 0).replace(".", "X").replace(",", ".").replace("X", ",") }}</div>
+            <div class="result-item"><i class="fas fa-percentage"></i> Custo com IPI: R$ {{ "{:,.4f}".format(produto.custo_com_ipi or 0).replace(".", "X").replace(",", ".").replace("X", ",") }}</div>
+            <div class="result-item"><i class="fas fa-warehouse"></i> Entrada no Estoque: {{ produto.quantidade_estoque }} {{ produto.unidade_estoque }}</div>
+          {% endif %}
+        </div>
+
+        <button class="btn btn-primary btn-save" {% if produto.status == 'salvo' %}disabled{% endif %}>
+          <i class="fas fa-save"></i> {% if produto.status == 'salvo' %}✓ SALVO{% else %}Salvar Produto{% endif %}
+        </button>
+
+        {% if not produto.qtd_por_volume_sugerido %}
+        <button class="btn btn-primary" onclick="openProductConfigModal('{{ produto.id }}', '{{ produto.codigo_fornecedor }}', '{{ produto.nome }}')" style="margin-top: 10px;">
+          <i class="fas fa-cog"></i> Configurar Unidade
+        </button>
+        {% endif %}
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- Botão flutuante para Finalizar NF-e -->
+  <button id="floating-finish-btn" class="floating-btn" onclick="finishNfe()">
+    <i class="fas fa-check-circle"></i> Finalizar NF-e
+  </button>
+
+  <!-- Notificação -->
+  <div id="notification" class="notification">
+    <i class="fas fa-check-circle"></i>
+    <span id="notification-message">Mensagem de notificação</span>
+  </div>
+
+  <!-- Modal de Configuração de Produto -->
+  <div id="modal-product-config" class="modal-product-config">
+    <div class="modal-product-config-content">
+      <span class="close-modal" onclick="closeProductConfigModal()">&times;</span>
+      <div class="product-config-form">
+        <h3 id="product-config-title">Configurar Unidade do Produto</h3>
+
+        <div>
+          <label for="product-config-code">Código do Produto:</label>
+          <input type="text" id="product-config-code" readonly>
+        </div>
+
+        <div>
+          <label for="product-config-name">Nome do Produto:</label>
+          <input type="text" id="product-config-name" readonly>
+        </div>
+
+        <div>
+          <label for="product-config-unidade">Tipo de Unidade:</label>
+          <select id="product-config-unidade">
+            <option value="UN">Unidade (UN)</option>
+            <option value="CX">Caixa (CX)</option>
+            <option value="FARDO">Fardo (FARDO)</option>
+            <option value="SACO">Saco (SACO)</option>
+            <option value="PC">Pacote (PC)</option>
+            <option value="DP">Display (DP)</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="product-config-qtd">Quantidade por Volume:</label>
+          <input type="number" id="product-config-qtd" min="1" step="1" value="1">
+        </div>
+
+        <div class="product-config-buttons">
+          <button class="btn btn-primary" onclick="saveProductConfig()">
+            <i class="fas fa-save"></i> Salvar
+          </button>
+          <button class="btn" onclick="closeProductConfigModal()">
+            <i class="fas fa-times"></i> Cancelar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Variáveis globais
+    let savedProducts = [];
+    let selectedProducts = new Set();
+    let currentNfe = '';
+    let currentConfigProductId = null;
+    let currentConfigProductCode = null;
+    let currentConfigProductName = null;
+    let autoOpenModals = {{ 'true' if produtos|selectattr('qtd_por_volume_sugerido', 'none')|list else 'false' }};
+
+    // Inicialização
+    document.addEventListener('DOMContentLoaded', function() {
+      // Verifica preferência de tema salva
+      if (localStorage.getItem('theme') === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        document.querySelector('.theme-switcher i').className = 'fas fa-sun';
+        document.querySelector('.theme-switcher').innerHTML = '<i class="fas fa-sun"></i> Modo Claro';
+      }
+
+      // Configura os eventos dos cards
+      setupProductCards();
+
+      // Configura os filtros
+      document.getElementById('supplier-filter').addEventListener('change', filterProducts);
+      document.getElementById('nfe-filter').addEventListener('change', function() {
+        currentNfe = this.value;
+        filterProducts();
+      });
+
+      // Verifica produtos salvos
+      checkSavedProducts();
+
+      // Mostra animação de entrada para os cards
+      setTimeout(() => {
+        document.querySelectorAll('.product-card').forEach(card => {
+          card.style.opacity = '1';
+        });
+
+        // Auto-abre modais para produtos não configurados
+        if (autoOpenModals) {
+          document.querySelectorAll('.produto-novo').forEach(card => {
+            const productId = card.dataset.id;
+            const productCode = card.dataset.code;
+            const productName = card.querySelector('h3').textContent;
+            openProductConfigModal(productId, productCode, productName);
+          });
+        }
+      }, 100);
+    });
+
+    function toggleTheme() {
+      const html = document.documentElement;
+      const themeSwitcher = document.querySelector('.theme-switcher');
+
+      if (html.getAttribute('data-theme') === 'dark') {
+        html.removeAttribute('data-theme');
+        localStorage.setItem('theme', 'light');
+        themeSwitcher.innerHTML = '<i class="fas fa-moon"></i> Modo Escuro';
+      } else {
+        html.setAttribute('data-theme', 'dark');
+        localStorage.setItem('theme', 'dark');
+        themeSwitcher.innerHTML = '<i class="fas fa-sun"></i> Modo Claro';
+      }
+    }
+
+    function setupProductCards() {
+      document.querySelectorAll('.product-card').forEach(card => {
+        const inputs = card.querySelectorAll('input[type="number"]');
+        const saveBtn = card.querySelector('.btn-save');
+        const checkbox = card.querySelector('.product-checkbox');
+        const status = card.dataset.status;
+        const unidadeBtns = card.querySelectorAll('.unidade-btn');
+
+        // Se já estiver salvo, marca como tal
+        if (status === 'salvo') {
+          savedProducts.push(card.dataset.id);
+          return;
+        }
+
+        // Configura eventos dos botões de unidade
+        unidadeBtns.forEach(btn => {
+          btn.addEventListener('click', function() {
+            // Remove classe active de todos os botões
+            unidadeBtns.forEach(b => b.classList.remove('active'));
+
+            // Adiciona classe active apenas no botão clicado
+            this.classList.add('active');
+
+            // Se for UN, ajusta a quantidade por volume para 1 e desabilita
+            if (this.dataset.unidade === 'UN') {
+              const qtdVolumeInput = card.querySelector('.quantity-per-volume');
+              qtdVolumeInput.value = '1';
+              qtdVolumeInput.disabled = true;
+            } else {
+              const qtdVolumeInput = card.querySelector('.quantity-per-volume');
+              qtdVolumeInput.disabled = false;
+              if (!qtdVolumeInput.value && qtdVolumeInput.placeholder) {
+                qtdVolumeInput.value = qtdVolumeInput.placeholder.replace('Ex: ', '');
+              }
+            }
+
+            calculateCosts(card);
+          });
+        });
+
+        // Configura eventos do checkbox
+        checkbox.addEventListener('change', function() {
+          if (this.checked) {
+            selectedProducts.add(card.dataset.id);
+            card.style.borderColor = 'var(--primary)';
+            card.style.boxShadow = '0 0 0 1px var(--primary)';
+          } else {
+            selectedProducts.delete(card.dataset.id);
+            card.style.borderColor = 'var(--border-color)';
+            card.style.boxShadow = 'none';
+          }
+          updateFinishButton();
+        });
+
+        // Configura cálculo automático
+        inputs.forEach(input => {
+          input.addEventListener('input', function() {
+            calculateCosts(card);
+          });
+        });
+
+        // Configura botão salvar
+        saveBtn.addEventListener('click', function() {
+          saveProduct(card);
+        });
+      });
+    }
+
+    function calculateCosts(card) {
+      const qtdVolumes = parseFloat(card.querySelector('.quantity-volumes').value) || 0;
+      const qtdPorVolume = parseFloat(card.querySelector('.quantity-per-volume').value) || 0;
+      const valorTotal = parseFloat(card.dataset.value);
+      const ipi = parseFloat(card.dataset.ipi) || 0;
+      const quantidadeTotal = parseInt(card.dataset.quantity);
+
+      // Obtém a unidade selecionada
+      const unidadeSelecionada = card.querySelector('.unidade-btn.active')?.dataset.unidade || 'UN';
+
+      if (qtdVolumes > 0 && qtdPorVolume > 0) {
+        let custoVolume = valorTotal / qtdVolumes;
+        let custoUnitario = custoVolume / qtdPorVolume;
+        let custoComIpi = custoUnitario * (1 + (ipi / 100));
+        let qtdRealUnidades = qtdVolumes * qtdPorVolume;
+
+        // Se for UN, ajusta os cálculos
+        if (unidadeSelecionada === 'UN') {
+          custoUnitario = valorTotal / quantidadeTotal;
+          custoComIpi = custoUnitario * (1 + (ipi / 100));
+          qtdRealUnidades = quantidadeTotal;
+        }
+
+        // Limpa resultados anteriores
+        const resultados = card.querySelector('.results');
+        let resultadosHTML = `
+          <div class="result-item"><i class="fas fa-box-open"></i> Qtd Total: ${quantidadeTotal} UN</div>
+          <div class="result-item"><i class="fas fa-tag"></i> Valor Total: R$ ${valorTotal.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</div>
+        `;
+
+        // Adiciona os campos de cálculo
+        if (unidadeSelecionada !== 'UN') {
+          resultadosHTML += `
+            <div class="result-item"><i class="fas fa-boxes"></i> Custo por Volume: R$ ${custoVolume.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</div>
+          `;
+        }
+
+        resultadosHTML += `
+          <div class="result-item"><i class="fas fa-cube"></i> Custo Unitário: R$ ${custoUnitario.toLocaleString('pt-BR', {minimumFractionDigits: 4})}</div>
+          <div class="result-item"><i class="fas fa-percentage"></i> Custo com IPI: R$ ${custoComIpi.toLocaleString('pt-BR', {minimumFractionDigits: 4})}</div>
+          <div class="result-item"><i class="fas fa-warehouse"></i> Entrada no Estoque: ${unidadeSelecionada === 'UN' ? quantidadeTotal : qtdRealUnidades} ${unidadeSelecionada === 'UN' ? 'UN' : 'UN'}</div>
+        `;
+
+        resultados.innerHTML = resultadosHTML;
+      }
+    }
+
+    async function saveProduct(card) {
+      const qtdVolumes = parseFloat(card.querySelector('.quantity-volumes').value) || 0;
+      const qtdPorVolume = parseFloat(card.querySelector('.quantity-per-volume').value) || 0;
+      const unidadeSelecionada = card.querySelector('.unidade-btn.active')?.dataset.unidade || 'UN';
+
+      if ((unidadeSelecionada !== 'UN' && (qtdVolumes <= 0 || qtdPorVolume <= 0)) ||
+          (unidadeSelecionada === 'UN' && qtdVolumes <= 0)) {
+        showNotification('Preencha as quantidades corretamente!', 'error');
+        return;
+      }
+
+      // Mostra estado de loading no botão
+      const saveBtn = card.querySelector('.btn-save');
+      const originalText = saveBtn.innerHTML;
+      saveBtn.innerHTML = '<div class="loading"></div> Salvando...';
+      saveBtn.disabled = true;
+
+      // Calcula os valores antes de enviar
+      const valorTotal = parseFloat(card.dataset.value);
+      const ipi = parseFloat(card.dataset.ipi) || 0;
+      const quantidadeTotal = parseInt(card.dataset.quantity);
+
+      let custoVolume, custoUnitario, custoComIpi, qtdRealUnidades;
+
+      if (unidadeSelecionada === 'UN') {
+        custoVolume = valorTotal;
+        custoUnitario = valorTotal / quantidadeTotal;
+        custoComIpi = custoUnitario * (1 + (ipi / 100));
+        qtdRealUnidades = quantidadeTotal;
+        qtdPorVolume = 1; // Para UN, sempre 1 por volume
+      } else {
+        custoVolume = valorTotal / qtdVolumes;
+        custoUnitario = custoVolume / qtdPorVolume;
+        custoComIpi = custoUnitario * (1 + (ipi / 100));
+        qtdRealUnidades = qtdVolumes * qtdPorVolume;
+      }
+
+      // Determina a unidade de estoque e quantidade
+      let unidade_estoque, quantidade_estoque;
+
+      if (['CX', 'FARDO', 'SACO', 'PC', 'DP'].includes(unidadeSelecionada)) {
+        unidade_estoque = 'UN';
+        quantidade_estoque = qtdRealUnidades;
+      } else {
+        unidade_estoque = unidadeSelecionada;
+        quantidade_estoque = unidadeSelecionada === 'UN' ? quantidadeTotal : qtdVolumes;
+      }
+
+      // Objeto de dados
+      const data = {
+        id: card.dataset.id,
+        codigo_fornecedor: card.dataset.code,
+        nome: card.querySelector('h3').textContent,
+        qtd_volumes: qtdVolumes,
+        qtd_por_volume: qtdPorVolume,
+        numero_nfe: card.dataset.nfe,
+        fornecedor: card.dataset.supplier,
+        data_emissao: card.dataset.emission,
+        valor_total: valorTotal,
+        ipi: ipi,
+        quantidade: quantidadeTotal,
+        caminho_xml: card.dataset.path,
+        custo_volume: custoVolume,
+        custo_unitario: custoUnitario,
+        custo_com_ipi: custoComIpi,
+        qtd_real_unidades: qtdRealUnidades,
+        unidade_estoque: unidade_estoque,
+        quantidade_estoque: quantidade_estoque,
+        tipo_unidade: unidadeSelecionada
+      };
+
+      try {
+        const response = await fetch('/painel-nfe/salvar-produto', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+
+        const result = await response.json();
+
+        if (result.status === 'success') {
+          // Atualiza visual do card
+          card.classList.add('saved');
+          card.querySelector('.btn-save').innerHTML = '<i class="fas fa-check"></i> ✓ SALVO';
+          card.querySelector('.btn-save').disabled = true;
+          card.querySelectorAll('input').forEach(i => i.disabled = true);
+          card.querySelector('.product-checkbox').disabled = true;
+          card.querySelectorAll('.unidade-btn').forEach(btn => {
+            btn.style.pointerEvents = 'none';
+          });
+
+          // Adiciona aos salvos
+          savedProducts.push(card.dataset.id);
+          updateCounters();
+          updateFinishButton();
+
+          showNotification('Produto salvo com sucesso!');
+        } else {
+          throw new Error(result.message || 'Erro ao salvar');
+        }
+      } catch (error) {
+        console.error('Erro:', error);
+        showNotification('Erro ao salvar produto: ' + error.message, 'error');
+      } finally {
+        // Restaura o botão se houve erro
+        if (!card.classList.contains('saved')) {
+          saveBtn.innerHTML = originalText;
+          saveBtn.disabled = false;
+        }
+      }
+    }
+
+    async function finishNfe() {
+      if (!confirm('Deseja realmente finalizar esta NF-e?\n\nEsta ação não pode ser desfeita.')) {
+        return;
+      }
+
+      const btn = document.getElementById('floating-finish-btn');
+      const originalText = btn.innerHTML;
+      btn.innerHTML = '<div class="loading"></div> Processando...';
+      btn.disabled = true;
+
+      try {
+        const selectedNfe = document.getElementById('nfe-filter').value;
+        const nfeProducts = Array.from(document.querySelectorAll(`.product-card[data-nfe="${selectedNfe}"]`));
+
+        if (nfeProducts.length === 0) {
+          throw new Error('Nenhum produto encontrado para esta NF-e');
+        }
+
+        // Verifica se todos os produtos estão salvos
+        const unsavedProducts = nfeProducts.filter(p => !p.classList.contains('saved'));
+        if (unsavedProducts.length > 0) {
+          throw new Error(`Existem ${unsavedProducts.length} produtos não salvos nesta NF-e`);
+        }
+
+        const finishData = {
+          numero_nfe: selectedNfe,
+          supplier: nfeProducts[0].dataset.supplier,
+          emission_date: nfeProducts[0].dataset.emission,
+          total_value: nfeProducts.reduce((total, product) => total + parseFloat(product.dataset.value), 0).toFixed(2),
+          xml_path: nfeProducts[0].dataset.path,
+          saved_products: savedProducts.filter(id => {
+            const product = document.querySelector(`.product-card[data-id="${id}"]`);
+            return product && product.dataset.nfe === selectedNfe;
+          })
+        };
+
+        const response = await fetch('/painel-nfe/finalizar-nfe', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(finishData)
+        });
+
+        if (!response.ok) {
+          const errorText = await response.text();
+          throw new Error(errorText || 'Erro ao finalizar NF-e');
+        }
+
+        const result = await response.json();
+
+        if (result.status === 'success') {
+          // Atualizar interface apenas após confirmação do servidor
+          nfeProducts.forEach(product => {
+            product.style.opacity = '0';
+            setTimeout(() => product.remove(), 300);
+          });
+
+          showNotification('NF-e finalizada com sucesso!');
+
+          // Atualizar contadores e filtros após animação
+          setTimeout(() => {
+            updateCounters();
+            updateFilters();
+            document.getElementById('floating-finish-btn').style.display = 'none';
+          }, 350);
+        } else {
+          throw new Error(result.message || 'Erro ao finalizar');
+        }
+      } catch (error) {
+        console.error('Erro:', error);
+        showNotification('Erro ao finalizar NF-e: ' + error.message, 'error');
+        btn.innerHTML = originalText;
+        btn.disabled = false;
+      }
+    }
+
+    function filterProducts() {
+      const supplierFilter = document.getElementById('supplier-filter').value;
+      const nfeFilter = document.getElementById('nfe-filter').value;
+
+      document.querySelectorAll('.product-card').forEach(card => {
+        const showSupplier = !supplierFilter || card.dataset.supplier === supplierFilter;
+        const showNfe = !nfeFilter || card.dataset.nfe === nfeFilter;
+
+        card.style.display = (showSupplier && showNfe) ? 'block' : 'none';
+      });
+    }
+
+    function selectAll() {
+      const selectAllCheckbox = document.getElementById('select-all');
+      const checkboxes = document.querySelectorAll('.product-checkbox:not(:disabled)');
+
+      checkboxes.forEach(checkbox => {
+        const card = checkbox.closest('.product-card');
+        const cardId = card.dataset.id;
+
+        // Verifica se o card está visível (não filtrado)
+        if (card.style.display !== 'none') {
+          checkbox.checked = selectAllCheckbox.checked;
+
+          if (selectAllCheckbox.checked) {
+            selectedProducts.add(cardId);
+            card.style.borderColor = 'var(--primary)';
+            card.style.boxShadow = '0 0 0 1px var(--primary)';
+          } else {
+            selectedProducts.delete(cardId);
+            card.style.borderColor = 'var(--border-color)';
+            card.style.boxShadow = 'none';
+          }
+        }
+      });
+
+      updateFinishButton();
+    }
+
+    function checkSavedProducts() {
+      const saved = document.querySelectorAll('.product-card.saved').length;
+      const pending = document.querySelectorAll('.product-card:not(.saved)').length;
+      const newProducts = document.querySelectorAll('.produto-novo').length;
+
+      document.getElementById('review-count').textContent = pending;
+      document.getElementById('new-count').textContent = newProducts;
+
+      if (saved > 0) {
+        document.getElementById('floating-finish-btn').style.display = 'flex';
+      }
+    }
+
+    function updateCounters() {
+      const pending = document.querySelectorAll('.product-card:not(.saved)').length;
+      const newProducts = document.querySelectorAll('.produto-novo').length;
+      document.getElementById('review-count').textContent = pending;
+      document.getElementById('new-count').textContent = newProducts;
+    }
+
+    function updateFinishButton() {
+      const btn = document.getElementById('floating-finish-btn');
+      const totalSelected = selectedProducts.size;
+      const totalSaved = savedProducts.length;
+
+      if (totalSelected > 0 || totalSaved > 0) {
+        btn.style.display = 'flex';
+        btn.disabled = false;
+
+        // Atualiza texto com contagem
+        if (totalSelected > 0) {
+          btn.innerHTML = `<i class="fas fa-check-circle"></i> Finalizar (${totalSelected})`;
+        } else {
+          btn.innerHTML = '<i class="fas fa-check-circle"></i> Finalizar NF-e';
+        }
+      } else {
+        btn.style.display = 'none';
+      }
+    }
+
+    function showNotification(message, type = 'success') {
+      const notification = document.getElementById('notification');
+      const messageEl = document.getElementById('notification-message');
+
+      messageEl.textContent = message;
+      notification.className = `notification ${type}`;
+      notification.classList.add('show');
+
+      setTimeout(() => {
+        notification.classList.remove('show');
+      }, 5000);
+    }
+
+    function openProductConfigModal(productId, productCode, productName) {
+      currentConfigProductId = productId;
+      currentConfigProductCode = productCode;
+      currentConfigProductName = productName;
+
+      document.getElementById('product-config-code').value = productCode;
+      document.getElementById('product-config-name').value = productName;
+      document.getElementById('product-config-title').textContent = `Configurar Unidade: ${productName}`;
+
+      document.getElementById('modal-product-config').style.display = 'flex';
+    }
+
+    function closeProductConfigModal() {
+      document.getElementById('modal-product-config').style.display = 'none';
+      currentConfigProductId = null;
+      currentConfigProductCode = null;
+      currentConfigProductName = null;
+    }
+
+    async function saveProductConfig() {
+    const unidade = document.getElementById('product-config-unidade').value;
+    const qtdPorVolume = document.getElementById('product-config-qtd').value;
+    const productId = currentConfigProductId;
+    const productCode = currentConfigProductCode;
+
+    if (!unidade || !qtdPorVolume || qtdPorVolume <= 0) {
+        showNotification('Preencha todos os campos corretamente!', 'error');
+        return;
+    }
+
+    try {
+        const response = await fetch('/nfe/configurar-unidade', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                productId: productId,
+                codigo_produto: productCode,
+                tipo_unidade: unidade,
+                quantidade_por_volume: qtdPorVolume
+            })
+        });
+
+        // Verifica se a resposta é JSON válido
+        const contentType = response.headers.get('content-type');
+        if (!contentType || !contentType.includes('application/json')) {
+            const text = await response.text();
+            throw new Error(text || 'Resposta inválida do servidor');
+        }
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.message || 'Erro ao salvar configuração');
+        }
+
+        // Atualiza a interface
+        const card = document.querySelector(`.product-card[data-id="${productId}"]`);
+        if (card) {
+            const qtdInput = card.querySelector('.quantity-per-volume');
+            qtdInput.value = qtdPorVolume;
+            calculateCosts(card);
+        }
+
+        showNotification('Configuração salva com sucesso!');
+        closeProductConfigModal();
+
+    } catch (error) {
+        console.error('Erro:', error);
+        showNotification('Erro ao salvar: ' + error.message, 'error');
+    }
+}
+
+    // Fechar modal ao clicar fora
+    window.addEventListener('click', function(event) {
+      const modalConfig = document.getElementById('modal-product-config');
+      if (event.target === modalConfig) {
+        closeProductConfigModal();
+      }
+    });
+  </script>
+</body>
+</html>

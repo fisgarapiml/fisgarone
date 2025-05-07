@@ -1,0 +1,10 @@
+<html><head><title>{{ 'Editar' if produto else 'Novo' }} Produto</title><link rel='stylesheet' href='/static/css/tema_fisgar.css'></head><body>
+<main>
+<h1>{{ 'Editar' if produto else 'Novo' }} Produto</h1>
+<form method='post'>
+<label>Nome:</label><input type='text' name='nome' value='{{ produto[2] if produto else '' }}'><br>
+<label>Quantidade:</label><input type='number' name='quantidade' value='{{ produto[4] if produto else '' }}'><br>
+<button type='submit'>Salvar</button>
+</form>
+</main>
+</body></html>

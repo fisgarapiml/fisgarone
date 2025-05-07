@@ -1,0 +1,1151 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neon Finance | Estoque</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <!-- Chart.js para gráficos -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            /* Cores principais */
+            --primary: #0066ff;         /* Azul Neon */
+            --primary-light: rgba(0, 102, 255, 0.1);
+            --accent: #00ffaa;          /* Verde Neon */
+            --text: #2b2d42;            /* Texto escuro */
+            --bg: #f8faff;              /* Fundo da página */
+            --card-bg: rgba(255, 255, 255, 0.95);
+
+            /* Cores de status */
+            --status-success: #00c853;      /* Verde */
+            --status-warning: #ffab00;   /* Amarelo */
+            --status-danger: #ff3d00;   /* Vermelho */
+            --status-info: #0066ff;     /* Azul */
+
+            /* Sombras */
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
+            --shadow-md: 0 4px 20px rgba(0, 102, 255, 0.12);
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+
+        .header-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo {
+            height: auto;
+            width: 180px;
+            margin-right: 20px;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+        }
+
+        .page-title {
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin: 0;
+        }
+
+        /* Cards de Dashboard */
+        .cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 24px;
+        }
+
+        .card-dashboard {
+            background: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: var(--shadow-sm);
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .card-dashboard:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+        }
+
+        .card-dashboard .card-title {
+            font-size: 1rem;
+            color: var(--text);
+            opacity: 0.8;
+            margin: 0 0 10px 0;
+        }
+
+        .card-dashboard .card-value {
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .card-dashboard .card-footer {
+            font-size: 0.85rem;
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .card-dashboard .card-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+        }
+
+        /* Cores dos cards */
+        .card-info {
+            border-left: 4px solid var(--status-info);
+        }
+
+        .card-success {
+            border-left: 4px solid var(--status-success);
+        }
+
+        .card-warning {
+            border-left: 4px solid var(--status-warning);
+        }
+
+        .card-danger {
+            border-left: 4px solid var(--status-danger);
+        }
+
+        /* Gráficos */
+        .charts-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 24px;
+        }
+
+        @media (max-width: 768px) {
+            .charts-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .chart-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: var(--shadow-sm);
+            padding: 20px;
+        }
+
+        .chart-card .card-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin: 0 0 15px 0;
+            color: var(--primary);
+        }
+
+        /* Tabela */
+        .card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: var(--shadow-sm);
+            padding: 0;
+            overflow: hidden;
+            margin-bottom: 24px;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+        }
+
+        .card-header {
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            color: white;
+            padding: 16px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .card-body {
+            padding: 24px;
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .data-table th {
+            background: var(--primary-light);
+            padding: 16px;
+            text-align: left;
+            font-weight: 600;
+            color: var(--primary);
+            position: sticky;
+            top: 0;
+        }
+
+        .data-table td {
+            padding: 12px 16px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .data-table tr:hover {
+            background: var(--primary-light);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .badge-success {
+            background: rgba(0, 200, 83, 0.1);
+            color: var(--status-success);
+        }
+
+        .badge-warning {
+            background: rgba(255, 171, 0, 0.1);
+            color: var(--status-warning);
+        }
+
+        .badge-danger {
+            background: rgba(255, 61, 0, 0.1);
+            color: var(--status-danger);
+        }
+
+        /* Botões */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-accent {
+            background: var(--accent);
+            color: var(--text);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+
+        /* Filtros */
+        .filter-bar {
+            display: flex;
+            gap: 16px;
+            padding: 16px 24px;
+            background: var(--primary-light);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .filter-group {
+            flex: 1;
+            max-width: 250px;
+        }
+
+        .filter-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .filter-group select,
+        .filter-group input {
+            width: 100%;
+            padding: 10px 12px;
+            border-radius: 8px;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            background: white;
+            font-family: inherit;
+        }
+
+        @media (max-width: 768px) {
+            .filter-bar {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .filter-group {
+                max-width: 100%;
+            }
+        }
+        /* Modal Estiloso e Futurista */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(5px);
+    animation: fadeIn 0.3s;
+    transition: opacity 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.modal-content {
+    background: linear-gradient(145deg, #ffffff, #f8faff);
+    margin: 5% auto;
+    padding: 0;
+    width: 50%;
+    min-width: 300px;
+    max-width: 600px;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 102, 255, 0.3);
+    overflow: hidden;
+    animation: slideIn 0.3s;
+    border: 1px solid rgba(0, 102, 255, 0.2);
+    transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+}
+.modal.closing {
+    opacity: 0;
+}
+.modal.closing .modal-content {
+    transform: translateY(-50px);
+    opacity: 0;
+}
+
+@keyframes slideIn {
+    from { transform: translateY(-50px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+.modal-header {
+    background: linear-gradient(90deg, var(--primary), var(--accent));
+    color: white;
+    padding: 16px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-header h2 {
+    margin: 0;
+    font-size: 1.5rem;
+}
+
+.close-modal {
+    font-size: 1.8rem;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.close-modal:hover {
+    transform: scale(1.2);
+}
+
+.modal-body {
+    padding: 24px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    background: white;
+    font-family: inherit;
+    transition: all 0.3s;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(0, 102, 255, 0.2);
+    outline: none;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 30px;
+}
+
+.btn-danger {
+    background: var(--status-danger);
+    color: white;
+    margin-right: auto;
+}
+
+@media (max-width: 768px) {
+    .modal-content {
+        width: 90%;
+        margin: 10% auto;
+    }
+
+    .modal-actions {
+        flex-direction: column;
+    }
+
+    .btn-danger {
+        margin-right: 0;
+        order: 1;
+    }
+}
+   .modal {
+    /* Adicione esta propriedade à classe .modal existente */
+    transition: opacity 0.3s ease-out;
+}
+
+.modal-content {
+    /* Adicione esta propriedade à classe .modal-content existente */
+    transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+}
+
+/* Adicione esta nova regra CSS */
+.modal.closing {
+    opacity: 0;
+}
+
+.modal.closing .modal-content {
+    transform: translateY(-50px);
+    opacity: 0;
+}
+    </style>
+</head>
+<!-- Modal Futurista -->
+<div id="itemModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Editar Item</h2>
+            <span class="close-modal">&times;</span>
+        </div>
+        <div class="modal-body">
+            <form id="itemForm">
+                <div class="form-group">
+                    <label for="editCodigo">Código</label>
+                    <input type="text" id="editCodigo" disabled>
+                </div>
+                <div class="form-group">
+                    <label for="editNome">Nome do Item</label>
+                    <input type="text" id="editNome" required>
+                </div>
+                <div class="form-group">
+                    <label for="editCategoria">Categoria</label>
+                    <select id="editCategoria" required>
+                        <option value="eletronicos">Eletrônicos</option>
+                        <option value="materiais">Materiais</option>
+                        <option value="pecas">Peças</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="editEstoque">Estoque Atual</label>
+                    <input type="number" id="editEstoque" required>
+                </div>
+                <div class="form-group">
+                    <label for="editMinimo">Estoque Mínimo</label>
+                    <input type="number" id="editMinimo" required>
+                </div>
+                <div class="form-group">
+                    <label for="editFornecedor">Fornecedor</label>
+                    <select id="editFornecedor" required>
+                        <option value="fornecedor-a">Fornecedor A</option>
+                        <option value="fornecedor-b">Fornecedor B</option>
+                        <option value="fornecedor-c">Fornecedor C</option>
+                    </select>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-outline close-modal">Cancelar</button>
+                    <button type="submit" class="btn btn-accent">Salvar Alterações</button>
+                    <button type="button" class="btn btn-danger" id="deleteItem">Excluir Item</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<body>
+    <div class="container">
+        <div class="header-container">
+            <div class="logo-container">
+                <img src="/static/logo_fisgar.png" alt="Logo fisgar" class="logo">
+                <h1 class="page-title">ESTOQUE</h1>
+            </div>
+            <div class="header-actions">
+                    <button class="btn btn-accent" id="btnNovoItem">
+                        <i class="bi bi-plus-circle"></i> Novo Item
+                    </button>
+    <button class="btn btn-primary" id="btnImportar">
+        <i class="bi bi-upload"></i> Importar
+    </button>
+</div>
+        </div>
+
+        <!-- Cards de Resumo -->
+        <div class="cards-container">
+            <div class="card-dashboard card-info">
+                <div class="card-icon" style="background: rgba(0, 102, 255, 0.1); color: var(--status-info);">
+                    <i class="bi bi-box-seam" style="font-size: 1.5rem;"></i>
+                </div>
+                <h3 class="card-title">Itens no Estoque</h3>
+                <p class="card-value">1,248</p>
+                <div class="card-footer">
+                    <i class="bi bi-arrow-up" style="color: var(--status-success); margin-right: 5px;"></i>
+                    <span>12% vs último mês</span>
+                </div>
+            </div>
+
+            <div class="card-dashboard card-success">
+                <div class="card-icon" style="background: rgba(0, 200, 83, 0.1); color: var(--status-success);">
+                    <i class="bi bi-check-circle" style="font-size: 1.5rem;"></i>
+                </div>
+                <h3 class="card-title">Itens com Estoque OK</h3>
+                <p class="card-value">924</p>
+                <div class="card-footer">
+                    <i class="bi bi-arrow-up" style="color: var(--status-success); margin-right: 5px;"></i>
+                    <span>8% vs último mês</span>
+                </div>
+            </div>
+
+            <div class="card-dashboard card-warning">
+                <div class="card-icon" style="background: rgba(255, 171, 0, 0.1); color: var(--status-warning);">
+                    <i class="bi bi-exclamation-triangle" style="font-size: 1.5rem;"></i>
+                </div>
+                <h3 class="card-title">Itens com Baixa</h3>
+                <p class="card-value">187</p>
+                <div class="card-footer">
+                    <i class="bi bi-arrow-down" style="color: var(--status-danger); margin-right: 5px;"></i>
+                    <span>5% vs último mês</span>
+                </div>
+            </div>
+
+            <div class="card-dashboard card-danger">
+                <div class="card-icon" style="background: rgba(255, 61, 0, 0.1); color: var(--status-danger);">
+                    <i class="bi bi-x-circle" style="font-size: 1.5rem;"></i>
+                </div>
+                <h3 class="card-title">Itens Esgotados</h3>
+                <p class="card-value">42</p>
+                <div class="card-footer">
+                    <i class="bi bi-arrow-down" style="color: var(--status-danger); margin-right: 5px;"></i>
+                    <span>3% vs último mês</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Gráficos -->
+        <div class="charts-container">
+            <div class="chart-card">
+                <h3 class="card-title">Movimentação Mensal</h3>
+                <canvas id="movimentacaoChart"></canvas>
+            </div>
+            <div class="chart-card">
+                <h3 class="card-title">Categorias (Valor Total)</h3>
+                <canvas id="categoriasChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Tabela de Itens Críticos -->
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">Itens com Estoque Crítico</h2>
+                <span id="total-registros">42 itens</span>
+            </div>
+
+            <div class="filter-bar">
+                <div class="filter-group">
+                    <label for="filtro-categoria">Categoria</label>
+                    <select id="filtro-categoria">
+                        <option value="todos">Todos</option>
+                        <option value="eletronicos">Eletrônicos</option>
+                        <option value="materiais">Materiais</option>
+                        <option value="pecas">Peças</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label for="filtro-fornecedor">Fornecedor</label>
+                    <select id="filtro-fornecedor">
+                        <option value="todos">Todos</option>
+                        <option value="fornecedor-a">Fornecedor A</option>
+                        <option value="fornecedor-b">Fornecedor B</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label for="filtro-status">Status</label>
+                    <select id="filtro-status">
+                        <option value="todos">Todos</option>
+                        <option value="baixo">Estoque Baixo</option>
+                        <option value="critico">Crítico</option>
+                        <option value="esgotado">Esgotado</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="data-table" id="tabela-estoque">
+                        <thead>
+                            <tr>
+                                <th>Código</th>
+                                <th>Item</th>
+                                <th>Categoria</th>
+                                <th>Fornecedor</th>
+                                <th>Estoque Atual</th>
+                                <th>Mínimo</th>
+                                <th>Status</th>
+                                <th>Última Entrada</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>P001</td>
+                                <td>Placa Mãe X99</td>
+                                <td>Eletrônicos</td>
+                                <td>Fornecedor A</td>
+                                <td>2</td>
+                                <td>10</td>
+                                <td>
+                                    <span class="badge badge-danger">Crítico</span>
+                                </td>
+                                <td>15/05/2023</td>
+                                <td>
+                                    <button class="btn btn-outline">
+                                        <i class="bi bi-pencil"></i> Editar
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>P042</td>
+                                <td>Fonte ATX 600W</td>
+                                <td>Eletrônicos</td>
+                                <td>Fornecedor B</td>
+                                <td>5</td>
+                                <td>15</td>
+                                <td>
+                                    <span class="badge badge-warning">Baixo</span>
+                                </td>
+                                <td>22/05/2023</td>
+                                <td>
+                                    <button class="btn btn-outline">
+                                        <i class="bi bi-pencil"></i> Editar
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>M015</td>
+                                <td>Parafuso Sextavado</td>
+                                <td>Materiais</td>
+                                <td>Fornecedor C</td>
+                                <td>0</td>
+                                <td>50</td>
+                                <td>
+                                    <span class="badge badge-danger">Esgotado</span>
+                                </td>
+                                <td>10/04/2023</td>
+                                <td>
+                                    <button class="btn btn-outline">
+                                        <i class="bi bi-pencil"></i> Editar
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>P087</td>
+                                <td>Memória RAM 8GB</td>
+                                <td>Eletrônicos</td>
+                                <td>Fornecedor A</td>
+                                <td>3</td>
+                                <td>20</td>
+                                <td>
+                                    <span class="badge badge-danger">Crítico</span>
+                                </td>
+                                <td>18/05/2023</td>
+                                <td>
+                                    <button class="btn btn-outline">
+                                        <i class="bi bi-pencil"></i> Editar
+                                    </button>
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+    // Gráfico de Movimentação
+    const movimentacaoCtx = document.getElementById('movimentacaoChart').getContext('2d');
+    const movimentacaoChart = new Chart(movimentacaoCtx, {
+        type: 'line',
+        data: {
+            labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun'],
+            datasets: [
+                {
+                    label: 'Entradas',
+                    data: [120, 190, 170, 220, 180, 250],
+                    borderColor: '#00c853',
+                    backgroundColor: 'rgba(0, 200, 83, 0.1)',
+                    tension: 0.3,
+                    fill: true
+                },
+                {
+                    label: 'Saídas',
+                    data: [80, 120, 140, 150, 170, 200],
+                    borderColor: '#0066ff',
+                    backgroundColor: 'rgba(0, 102, 255, 0.1)',
+                    tension: 0.3,
+                    fill: true
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                }
+            }
+        }
+    });
+
+    // Gráfico de Categorias
+    const categoriasCtx = document.getElementById('categoriasChart').getContext('2d');
+    const categoriasChart = new Chart(categoriasCtx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Eletrônicos', 'Materiais', 'Peças', 'Outros'],
+            datasets: [{
+                data: [12000, 5000, 8000, 2000],
+                backgroundColor: [
+                    '#0066ff',
+                    '#00c853',
+                    '#ffab00',
+                    '#ff3d00'
+                ],
+                borderWidth: 0
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'right',
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return context.label + ': R$ ' + context.raw.toLocaleString('pt-BR');
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+    // Filtros da tabela
+    const filtroCategoria = document.getElementById('filtro-categoria');
+    const filtroFornecedor = document.getElementById('filtro-fornecedor');
+    const filtroStatus = document.getElementById('filtro-status');
+    const tabelaEstoque = document.getElementById('tabela-estoque');
+
+    function aplicarFiltros() {
+        const categoria = filtroCategoria.value;
+        const fornecedor = filtroFornecedor.value;
+        const status = filtroStatus.value;
+
+        const linhas = tabelaEstoque.querySelectorAll('tbody tr');
+        let totalVisiveis = 0;
+
+        linhas.forEach(linha => {
+            const celulas = linha.cells;
+            const categoriaLinha = celulas[2].textContent.trim().toLowerCase();
+            const fornecedorLinha = celulas[3].textContent.trim().toLowerCase();
+            const statusLinha = celulas[6].textContent.trim().toLowerCase();
+
+            let mostrar = true;
+
+            if (categoria !== 'todos') {
+                mostrar = mostrar && (categoriaLinha.includes(categoria));
+            }
+
+            if (fornecedor !== 'todos') {
+                mostrar = mostrar && (fornecedorLinha.includes(fornecedor.replace('fornecedor-', '')));
+            }
+
+            if (status !== 'todos') {
+                if (status === 'baixo') {
+                    mostrar = mostrar && (statusLinha.includes('baixo'));
+                } else if (status === 'critico') {
+                    mostrar = mostrar && (statusLinha.includes('crítico'));
+                } else if (status === 'esgotado') {
+                    mostrar = mostrar && (statusLinha.includes('esgotado'));
+                }
+            }
+
+            if (mostrar) {
+                linha.style.display = '';
+                totalVisiveis++;
+            } else {
+                linha.style.display = 'none';
+            }
+        });
+
+        document.getElementById('total-registros').textContent = `${totalVisiveis} itens`;
+    }
+
+    filtroCategoria.addEventListener('change', aplicarFiltros);
+    filtroFornecedor.addEventListener('change', aplicarFiltros);
+    filtroStatus.addEventListener('change', aplicarFiltros);
+
+    // Modal functionality
+    const modal = document.getElementById('itemModal');
+    const closeModalButtons = document.querySelectorAll('.close-modal');
+    const itemForm = document.getElementById('itemForm');
+
+    /// Abrir modal ao clicar em um card ou botão de edição
+document.querySelectorAll('.card-dashboard, .btn-outline').forEach(element => {
+    element.addEventListener('click', function(e) {
+        // Prevenir comportamentos padrão
+        e.preventDefault();
+
+        if (e.target.tagName === 'BUTTON' || e.target.classList.contains('bi-pencil')) {
+            // Se for um botão de edição na tabela
+            const row = e.target.closest('tr');
+            if (row) {
+                fillModalWithRowData(row);
+                modal.style.display = 'block';
+                document.body.style.overflow = 'hidden';
+            }
+        } else if (element.classList.contains('card-dashboard')) {
+            // Se for um card do dashboard - abrir modal diretamente
+            modal.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+
+            // Aqui você pode carregar dados específicos para o card clicado
+            const cardType = element.classList.contains('card-info') ? 'itens' :
+                            element.classList.contains('card-success') ? 'itens-ok' :
+                            element.classList.contains('card-warning') ? 'itens-baixos' : 'itens-criticos';
+
+            // Exemplo: carregar dados para esta categoria
+            loadDataForCard(cardType);
+        }
+    });
+});
+
+// Função de exemplo para carregar dados específicos do card
+function loadDataForCard(cardType) {
+    // Limpar formulário
+    itemForm.reset();
+
+    // Configurar título do modal baseado no card
+    document.querySelector('.modal-header h2').textContent =
+        cardType === 'itens' ? 'Todos os Itens' :
+        cardType === 'itens-ok' ? 'Itens com Estoque OK' :
+        cardType === 'itens-baixos' ? 'Itens com Estoque Baixo' : 'Itens Críticos';
+
+    // Aqui você faria uma chamada AJAX para carregar dados específicos
+    console.log('Carregando dados para:', cardType);
+
+    // Exemplo de como você poderia preencher alguns campos
+    document.getElementById('editCategoria').value = 'todos';
+    document.getElementById('editFornecedor').value = 'todos';
+}
+
+    // Fechar modal
+    closeModalButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        });
+    });
+
+    // Fechar ao clicar fora do modal
+    window.addEventListener('click', function(event) {
+        if (event.target === modal) {
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+    });
+
+    // Preencher modal com dados da linha
+    function fillModalWithRowData(row) {
+        const cells = row.cells;
+        document.getElementById('editCodigo').value = cells[0].textContent;
+        document.getElementById('editNome').value = cells[1].textContent;
+        document.getElementById('editCategoria').value = cells[2].textContent.toLowerCase();
+        document.getElementById('editEstoque').value = cells[4].textContent;
+        document.getElementById('editMinimo').value = cells[5].textContent;
+
+        // Extrair fornecedor do texto
+        const fornecedorText = cells[3].textContent.toLowerCase();
+        document.getElementById('editFornecedor').value =
+            fornecedorText.includes('a') ? 'fornecedor-a' :
+            fornecedorText.includes('b') ? 'fornecedor-b' : 'fornecedor-c';
+    }
+
+    // Enviar formulário (simulação - substitua por chamada AJAX real)
+    itemForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        // Simular salvamento no banco de dados
+        console.log('Dados a serem salvos:', {
+            codigo: document.getElementById('editCodigo').value,
+            nome: document.getElementById('editNome').value,
+            categoria: document.getElementById('editCategoria').value,
+            estoque: document.getElementById('editEstoque').value,
+            minimo: document.getElementById('editMinimo').value,
+            fornecedor: document.getElementById('editFornecedor').value
+        });
+
+        // Mostrar feedback
+        alert('Alterações salvas com sucesso!');
+        modal.style.display = 'none';
+        document.body.style.overflow = 'auto';
+
+        // Aqui você faria uma chamada AJAX para atualizar o banco de dados
+        // updateDatabase(...);
+    });
+
+    // Botão de excluir
+    document.getElementById('deleteItem').addEventListener('click', function() {
+        if (confirm('Tem certeza que deseja excluir este item permanentemente?')) {
+            const codigo = document.getElementById('editCodigo').value;
+            console.log('Item a ser excluído:', codigo);
+
+            // Simular exclusão
+            alert(`Item ${codigo} excluído com sucesso!`);
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+
+            // Aqui você faria uma chamada AJAX para excluir do banco de dados
+            // deleteFromDatabase(codigo);
+        }
+    });
+
+    // Carregar dados reais do banco de dados (exemplo com fetch)
+    function loadRealData() {
+        // Substitua esta URL pelo endpoint real do seu backend
+        fetch('/api/estoque')
+            .then(response => response.json())
+            .then(data => {
+                updateDashboardCards(data);
+                updateTable(data);
+                updateCharts(data);
+            })
+            .catch(error => {
+                console.error('Erro ao carregar dados:', error);
+                // Você pode mostrar dados mockados em caso de erro
+                console.log('Usando dados mockados como fallback');
+            });
+    }
+
+    function updateDashboardCards(data) {
+        // Atualize os cards com dados reais
+        document.querySelector('.card-dashboard.card-info .card-value').textContent = data.totalItens;
+        document.querySelector('.card-dashboard.card-success .card-value').textContent = data.itensOk;
+        document.querySelector('.card-dashboard.card-warning .card-value').textContent = data.itensBaixos;
+        document.querySelector('.card-dashboard.card-danger .card-value').textContent = data.itensCriticos;
+    }
+
+    function updateTable(data) {
+        // Atualize a tabela com dados reais
+        const tbody = document.querySelector('#tabela-estoque tbody');
+        tbody.innerHTML = ''; // Limpa a tabela
+
+        data.itensCriticosList.forEach(item => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${item.codigo}</td>
+                <td>${item.nome}</td>
+                <td>${item.categoria}</td>
+                <td>${item.fornecedor}</td>
+                <td>${item.estoqueAtual}</td>
+                <td>${item.estoqueMinimo}</td>
+                <td>
+                    <span class="badge ${getStatusClass(item.status)}">${item.status}</span>
+                </td>
+                <td>${formatDate(item.ultimaEntrada)}</td>
+                <td>
+                    <button class="btn btn-outline">
+                        <i class="bi bi-pencil"></i> Editar
+                    </button>
+                </td>
+            `;
+            tbody.appendChild(row);
+        });
+    }
+
+    function getStatusClass(status) {
+        return status.includes('Baixo') ? 'badge-warning' :
+               status.includes('Crítico') ? 'badge-danger' :
+               status.includes('Esgotado') ? 'badge-danger' : 'badge-success';
+    }
+
+    function formatDate(dateString) {
+        // Formatar a data conforme necessário
+        return new Date(dateString).toLocaleDateString('pt-BR');
+    }
+
+    function updateCharts(data) {
+        // Atualize os gráficos com dados reais
+        movimentacaoChart.data.datasets[0].data = data.entradasMensais;
+        movimentacaoChart.data.datasets[1].data = data.saidasMensais;
+        movimentacaoChart.update();
+
+        categoriasChart.data.datasets[0].data = data.valoresPorCategoria;
+        categoriasChart.update();
+    }
+
+    // Carregar dados reais quando a página carregar
+    loadRealData();
+});
+        // Configuração do botão "Novo Item"
+document.getElementById('btnNovoItem').addEventListener('click', function() {
+    // Limpa todos os campos do formulário
+    document.getElementById('itemForm').reset();
+
+    // Configura o título do modal
+    document.querySelector('.modal-header h2').textContent = 'Cadastrar Novo Item';
+
+    // Preenche o campo código com "NOVO" (só para visualização)
+    document.getElementById('editCodigo').value = 'NOVO';
+
+    // Abre o modal
+    document.getElementById('itemModal').style.display = 'block';
+    document.body.style.overflow = 'hidden';
+});
+        document.getElementById('btnImportar').addEventListener('click', function() {
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.accept = '.csv, .xlsx';
+
+    fileInput.onchange = async function(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        // Mostra carregamento
+        const importBtn = document.getElementById('btnImportar');
+        importBtn.innerHTML = '<i class="bi bi-arrow-repeat spin"></i> Importando...';
+        importBtn.disabled = true;
+
+        try {
+            const formData = new FormData();
+            formData.append('file', file);
+
+            // Envia para o servidor
+            const response = await fetch('/api/importar', {
+                method: 'POST',
+                body: formData
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                showNotification(`✅ ${result.imported} itens importados!`);
+                loadRealData(); // Atualiza a tabela
+            } else {
+                throw new Error(result.error || 'Erro desconhecido');
+            }
+        } catch (error) {
+            showNotification(`❌ Erro: ${error.message}`);
+            console.error('Erro na importação:', error);
+        } finally {
+            // Restaura o botão
+            importBtn.innerHTML = '<i class="bi bi-upload"></i> Importar';
+            importBtn.disabled = false;
+        }
+    };
+
+    fileInput.click();
+});
+
+// Adicione este estilo para o ícone de carregamento
+const style = document.createElement('style');
+style.innerHTML = `
+    .spin {
+        animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+        100% { transform: rotate(360deg); }
+    }
+`;
+document.head.appendChild(style);
+    </script>
+</body>
+</html>

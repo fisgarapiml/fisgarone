@@ -1,0 +1,95 @@
+<!-- templates/config_tabela_unidades.html -->
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Configurar Unidades - Sistema Fisgar</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #0a0f1a;
+            color: #fff;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            margin-bottom: 10px;
+            color: #00ffff;
+        }
+        .card {
+            background-color: #1a2238;
+            border: 1px solid #2c3e50;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px 0;
+            box-shadow: 0 0 10px #00ffff55;
+        }
+        .card h3 {
+            margin: 0 0 10px 0;
+            font-size: 18px;
+            color: #ffffff;
+        }
+        .card input {
+            width: 80px;
+            padding: 5px;
+            border-radius: 5px;
+            border: none;
+            margin-right: 10px;
+        }
+        .card button {
+            background-color: #00ffff;
+            color: #000;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .card button:hover {
+            background-color: #00cccc;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧩 Configuração de Unidades</h1>
+    <p>Total de produtos pendentes: {{ total }}</p>
+
+    {% for p in produtos %}
+        <div class="card" id="produto-{{ p.codigo_fornecedor }}">
+            <h3>{{ p.nome }} ({{ p.codigo_fornecedor }})</h3>
+            <p>Unidade Compra: {{ p.unidade }}</p>
+            <input type="number" placeholder="Qtd por volume" id="vol-{{ p.codigo_fornecedor }}">
+            <input type="number" placeholder="Qtd por pacote" id="pac-{{ p.codigo_fornecedor }}">
+            <button onclick="salvar('{{ p.codigo_fornecedor }}', '{{ p.nome }}', '{{ p.unidade }}')">
+                Salvar
+            </button>
+        </div>
+    {% endfor %}
+
+    <script>
+        function salvar(codigo, nome, unidade) {
+            const vol = document.getElementById('vol-' + codigo).value;
+            const pac = document.getElementById('pac-' + codigo).value;
+
+            fetch('/config-unidades/salvar', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    codigo_fornecedor: codigo,
+                    nome: nome,
+                    unidade_compra: unidade,
+                    qtd_por_volume: vol || 0,
+                    qtd_por_pacote: pac || 0
+                })
+            }).then(resp => resp.json())
+              .then(data => {
+                  if (data.status === 'success') {
+                      document.getElementById('produto-' + codigo).style.opacity = '0.5';
+                  } else {
+                      alert('Erro: ' + data.message);
+                  }
+              });
+        }
+    </script>
+</body>
+</html>
