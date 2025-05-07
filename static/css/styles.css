@@ -1,56 +1,63 @@
-:root {
-  /* Cores - Modo Claro (padrão) */
-  --primary: #0066ff;
-  --secondary: #7b2dff;
-  --accent: #ff2d7b;
-  --bg: #f8fafc;
-  --card-bg: #ffffff;
-  --text: #2d3748;
-  --text-secondary: #718096;
-  --border: #e2e8f0;
-
-  /* Status */
-  --status-paid: #00c853;
-  --status-pending: #ffab00;
-  --status-overdue: #ff3d00;
-
-  /* Tipografia */
-  --font: 'Roboto', sans-serif;
-}
-
-/* Estilos base */
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
 body {
-  font-family: var(--font);
-  background: var(--bg);
-  color: var(--text);
-  min-height: 100vh;
-  padding: 2rem;
-  transition: all 0.3s ease;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f5f5f5;
 }
 
 .container {
-  max-width: 1200px;
-  margin: 0 auto;
-  position: relative;
+    display: flex;
+    min-height: 100vh;
 }
 
-.header {
-  text-align: center;
-  margin-bottom: 3rem;
-  position: relative;
+header {
+    background-color: #2c3e50;
+    color: white;
+    padding: 1rem;
+    text-align: center;
 }
 
-.header h1 {
-  font-size: 1.8rem;
-  font-weight: 500;
-  color: var(--primary);
-  margin-bottom: 1rem;
+.logo {
+    max-height: 60px;
 }
 
-/* Adicione aqui outros estilos globais */
+.sidebar {
+    width: 250px;
+    background-color: #34495e;
+    color: white;
+    padding: 1rem;
+}
+
+.menu {
+    list-style: none;
+    padding: 0;
+}
+
+.menu li a {
+    color: white;
+    text-decoration: none;
+    display: block;
+    padding: 10px;
+    margin: 5px 0;
+    border-radius: 4px;
+}
+
+.menu li a:hover {
+    background-color: #2c3e50;
+}
+
+.content {
+    flex: 1;
+    padding: 2rem;
+    background-color: white;
+}
+
+footer {
+    background-color: #2c3e50;
+    color: white;
+    text-align: center;
+    padding: 1rem;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}

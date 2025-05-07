@@ -1,16 +1,95 @@
-<html><head><title>Painel Estoque</title><link rel='stylesheet' href='/static/css/tema_fisgar.css'></head><body>
-<aside class='menu'>
-<h2>Estoque</h2>
-<a href='/estoque'>Dashboard</a>
-<a href='/estoque/inventario'>Inventário</a>
-<a href='/estoque/adicionar'>Novo Produto</a>
-</aside>
-<main>
-<h1>Dashboard</h1>
-<div class='cards'>
-<div class='card'><h3>Total</h3><p>{{ total }}</p></div>
-<div class='card'><h3>Abaixo Mínimo</h3><p>{{ abaixo }}</p></div>
-<div class='card'><h3>Zerados</h3><p>{{ zerados }}</p></div>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neon Finance | Estoque</title>
+    <link rel="stylesheet" href="/static/css/fisgar_ui_base.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+<div class="sidebar">
+    <h2>📦 Estoque</h2>
+    <a href="/estoque" class="active">🏠 Dashboard</a>
+    <a href="/estoque/inventario">📋 Inventário</a>
+    <a href="/estoque/adicionar">➕ Novo Produto</a>
+    <button class="btn-outline" onclick="toggleTheme()">🌗 Tema</button>
 </div>
+<main class="container">
+    <div class="page-header">
+        <h1 class="page-title">Dashboard</h1>
+    </div>
+    <div class="cards-container">
+        <div class="card-dashboard card-info">
+            <div class="card-icon"><i class="bi bi-box-seam"></i></div>
+            <h3 class="card-title">Itens no Estoque</h3>
+            <p class="card-value" id="totalItens">--</p>
+        </div>
+        <div class="card-dashboard card-success">
+            <div class="card-icon"><i class="bi bi-check-circle"></i></div>
+            <h3 class="card-title">Itens OK</h3>
+            <p class="card-value" id="itensOk">--</p>
+        </div>
+        <div class="card-dashboard card-warning">
+            <div class="card-icon"><i class="bi bi-exclamation-triangle"></i></div>
+            <h3 class="card-title">Itens Baixos</h3>
+            <p class="card-value" id="itensBaixos">--</p>
+        </div>
+        <div class="card-dashboard card-danger">
+            <div class="card-icon"><i class="bi bi-x-circle"></i></div>
+            <h3 class="card-title">Itens Esgotados</h3>
+            <p class="card-value" id="itensCriticos">--</p>
+        </div>
+    </div>
+    <div class="charts-container">
+        <div class="chart-card">
+            <h3 class="card-title">Movimentação Mensal</h3>
+            <canvas id="movimentacaoChart"></canvas>
+        </div>
+        <div class="chart-card">
+            <h3 class="card-title">Categorias (Valor)</h3>
+            <canvas id="categoriasChart"></canvas>
+        </div>
+    </div>
+    <div class="card">
+        <!-- Tabela dinâmica -->
+        <div class="filter-bar">
+            <div class="filter-group"><label>Categoria</label><select id="filtro-categoria"><option value="todos">Todos</option></select></div>
+            <div class="filter-group"><label>Fornecedor</label><select id="filtro-fornecedor"><option value="todos">Todos</option></select></div>
+            <div class="filter-group"><label>Status</label><select id="filtro-status"><option value="todos">Todos</option></select></div>
+        </div>
+        <div class="card-body table-responsive">
+            <table class="data-table" id="tabela-estoque"><thead><tr>
+                <th>Código</th><th>Nome</th><th>Fornecedor</th><th>Estoque Atual</th><th>Última Entrada</th><th>Ações</th>
+            </tr></thead><tbody></tbody></table>
+        </div>
+    </div>
 </main>
+<script>
+// Lógica JS para fetch /api/estoque, update cards, charts, tabela, toggle tema
+async function loadData() {
+    const res = await fetch('/api/estoque'); const data = await res.json();
+    document.getElementById('totalItens').textContent = data.totalItens;
+    document.getElementById('itensOk').textContent = data.itensOk;
+    document.getElementById('itensBaixos').textContent = data.itensBaixos;
+    document.getElementById('itensCriticos').textContent = data.itensCriticos;
+    // build filter selects
+    // fill table tbody
+    const tbody = document.querySelector('#tabela-estoque tbody'); tbody.innerHTML='';
+    data.itensCriticosList.forEach(i => {
+        const tr=document.createElement('tr');
+        tr.innerHTML = `
+            <td>${i.codigo}</td><td>${i.nome}</td><td>${i.fornecedor}</td><td>${i.estoqueAtual}</td><td>${i.ultimaEntrada}</td>
+            <td><button class='btn-outline' onclick="location.href='/estoque/editar/${i.codigo}'">✏️</button></td>`;
+        tbody.append(tr);
+    });
+    // Chart.js init
+    const mCtx = document.getElementById('movimentacaoChart');
+    new Chart(mCtx, {type:'line',data:{labels:['Jan','Fev','Mar','Abr','Mai','Jun'],datasets:[{label:'Entradas',data:data.entradasMensais,borderColor:'#00c853',fill:true,tension:0.3},{label:'Saídas',data:data.saidasMensais,borderColor:'#0066ff',fill:true,tension:0.3}]},options:{responsive:true}});
+    const cCtx = document.getElementById('categoriasChart');
+    new Chart(cCtx,{type:'doughnut',data:{labels:['Eletronicos','Materiais','Pecas','Outros'],datasets:[{data:data.valoresPorCategoria,backgroundColor:['#0066ff','#00c853','#ffc107','#ff3d00']}]},options:{responsive:true,plugins:{legend:{position:'right'}}}});
+}
+function toggleTheme(){document.body.classList.toggle('dark');localStorage.setItem('tema',document.body.classList.contains('dark')?'escuro':'claro');}
+window.onload=loadData;
+</script>
 </body></html>
