@@ -3,71 +3,70 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FisgarOne - {% block title %}Painel de Controle{% endblock %}</title>
-
-    <!-- SEUS LINKS ATUAIS -->
+    <title>FisgarOne | {% block title %}{% endblock %}</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
-
-    <!-- CSS PADRÃO DO SISTEMA -->
-    <link rel="stylesheet" href="/static/css/styles.css">
-
-    <!-- BLOCO PARA CSS ESPECÍFICO DE CADA PÁGINA -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Orbitron:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
     {% block extra_css %}{% endblock %}
 </head>
 <body>
-    <div class="container-fluid"> <!-- Alterado para container-fluid (como no seu código) -->
-        <!-- BARRA LATERAL -->
-        <aside class="sidebar bg-dark"> <!-- Adicione suas classes de cor aqui -->
-            <div class="sidebar-header">
-                <img src="/static/images/logo.png" alt="Logo FisgarOne" class="logo img-fluid">
-            </div>
-            <nav>
-                <ul class="menu">
-                    <li>
-                        <a href="/" class="text-light"> <!-- Classes de cor/texto -->
-                            <i class="fas fa-home me-2"></i>Home
-                        </a>
-                    </li>
-                    <li>
-                        <a href="/financeiro" class="text-light">
-                            <i class="fas fa-money-bill-wave me-2"></i>Financeiro
-                        </a>
-                    </li>
-                    <li>
-                        <a href="/estoque" class="text-light">
-                            <i class="fas fa-boxes me-2"></i>Estoque
-                        </a>
-                    </li>
-                    <li>
-                        <a href="/nfe" class="text-light">
-                            <i class="fas fa-file-invoice me-2"></i>NF-e
-                        </a>
-                    </li>
-                    <li>
-                        <a href="/produtos" class="text-light">
-                            <i class="fas fa-tags me-2"></i>Produtos
-                        </a>
-                    </li>
-                </ul>
-            </nav>
-        </aside>
+    <!-- Barra Lateral -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <a href="#" class="logo">
+                <i class="fas fa-fish logo-icon"></i>
+                <span>FisgarOne</span>
+            </a>
+        </div>
 
-        <!-- CONTEÚDO PRINCIPAL -->
-        <main class="content">
-            {% block content %}{% endblock %}
-        </main>
+        <div class="menu">
+            <!-- Menu será carregado dinamicamente via JavaScript -->
+        </div>
+
+        <div class="theme-switcher">
+    <button class="theme-btn" id="light-theme">
+        <i class="fas fa-sun"></i>
+        <span>Claro</span>
+    </button>
+    <button class="theme-btn active" id="dark-theme">
+        <i class="fas fa-moon"></i>
+        <span>Escuro</span>
+    </button>
+</div>
+
+        <div class="sidebar-footer">
+            <div class="user-profile">
+                <div class="user-avatar">AD</div>
+                <div class="user-info">
+                    <div class="user-name">Admin User</div>
+                    <div class="user-role">Administrador</div>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <!-- RODAPÉ -->
-    <footer class="bg-dark text-light p-3"> <!-- Classes de estilo -->
-        <p class="mb-0 text-center">Sistema FisgarOne © {% now 'Y' %}</p>
-    </footer>
+    <!-- Conteúdo Principal -->
+    <div class="main-content">
+        <div class="header">
+            <h1 class="page-title">{% block page_title %}{% endblock %}</h1>
+            <div class="header-actions">
+                <div class="search-bar">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Pesquisar...">
+                </div>
+                <button class="notification-btn">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-badge">3</span>
+                </button>
+            </div>
+        </div>
 
-    <!-- SCRIPTS GLOBAIS -->
-    <script src="/static/js/main.js"></script>
+        {% block content %}{% endblock %}
+    </div>
 
-    <!-- BLOCO PARA SCRIPTS ESPECÍFICOS -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
     {% block extra_js %}{% endblock %}
+
 </body>
 </html>

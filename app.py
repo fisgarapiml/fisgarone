@@ -398,7 +398,7 @@ def home():
             cursor.execute("SELECT COUNT(DISTINCT fornecedor) FROM nfe_processadas")
             total_fornecedores = cursor.fetchone()[0] or 0
 
-            return render_template('home.html',
+            return render_template('index.html',
                                    total_nfe=total_nfe,
                                    valor_total=valor_total,
                                    total_fornecedores=total_fornecedores,
