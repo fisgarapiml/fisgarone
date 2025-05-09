@@ -797,6 +797,21 @@
     margin: 1.5rem 0 0.5rem;
     padding-left: 1rem;
 }
+    /* Estilo específico para o logo */
+.logo-img {
+    height: 140px; /* Ajuste este valor conforme necessário */
+    width: auto; /* Mantém a proporção */
+    max-width: 180px; /* Limite máximo de largura */
+    transition: all 0.3s ease;
+}
+
+/* Versão mobile */
+@media (max-width: 768px) {
+    .logo-img {
+        height: 30px;
+        max-width: 150px;
+    }
+}
     </style>
 {% endblock %}
 
@@ -1010,27 +1025,31 @@
             });
 
             // Submenus
-            const submenuToggles = document.querySelectorAll('.menu-item.has-submenu');
-            submenuToggles.forEach(toggle => {
-                toggle.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const submenuId = this.id.replace('-menu', '-submenu');
-                    const submenu = document.getElementById(submenuId);
+            // No seu extra_js, substitua a parte de submenus por:
+const submenuToggles = document.querySelectorAll('.menu-item.has-submenu');
+submenuToggles.forEach(toggle => {
+    // Fecha todos os submenus inicialmente
+    const submenuId = toggle.id.replace('-menu', '-submenu');
+    const submenu = document.getElementById(submenuId);
+    submenu.classList.remove('show');
 
-                    // Fecha todos os outros submenus
-                    document.querySelectorAll('.submenu').forEach(sm => {
-                        if (sm.id !== submenuId) {
-                            sm.classList.remove('show');
-                            document.getElementById(sm.id.replace('-submenu', '-menu')).classList.remove('active');
-                        }
-                    });
+    toggle.addEventListener('click', function(e) {
+        e.preventDefault();
+        const submenu = this.nextElementSibling;
 
-                    // Alterna o submenu atual
-                    submenu.classList.toggle('show');
-                    this.classList.toggle('active');
-                });
-            });
+        // Fecha todos os outros submenus
+        document.querySelectorAll('.submenu').forEach(sm => {
+            if (sm !== submenu) {
+                sm.classList.remove('show');
+                sm.previousElementSibling.classList.remove('active');
+            }
+        });
 
+        // Alterna o submenu atual
+        submenu.classList.toggle('show');
+        this.classList.toggle('active');
+    });
+});
             // Submenu items
             const submenuItems = document.querySelectorAll('.submenu-item');
             submenuItems.forEach(item => {
