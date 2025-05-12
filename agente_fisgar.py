@@ -7,7 +7,7 @@ from datetime import datetime
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DB_PATH = os.path.join(BASE_DIR, 'grupo_fisgar.db')
-APP_PATH = os.path.join(BASE_DIR, 'appfinance.py')  # ajuste se necessário
+APP_PATH = os.path.join(BASE_DIR, 'app.py')  # ajuste se necessário
 
 # Identidade Visual Fisgar Neon Premium (CSS Base)
 FISGAR_CSS = '''

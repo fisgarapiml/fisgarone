@@ -319,3 +319,11 @@ def calcular_status(vencimento, valor_pago):
         return "Hoje"
     else:
         return "Pendente"
+
+    @app.route('/contas-a-pagar/pdf')
+    def gerar_pdf_contas():
+        filtro = request.args.get('tipo')  # Ex: dia, atrasados, segunda
+        # lógica para buscar os lançamentos certos...
+        # render_template para gerar HTML
+        # converter com weasyprint ou xhtml2pdf
+

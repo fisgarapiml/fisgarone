@@ -1,17 +1,12 @@
 # novo_arquivo: modulos/estoque/estoque_dashboard.py
-from flask import Blueprint, render_template
-from app import app
+from flask import Blueprint, render_template, current_app
 import sqlite3
-import os
 import json
 
 estoque_bp = Blueprint('estoque_bp', __name__)
 
-# Caminho do banco central
-DB_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', 'grupo_fisgar.db')
-
 def get_db_connection():
-    conn = sqlite3.connect(DB_PATH)
+    conn = sqlite3.connect(current_app.config['DATABASE'])  # ← Respeita a configuração central
     conn.row_factory = sqlite3.Row
     return conn
 
@@ -50,7 +45,7 @@ def estoque_dashboard():
         ''')
         itens_criticos = [dict(row) for row in cursor.fetchall()]
 
-        # Dados fictícios para os gráficos (ajuste com dados reais depois)
+        # Dados fictícios para os gráficos (substituir por dados reais depois)
         meses = ['Jan', 'Fev', 'Mar']
         entradas = [120, 190, 170]
         saidas = [80, 120, 140]

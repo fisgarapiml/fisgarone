@@ -1,6 +1,7 @@
 from flask import Blueprint, jsonify
 import sqlite3
-from app import app  # Importe a aplicação para usar a configuração do banco
+from flask import current_app
+
 
 # Padronize o nome do blueprint com _bp no final
 api_estoque_bp = Blueprint('api_estoque_bp', __name__)

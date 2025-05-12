@@ -24,19 +24,13 @@ def get_menu():
             "titulo": "Financeiro",
             "itens": [
                 {
-                    "nome": "Contas a Pagar",
-                    "icone": "fas fa-money-bill-wave",
-                    "url": url_for('contas_a_pagar_bp.contas_a_pagar')
-                },
-                {
-                    "nome": "Lançamentos",
-                    "icone": "fas fa-pen-fancy",
-                    "url": url_for('lancamento_manual_bp.lancamento_manual')
-                },
-                {
-                    "nome": "Fluxo de Caixa",
-                    "icone": "fas fa-chart-line",
-                    "url": url_for('cards_bp.get_cards')
+                    "nome": "Financeiro",
+                    "icone": "fas fa-wallet",
+                    "submenu": [
+                        { "nome": "Contas a Pagar", "url": url_for('contas_a_pagar_bp.contas_a_pagar') },
+                        { "nome": "Lançamentos", "url": url_for('lancamento_manual_bp.lancamento_manual') },
+                        { "nome": "Fluxo de Caixa", "url": url_for('cards_bp.get_cards') }
+                    ]
                 }
             ]
         },
@@ -44,14 +38,12 @@ def get_menu():
             "titulo": "Estoque",
             "itens": [
                 {
-                    "nome": "Interface",
-                    "icone": "fas fa-warehouse",
-                    "url": url_for('estoque_interface_bp.interface')
-                },
-                {
-                    "nome": "Dashboard",
+                    "nome": "Estoque",
                     "icone": "fas fa-boxes",
-                    "url": url_for('estoque_bp.estoque_dashboard')
+                    "submenu": [
+                        { "nome": "Interface", "url": url_for('estoque_interface_bp.interface') },
+                        { "nome": "Dashboard", "url": url_for('estoque_bp.estoque_dashboard') }
+                    ]
                 }
             ]
         },
@@ -59,9 +51,11 @@ def get_menu():
             "titulo": "Produtos",
             "itens": [
                 {
-                    "nome": "Catálogo",
+                    "nome": "Produtos",
                     "icone": "fas fa-tags",
-                    "url": url_for('produtos.index')  # ← endpoint real conforme debug
+                    "submenu": [
+                        { "nome": "Catálogo", "url": url_for('produtos.index') }
+                    ]
                 }
             ]
         },
@@ -69,9 +63,11 @@ def get_menu():
             "titulo": "NF-e",
             "itens": [
                 {
-                    "nome": "Painel NF-e",
+                    "nome": "NF-e",
                     "icone": "fas fa-file-invoice",
-                    "url": url_for('nfe.painel')  # ← endpoint real
+                    "submenu": [
+                        { "nome": "Painel NF-e", "url": url_for('nfe.painel') }
+                    ]
                 }
             ]
         }

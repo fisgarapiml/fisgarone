@@ -17,7 +17,7 @@ openai.api_key = os.getenv('OPENAI_API_KEY')
 BASE_DIR = Path(__file__).parent.resolve()
 DB_PATH = BASE_DIR / 'grupo_fisgar.db'
 
-# Localiza automaticamente o arquivo principal do app (app.py, appfinance.py, etc.)
+# Localiza automaticamente o arquivo principal do app (app.py, app.py, etc.)
 def find_app_file():
     for fname in os.listdir(BASE_DIR):
         if fname.startswith('app') and fname.endswith('.py'):

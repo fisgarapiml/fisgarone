@@ -6,169 +6,404 @@
   <title>FisgarOne | {% block title %}{% endblock %}</title>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Ícones futuristas -->
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
 
   <style>
     :root {
-      --bg: #f8fafc;
-      --text: #1a202c;
-      --sidebar-bg: #0a0a23;
-      --accent: #00f2ff;
-      --hover: rgba(0, 242, 255, 0.08);
-      --modal-bg: #111130;
-    }
+      /* Cores Tema Claro Neon */
+      --primary-light: #e0f7ff;         /* Azul neon claro */
+      --primary-bright: #00d0ff;        /* Azul neon brilhante */
+      --accent-light: #ff3e80;          /* Rosa neon para contraste */
+      --text-light: #1a237e;            /* Texto azul escuro */
+      --text-light-contrast: #0d47a1;   /* Texto com mais contraste */
+      --bg-light: #f5fdff;              /* Fundo branco azulado */
+      --menu-bg-light: #ffffff;         /* Barra lateral branca */
+      --menu-border-light: #00d0ff;     /* Borda azul neon */
 
-    body.dark-theme {
-      --bg: #0d1117;
-      --text: #c9d1d9;
+      /* Cores Tema Escuro (mantido do anterior) */
+      --primary-dark: #00f0ff;          /* Ciano futurista */
+      --primary-dark-bright: #00a8b5;   /* Ciano mais escuro */
+      --accent-dark: #ff2d75;           /* Rosa neon */
+      --text-dark: #e0e0e0;             /* Texto claro */
+      --bg-dark: #020617;               /* Fundo preto profundo */
+      --menu-bg-dark: rgba(2, 6, 23, 0.9); /* Vidro fosco escuro */
+      --menu-border-dark: #00f0ff;      /* Borda ciano */
+
+      /* Constantes */
+      --border-radius: 12px;
+      --transition-speed: 0.4s;
+      --glow-effect-light: 0 0 15px rgba(0, 208, 255, 0.3);
+      --glow-effect-dark: 0 0 15px rgba(0, 240, 255, 0.5);
     }
 
     body {
       margin: 0;
       font-family: 'Space Grotesk', sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      display: flex;
+      background-color: var(--bg-light);
+      color: var(--text-light);
+      transition: all var(--transition-speed) ease;
     }
 
-    .sidebar {
-      width: 250px;
-      background: var(--sidebar-bg);
-      color: white;
-      min-height: 100vh;
+    .dark-theme {
+      background-color: var(--bg-dark);
+      color: var(--text-dark);
+    }
+
+    /* Efeito de barra lateral destacada */
+    .sidebar-container {
+      width: 280px;
+      height: 100vh;
       position: fixed;
+      left: 0;
+      top: 0;
+      background: var(--menu-bg-light);
+      border-right: 2px solid var(--menu-border-light);
+      box-shadow: 5px 0 25px rgba(0, 208, 255, 0.2);
       display: flex;
       flex-direction: column;
-      padding: 1rem;
-      border-right: 1px solid #1f1f3b;
-      z-index: 100;
+      z-index: 1000;
+      transition: all var(--transition-speed) ease;
     }
 
-    .logo {
+    .dark-theme .sidebar-container {
+      background: var(--menu-bg-dark);
+      border-right: 2px solid var(--menu-border-dark);
+      box-shadow: 5px 0 25px rgba(0, 240, 255, 0.2);
+    }
+
+    /* Logo com destaque */
+    .sidebar-logo {
+      padding: 30px 20px;
       text-align: center;
-      margin-bottom: 2rem;
+      border-bottom: 1px solid rgba(0, 208, 255, 0.3);
+      background: linear-gradient(to bottom, rgba(224, 247, 255, 0.3), rgba(255, 255, 255, 0.1));
     }
 
-    .logo img {
-      width: 180px;
-      height: 140px;
+    .dark-theme .sidebar-logo {
+      border-bottom: 1px solid rgba(0, 240, 255, 0.3);
+      background: linear-gradient(to bottom, rgba(0, 240, 255, 0.05), rgba(2, 6, 23, 0.1));
+    }
+
+    .sidebar-logo img {
+      width: 140px;
+      height: 180px;
       object-fit: contain;
+      filter: drop-shadow(0 0 5px rgba(0, 208, 255, 0.5));
+      transition: all var(--transition-speed) ease;
+    }
+
+    .dark-theme .sidebar-logo img {
+      filter: drop-shadow(0 0 5px rgba(0, 240, 255, 0.5));
+    }
+
+    .sidebar-logo:hover img {
+      filter: drop-shadow(0 0 15px rgba(0, 208, 255, 0.8));
+      transform: scale(1.03);
+    }
+
+    .dark-theme .sidebar-logo:hover img {
+      filter: drop-shadow(0 0 15px rgba(0, 240, 255, 0.8));
+    }
+
+    /* Menu principal - Estilo Neon */
+    #main-menu {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px 15px;
     }
 
     .menu-group-title {
-      font-size: 0.75rem;
-      opacity: 0.6;
-      padding: 0.5rem 0.5rem;
+      color: var(--primary-bright);
+      font-size: 0.7rem;
       text-transform: uppercase;
+      letter-spacing: 2px;
+      margin: 30px 0 15px 0;
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgba(0, 208, 255, 0.3);
+      font-weight: 700;
+      position: relative;
+    }
+
+    .dark-theme .menu-group-title {
+      color: var(--primary-dark);
+      border-bottom: 1px solid rgba(0, 240, 255, 0.3);
+    }
+
+    .menu-group-title::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 40px;
+      height: 2px;
+      background: var(--accent-light);
+    }
+
+    .dark-theme .menu-group-title::after {
+      background: var(--accent-dark);
+    }
+
+    .menu-item {
+      margin: 12px 0;
+      border-radius: var(--border-radius);
+      overflow: hidden;
+      transition: all var(--transition-speed) ease;
+      position: relative;
+    }
+
+    .menu-item::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 3px;
+      height: 100%;
+      background: linear-gradient(to bottom, var(--primary-bright), var(--accent-light));
+      transform: scaleY(0);
+      transform-origin: bottom;
+      transition: transform var(--transition-speed) ease;
+    }
+
+    .dark-theme .menu-item::before {
+      background: linear-gradient(to bottom, var(--primary-dark), var(--accent-dark));
+    }
+
+    .menu-item:hover::before,
+    .menu-item.open::before {
+      transform: scaleY(1);
     }
 
     .menu-link {
-      color: var(--accent);
-      text-decoration: none;
-      padding: 0.6rem 1rem;
       display: flex;
       align-items: center;
-      border-radius: 8px;
+      padding: 15px 20px;
+      color: var(--text-light-contrast);
+      text-decoration: none;
       cursor: pointer;
-      transition: 0.3s;
+      transition: all var(--transition-speed) ease;
+      position: relative;
+      background: rgba(224, 247, 255, 0.3);
+    }
+
+    .dark-theme .menu-link {
+      color: var(--text-dark);
+      background: rgba(0, 240, 255, 0.05);
     }
 
     .menu-link:hover {
-      background: var(--hover);
+      background: rgba(0, 208, 255, 0.1);
+      box-shadow: var(--glow-effect-light);
+    }
+
+    .dark-theme .menu-link:hover {
+      background: rgba(0, 240, 255, 0.1);
+      box-shadow: var(--glow-effect-dark);
     }
 
     .menu-link i {
-      margin-right: 10px;
-      width: 20px;
+      font-size: 1.2rem;
+      margin-right: 15px;
+      width: 24px;
       text-align: center;
+      color: var(--primary-bright);
+      transition: all var(--transition-speed) ease;
     }
 
-    .menu-link.active {
-      background: var(--hover);
+    .dark-theme .menu-link i {
+      color: var(--primary-dark);
+    }
+
+    .menu-link:hover i {
+      color: var(--accent-light);
+      transform: scale(1.2);
+      filter: drop-shadow(0 0 5px var(--primary-bright));
+    }
+
+    .dark-theme .menu-link:hover i {
+      color: var(--accent-dark);
+      filter: drop-shadow(0 0 5px var(--primary-dark));
+    }
+
+    .menu-link span {
       font-weight: 600;
+      letter-spacing: 0.5px;
     }
 
-    .theme-switcher {
-      margin-top: auto;
-      text-align: center;
-      padding-top: 2rem;
+    /* Submenu */
+    .submenu-list {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height var(--transition-speed) ease;
+      background: rgba(224, 247, 255, 0.2);
+      border-left: 2px solid var(--primary-bright);
+      margin-left: 10px;
+      border-radius: 0 0 var(--border-radius) var(--border-radius);
     }
 
-    .theme-btn {
-      background: none;
-      border: 1px solid var(--accent);
-      color: var(--accent);
-      padding: 0.4rem 1rem;
-      border-radius: 20px;
-      cursor: pointer;
+    .dark-theme .submenu-list {
+      background: rgba(0, 240, 255, 0.05);
+      border-left: 2px solid var(--primary-dark);
     }
 
-    .main-content {
-      margin-left: 250px;
-      padding: 2rem;
-      flex-grow: 1;
+    .menu-item.open .submenu-list {
+      max-height: 500px;
     }
 
-    /* Modal para submenu */
-    .submenu-modal {
-      display: none;
-      position: fixed;
-      left: 250px;
-      top: 0;
-      height: 100%;
-      width: 250px;
-      background: var(--modal-bg);
-      color: white;
-      z-index: 999;
-      padding: 2rem 1rem;
-    }
-
-    .submenu-modal.active {
+    .submenu-list a {
       display: block;
-    }
-
-    .submenu-modal a {
-      color: white;
-      display: block;
-      padding: 0.5rem 0;
+      padding: 12px 20px 12px 60px;
+      color: var(--text-light-contrast);
       text-decoration: none;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      font-size: 0.9rem;
+      transition: all var(--transition-speed) ease;
+      position: relative;
     }
 
-    .submenu-modal .close-submenu {
-      text-align: right;
+    .dark-theme .submenu-list a {
+      color: var(--text-dark);
+    }
+
+    .submenu-list a:hover {
+      background: rgba(255, 62, 128, 0.1);
+      color: var(--primary-bright);
+      padding-left: 65px;
+    }
+
+    .dark-theme .submenu-list a:hover {
+      background: rgba(255, 45, 117, 0.1);
+      color: var(--primary-dark);
+    }
+
+    .submenu-list a::before {
+      content: '⯈';
+      position: absolute;
+      left: 35px;
+      color: var(--primary-bright);
+      transition: all var(--transition-speed) ease;
+    }
+
+    .dark-theme .submenu-list a::before {
+      color: var(--primary-dark);
+    }
+
+    .submenu-list a:hover::before {
+      color: var(--accent-light);
+      transform: translateX(5px);
+    }
+
+    .dark-theme .submenu-list a:hover::before {
+      color: var(--accent-dark);
+    }
+
+    /* Botão de tema */
+    #theme-toggle {
+      position: fixed;
+      bottom: 30px;
+      left: 30px;
+      background: linear-gradient(45deg, var(--primary-bright), var(--accent-light));
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       cursor: pointer;
-      margin-bottom: 1rem;
-      font-weight: bold;
-      color: var(--accent);
+      box-shadow: var(--glow-effect-light);
+      transition: all var(--transition-speed) ease;
+      z-index: 1100;
+      font-size: 1.2rem;
+    }
+
+    .dark-theme #theme-toggle {
+      background: linear-gradient(45deg, var(--primary-dark), var(--accent-dark));
+      box-shadow: var(--glow-effect-dark);
+    }
+
+    #theme-toggle:hover {
+      transform: scale(1.1) rotate(30deg);
+      box-shadow: 0 0 25px rgba(255, 62, 128, 0.7);
+    }
+
+    .dark-theme #theme-toggle:hover {
+      box-shadow: 0 0 25px rgba(255, 45, 117, 0.7);
+    }
+
+    /* Conteúdo principal */
+    .main-content {
+      margin-left: 280px;
+      padding: 30px;
+      min-height: 100vh;
+      transition: margin-left var(--transition-speed) ease;
+      background-color: var(--bg-light);
+    }
+
+    .dark-theme .main-content {
+      background-color: var(--bg-dark);
+    }
+
+    /* Responsividade */
+    @media (max-width: 768px) {
+      .sidebar-container {
+        width: 80px;
+      }
+
+      .sidebar-logo {
+        padding: 15px 10px;
+      }
+
+      .sidebar-logo img {
+        width: 60px;
+        height: 77px;
+      }
+
+      .menu-link span,
+      .menu-group-title,
+      .submenu-list a span {
+        display: none;
+      }
+
+      .menu-link {
+        justify-content: center;
+        padding: 18px 0;
+      }
+
+      .menu-link i {
+        margin-right: 0;
+        font-size: 1.4rem;
+      }
+
+      .main-content {
+        margin-left: 80px;
+      }
+
+      #theme-toggle {
+        bottom: 20px;
+        left: 20px;
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
+      }
     }
   </style>
-
   {% block extra_css %}{% endblock %}
 </head>
 <body>
 
   <!-- Sidebar -->
-  <div class="sidebar">
-    <div class="logo">
-      <a href="{{ url_for('bp_home.index') }}">
-        <img src="{{ url_for('static', filename='images/logofisgar.png') }}" alt="Logo FisgarOne" />
-      </a>
+  <div class="sidebar-container">
+    <div class="sidebar-logo">
+      <img src="{{ url_for('static', filename='images/logofisgar.png') }}" alt="Logo FisgarOne" />
     </div>
-
-    <nav id="main-menu"></nav>
-
-    <div class="theme-switcher">
-      <button id="theme-toggle" class="theme-btn"><i class="fas fa-adjust"></i> Tema</button>
-    </div>
+    <div id="main-menu"></div>
   </div>
 
-  <!-- Modal de Submenu -->
-  <div id="submenu-modal" class="submenu-modal">
-    <div class="close-submenu" onclick="fecharSubmenu()">× Fechar</div>
-    <a href="#">Submenu 1</a>
-    <a href="#">Submenu 2</a>
-    <a href="#">Submenu 3</a>
-  </div>
+  <!-- Botão de tema -->
+  <button id="theme-toggle" title="Alternar tema">
+    <i class="ri-contrast-2-fill"></i>
+  </button>
 
   <!-- Conteúdo Principal -->
   <div class="main-content">
@@ -177,53 +412,62 @@
 
   <!-- Scripts -->
   <script>
-    // Menu lateral dinâmico
-    fetch('/api/menu')
-      .then(res => res.json())
-      .then(data => {
-        const menu = document.getElementById('main-menu');
-        data.forEach(group => {
-          const title = document.createElement('div');
-          title.className = 'menu-group-title';
-          title.textContent = group.titulo;
-          menu.appendChild(title);
+    document.addEventListener('DOMContentLoaded', function() {
+      // Carrega o menu via API
+      fetch('/api/menu')
+        .then(res => res.json())
+        .then(data => {
+          const menu = document.getElementById('main-menu');
+          data.forEach(group => {
+            const groupTitle = document.createElement('div');
+            groupTitle.className = 'menu-group-title';
+            groupTitle.textContent = group.titulo;
+            menu.appendChild(groupTitle);
 
-          group.itens.forEach(item => {
-            const link = document.createElement('div');
-            link.className = 'menu-link';
-            link.innerHTML = `<i class="${item.icone}"></i> <span>${item.nome}</span>`;
-            link.onclick = () => {
-              if (item.nome === 'Interface' || item.nome.includes('Sub')) {
-                abrirSubmenu(); // se for submenu, mostra modal
-              } else {
-                window.location.href = item.url;
+            group.itens.forEach(item => {
+              const menuItem = document.createElement('div');
+              menuItem.className = 'menu-item';
+
+              const mainLink = document.createElement('div');
+              mainLink.className = 'menu-link';
+              mainLink.innerHTML = `<i class="${item.icone}"></i> <span>${item.nome}</span>`;
+              mainLink.onclick = () => {
+                if (item.submenu) {
+                  menuItem.classList.toggle('open');
+                } else {
+                  window.location.href = item.url;
+                }
+              };
+              menuItem.appendChild(mainLink);
+
+              if (item.submenu) {
+                const submenu = document.createElement('div');
+                submenu.className = 'submenu-list';
+                item.submenu.forEach(sub => {
+                  const subLink = document.createElement('a');
+                  subLink.href = sub.url;
+                  subLink.innerHTML = `<span>${sub.nome}</span>`;
+                  submenu.appendChild(subLink);
+                });
+                menuItem.appendChild(submenu);
               }
-            };
-            if (window.location.pathname === new URL(item.url, window.location.origin).pathname) {
-              link.classList.add('active');
-            }
-            menu.appendChild(link);
+
+              menu.appendChild(menuItem);
+            });
           });
         });
+
+      // Verifica tema ao carregar
+      if (localStorage.getItem('theme') === 'dark') {
+        document.body.classList.add('dark-theme');
+      }
+
+      // Alternância de tema
+      document.getElementById('theme-toggle').addEventListener('click', () => {
+        document.body.classList.toggle('dark-theme');
+        localStorage.setItem('theme', document.body.classList.contains('dark-theme') ? 'dark' : 'light');
       });
-
-    function abrirSubmenu() {
-      document.getElementById('submenu-modal').classList.add('active');
-    }
-
-    function fecharSubmenu() {
-      document.getElementById('submenu-modal').classList.remove('active');
-    }
-
-    // Alternância de tema
-    document.getElementById('theme-toggle').addEventListener('click', () => {
-      document.body.classList.toggle('dark-theme');
-      localStorage.setItem('theme', document.body.classList.contains('dark-theme') ? 'dark' : 'light');
     });
-
-    if (localStorage.getItem('theme') === 'dark') {
-      document.body.classList.add('dark-theme');
-    }
   </script>
 
   {% block extra_js %}{% endblock %}
