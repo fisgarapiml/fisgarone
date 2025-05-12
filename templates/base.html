@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FisgarOne | {% block title %}{% endblock %}</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --text: #1a202c;
+      --sidebar-bg: #0a0a23;
+      --accent: #00f2ff;
+      --hover: rgba(0, 242, 255, 0.08);
+      --modal-bg: #111130;
+    }
+
+    body.dark-theme {
+      --bg: #0d1117;
+      --text: #c9d1d9;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Space Grotesk', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+    }
+
+    .sidebar {
+      width: 250px;
+      background: var(--sidebar-bg);
+      color: white;
+      min-height: 100vh;
+      position: fixed;
+      display: flex;
+      flex-direction: column;
+      padding: 1rem;
+      border-right: 1px solid #1f1f3b;
+      z-index: 100;
+    }
+
+    .logo {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .logo img {
+      width: 180px;
+      height: 140px;
+      object-fit: contain;
+    }
+
+    .menu-group-title {
+      font-size: 0.75rem;
+      opacity: 0.6;
+      padding: 0.5rem 0.5rem;
+      text-transform: uppercase;
+    }
+
+    .menu-link {
+      color: var(--accent);
+      text-decoration: none;
+      padding: 0.6rem 1rem;
+      display: flex;
+      align-items: center;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .menu-link:hover {
+      background: var(--hover);
+    }
+
+    .menu-link i {
+      margin-right: 10px;
+      width: 20px;
+      text-align: center;
+    }
+
+    .menu-link.active {
+      background: var(--hover);
+      font-weight: 600;
+    }
+
+    .theme-switcher {
+      margin-top: auto;
+      text-align: center;
+      padding-top: 2rem;
+    }
+
+    .theme-btn {
+      background: none;
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      padding: 0.4rem 1rem;
+      border-radius: 20px;
+      cursor: pointer;
+    }
+
+    .main-content {
+      margin-left: 250px;
+      padding: 2rem;
+      flex-grow: 1;
+    }
+
+    /* Modal para submenu */
+    .submenu-modal {
+      display: none;
+      position: fixed;
+      left: 250px;
+      top: 0;
+      height: 100%;
+      width: 250px;
+      background: var(--modal-bg);
+      color: white;
+      z-index: 999;
+      padding: 2rem 1rem;
+    }
+
+    .submenu-modal.active {
+      display: block;
+    }
+
+    .submenu-modal a {
+      color: white;
+      display: block;
+      padding: 0.5rem 0;
+      text-decoration: none;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .submenu-modal .close-submenu {
+      text-align: right;
+      cursor: pointer;
+      margin-bottom: 1rem;
+      font-weight: bold;
+      color: var(--accent);
+    }
+  </style>
+
+  {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="logo">
+      <a href="{{ url_for('bp_home.index') }}">
+        <img src="{{ url_for('static', filename='images/logofisgar.png') }}" alt="Logo FisgarOne" />
+      </a>
+    </div>
+
+    <nav id="main-menu"></nav>
+
+    <div class="theme-switcher">
+      <button id="theme-toggle" class="theme-btn"><i class="fas fa-adjust"></i> Tema</button>
+    </div>
+  </div>
+
+  <!-- Modal de Submenu -->
+  <div id="submenu-modal" class="submenu-modal">
+    <div class="close-submenu" onclick="fecharSubmenu()">× Fechar</div>
+    <a href="#">Submenu 1</a>
+    <a href="#">Submenu 2</a>
+    <a href="#">Submenu 3</a>
+  </div>
+
+  <!-- Conteúdo Principal -->
+  <div class="main-content">
+    {% block content %}{% endblock %}
+  </div>
+
+  <!-- Scripts -->
+  <script>
+    // Menu lateral dinâmico
+    fetch('/api/menu')
+      .then(res => res.json())
+      .then(data => {
+        const menu = document.getElementById('main-menu');
+        data.forEach(group => {
+          const title = document.createElement('div');
+          title.className = 'menu-group-title';
+          title.textContent = group.titulo;
+          menu.appendChild(title);
+
+          group.itens.forEach(item => {
+            const link = document.createElement('div');
+            link.className = 'menu-link';
+            link.innerHTML = `<i class="${item.icone}"></i> <span>${item.nome}</span>`;
+            link.onclick = () => {
+              if (item.nome === 'Interface' || item.nome.includes('Sub')) {
+                abrirSubmenu(); // se for submenu, mostra modal
+              } else {
+                window.location.href = item.url;
+              }
+            };
+            if (window.location.pathname === new URL(item.url, window.location.origin).pathname) {
+              link.classList.add('active');
+            }
+            menu.appendChild(link);
+          });
+        });
+      });
+
+    function abrirSubmenu() {
+      document.getElementById('submenu-modal').classList.add('active');
+    }
+
+    function fecharSubmenu() {
+      document.getElementById('submenu-modal').classList.remove('active');
+    }
+
+    // Alternância de tema
+    document.getElementById('theme-toggle').addEventListener('click', () => {
+      document.body.classList.toggle('dark-theme');
+      localStorage.setItem('theme', document.body.classList.contains('dark-theme') ? 'dark' : 'light');
+    });
+
+    if (localStorage.getItem('theme') === 'dark') {
+      document.body.classList.add('dark-theme');
+    }
+  </script>
+
+  {% block extra_js %}{% endblock %}
+</body>
+</html>
