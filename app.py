@@ -12,6 +12,7 @@ from modulos.nfe.salvar_produto import salvar_produto_bp
 from modulos.nfe.config_unidades import config_unidades_bp
 from modulos.nfe.painel_nfe import nfe_bp
 from modulos.home import bp_home
+from modulos.auth import auth as auth_blueprint
 
 # Inicialização da aplicação
 app = Flask(__name__)
@@ -55,6 +56,29 @@ app.register_blueprint(salvar_produto_bp, url_prefix='/nfe/produtos')
 app.register_blueprint(config_unidades_bp, url_prefix='/nfe/unidades')
 app.register_blueprint(nfe_bp, url_prefix='/nfe/painel')
 
+#Usuarios
+app.register_blueprint(auth_blueprint)
+
+from flask_login import LoginManager
+from modulos.usuario_model import Usuario
+
+login_manager = LoginManager()
+login_manager.login_view = 'auth.login'
+login_manager.init_app(app)
+
+@login_manager.user_loader
+def load_user(user_id):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT id, nome, email, senha_hash, nivel_acesso FROM usuarios WHERE id = ?", (user_id,))
+    row = cursor.fetchone()
+    conn.close()
+    if row:
+        return Usuario(*row)
+    return None
+
+
 if __name__ == '__main__':
     os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True)
+

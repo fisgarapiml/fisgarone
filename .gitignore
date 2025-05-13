@@ -1,0 +1,19 @@
+# Ignorar ambientes virtuais
+# Python
+*.pyc
+__pycache__/
+.venv/
+venv/
+
+# IDEs
+.idea/
+.vscode/
+
+# Dados sensíveis
+grupo_fisgar.db
+uploads/
+*.log
+*.bak
+
+# Outros
+.env

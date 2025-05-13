@@ -1,4 +1,4 @@
-# agente_fisgar.py
+# acesso_externo.py
 
 import os
 import argparse

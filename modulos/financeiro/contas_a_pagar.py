@@ -1,9 +1,10 @@
-from flask import Blueprint, render_template, request, jsonify, current_app
+from flask import Blueprint, render_template, request, jsonify, current_app, make_response, abort
 import sqlite3
 import json
-from datetime import datetime
+from datetime import datetime, timedelta
 import pandas as pd
 import re
+from weasyprint import HTML
 
 contas_a_pagar_bp = Blueprint('contas_a_pagar_bp', __name__)
 
@@ -300,8 +301,10 @@ def contas_a_pagar():
     finally:
         conn.close()
 
+
 def formatar_brl(valor):
     return f"R$ {valor:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
+
 
 def calcular_status(vencimento, valor_pago):
     hoje = datetime.today().date()
@@ -320,10 +323,112 @@ def calcular_status(vencimento, valor_pago):
     else:
         return "Pendente"
 
-    @app.route('/contas-a-pagar/pdf')
-    def gerar_pdf_contas():
-        filtro = request.args.get('tipo')  # Ex: dia, atrasados, segunda
-        # lógica para buscar os lançamentos certos...
-        # render_template para gerar HTML
-        # converter com weasyprint ou xhtml2pdf
 
+@contas_a_pagar_bp.route('/pdf')
+def gerar_pdf_contas():
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+
+        # Obter parâmetros
+        filtro = request.args.get('filtro', 'dia')
+        mes = request.args.get('mes', datetime.today().month)
+        ano = request.args.get('ano', datetime.today().year)
+        hoje = datetime.today().date()
+
+        # Definir consulta base
+        query = """
+            SELECT vencimento, fornecedor, categorias, plano_de_contas, 
+                   valor, valor_pago, codigo
+            FROM contas_a_pagar
+            WHERE (valor_pago IS NULL OR valor_pago = 0)
+        """
+        params = []
+
+        # Aplicar filtros específicos
+        if filtro == "dia":
+            titulo = "CONTAS DO DIA"
+            query += """
+                AND date(substr(vencimento, 7, 4) || '-' || 
+                    substr(vencimento, 4, 2) || '-' || 
+                    substr(vencimento, 1, 2)) = date('now')
+            """
+        elif filtro == "atrasados":
+            titulo = "CONTAS ATRASADAS"
+            query += """
+                AND date(substr(vencimento, 7, 4) || '-' || 
+                    substr(vencimento, 4, 2) || '-' || 
+                    substr(vencimento, 1, 2)) < date('now')
+            """
+        elif filtro == "segunda":
+            titulo = "CONTAS SEGUNDA + FIM DE SEMANA"
+            # Calcula datas do fim de semana anterior
+            if hoje.weekday() == 0:  # Se hoje é segunda
+                sabado = hoje - timedelta(days=2)
+                domingo = hoje - timedelta(days=1)
+            else:
+                # Encontra a próxima segunda
+                dias_para_segunda = (0 - hoje.weekday()) % 7
+                proxima_segunda = hoje + timedelta(days=dias_para_segunda)
+                sabado = proxima_segunda - timedelta(days=2)
+                domingo = proxima_segunda - timedelta(days=1)
+
+            query += """
+                AND (
+                    date(substr(vencimento, 7, 4) || '-' || 
+                        substr(vencimento, 4, 2) || '-' || 
+                        substr(vencimento, 1, 2)) = date(?)
+                    OR
+                    date(substr(vencimento, 7, 4) || '-' || 
+                        substr(vencimento, 4, 2) || '-' || 
+                        substr(vencimento, 1, 2)) = date(?)
+                    OR
+                    date(substr(vencimento, 7, 4) || '-' || 
+                        substr(vencimento, 4, 2) || '-' || 
+                        substr(vencimento, 1, 2)) = date(?)
+                )
+            """
+            params.extend([
+                hoje.strftime('%Y-%m-%d') if hoje.weekday() == 0 else proxima_segunda.strftime('%Y-%m-%d'),
+                sabado.strftime('%Y-%m-%d'),
+                domingo.strftime('%Y-%m-%d')
+            ])
+
+        cursor.execute(query, params)
+
+        # Processar resultados
+        lancamentos = []
+        for row in cursor.fetchall():
+            lancamentos.append({
+                "vencimento": row['vencimento'],
+                "fornecedor": row['fornecedor'] or '-',
+                "categoria": row['categorias'] or '-',
+                "plano": row['plano_de_contas'] or '-',
+                "valor": float(row['valor']) if row['valor'] else 0.0,
+                "pago": float(row['valor_pago']) if row['valor_pago'] else 0.0,
+                "status": calcular_status(row['vencimento'], row['valor_pago'])
+            })
+
+        # Gerar HTML para PDF
+        html = render_template(
+            "contas_pdf.html",
+            lancamentos=lancamentos,
+            titulo=titulo,
+            data_emissao=datetime.now().strftime("%d/%m/%Y %H:%M"),
+            total_geral=sum(abs(item['valor']) for item in lancamentos)
+        )
+
+        # Criar PDF
+        pdf = HTML(string=html).write_pdf()
+
+        # Retornar PDF
+        response = make_response(pdf)
+        response.headers['Content-Type'] = 'application/pdf'
+        response.headers['Content-Disposition'] = f'inline; filename=contas_a_pagar_{filtro}.pdf'
+        return response
+
+    except Exception as e:
+        current_app.logger.error(f"Erro ao gerar PDF: {str(e)}")
+        abort(500, description="Erro ao gerar relatório PDF")
+    finally:
+        conn.close()

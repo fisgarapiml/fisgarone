@@ -1,23 +1,20 @@
 import sqlite3
+from werkzeug.security import generate_password_hash
 
-DB = 'grupo_fisgar.db'
+# Conexão direta com o banco na raiz
+conn = sqlite3.connect('grupo_fisgar.db')
+cursor = conn.cursor()
 
-def atualizar_tabela_produtos_processados():
-    conn = sqlite3.connect(DB)
-    cursor = conn.cursor()
+# Criptografa a senha
+senha_hash = generate_password_hash("senha123", method='pbkdf2:sha256')
 
-    # Verifica se a coluna já existe
-    cursor.execute("PRAGMA table_info(produtos_processados)")
-    colunas = [col[1] for col in cursor.fetchall()]
+# Insere o usuário
+cursor.execute('''
+INSERT INTO usuarios (nome, email, senha_hash, nivel_acesso)
+VALUES (?, ?, ?, ?)
+''', ("Administrador", "admin@fisgar.com", senha_hash, "admin"))
 
-    if 'qtd_por_volume_extraida' not in colunas:
-        cursor.execute("ALTER TABLE produtos_processados ADD COLUMN qtd_por_volume_extraida INTEGER")
-        print("✅ Coluna 'qtd_por_volume_extraida' adicionada com sucesso.")
-    else:
-        print("ℹ️ A coluna 'qtd_por_volume_extraida' já existe.")
+conn.commit()
+conn.close()
 
-    conn.commit()
-    conn.close()
-
-if __name__ == '__main__':
-    atualizar_tabela_produtos_processados()
+print("✅ Usuário criado com sucesso.")

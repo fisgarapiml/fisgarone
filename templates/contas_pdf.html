@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>{{ titulo }}</title>
+    <style>
+        body { font-family: Arial; margin: 0; padding: 20px; color: #333; }
+        .header { text-align: center; margin-bottom: 20px; border-bottom: 2px solid #0066cc; padding-bottom: 10px; }
+        h1 { color: #0066cc; margin-bottom: 5px; }
+        .info { color: #666; margin-bottom: 20px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th { background-color: #0066cc; color: white; padding: 10px; text-align: left; }
+        td { padding: 8px 10px; border-bottom: 1px solid #ddd; }
+        .valor { text-align: right; }
+        .status { display: inline-block; padding: 3px 8px; border-radius: 3px; font-size: 12px; color: white; }
+        .pago { background-color: #4CAF50; }
+        .vencido { background-color: #f44336; }
+        .hoje { background-color: #FFC107; color: #000; }
+        .pendente { background-color: #2196F3; }
+        .footer { margin-top: 30px; padding-top: 10px; border-top: 1px solid #eee; font-size: 11px; color: #777; text-align: center; }
+        .total { font-weight: bold; margin-top: 15px; text-align: right; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>{{ titulo }}</h1>
+        <div class="info">Emitido em: {{ data_emissao }}</div>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Vencimento</th>
+                <th>Fornecedor</th>
+                <th>Categoria</th>
+                <th>Valor</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in lancamentos %}
+            <tr>
+                <td>{{ item.vencimento }}</td>
+                <td>{{ item.fornecedor }}</td>
+                <td>{{ item.categoria }}</td>
+                <td class="valor">R$ {{ "%.2f"|format(item.valor|abs) }}</td>
+                <td>
+                    <span class="status {{ item.status|lower }}">
+                        {{ item.status }}
+                    </span>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="total">Total: R$ {{ "%.2f"|format(total_geral) }}</div>
+
+    <div class="footer">
+        Relatório gerado pelo Sistema FisgarOne
+    </div>
+</body>
+</html>

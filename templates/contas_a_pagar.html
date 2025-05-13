@@ -8,6 +8,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 
 <style>
+
     :root {
         --primary: #0066ff;
         --primary-light: rgba(0, 102, 255, 0.1);
@@ -522,37 +523,70 @@
   gap: 10px;
 }
 
-.pdf-options {
-  display: none;
-  position: absolute;
-  top: 48px;
-  right: 0;
-  background: #0f172a;
-  border: 1px solid #00f2ff50;
-  border-radius: 12px;
-  padding: 15px;
-  width: 260px;
-  box-shadow: 0 8px 20px rgba(0, 242, 255, 0.2);
-  z-index: 1000;
+.pdf-floating-container {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    z-index: 1000;
 }
 
+.pdf-main-button {
+    background-color: #e53935;
+    color: white;
+    border: none;
+    border-radius: 50px;
+    padding: 15px 25px;
+    font-size: 16px;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.3s;
+}
+
+.pdf-main-button:hover {
+    background-color: #c62828;
+    transform: scale(1.05);
+}
+
+.pdf-options {
+    display: none;
+    position: absolute;
+    bottom: 70px;
+    right: 0;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    overflow: hidden;
+    min-width: 250px;
+}
+
+.pdf-options button {
+    width: 100%;
+    padding: 12px 20px;
+    border: none;
+    background: none;
+    text-align: left;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #333;
+}
+
+.pdf-options button:hover {
+    background-color: #f5f5f5;
+}
+
+.pdf-options button i {
+    width: 20px;
+    text-align: center;
+}
 </style>
 {% endblock %}
 
 {% block content %}
-<!-- Botão PDF com Dropdown Neon -->
-<div class="pdf-export-wrapper">
-  <button class="pdf-btn" onclick="togglePdfOptions()">
-    <i class="fas fa-file-pdf"></i> Gerar PDF
-  </button>
-  <div id="pdf-options" class="pdf-options">
-    <label><input type="checkbox" value="hoje" /> Lançamentos do Dia</label>
-    <label><input type="checkbox" value="atrasados" /> Lançamentos Atrasados</label>
-    <label><input type="checkbox" value="segunda" /> Segunda-feira + Fim de Semana</label>
-    <button onclick="gerarPDF()">Gerar Agora</button>
-  </div>
-</div>
-
 
     <div class="dashboard-container">
         <header class="dashboard-header">
@@ -686,6 +720,23 @@
             </form>
         </div>
     </div>
+<div class="pdf-floating-container">
+    <button class="pdf-main-button" onclick="togglePDFOptions()">
+        <i class="fas fa-file-pdf"></i> GERAR PDF
+    </button>
+
+    <div class="pdf-options" id="pdfOptions">
+        <button onclick="gerarPDF('dia')">
+            <i class="fas fa-calendar-day"></i> Contas do Dia
+        </button>
+        <button onclick="gerarPDF('atrasados')">
+            <i class="fas fa-exclamation-triangle"></i> Contas Atrasadas
+        </button>
+        <button onclick="gerarPDF('segunda')">
+            <i class="fas fa-calendar-week"></i> Segunda + Fim de Semana
+        </button>
+    </div>
+</div>
 {% endblock %}
 
 {% block extra_js %}
@@ -1038,5 +1089,30 @@ function gerarPDF() {
                 showTransactions('all');
             }
         });
+        function togglePDFOptions() {
+    const options = document.getElementById('pdfOptions');
+    options.style.display = options.style.display === 'block' ? 'none' : 'block';
+}
+
+function gerarPDF(filtro) {
+    const mes = new Date().getMonth() + 1;
+    const ano = new Date().getFullYear();
+
+    // Fecha o menu de opções
+    document.getElementById('pdfOptions').style.display = 'none';
+
+    // Abre o PDF em nova aba
+    window.open(`/contas-a-pagar/pdf?filtro=${filtro}&mes=${mes}&ano=${ano}`, '_blank');
+}
+
+// Fecha o menu se clicar fora
+document.addEventListener('click', function(event) {
+    const options = document.getElementById('pdfOptions');
+    const button = document.querySelector('.pdf-main-button');
+
+    if (!options.contains(event.target) && event.target !== button) {
+        options.style.display = 'none';
+    }
+});
     </script>
 {% endblock %}
