@@ -28,7 +28,7 @@ def get_menu():
                     "icone": "fas fa-wallet",
                     "submenu": [
                         { "nome": "Contas a Pagar", "url": url_for('contas_a_pagar_bp.contas_a_pagar') },
-                        { "nome": "Lançamentos", "url": url_for('lancamento_manual_bp.lancamento_manual') },
+                        { "nome": "Lançamentos", "url": url_for('lancamento_manual.pagina_lancamento') },
                         { "nome": "Fluxo de Caixa", "url": url_for('cards_bp.get_cards') }
                     ]
                 }

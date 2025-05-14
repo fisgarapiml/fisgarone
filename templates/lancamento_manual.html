@@ -1,13 +1,45 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8">
-  <title>NEON FINANCE | Lançamento Manual</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-  <style>
+{% extends 'base.html' %}
+
+{% block title %}Lançamentos{% endblock %}
+{% block page_title %}Lançamentos{% endblock %}
+
+{% block extra_css %}
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+<style>
+  .select2-container {
+    width: 100% !important;
+  }
+
+  .select2-container--default .select2-selection--single {
+    height: auto;
+    min-height: 48px;
+    padding: 0.8rem 1rem;
+    border-radius: 12px;
+    border: 1px solid rgba(0, 102, 255, 0.2);
+    background-color: white;
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+    font-size: 1rem;
+    font-family: 'Space Grotesk', sans-serif;
+  }
+
+  .select2-container--default .select2-selection--single .select2-selection__rendered {
+    padding-left: 0;
+    color: rgba(0, 0, 0, 0.6);
+    line-height: 1.5;
+  }
+
+  .select2-container--default .select2-selection--single .select2-selection__arrow {
+    height: 100%;
+    right: 12px;
+    top: 0;
+    position: absolute;
+  }
+
     :root {
       --primary: #0066ff;
       --primary-light: rgba(0, 102, 255, 0.1);
@@ -238,21 +270,37 @@
       color: var(--status-overdue);
     }
 
-    /* Select2 customization */
-    .select2-container--default .select2-selection--single {
-      height: auto;
-      padding: 0.8rem 1rem;
-      border: 1px solid rgba(0, 102, 255, 0.2);
-      border-radius: 12px;
-    }
-    .select2-container--default .select2-selection--single .select2-selection__arrow {
-      height: 100%;
-      right: 10px;
-    }
-    .select2-container--default .select2-selection--single .select2-selection__rendered {
-      line-height: 1.5;
-      padding-left: 0;
-    }
+    .select2-container {
+  width: 100% !important;
+}
+
+.select2-container--default .select2-selection--single {
+  height: 48px !important;
+  border: 1px solid rgba(0, 102, 255, 0.2);
+  border-radius: 12px;
+  background-color: white;
+  display: flex;
+  align-items: center;
+  padding: 0 1rem;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+  color: rgba(0, 0, 0, 0.6); /* estilo de placeholder */
+  padding: 0;
+  margin: 0;
+  line-height: normal;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+  height: 100%;
+  position: absolute;
+  right: 12px;
+  top: 0;
+  width: 34px;
+}
 
     /* Responsive adjustments */
     @media (max-width: 768px) {
@@ -424,9 +472,18 @@
       background-color: rgba(0, 102, 255, 0.05);
       border-radius: 12px;
     }
+  .auto-preenchido {
+  border: 2px solid red !important;
+  background-color: rgba(255, 0, 0, 0.05);
+  box-shadow: 0 0 10px red;
+  transition: all 0.3s ease;
+}
+
+
   </style>
-</head>
-<body>
+{% endblock %}
+
+{% block content %}
   <div class="container">
     <div class="header">
       <h1>LANÇAMENTO MANUAL</h1>
@@ -759,12 +816,46 @@
       </div>
     </form>
   </div>
+{% endblock %}
 
-  <!-- Scripts -->
+{% block extra_js %}
+
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-  <script>
-    $(document).ready(function() {
+<script>
+    $(document).ready(function () {
+  const $planoSelect = $('select[name="plano_de_contas"]');
+
+  console.log("Campo plano detectado?", $planoSelect.length); // Deve ser 1
+
+  $planoSelect.on('change', function () {
+    const plano = $(this).val();
+    console.log("Plano selecionado:", plano);
+
+    if (!plano) return;
+
+    $.get(`/financeiro/lancamentos/api/plano_info?plano=${encodeURIComponent(plano)}`, function (data) {
+      console.log("Dados recebidos:", data);
+
+      function preencher(nomeCampo, valor) {
+        if (!valor) return;
+        const $campo = $(`select[name="${nomeCampo}"]`);
+        $campo.val(valor).trigger('change');
+
+        // Destaca o campo visualmente
+        const $container = $campo.next('.select2');
+        $container.addClass('auto-preenchido');
+        setTimeout(() => $container.removeClass('auto-preenchido'), 1500);
+      }
+
+      preencher("fornecedor", data.fornecedor);
+      preencher("categorias", data.categorias);
+      preencher("tipo_custo", data.tipo_custo);
+      preencher("empresa", data.empresa);
+      preencher("conta", data.conta);
+    });
+  });
+
       // URL base para as APIs
       const API_BASE = '/financeiro/lancamentos/api';
 
@@ -994,6 +1085,5 @@
       // Adiciona estilo para ícone de loading
       $('<style>.spin {animation: spin 1s linear infinite;} @keyframes spin {100% {transform: rotate(360deg);}}</style>').appendTo('head');
     });
-  </script>
-</body>
-</html>
+   </script>
+{% endblock %}

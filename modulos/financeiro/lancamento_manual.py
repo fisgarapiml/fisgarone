@@ -94,3 +94,20 @@ def salvar_lancamento():
 @lancamento_manual_bp.route('/api/teste')
 def teste():
     return jsonify({'status': 'success', 'message': 'Tudo funcionando!'})
+
+@lancamento_manual_bp.route('/api/plano_info')
+def plano_info():
+    plano = request.args.get('plano')  # variável correta
+    db = get_db()
+
+    dados = db.execute("""
+        SELECT fornecedor, categorias, tipo_custo, empresa, conta
+        FROM contas_a_pagar
+        WHERE plano_de_contas = ?
+        ORDER BY data_cadastro DESC
+        LIMIT 1
+    """, (plano,)).fetchone()
+
+    if dados:
+        return jsonify(dict(dados))
+    return jsonify({})
