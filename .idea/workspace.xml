@@ -5,10 +5,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e3aaa54f-aebd-4ecb-8523-c15f4bb10208" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/modulos/financeiro/contas_edicao.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/modulos/ponto/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/modulos/ponto/rotas.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/ponto.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/contas_edicao.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/ponto.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modulos/financeiro/lancamento_manual.py" beforeDir="false" afterPath="$PROJECT_DIR$/modulos/financeiro/lancamento_manual.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modulos/home.py" beforeDir="false" afterPath="$PROJECT_DIR$/modulos/home.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/lancamento_manual.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/lancamento_manual.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/grupo_fisgar.db" beforeDir="false" afterPath="$PROJECT_DIR$/grupo_fisgar.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modulos/financeiro/contas_a_pagar.py" beforeDir="false" afterPath="$PROJECT_DIR$/modulos/financeiro/contas_a_pagar.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/contas_a_pagar.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/contas_a_pagar.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/nfe/painel_nfe.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/nfe/painel_nfe.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/teste.py" beforeDir="false" afterPath="$PROJECT_DIR$/teste.py" afterDir="false" />
     </list>
@@ -58,7 +65,7 @@
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/fisgarone/venv/Scripts/python.exe&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Financeiro_Agente_Teste&quot;,
     &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
   }
 }</component>
@@ -69,14 +76,14 @@
       <recent name="C:\fisgarone\templates" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\fisgarone\static" />
       <recent name="C:\fisgarone\templates" />
+      <recent name="C:\fisgarone\templates\financeiro" />
       <recent name="C:\fisgarone\templates\nfe" />
       <recent name="C:\fisgarone\modulos" />
-      <recent name="C:\fisgarone\modulos\home" />
-      <recent name="C:\fisgarone\templates\home" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.main">
+  <component name="RunManager" selected="Python.teste">
     <configuration name="acesso_externo" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="fisgarone" />
       <option name="ENV_FILES" value="" />
@@ -211,10 +218,10 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.teste" />
         <item itemvalue="Python.home" />
         <item itemvalue="Python.painel_nfe" />
         <item itemvalue="Python.acesso_externo" />
-        <item itemvalue="Python.teste" />
       </list>
     </recent_temporary>
   </component>

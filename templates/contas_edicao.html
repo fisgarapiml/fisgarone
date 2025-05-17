@@ -1,0 +1,386 @@
+{% extends 'base.html' %}
+
+{% block title %}Edição Avançada - Contas a Pagar{% endblock %}
+
+{% block extra_css %}
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<style>
+  /* Container principal */
+  .container-edicao {
+    max-width: 1400px;
+    margin: 2rem auto;
+    padding: 1rem;
+    background: var(--bg-light);
+  }
+  .titulo-edicao {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--primary-bright);
+    margin-bottom: 2rem;
+  }
+  /* Filtros superiores */
+  .filtros {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+  .filtro-item {
+    display: flex;
+    flex-direction: column;
+  }
+  .filtro-item label {
+    font-weight: 600;
+    margin-bottom: 0.3rem;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+  }
+  .filtro-item select,
+  .filtro-item input {
+    padding: 0.6rem 0.8rem;
+    border: 1px solid rgba(0, 102, 255, 0.2);
+    border-radius: var(--border-radius);
+    font-size: 1rem;
+    background: white;
+  }
+
+  /* Card de edição */
+  .card-edicao {
+    background: var(--card-bg);
+    border-radius: var(--border-radius);
+    box-shadow: var(--card-shadow);
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  .card-edicao:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 32px rgba(0, 102, 255, 0.15);
+  }
+  .card-edicao-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 1rem;
+  }
+  .card-edicao-header h3 {
+    font-size: 1.25rem;
+    color: var(--primary);
+    margin: 0;
+  }
+  .card-edicao-header small {
+    color: var(--text-secondary);
+  }
+
+  /* Grid de campos dentro do card */
+  .form-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  .form-group {
+    display: flex;
+    flex-direction: column;
+  }
+  .form-group label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 0.3rem;
+    color: var(--text-secondary);
+  }
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    padding: 0.5rem 0.75rem;
+    border: 1px solid rgba(0, 102, 255, 0.2);
+    border-radius: var(--border-radius);
+    font-size: 0.95rem;
+    background: white;
+  }
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus {
+    outline: none;
+    border-color: var(--primary-bright);
+    box-shadow: var(--glow-effect-light);
+  }
+
+  /* Botões de ação */
+  .btn-salvar, .btn-editar, .btn-excluir {
+    margin-right: 0.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: var(--border-radius);
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  .btn-salvar {
+    background: var(--primary);
+    color: white;
+    border: none;
+  }
+  .btn-salvar:hover {
+    background: var(--primary-dark-bright);
+  }
+  .btn-editar {
+    background: var(--accent-light);
+    color: #fff;
+    border: none;
+  }
+  .btn-editar:hover {
+    background: #ff3e80;
+  }
+  .btn-excluir {
+    background: #ff3d00;
+    color: white;
+    border: none;
+  }
+  .btn-excluir:hover {
+    background: #e63500;
+  }
+
+  /* Paginação */
+  .pagination-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 2rem;
+  }
+  .pagination-controls button {
+    padding: 0.4rem 0.8rem;
+    border: 1px solid var(--primary);
+    background: white;
+    color: var(--primary);
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  .pagination-controls button:hover {
+    background: var(--primary-light);
+  }
+  .pagina-ativa {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--primary-dark);
+  }
+
+  /* Custom select2 */
+  .select2-container--default .select2-selection--single {
+    padding: 0.3rem 0.6rem;
+    border-radius: var(--border-radius);
+    border: 1px solid rgba(0, 102, 255, 0.2);
+    background: white;
+  }
+  .auto-preenchido select {
+    border: 2px solid var(--accent-light) !important;
+    box-shadow: 0 0 8px rgba(255, 62, 128, 0.3) !important;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-edicao">
+  <h1 class="titulo-edicao">Edição Avançada de Contas a Pagar</h1>
+
+  <!-- Filtros -->
+  <div class="filtros">
+    <div class="filtro-item">
+      <label for="filtro-empresa">Empresa</label>
+      <select id="filtro-empresa" class="select2 filtro-select"></select>
+    </div>
+    <div class="filtro-item">
+      <label for="filtro-status">Status</label>
+      <select id="filtro-status" class="select2 filtro-select"></select>
+    </div>
+    <div class="filtro-item">
+      <label for="filtro-plano">Plano de Contas</label>
+      <select id="filtro-plano" class="select2 filtro-select"></select>
+    </div>
+    <div class="filtro-item">
+      <label for="filtro-periodo">Período</label>
+      <input type="month" id="filtro-periodo" class="form-control filtro-select" />
+    </div>
+  </div>
+
+  <!-- Cards -->
+  <div id="cards-container"></div>
+
+  <!-- Paginação -->
+  <div class="pagination-controls">
+    <button id="btn-anterior">&laquo; Anterior</button>
+    <span class="pagina-ativa" id="pagina-atual">1</span>
+    <button id="btn-proxima">Próxima &raquo;</button>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script>
+$(function() {
+  const dynamicFields = ['fornecedor','categorias','plano_de_contas','centro_de_custo','tipo_custo','empresa','conta','tipo_documento','status'];
+  const optionsCache = {};
+
+  // Carrega opções dinâmicas de select
+  function loadOptions(field) {
+    // Ajuste para usar o endpoint central de opções do módulo de lançamentos
+    return $.getJSON(`/financeiro/lancamentos/api/opcoes_select?campo=${field}`)
+      .done(data => optionsCache[field] = data);
+  };
+
+  // Inicializa filtros
+  Promise.all(['empresa','status','plano_de_contas'].map(f => loadOptions(f))).then(() => {
+    // Empresa
+    $('#filtro-empresa')
+      .append('<option value="">Todas</option>')
+      .select2({placeholder:'Todas',width:'100%'});
+    optionsCache['empresa'].forEach(v => $('#filtro-empresa').append(`<option>${v}</option>`));
+
+    // Status e Plano
+    ['status','plano_de_contas'].forEach(f => {
+      const selId = f==='status'?'status':'plano';
+      $(`#filtro-${selId}`)
+        .append('<option value=""></option>')
+        .select2({placeholder:'Todos',width:'100%'});
+      optionsCache[f].forEach(v => $(`#filtro-${selId}`).append(`<option>${v}</option>`));
+    });
+
+    // Eventos de filtro
+    ['empresa','status','plano'].forEach(k => $(`#filtro-${k}`).on('change', () => loadPage(1)));
+  });
+  $('#filtro-periodo').on('change', () => loadPage(1));
+
+  let page = 1, limit = 20;
+
+  // Cria select2 para cada campo em edição
+  function createSelect(name, value) {
+    const sel = $(`<select name="${name}" class="form-control select2"></select>`);
+    sel.append('<option value=""></option>');
+    (optionsCache[name]||[]).forEach(v => sel.append(`<option${v===value?' selected':''}>${v}</option>`));
+    sel.select2({tags:true,width:'100%'});
+    return sel;
+  }
+
+  // Monta cards com formulários
+  function montarCards(data) {
+    const cont = $('#cards-container').empty();
+    if (!data.length) {
+      return cont.html('<p>Nenhum lançamento encontrado.</p>');
+    }
+    data.forEach(item => {
+      const card = $('<div>').addClass('card-edicao');
+      const hdr = $('<div>').addClass('card-edicao-header');
+      hdr.append(`<h3>Código: ${item.codigo}</h3><small>Venc: ${item.vencimento}</small>`);
+      card.append(hdr);
+
+      const form = $('<form>');
+      form.on('submit', e => { e.preventDefault(); save(item.codigo,form); });
+
+      const row = $('<div>').addClass('form-row');
+      Object.entries(item).forEach(([key,val]) => {
+        if (['codigo','data_cadastro'].includes(key)) return;
+        const grp = $('<div>').addClass('form-group');
+        grp.append(`<label>${key.replace(/_/g,' ')}</label>`);
+        if (dynamicFields.includes(key)) {
+          grp.append(createSelect(key,val));
+        } else if (key.includes('valor')) {
+          grp.append(`<input type="number" step="0.01" name="${key}" value="${val||''}" class="form-control" />`);
+        } else if (key.includes('data')) {
+          grp.append(`<input type="date" name="${key}" value="${val||''}" class="form-control" />`);
+        } else {
+          grp.append(`<input type="text" name="${key}" value="${val||''}" class="form-control" />`);
+        }
+        row.append(grp);
+      });
+
+      form.append(row);
+      // Botões de ação
+      const btnGroup = $('<div>').css('text-align','right');
+      btnGroup.append('<button type="button" class="btn-editar">Editar</button>');
+      btnGroup.append('<button type="submit" class="btn-salvar">Salvar</button>');
+      btnGroup.append('<button type="button" class="btn-excluir">Excluir</button>');
+      form.append(btnGroup);
+
+      // Eventos dos botões
+      btnGroup.find('.btn-editar').on('click', () => {
+        form.find('input,select').prop('disabled', false);
+      });
+      btnGroup.find('.btn-excluir').on('click', () => {
+        if (confirm('Confirma exclusão?')) deleteConta(item.codigo, card);
+      });
+
+      card.append(form);
+      cont.append(card);
+    });
+    $('.select2').select2({tags:true,width:'100%'});
+  }
+
+    // Carrega opções dinâmicas de select
+function loadOptions(field) {
+  return $.getJSON(`/financeiro/lancamentos/api/opcoes_select?campo=${field}`)
+    .done(data => optionsCache[field] = data);
+}
+
+// Carrega página com filtros e paginação
+function loadPage(p = 1) {
+  page = p;
+  $('#pagina-atual').text(page);
+  $('#cards-container').html('<p>Carregando...</p>');
+  const params = {
+    pagina: page,
+    limite: limit,
+    empresa: $('#filtro-empresa').val(),
+    status: $('#filtro-status').val(),
+    plano_de_contas: $('#filtro-plano').val(),
+    periodo: $('#filtro-periodo').val()
+  };
+  // AQUI você deve apontar para o endpoint correto
+  $.getJSON('/financeiro/api/contas_a_pagar', params, montarCards);
+}
+
+// Salva edição individual
+function save(id, form) {
+  const payload = {};
+  form.find('input,select').each(function() {
+    payload[this.name] = $(this).val();
+  });
+  $.ajax({
+    url: `/financeiro/api/editar_conta/${id}`,
+    method: 'POST',
+    contentType: 'application/json',
+    data: JSON.stringify(payload),
+    success: resp => {
+      if (resp.success) {
+        loadPage(page);
+      } else {
+        alert('Erro: ' + resp.error);
+      }
+    }
+  });
+}
+
+
+  // Exclui registro e remove card
+  function deleteConta(id, cardElem) {
+    $.ajax({
+      url: `/financeiro/api/contas_a_pagar/${id}`,
+      method: 'DELETE',
+      success: resp => {
+        if (resp.success) cardElem.remove();
+        else alert('Erro ao excluir: '+resp.error);
+      }
+    });
+  }
+
+  // Controles de paginação
+  $('#btn-anterior').on('click', ()=>{ if (page>1) loadPage(page-1); });
+  $('#btn-proxima').on('click', ()=>{ loadPage(page+1); });
+
+  // Inicialização
+  Promise.all(dynamicFields.map(f=>loadOptions(f))).then(()=>loadPage(1));
+});
+</script>
+{% endblock %}

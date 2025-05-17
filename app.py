@@ -13,6 +13,8 @@ from modulos.nfe.config_unidades import config_unidades_bp
 from modulos.nfe.painel_nfe import nfe_bp
 from modulos.home import bp_home
 from modulos.auth import auth as auth_blueprint
+from modulos.financeiro.contas_edicao import contas_edicao_bp
+from modulos.ponto.rotas import ponto_bp
 
 # Inicialização da aplicação
 app = Flask(__name__)
@@ -41,6 +43,7 @@ app.register_blueprint(bp_home)
 app.register_blueprint(contas_a_pagar_bp, url_prefix='/contas-a-pagar')
 app.register_blueprint(cards_bp, url_prefix='/financeiro/cards')
 app.register_blueprint(lancamento_manual_bp, url_prefix='/financeiro/lancamentos')
+app.register_blueprint(contas_edicao_bp)
 
 # Estoque
 app.register_blueprint(estoque_interface_bp, url_prefix='/estoque/interface')
@@ -57,7 +60,7 @@ app.register_blueprint(config_unidades_bp, url_prefix='/nfe/unidades')
 app.register_blueprint(nfe_bp, url_prefix='/nfe/painel')
 
 #Usuarios
-app.register_blueprint(auth_blueprint)
+app.register_blueprint(ponto_bp)
 
 from flask_login import LoginManager
 from modulos.usuario_model import Usuario

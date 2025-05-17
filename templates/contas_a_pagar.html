@@ -974,49 +974,53 @@ function gerarPDF() {
         }
 
         function saveTransaction() {
-            const codigo = document.getElementById('edit-codigo').value;
-            const fornecedor = document.getElementById('edit-fornecedor').value;
-            const categoria = document.getElementById('edit-categoria').value;
-            const plano = document.getElementById('edit-plano').value;
-            const vencimento = document.getElementById('edit-vencimento').value;
-            const valor = document.getElementById('edit-valor').value;
-            const pago = document.getElementById('edit-pago').value;
+  // 1) Coleta os campos do modal
+  const codigo     = document.getElementById('edit-codigo').value;
+  const fornecedor = document.getElementById('edit-fornecedor').value;
+  const categoria  = document.getElementById('edit-categoria').value;
+  const plano      = document.getElementById('edit-plano').value;
+  const venc       = document.getElementById('edit-vencimento').value;
+  const valor      = document.getElementById('edit-valor').value;
+  const pago       = document.getElementById('edit-pago').value;
 
-            // Formata a data para DD/MM/YYYY
-            const [year, month, day] = vencimento.split('-');
-            const formattedDate = `${day}/${month}/${year}`;
+  // 2) Formata a data de YYYY-MM-DD para DD/MM/YYYY
+  const [year, month, day] = venc.split('-');
+  const formattedDate = `${day}/${month}/${year}`;
 
-            // Envia os dados para o servidor
-            fetch(`/editar_lancamento`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    codigo: codigo,
-                    fornecedor: fornecedor,
-                    categoria: categoria,
-                    plano: plano,
-                    vencimento: formattedDate,
-                    valor: valor,
-                    pago: pago
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    alert('Lançamento atualizado com sucesso!');
-                    closeEditModal();
-                    location.reload();
-                } else {
-                    alert('Erro ao atualizar o lançamento: ' + data.message);
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Erro ao atualizar o lançamento');
-            });
-        }
+  // 3) Dispara o POST para /contas-a-pagar/editar_lancamento
+  fetch('/contas-a-pagar/editar_lancamento', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      codigo: codigo,
+      fornecedor: fornecedor,
+      categorias: categoria,
+      plano_de_contas: plano,
+      vencimento: formattedDate,
+      valor: valor,
+      valor_pago: pago
+    })
+  })
+  .then(response => {
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    return response.json();
+  })
+  .then(data => {
+    if (data.success) {
+      alert('Lançamento atualizado com sucesso!');
+      closeEditModal();
+      // Se quiser recarregar a lista via AJAX, chame a função que atualiza a tabela.
+      // Aqui, para simplificar, você pode usar:
+      location.reload();
+    } else {
+      alert('Erro ao atualizar: ' + data.error);
+    }
+  })
+  .catch(err => {
+    console.error(err);
+    alert('Falha na comunicação com o servidor.');
+  });
+}
 
         function markAsPaid(codigo) {
             if (confirm('Deseja marcar este lançamento como pago?')) {

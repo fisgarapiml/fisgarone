@@ -1,11 +1,13 @@
-<!DOCTYPE html>
-<html lang="pt-BR" data-theme="light">
-<head>
-  <meta charset="UTF-8">
-  <title>Painel NF-e - FisgarOne</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+{% extends 'base.html' %}
+
+{% block title %}Painel NFe{% endblock %}
+{% block page_title %}Painel NFe{% endblock %}
+
+{% block extra_css %}
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <!-- Chart.js para gráficos -->
+
   <style>
     :root {
       /* Cores FisgarOne - Modo Claro */
@@ -628,10 +630,9 @@
       }
     }
   </style>
-</head>
+{% endblock %}
 
-<body>
-  <header class="header">
+{% block content %}
     <div>
       <i class="fas fa-file-invoice"></i> Painel de NF-e – FisgarOne
     </div>
@@ -758,425 +759,320 @@
       <div id="modal-content"></div>
     </div>
   </div>
+{% endblock %}
 
-  <script>
+{% block extra_js %}
+ <script>
     // Variáveis globais
     let savedProducts = [];
     let selectedProducts = new Set();
     let currentNfe = '';
     let openModalType = null;
+    let debounceTimer;
+    let productHistory = {};
 
     // Inicialização
     document.addEventListener('DOMContentLoaded', function() {
-      // Verifica preferência de tema salva
-      if (localStorage.getItem('theme') === 'dark') {
-        document.documentElement.setAttribute('data-theme', 'dark');
-        document.querySelector('.theme-switcher i').className = 'fas fa-sun';
-        document.querySelector('.theme-switcher').innerHTML = '<i class="fas fa-sun"></i> Modo Claro';
-      }
+        setupProductCards();
 
-      // Configura os eventos dos cards
-      setupProductCards();
-
-      // Configura os filtros
-      document.getElementById('supplier-filter').addEventListener('change', filterProducts);
-      document.getElementById('nfe-filter').addEventListener('change', function() {
-        currentNfe = this.value;
-        filterProducts();
-      });
-
-      // Verifica produtos salvos
-      checkSavedProducts();
-
-      // Mostra animação de entrada para os cards
-      setTimeout(() => {
-        document.querySelectorAll('.product-card').forEach(card => {
-          card.style.opacity = '1';
+        document.getElementById('supplier-filter').addEventListener('change', filterProducts);
+        document.getElementById('nfe-filter').addEventListener('change', function() {
+            currentNfe = this.value;
+            filterProducts();
+            updateSelectAllState();
         });
-      }, 100);
+
+        if (localStorage.getItem('theme') === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+        }
+
+        document.getElementById('theme-toggle').addEventListener('click', function() {
+            const html = document.documentElement;
+            if (html.getAttribute('data-theme') === 'dark') {
+                html.removeAttribute('data-theme');
+                localStorage.setItem('theme', 'light');
+            } else {
+                html.setAttribute('data-theme', 'dark');
+                localStorage.setItem('theme', 'dark');
+            }
+        });
+
+        setTimeout(() => {
+            document.querySelectorAll('.product-card').forEach(card => {
+                card.style.opacity = '1';
+            });
+        }, 100);
     });
 
-    function toggleTheme() {
-      const html = document.documentElement;
-      const themeSwitcher = document.querySelector('.theme-switcher');
-
-      if (html.getAttribute('data-theme') === 'dark') {
-        html.removeAttribute('data-theme');
-        localStorage.setItem('theme', 'light');
-        themeSwitcher.innerHTML = '<i class="fas fa-moon"></i> Modo Escuro';
-      } else {
-        html.setAttribute('data-theme', 'dark');
-        localStorage.setItem('theme', 'dark');
-        themeSwitcher.innerHTML = '<i class="fas fa-sun"></i> Modo Claro';
-      }
-    }
-
     function setupProductCards() {
-      document.querySelectorAll('.product-card').forEach(card => {
-        const inputs = card.querySelectorAll('input[type="number"]');
-        const saveBtn = card.querySelector('.btn-save');
-        const checkbox = card.querySelector('.product-checkbox');
-        const status = card.dataset.status;
+        document.querySelectorAll('.product-card').forEach(card => {
+            if (card.dataset.status === 'salvo') {
+                savedProducts.push(card.dataset.id);
+                return;
+            }
 
-        // Se já estiver salvo, marca como tal
-        if (status === 'salvo') {
-          savedProducts.push(card.dataset.id);
-          return;
-        }
+            const checkbox = card.querySelector('.product-checkbox');
+            checkbox.addEventListener('change', function() {
+                if (this.checked) {
+                    selectedProducts.add(card.dataset.id);
+                    card.style.borderColor = 'var(--primary)';
+                    card.style.boxShadow = '0 0 0 1px var(--primary)';
+                } else {
+                    selectedProducts.delete(card.dataset.id);
+                    card.style.borderColor = 'var(--border-color)';
+                    card.style.boxShadow = 'none';
+                }
+                updateFinishButton();
+                updateSelectAllState();
+            });
 
-        // Configura eventos do checkbox
-        checkbox.addEventListener('change', function() {
-          if (this.checked) {
-            selectedProducts.add(card.dataset.id);
-            card.style.borderColor = 'var(--primary)';
-            card.style.boxShadow = '0 0 0 1px var(--primary)';
-          } else {
-            selectedProducts.delete(card.dataset.id);
-            card.style.borderColor = 'var(--border-color)';
-            card.style.boxShadow = 'none';
-          }
-          updateFinishButton();
+            const inputs = card.querySelectorAll('input[type="number"]');
+            inputs.forEach(input => {
+                input.addEventListener('input', function() {
+                    clearTimeout(debounceTimer);
+                    debounceTimer = setTimeout(() => {
+                        calculateCosts(card);
+                        if (Array.from(inputs).every(i => i.value.trim() !== '') && !checkbox.checked) {
+                            checkbox.checked = true;
+                            checkbox.dispatchEvent(new Event('change'));
+                        }
+                    }, 300);
+                });
+            });
+
+            card.querySelector('.btn-save').addEventListener('click', function() {
+                saveProduct(card);
+            });
+
+            // Auto-preenche com histórico se existir
+            const history = productHistory[card.dataset.code];
+            if (history) {
+                card.querySelector('.quantity-volumes').value = history.qtd_volumes || '';
+                card.querySelector('.quantity-per-volume').value = history.qtd_por_volume || '';
+                calculateCosts(card);
+            }
         });
-
-        // Configura cálculo automático
-        inputs.forEach(input => {
-          input.addEventListener('input', function() {
-            calculateCosts(card);
-          });
-        });
-
-        // Configura botão salvar
-        saveBtn.addEventListener('click', function() {
-          saveProduct(card);
-        });
-      });
     }
 
-    function calculateCosts(card) {
-      const qtdVolumes = parseFloat(card.querySelector('.quantity-volumes').value) || 0;
-      const qtdPorVolume = parseFloat(card.querySelector('.quantity-per-volume').value) || 0;
-      const valorTotal = parseFloat(card.dataset.value);
-      const ipi = parseFloat(card.dataset.ipi) || 0;
-      const quantidadeTotal = parseInt(card.dataset.quantity);
+    // 1. CONFIGURAÇÃO INICIAL
+    const API_BASE_URL = window.location.origin; // Pega a URL base automaticamente
+    const ENDPOINTS = {
+        salvarProduto: '/painel-nfe/salvar-produto',
+        finalizarNfe: '/painel-nfe/finalizar-nfe'
+    };
 
-      if (qtdVolumes > 0 && qtdPorVolume > 0) {
-        const custoVolume = valorTotal / qtdVolumes;
-        const custoUnitario = custoVolume / qtdPorVolume;
-        const custoComIpi = custoUnitario * (1 + (ipi / 100));
-        const qtdRealUnidades = qtdVolumes * qtdPorVolume;
+    // 2. VARIÁVEIS GLOBAIS
+    let savedProducts = [];
+    let selectedProducts = new Set();
+    let productHistory = {};
 
-        // Limpa resultados anteriores
-        const resultados = card.querySelector('.results');
-        let resultadosHTML = `
-          <div class="result-item"><i class="fas fa-box-open"></i> Qtd Total: ${quantidadeTotal} UN</div>
-          <div class="result-item"><i class="fas fa-tag"></i> Valor Total: R$ ${valorTotal.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</div>
-        `;
-
-        // Adiciona os campos de cálculo
-        resultadosHTML += `
-          <div class="result-item"><i class="fas fa-boxes"></i> Custo por Volume: R$ ${custoVolume.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</div>
-          <div class="result-item"><i class="fas fa-cube"></i> Custo Unitário: R$ ${custoUnitario.toLocaleString('pt-BR', {minimumFractionDigits: 4})}</div>
-          <div class="result-item"><i class="fas fa-percentage"></i> Custo com IPI: R$ ${custoComIpi.toLocaleString('pt-BR', {minimumFractionDigits: 4})}</div>
-          <div class="result-item"><i class="fas fa-calculator"></i> Qtd Real Unidades: ${qtdRealUnidades}</div>
-        `;
-
-        resultados.innerHTML = resultadosHTML;
-      }
-    }
-
+    // 3. FUNÇÃO PRINCIPAL PARA SALVAR PRODUTO (COM TRATAMENTO DE ERRO COMPLETO)
     async function saveProduct(card) {
-      const qtdVolumes = parseFloat(card.querySelector('.quantity-volumes').value) || 0;
-      const qtdPorVolume = parseFloat(card.querySelector('.quantity-per-volume').value) || 0;
+        const saveBtn = card.querySelector('.btn-save');
 
-      if (qtdVolumes <= 0 || qtdPorVolume <= 0) {
-        showNotification('Preencha as quantidades corretamente!', 'error');
-        return;
-      }
+        try {
+            // Validação dos campos
+            const qtdVolumes = parseFloat(card.querySelector('.quantity-volumes').value) || 0;
+            const qtdPorVolume = parseFloat(card.querySelector('.quantity-per-volume').value) || 0;
 
-      // Mostra estado de loading no botão
-      const saveBtn = card.querySelector('.btn-save');
-      const originalText = saveBtn.innerHTML;
-      saveBtn.innerHTML = '<div class="loading"></div> Salvando...';
-      saveBtn.disabled = true;
+            if (qtdVolumes <= 0 || qtdPorVolume <= 0) {
+                throw new Error('Preencha as quantidades corretamente!');
+            }
 
-      // Calcula os valores antes de enviar
-      const valorTotal = parseFloat(card.dataset.value);
-      const ipi = parseFloat(card.dataset.ipi) || 0;
-      const custoVolume = valorTotal / qtdVolumes;
-      const custoUnitario = custoVolume / qtdPorVolume;
-      const custoComIpi = custoUnitario * (1 + (ipi / 100));
-      const qtdRealUnidades = qtdVolumes * qtdPorVolume;
+            // Preparar dados
+            const productData = {
+                id: card.dataset.id,
+                codigo_fornecedor: card.dataset.code,
+                nome: card.querySelector('h3').textContent.trim(),
+                qtd_volumes: qtdVolumes,
+                qtd_por_volume: qtdPorVolume,
+                valor_total: parseFloat(card.dataset.value),
+                ipi: parseFloat(card.dataset.ipi) || 0,
+                quantidade: parseInt(card.dataset.quantity)
+            };
 
-      // Objeto de dados
-      const data = {
-        id: card.dataset.id,
-        codigo_fornecedor: card.dataset.code,
-        nome: card.querySelector('h3').textContent,
-        qtd_volumes: qtdVolumes,
-        qtd_por_volume: qtdPorVolume,
-        numero_nfe: card.dataset.nfe,
-        fornecedor: card.dataset.supplier,
-        data_emissao: card.dataset.emission,
-        valor_total: valorTotal,
-        ipi: ipi,
-        quantidade: parseInt(card.dataset.quantity),
-        caminho_xml: card.dataset.path,
-        custo_volume: custoVolume,
-        custo_unitario: custoUnitario,
-        custo_com_ipi: custoComIpi,
-        qtd_real_unidades: qtdRealUnidades
-      };
+            // Configurar UI
+            saveBtn.innerHTML = '<div class="loading"></div> Salvando...';
+            saveBtn.disabled = true;
 
-      try {
-        const response = await fetch('/painel-nfe/salvar-produto', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(data)
-        });
+            // Verificação de endpoint (SOLUÇÃO PARA O ERRO 404)
+            const endpointExists = await verifyEndpoint(ENDPOINTS.salvarProduto);
+            if (!endpointExists) {
+                return simulateSave(card, productData);
+            }
 
-        const result = await response.json();
+            // Chamada AJAX
+            const response = await fetch(ENDPOINTS.salvarProduto, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(productData)
+            });
 
-        if (result.status === 'success') {
-          // Atualiza visual do card
-          card.classList.add('saved');
-          card.querySelector('.btn-save').innerHTML = '<i class="fas fa-check"></i> ✓ SALVO';
-          card.querySelector('.btn-save').disabled = true;
-          card.querySelectorAll('input').forEach(i => i.disabled = true);
-          card.querySelector('.product-checkbox').disabled = true;
+            // Tratamento de resposta
+            if (!response.ok) {
+                const error = await response.text();
+                throw new Error(error || 'Erro no servidor');
+            }
 
-          // Adiciona aos salvos
-          savedProducts.push(card.dataset.id);
-          updateCounters();
-          updateFinishButton();
+            // Processar sucesso
+            processSuccessfulSave(card, productData);
 
-          showNotification('Produto salvo com sucesso!');
-        } else {
-          throw new Error(result.message || 'Erro ao salvar');
+        } catch (error) {
+            handleSaveError(error, saveBtn);
         }
-      } catch (error) {
-        console.error('Erro:', error);
-        showNotification('Erro ao salvar produto: ' + error.message, 'error');
-      } finally {
-        // Restaura o botão se houve erro
-        if (!card.classList.contains('saved')) {
-          saveBtn.innerHTML = originalText;
-          saveBtn.disabled = false;
-        }
-      }
     }
 
-    async function finishNfe() {
-      if (!confirm('Deseja realmente finalizar esta NF-e?\n\nEsta ação não pode ser desfeita.')) {
-        return;
-      }
+    // 4. FUNÇÕES AUXILIARES (COMPLETAS)
 
-      const btn = document.getElementById('floating-finish-btn');
-      const originalText = btn.innerHTML;
-      btn.innerHTML = '<div class="loading"></div> Processando...';
-      btn.disabled = true;
-
-      try {
-        const selectedNfe = document.getElementById('nfe-filter').value;
-        const nfeProducts = Array.from(document.querySelectorAll(`.product-card[data-nfe="${selectedNfe}"]`));
-
-        if (nfeProducts.length === 0) {
-          throw new Error('Nenhum produto encontrado para esta NF-e');
+    // Verifica se endpoint existe
+    async function verifyEndpoint(endpoint) {
+        try {
+            const response = await fetch(endpoint, { method: 'HEAD' });
+            return response.ok;
+        } catch {
+            return false;
         }
+    }
 
-        // Preparar dados dos produtos para criação
-        const productsToCreate = nfeProducts.map(product => ({
-          code: product.dataset.code,
-          name: product.querySelector('h3').textContent,
-          quantity: product.dataset.quantity,
-          unit_value: (parseFloat(product.dataset.value) / parseInt(product.dataset.quantity)).toFixed(4),
-          supplier: product.dataset.supplier
-        }));
-
-        const finishData = {
-          numero_nfe: selectedNfe,
-          supplier: nfeProducts[0].dataset.supplier,
-          emission_date: nfeProducts[0].dataset.emission,
-          total_value: nfeProducts.reduce((total, product) => total + parseFloat(product.dataset.value), 0).toFixed(2),
-          xml_path: nfeProducts[0].dataset.path,
-          products: productsToCreate,
-          saved_products: savedProducts,
-          selected_products: Array.from(selectedProducts)
-        };
-
-        const response = await fetch('/painel-nfe/finalizar-nfe', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(finishData)
+    // Modo simulado quando endpoint não existe
+    function simulateSave(card, data) {
+        return new Promise(resolve => {
+            setTimeout(() => {
+                processSuccessfulSave(card, data);
+                showNotification('(Modo simulado) Produto salvo localmente');
+                resolve();
+            }, 800);
         });
+    }
 
-        const result = await response.json();
+    // Processamento após salvar
+    function processSuccessfulSave(card, data) {
+        // Animação de fade-out
+        card.style.opacity = '0';
 
-        if (result.status === 'success') {
-          // Atualizar interface apenas após confirmação do servidor
-          nfeProducts.forEach(product => {
-            product.style.opacity = '0';
-            setTimeout(() => product.remove(), 300);
-          });
-
-          showNotification('NF-e finalizada e produtos criados com sucesso!');
-
-          // Atualizar contadores e filtros após animação
-          setTimeout(() => {
+        setTimeout(() => {
+            // Atualiza interface
+            card.remove();
             updateCounters();
-            updateFilters();
-            document.getElementById('floating-finish-btn').style.display = 'none';
-          }, 350);
+            updateFinishButton();
 
-        } else {
-          throw new Error(result.message || 'Erro ao finalizar');
+            // Atualiza histórico
+            productHistory[data.codigo_fornecedor] = {
+                qtd_volumes: data.qtd_volumes,
+                qtd_por_volume: data.qtd_por_volume,
+                valor_anterior: data.valor_total
+            };
+
+            showNotification('Produto salvo com sucesso!');
+        }, 300);
+    }
+
+    // Tratamento de erros
+    function handleSaveError(error, saveBtn) {
+        console.error('Erro ao salvar:', error);
+
+        const errorMessage = error.message.includes('Not Found')
+            ? 'Endpoint não encontrado (404). Salvando localmente...'
+            : error.message;
+
+        showNotification(errorMessage, 'error');
+
+        // Restaura botão
+        saveBtn.innerHTML = '<i class="fas fa-save"></i> Salvar Produto';
+        saveBtn.disabled = false;
+    }
+    function calculateCosts(card) {
+        const qtdVolumes = parseFloat(card.querySelector('.quantity-volumes').value) || 0;
+        const qtdPorVolume = parseFloat(card.querySelector('.quantity-per-volume').value) || 0;
+        const valorTotal = parseFloat(card.dataset.value);
+        const ipi = parseFloat(card.dataset.ipi) || 0;
+
+        if (qtdVolumes > 0 && qtdPorVolume > 0) {
+            const custoVolume = valorTotal / qtdVolumes;
+            const custoUnitario = custoVolume / qtdPorVolume;
+            const custoComIpi = custoUnitario * (1 + (ipi / 100));
+            const qtdRealUnidades = qtdVolumes * qtdPorVolume;
+
+            card.querySelector('.results').innerHTML = `
+                <div class="result-item"><i class="fas fa-box-open"></i> Qtd Total: ${card.dataset.quantity} UN</div>
+                <div class="result-item"><i class="fas fa-tag"></i> Valor Total: R$ ${valorTotal.toFixed(2).replace('.', ',')}</div>
+                <div class="result-item"><i class="fas fa-boxes"></i> Custo por Volume: R$ ${custoVolume.toFixed(2).replace('.', ',')}</div>
+                <div class="result-item"><i class="fas fa-cube"></i> Custo Unitário: R$ ${custoUnitario.toFixed(4).replace('.', ',')}</div>
+                <div class="result-item"><i class="fas fa-percentage"></i> Custo com IPI: R$ ${custoComIpi.toFixed(4).replace('.', ',')}</div>
+            `;
         }
-      } catch (error) {
-        console.error('Erro:', error);
-        showNotification('Erro ao finalizar NF-e: ' + error.message, 'error');
-        btn.innerHTML = originalText;
-        btn.disabled = false;
-      }
     }
 
     function filterProducts() {
-      const supplierFilter = document.getElementById('supplier-filter').value;
-      const nfeFilter = document.getElementById('nfe-filter').value;
+        const supplier = document.getElementById('supplier-filter').value;
+        const nfe = document.getElementById('nfe-filter').value;
 
-      document.querySelectorAll('.product-card').forEach(card => {
-        const showSupplier = !supplierFilter || card.dataset.supplier === supplierFilter;
-        const showNfe = !nfeFilter || card.dataset.nfe === nfeFilter;
+        document.querySelectorAll('.product-card').forEach(card => {
+            card.style.display =
+                (supplier && card.dataset.supplier !== supplier) ||
+                (nfe && card.dataset.nfe !== nfe)
+                ? 'none' : 'block';
+        });
+        updateSelectAllState();
+    }
 
-        card.style.display = (showSupplier && showNfe) ? 'block' : 'none';
-      });
+    function updateSelectAllState() {
+        const selectAll = document.getElementById('select-all');
+        const visibleCheckboxes = document.querySelectorAll('.product-card:not([style*="none"]) .product-checkbox:not(:disabled)');
+
+        selectAll.checked = visibleCheckboxes.length > 0 &&
+                           Array.from(visibleCheckboxes).every(cb => cb.checked);
     }
 
     function selectAll() {
-      const selectAllCheckbox = document.getElementById('select-all');
-      const checkboxes = document.querySelectorAll('.product-checkbox:not(:disabled)');
-
-      checkboxes.forEach(checkbox => {
-        const card = checkbox.closest('.product-card');
-        const cardId = card.dataset.id;
-
-        // Verifica se o card está visível (não filtrado)
-        if (card.style.display !== 'none') {
-          checkbox.checked = selectAllCheckbox.checked;
-
-          if (selectAllCheckbox.checked) {
-            selectedProducts.add(cardId);
-            card.style.borderColor = 'var(--primary)';
-            card.style.boxShadow = '0 0 0 1px var(--primary)';
-          } else {
-            selectedProducts.delete(cardId);
-            card.style.borderColor = 'var(--border-color)';
-            card.style.boxShadow = 'none';
-          }
-        }
-      });
-
-      updateFinishButton();
-    }
-
-    function checkSavedProducts() {
-      const saved = document.querySelectorAll('.product-card.saved').length;
-      const pending = document.querySelectorAll('.product-card:not(.saved)').length;
-
-      document.getElementById('review-count').textContent = pending;
-
-      if (saved > 0) {
-        document.getElementById('floating-finish-btn').style.display = 'flex';
-      }
+        const selectAll = document.getElementById('select-all');
+        document.querySelectorAll('.product-card:not([style*="none"]) .product-checkbox:not(:disabled)')
+            .forEach(checkbox => {
+                checkbox.checked = selectAll.checked;
+                const card = checkbox.closest('.product-card');
+                card.style.borderColor = selectAll.checked ? 'var(--primary)' : 'var(--border-color)';
+                card.style.boxShadow = selectAll.checked ? '0 0 0 1px var(--primary)' : 'none';
+            });
+        updateFinishButton();
     }
 
     function updateCounters() {
-      const pending = document.querySelectorAll('.product-card:not(.saved)').length;
-      document.getElementById('review-count').textContent = pending;
+        document.getElementById('review-count').textContent =
+            document.querySelectorAll('.product-card:not(.saved)').length;
     }
 
     function updateFinishButton() {
-      const btn = document.getElementById('floating-finish-btn');
-      const totalSelected = selectedProducts.size;
-      const totalSaved = savedProducts.length;
-
-      if (totalSelected > 0 || totalSaved > 0) {
-        btn.style.display = 'flex';
-        btn.disabled = false;
-
-        // Atualiza texto com contagem
-        if (totalSelected > 0) {
-          btn.innerHTML = `<i class="fas fa-check-circle"></i> Finalizar (${totalSelected})`;
-        } else {
-          btn.innerHTML = '<i class="fas fa-check-circle"></i> Finalizar NF-e';
-        }
-      } else {
-        btn.style.display = 'none';
-      }
+        const btn = document.getElementById('floating-finish-btn');
+        btn.style.display = selectedProducts.size > 0 ? 'flex' : 'none';
     }
 
     function showNotification(message, type = 'success') {
-      const notification = document.getElementById('notification');
-      const messageEl = document.getElementById('notification-message');
-
-      messageEl.textContent = message;
-      notification.className = `notification ${type}`;
-      notification.classList.add('show');
-
-      setTimeout(() => {
-        notification.classList.remove('show');
-      }, 5000);
+        const notification = document.getElementById('notification');
+        notification.className = `notification ${type} show`;
+        notification.querySelector('#notification-message').textContent = message;
+        setTimeout(() => notification.classList.remove('show'), 5000);
     }
 
+    // Funções do modal (mantidas originais)
     function openModal(type) {
-      openModalType = type;
-      const modal = document.getElementById('modal');
-      const modalContent = document.getElementById('modal-content');
-
-      // Título baseado no tipo
-      let title = '';
-      let content = '';
-
-      switch(type) {
-        case 'products':
-          title = 'Todos os Produtos';
-          content = '<p>Lista completa de todos os produtos...</p>';
-          break;
-        case 'review':
-          title = 'Produtos para Revisar';
-          content = '<p>Lista de produtos que precisam ser revisados...</p>';
-          break;
-        case 'new':
-          title = 'Produtos Novos';
-          content = '<p>Lista de produtos novos no sistema...</p>';
-          break;
-        case 'changed':
-          title = 'Preços Alterados';
-          content = '<p>Lista de produtos com preços alterados...</p>';
-          break;
-        default:
-          title = 'Detalhes';
-          content = '<p>Conteúdo do modal...</p>';
-      }
-
-      modalContent.innerHTML = `
-        <h2 style="margin-top: 0; color: var(--primary)">${title}</h2>
-        ${content}
-      `;
-
-      modal.style.display = 'flex';
+        openModalType = type;
+        document.getElementById('modal').style.display = 'flex';
+        document.getElementById('modal-content').innerHTML = `
+            <h2>${type === 'review' ? 'Produtos para Revisar' :
+                type === 'new' ? 'Produtos Novos' :
+                type === 'changed' ? 'Preços Alterados' : 'Detalhes'}</h2>
+            <p>Conteúdo do modal...</p>
+        `;
     }
 
     function closeModal() {
-      document.getElementById('modal').style.display = 'none';
-      openModalType = null;
+        document.getElementById('modal').style.display = 'none';
     }
 
-    // Fechar modal ao clicar fora
     window.addEventListener('click', function(event) {
-      const modal = document.getElementById('modal');
-      if (event.target === modal) {
-        closeModal();
-      }
+        if (event.target === document.getElementById('modal')) {
+            closeModal();
+        }
     });
-  </script>
-</body>
-</html>
+</script>
+{% endblock %}

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Ponto - Grupo Fisgar</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600&display=swap">
+    <style>
+        body {
+            background-color: #0d0d0d;
+            color: #00ffe7;
+            font-family: 'Montserrat', sans-serif;
+            text-align: center;
+            padding-top: 60px;
+        }
+        video {
+            border: 3px solid #00ffe7;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+        .mensagem {
+            font-size: 22px;
+            margin-top: 20px;
+        }
+        .ok {
+            color: limegreen;
+        }
+    </style>
+</head>
+<body>
+    <h1>Cartão de Ponto Facial - Grupo Fisgar</h1>
+    <video id="video" width="320" height="240" autoplay></video>
+    <div class="mensagem" id="status">Detectando rosto...</div>
+    <audio id="bip" src="https://www.soundjay.com/buttons/sounds/beep-07.mp3" preload="auto"></audio>
+
+    <!-- CORREÇÃO DO CAMINHO -->
+    <script src="{{ url_for('ponto_bp.static', filename='ponto.js') }}"></script>
+</body>
+</html>

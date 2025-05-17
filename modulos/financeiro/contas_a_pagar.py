@@ -20,20 +20,32 @@ mapeamento_categorias = {
     "DAS de Parcelamento": "Dívidas Parceladas",
     "Padrão": "Simples Nacional",
     "Sistema Integrador": "Software",
-    "Point Ships (Pipoca)": "Fornecedores",
+    "Point Chips (Pipoca)": "Fornecedores",
     "Kikakau (Bolibol)": "Fornecedores",
     "Billispel": "Fornecedores",
     "Aluguel": "Fixo",
     "Fatura": "Cartões",
     "Jhan": "Fornecedores",
-    "vale transporte": "Funcionários",
-    "salário": "Funcionários",
+    "Vale Transporte": "Funcionários",
+    "Salário": "Funcionários",
     "bonificação": "Funcionários",
-    "fgts": "Funcionários",
+    "FGTS": "Funcionários",
     "Gabriel": "Funcionários",
     "Lara Peçanha": "Funcionários",
+    "Jtoys": "Fornecedores",
+    "MiniPlay": "Fornecedores",
+    "Marsil Atacadista": "Fornecedores",
+    "Manos Doces": "Fornecedores",
+    "Point Chips": "Fornecedores",
+    "Nucita": "Fornecedores",
+    "ALFA FULGA COMERCIIO": "Fornecedores",
     "Contabilidade": "Custo Fixo",
-    "Altamiris Goes": "Custo Fixo"
+    "Altamiris Goes": "Custo Fixo",
+    "Simples Nacional": "Impostos",
+    "Vale Refeição": "Alimentação",
+    "Produtos de Limpeza ou manutenção": "Insumos",
+    "Envios Flex": "Custo Entregas",
+    "Acordo/Empréstimo": "Dívidas Parceladas",
 }
 
 custo_fixo_variavel = {
@@ -150,7 +162,7 @@ def atualizar_dados_contas_a_pagar():
 
 @contas_a_pagar_bp.route("/")
 def contas_a_pagar():
-    atualizar_dados_contas_a_pagar()
+    #atualizar_dados_contas_a_pagar()
 
     try:
         conn = get_db_connection()
@@ -324,6 +336,8 @@ def calcular_status(vencimento, valor_pago):
         return "Pendente"
 
 
+
+
 @contas_a_pagar_bp.route('/pdf')
 def gerar_pdf_contas():
     try:
@@ -432,3 +446,31 @@ def gerar_pdf_contas():
         abort(500, description="Erro ao gerar relatório PDF")
     finally:
         conn.close()
+
+@contas_a_pagar_bp.route('/editar_lancamento', methods=['POST'])
+def editar_lancamento():
+    # Recebe JSON ou form-data
+    dados = request.get_json() or request.form.to_dict()
+    codigo = dados.pop('codigo', None)
+    if not codigo:
+        return jsonify(success=False, error='Código não fornecido'), 400
+
+    # Monta dinamicamente a parte SET do UPDATE
+    campos = [f"{campo} = ?" for campo in dados.keys()]
+    valores = list(dados.values())
+    valores.append(codigo)
+
+    conn = sqlite3.connect(current_app.config['DATABASE'])
+    try:
+        conn.execute(
+            f"UPDATE contas_a_pagar SET {', '.join(campos)} WHERE codigo = ?",
+            valores
+        )
+        conn.commit()
+    except Exception as e:
+        return jsonify(success=False, error=str(e)), 500
+    finally:
+        conn.close()
+
+    return jsonify(success=True)
+
