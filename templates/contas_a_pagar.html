@@ -583,6 +583,150 @@
     width: 20px;
     text-align: center;
 }
+   .chart-card {
+    width: 100%;
+    background: white;
+    border-radius: 20px;
+    padding: 30px 20px;
+    box-shadow: 0 10px 30px rgba(0, 102, 255, 0.05);
+    margin: 40px 0;
+    overflow-x: auto;
+}
+
+.chart-card h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 25px;
+    text-align: center;
+}
+
+#graficoContasMensais {
+    max-height: 300px;
+}
+
+.chart-duplo {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 40px;
+    margin-top: 40px;
+    background: white;
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 10px 30px rgba(0, 102, 255, 0.05);
+}
+
+.chart-box {
+    flex: 1;
+    min-width: 400px;
+    max-width: 700px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.chart-box h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.chart-box canvas {
+    width: 100% !important;
+    height: auto !important;
+    aspect-ratio: 2 / 1;
+    max-height: 400px;
+}
+
+.chart-box .chartjs-legend ul {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding-left: 20px;
+    gap: 10px;
+    margin-top: 20px;
+}
+.custom-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(15, 23, 42, 0.7);
+  z-index: 2000;
+  justify-content: center;
+  align-items: center;
+}
+
+.custom-modal-content {
+  background: white;
+  border-radius: 16px;
+  max-width: 90%;
+  width: 900px;
+  max-height: 90%;
+  overflow: auto;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.25);
+  padding: 30px;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.custom-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.custom-modal-header h2 {
+  font-size: 1.5rem;
+  color: var(--primary);
+}
+
+.close-modal {
+  background: none;
+  border: none;
+  font-size: 2rem;
+  cursor: pointer;
+  color: #555;
+}
+
+.custom-modal-body {
+  font-size: 0.95rem;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+.pdf-btn-modal {
+  background: linear-gradient(45deg, #00f2ff, #0088ff);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  box-shadow: 0 0 10px #00f2ff80;
+  transition: all 0.3s ease;
+}
+
+.pdf-btn-modal i {
+  margin-right: 8px;
+}
+
+.pdf-btn-modal:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 14px #00f2ffcc;
+}
+
+
 </style>
 {% endblock %}
 
@@ -643,6 +787,33 @@
                 <p class="card-value">{{ formatar_brl(vencidas) }}</p>
             </div>
         </div>
+<div class="chart-duplo">
+  <div class="chart-box">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+  <h3>Evolução Mensal</h3>
+  <select id="filtro-evolucao" style="padding: 5px 10px; border-radius: 8px; border: 1px solid #ccc;">
+    <option value="ano">Ano Atual</option>
+    <option value="todos">Todos os Anos</option>
+  </select>
+</div>
+<canvas id="graficoContasMensais"></canvas>
+
+  </div>
+  <div class="chart-box">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+  <h3>Distribuição por Categoria</h3>
+  <select id="filtro-categoria" style="padding: 5px 10px; border-radius: 8px; border: 1px solid #ccc;">
+    <option value="mes">Mês Atual</option>
+    <option value="ano">Ano Atual</option>
+    <option value="todos">Todos os Lançamentos</option>
+  </select>
+</div>
+<canvas id="graficoCategorias"></canvas>
+
+  </div>
+</div>
+
+
 
         <!-- Timeline Diária -->
         <div class="daily-timeline">
@@ -737,9 +908,29 @@
         </button>
     </div>
 </div>
+<div class="custom-modal" id="modal-lancamentos">
+  <div class="custom-modal-content">
+    <div class="custom-modal-header">
+      <h2 id="modal-title">Lançamentos</h2>
+      <button onclick="fecharModal()" class="close-modal">&times;</button>
+    </div>
+    <div class="custom-modal-body" id="modal-body">
+      <!-- Lançamentos aparecem aqui -->
+    </div>
+  </div>
+</div>
+<div style="text-align: right; margin-top: 20px;">
+  <button id="btn-exportar-pdf" class="pdf-btn-modal">
+    <i class="bi bi-file-earmark-pdf"></i> Exportar PDF
+  </button>
+</div>
+
+
 {% endblock %}
 
 {% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <script>
         function togglePdfOptions() {
   const options = document.getElementById("pdf-options");
@@ -811,6 +1002,14 @@ function gerarPDF() {
         // Mostra os lançamentos conforme o filtro
         function showTransactions(filterType) {
             currentFilter = filterType;
+            document.querySelectorAll('.card').forEach(card => {
+  card.addEventListener('click', () => {
+    const filtro = card.dataset.filter;
+    const titulo = card.querySelector('.card-title')?.textContent || 'Lançamentos';
+
+    mostrarLancamentosFiltrados({ tipo: 'card', valor: filtro, titulo });
+  });
+});
 
             // Ativa o card clicado
             document.querySelectorAll('.card').forEach(card => {
@@ -1118,5 +1317,266 @@ document.addEventListener('click', function(event) {
         options.style.display = 'none';
     }
 });
+        let chartBarras = null;
+const anoAtualEvolucao = '{{ current_year }}';
+
+function carregarGraficoEvolucao(filtro = 'ano') {
+  fetch('/contas-a-pagar/api/contas_por_mes')
+    .then(response => response.json())
+    .then(data => {
+      let dadosFiltrados = [];
+
+      if (filtro === 'ano') {
+        dadosFiltrados = data.filter(item => item.mes.endsWith('/' + anoAtualEvolucao));
+      } else {
+        dadosFiltrados = data; // Todos os meses
+      }
+
+      const labels = dadosFiltrados.map(item => item.mes);
+      const previsto = dadosFiltrados.map(item => item.previsto);
+      const pago = dadosFiltrados.map(item => item.pago);
+
+      if (chartBarras) chartBarras.destroy();
+
+      const ctx = document.getElementById('graficoContasMensais').getContext('2d');
+      chartBarras = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: labels,
+          datasets: [
+            {
+              label: 'Previsto',
+              data: previsto,
+              backgroundColor: 'rgba(0, 102, 255, 0.2)',
+              borderColor: '#0066ff',
+              borderWidth: 2,
+              borderRadius: 10,
+              barPercentage: 0.5,
+              categoryPercentage: 0.6
+            },
+            {
+              label: 'Pago',
+              data: pago,
+              backgroundColor: 'rgba(0, 200, 83, 0.2)',
+              borderColor: '#00c853',
+              borderWidth: 2,
+              borderRadius: 10,
+              barPercentage: 0.5,
+              categoryPercentage: 0.6
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            x: {
+              ticks: { font: { size: 12 } },
+              grid: { display: false }
+            },
+            y: {
+              beginAtZero: true,
+              ticks: {
+                callback: valor => 'R$ ' + valor.toLocaleString('pt-BR', { minimumFractionDigits: 2 }),
+                font: { size: 12 }
+              },
+              grid: { color: '#f0f0f0' }
+            }
+          },
+          plugins: {
+            legend: { labels: { font: { size: 13 } } },
+            tooltip: {
+              callbacks: {
+                label: context => {
+                  const valor = context.parsed.y || 0;
+                  return `${context.dataset.label}: R$ ${valor.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`;
+                }
+              }
+            }
+          },
+          onClick: (evt, elements) => {
+  if (elements.length > 0) {
+    const index = elements[0].index;
+    const mesSelecionado = chartBarras.data.labels[index];
+    mostrarLancamentosFiltrados({ tipo: 'mes', valor: mesSelecionado });
+  }
+}
+        }
+      });
+    });
+}
+
+// Inicializa gráfico
+carregarGraficoEvolucao();
+
+// Listener do dropdown
+document.getElementById('filtro-evolucao').addEventListener('change', e => {
+  carregarGraficoEvolucao(e.target.value);
+});
+
+
+const mes = '{{ current_month }}';
+const ano = '{{ current_year }}';
+const mesAtual = '{{ current_month }}';
+const anoAtual = '{{ current_year }}';
+let chartPizza = null;
+
+function carregarGraficoCategorias(filtro = 'mes') {
+  let url = '/contas-a-pagar/api/categorias_agrupadas';
+
+  if (filtro === 'mes') {
+    url += `?mes=${mesAtual}&ano=${anoAtual}`;
+  } else if (filtro === 'ano') {
+    url += `?ano=${anoAtual}`;
+  }
+
+  fetch(url)
+    .then(response => response.json())
+    .then(data => {
+      const categorias = data.map(item => item.categoria);
+      const valores = data.map(item => item.total);
+      const cores = [
+        '#0066ff', '#00c853', '#ffab00', '#ff3d00',
+        '#6200ea', '#00bcd4', '#607d8b', '#8bc34a',
+        '#f44336', '#9c27b0', '#3f51b5', '#795548'
+      ];
+
+      if (chartPizza) chartPizza.destroy();
+
+      chartPizza = new Chart(document.getElementById('graficoCategorias'), {
+        type: 'doughnut',
+        data: {
+          labels: categorias,
+          datasets: [{
+            label: 'Total por Categoria',
+            data: valores,
+            backgroundColor: cores,
+            borderColor: '#fff',
+            borderWidth: 2
+          }]
+        },
+        options: {
+  responsive: true,
+  maintainAspectRatio: false,
+  plugins: {
+    legend: {
+      position: 'right',
+      align: 'start',
+      labels: {
+        font: { size: 13 },
+        boxWidth: 18,
+        padding: 12
+      }
+    },
+    tooltip: {
+      callbacks: {
+        label: context => {
+          const valor = context.parsed || 0;
+          return `${context.label}: R$ ${valor.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`;
+        }
+      },
+      backgroundColor: 'rgba(0,0,0,0.7)',
+      titleFont: { size: 14 },
+      bodyFont: { size: 13 },
+      padding: 10
+    }
+  },
+  onClick: (evt, elements) => {
+    if (elements.length > 0) {
+      const index = elements[0].index;
+      const categoriaSelecionada = chartPizza.data.labels[index];
+      mostrarLancamentosFiltrados({ tipo: 'categoria', valor: categoriaSelecionada });
+    }
+  }
+}
+
+      });
+    });
+}
+
+// Inicializa gráfico
+carregarGraficoCategorias();
+
+// Atualiza ao trocar filtro
+document.getElementById('filtro-categoria').addEventListener('change', e => {
+  carregarGraficoCategorias(e.target.value);
+});
+function mostrarLancamentosFiltrados(filtro) {
+  const mesAtual = '{{ current_month }}';
+  const anoAtual = '{{ current_year }}';
+  let url = `/contas-a-pagar/api/lancamentos_filtrados`;
+
+if (filtro.tipo === 'categoria') {
+  url += `?tipo=categoria&valor=${encodeURIComponent(filtro.valor)}&mes={{ current_month }}&ano={{ current_year }}`;
+} else if (filtro.tipo === 'mes') {
+  url += `?tipo=mes&valor=${encodeURIComponent(filtro.valor)}`;
+} else if (filtro.tipo === 'card') {
+  url += `?tipo=card&valor=${encodeURIComponent(filtro.valor)}&mes={{ current_month }}&ano={{ current_year }}`;
+}
+
+
+  if (filtro.tipo === 'categoria') {
+    url += `&mes=${mesAtual}&ano=${anoAtual}`;
+  }
+
+  fetch(url)
+    .then(res => res.json())
+    .then(transactions => {
+      const title = filtro.tipo === 'mes'
+        ? `Lançamentos de ${filtro.valor}`
+        : `Lançamentos em ${filtro.valor} (${mesAtual}/${anoAtual})`;
+
+      document.getElementById('modal-title').textContent = title;
+
+      if (!transactions.length) {
+        document.getElementById('modal-body').innerHTML = '<p style="text-align:center;color:#777;">Nenhum lançamento encontrado.</p>';
+      } else {
+        let html = `
+          <table class="transactions-table" style="width:100%;">
+            <thead>
+              <tr>
+                <th>Fornecedor</th>
+                <th>Categoria</th>
+                <th>Plano</th>
+                <th>Vencimento</th>
+                <th>Valor</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+        `;
+
+        transactions.forEach(trans => {
+          html += `
+            <tr>
+              <td>${trans.fornecedor}</td>
+              <td>${trans.categoria}</td>
+              <td>${trans.plano}</td>
+              <td>${trans.vencimento}</td>
+              <td>${formatar_brl(trans.valor)}</td>
+              <td>${trans.status}</td>
+            </tr>
+          `;
+        });
+
+        html += '</tbody></table>';
+        document.getElementById('modal-body').innerHTML = html;
+      }
+
+      document.getElementById('modal-lancamentos').style.display = 'flex';
+    });
+}
+
+function fecharModal() {
+  document.getElementById('modal-lancamentos').style.display = 'none';
+}
+document.getElementById('btn-exportar-pdf').addEventListener('click', () => {
+  const filtro = document.getElementById('modal-title').textContent;
+  const periodo = `mes={{ current_month }}&ano={{ current_year }}`;
+  const url = `/contas-a-pagar/pdf?filtro=${encodeURIComponent(filtro)}&${periodo}`;
+  window.open(url, '_blank');
+});
+
+
     </script>
 {% endblock %}

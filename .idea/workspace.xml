@@ -5,19 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e3aaa54f-aebd-4ecb-8523-c15f4bb10208" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/modulos/financeiro/contas_edicao.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/modulos/ponto/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/modulos/ponto/rotas.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/ponto.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/contas_edicao.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/ponto.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/grupo_fisgar.db" beforeDir="false" afterPath="$PROJECT_DIR$/grupo_fisgar.db" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/modulos/financeiro/contas_a_pagar.py" beforeDir="false" afterPath="$PROJECT_DIR$/modulos/financeiro/contas_a_pagar.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/contas_a_pagar.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/contas_a_pagar.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/nfe/painel_nfe.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/nfe/painel_nfe.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/teste.py" beforeDir="false" afterPath="$PROJECT_DIR$/teste.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

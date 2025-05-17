@@ -335,7 +335,143 @@ def calcular_status(vencimento, valor_pago):
     else:
         return "Pendente"
 
+@contas_a_pagar_bp.route('/api/contas_por_mes')
+def api_contas_por_mes():
+    conn = get_db_connection()
+    cursor = conn.cursor()
 
+    cursor.execute("""
+        SELECT 
+            substr(vencimento, 4, 7) as mes_ano,
+            SUM(CAST(valor AS FLOAT)) as total_previsto,
+            SUM(CAST(COALESCE(valor_pago, 0) AS FLOAT)) as total_pago
+        FROM contas_a_pagar
+        GROUP BY mes_ano
+        ORDER BY substr(vencimento, 7, 4), substr(vencimento, 4, 2)
+    """)
+
+    dados = [
+        {"mes": row["mes_ano"], "previsto": abs(row["total_previsto"]), "pago": abs(row["total_pago"])}
+        for row in cursor.fetchall()
+    ]
+    conn.close()
+    return jsonify(dados)
+
+@contas_a_pagar_bp.route('/api/categorias_agrupadas')
+def categorias_agrupadas():
+    mes = request.args.get("mes")
+    ano = request.args.get("ano")
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    if mes and ano:
+        mes_corrente = f"{int(mes):02d}/{ano}"
+        cursor.execute("""
+            SELECT categorias, SUM(ABS(CAST(valor AS FLOAT))) as total
+            FROM contas_a_pagar
+            WHERE substr(vencimento, 4, 7) = ?
+              AND categorias IS NOT NULL AND TRIM(categorias) != ''
+              AND valor IS NOT NULL AND TRIM(valor) != ''
+            GROUP BY categorias
+            HAVING total > 0
+            ORDER BY total DESC
+        """, (mes_corrente,))
+    elif ano:
+        cursor.execute("""
+            SELECT categorias, SUM(ABS(CAST(valor AS FLOAT))) as total
+            FROM contas_a_pagar
+            WHERE substr(vencimento, 7, 4) = ?
+              AND categorias IS NOT NULL AND TRIM(categorias) != ''
+              AND valor IS NOT NULL AND TRIM(valor) != ''
+            GROUP BY categorias
+            HAVING total > 0
+            ORDER BY total DESC
+        """, (ano,))
+    else:
+        cursor.execute("""
+            SELECT categorias, SUM(ABS(CAST(valor AS FLOAT))) as total
+            FROM contas_a_pagar
+            WHERE categorias IS NOT NULL AND TRIM(categorias) != ''
+              AND valor IS NOT NULL AND TRIM(valor) != ''
+            GROUP BY categorias
+            HAVING total > 0
+            ORDER BY total DESC
+        """)
+
+    resultado = [{"categoria": row["categorias"], "total": row["total"]} for row in cursor.fetchall()]
+    conn.close()
+    return jsonify(resultado)
+
+@contas_a_pagar_bp.route('/api/lancamentos_filtrados')
+def lancamentos_filtrados():
+    tipo = request.args.get("tipo")
+    valor = request.args.get("valor")
+    mes = request.args.get("mes")
+    ano = request.args.get("ano")
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    query = """
+        SELECT codigo, vencimento, categorias, fornecedor, plano_de_contas, valor, valor_pago
+        FROM contas_a_pagar
+        WHERE 1=1
+    """
+    params = []
+
+    if tipo == 'categoria':
+        query += " AND LOWER(categorias) = LOWER(?)"
+        params.append(valor)
+        if mes and ano:
+            query += " AND substr(vencimento, 4, 7) = ?"
+            params.append(f"{int(mes):02d}/{ano}")
+
+    elif tipo == 'mes':
+        query += " AND substr(vencimento, 4, 7) = ?"
+        params.append(valor)
+
+    elif tipo == 'card':
+        if valor == 'paid':
+            query += " AND valor_pago > 0"
+        elif valor == 'balance':
+            query += " AND (valor_pago IS NULL OR valor_pago = 0)"
+        elif valor == 'overdue':
+            query += """
+                AND (valor_pago IS NULL OR valor_pago = 0)
+                AND date(substr(vencimento, 7, 4) || '-' || 
+                         substr(vencimento, 4, 2) || '-' || 
+                         substr(vencimento, 1, 2)) < date('now')
+            """
+        elif valor == 'today':
+            query += """
+                AND (valor_pago IS NULL OR valor_pago = 0)
+                AND date(substr(vencimento, 7, 4) || '-' || 
+                         substr(vencimento, 4, 2) || '-' || 
+                         substr(vencimento, 1, 2)) = date('now')
+            """
+        elif valor == 'all':
+            pass  # mostra tudo
+
+        if mes and ano:
+            query += " AND substr(vencimento, 4, 7) = ?"
+            params.append(f"{int(mes):02d}/{ano}")
+
+    query += " ORDER BY vencimento ASC"
+    cursor.execute(query, params)
+
+    resultado = [{
+        "codigo": row["codigo"],
+        "vencimento": row["vencimento"],
+        "categoria": row["categorias"] or '-',
+        "fornecedor": row["fornecedor"] or '-',
+        "plano": row["plano_de_contas"] or '-',
+        "valor": float(row["valor"]) if row["valor"] else 0.0,
+        "status": calcular_status(row["vencimento"], row["valor_pago"])
+    } for row in cursor.fetchall()]
+
+    conn.close()
+    return jsonify(resultado)
 
 
 @contas_a_pagar_bp.route('/pdf')
