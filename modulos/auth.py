@@ -19,7 +19,7 @@ def get_usuario_por_email(email):
         return Usuario(*row)
     return None
 
-@auth.route('/login', methods=['GET', 'POST'])
+#auth.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
         email = request.form['email']
@@ -32,8 +32,8 @@ def login():
         flash('E-mail ou senha inválidos.', 'erro')
     return render_template('login.html')
 
-@auth.route('/logout')
-@login_required
+#@auth.route('/logout')
+#@login_required
 def logout():
     logout_user()
     return redirect(url_for('auth.login'))

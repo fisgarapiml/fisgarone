@@ -1,121 +1,143 @@
-{% extends 'base.html' %}
-
-{% block title %}Painel NFe{% endblock %}
-{% block page_title %}Painel NFe{% endblock %}
-
-{% block extra_css %}
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-    <!-- Chart.js para gráficos -->
-
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <title>Painel NF-e - FisgarOne</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
   <style>
     :root {
-      /* Cores FisgarOne - Modo Claro */
-      --primary: #0066ff;
-      --secondary: #7b2dff;
-      --highlight: #ff2d7b;
-      --bg-color: #f8fafc;
-      --card-bg: #ffffff;
-      --text-color: #2d3748;
-      --text-muted: #718096;
-      --border-color: #e2e8f0;
-      --hover-bg: rgba(0, 0, 0, 0.05);
+      /* Cores Tema Claro Neon */
+      --primary-light: #e0f7ff;
+      --primary-bright: #00d0ff;
+      --accent-light: #ff3e80;
+      --text-light: #1a237e;
+      --text-light-contrast: #0d47a1;
+      --bg-light: #f5fdff;
+      --menu-bg-light: #ffffff;
+      --menu-border-light: #00d0ff;
       --success: #00cc99;
       --warning: #ff9900;
       --danger: #ff2d7b;
+      --border-color: #e2e8f0;
+      --hover-bg: rgba(0, 0, 0, 0.05);
 
-      /* Tipografia */
+      /* Cores Tema Escuro */
+      --primary-dark: #00f0ff;
+      --primary-dark-bright: #00a8b5;
+      --accent-dark: #ff2d75;
+      --text-dark: #e0e0e0;
+      --bg-dark: #020617;
+      --menu-bg-dark: rgba(2, 6, 23, 0.9);
+      --menu-border-dark: #00f0ff;
+      --border-color-dark: #4a5568;
+      --hover-bg-dark: rgba(255, 255, 255, 0.05);
+
+      /* Constantes */
+      --border-radius: 12px;
+      --border-radius-sm: 6px;
+      --transition-speed: 0.4s;
+      --glow-effect-light: 0 0 15px rgba(0, 208, 255, 0.3);
+      --glow-effect-dark: 0 0 15px rgba(0, 240, 255, 0.5);
       --title-size: 1.8rem;
       --subtitle-size: 1rem;
       --body-size: 0.9rem;
       --secondary-size: 0.8rem;
-
-      /* Espaçamentos */
       --space-sm: 0.5rem;
       --space-md: 1rem;
       --space-lg: 1.5rem;
       --space-xl: 2rem;
-
-      /* Bordas */
-      --border-radius: 12px;
-      --border-radius-sm: 6px;
     }
 
     /* Modo Escuro */
     [data-theme="dark"] {
-      --primary: #0066ff;
-      --secondary: #7b2dff;
-      --highlight: #ff2d7b;
-      --bg-color: #1a202c;
+      --primary: var(--primary-dark);
+      --secondary: var(--accent-dark);
+      --highlight: var(--accent-dark);
+      --bg-color: var(--bg-dark);
       --card-bg: #2d3748;
-      --text-color: #f7fafc;
+      --text-color: var(--text-dark);
       --text-muted: #a0aec0;
-      --border-color: #4a5568;
-      --hover-bg: rgba(255, 255, 255, 0.05);
+      --border-color: var(--border-color-dark);
+      --hover-bg: var(--hover-bg-dark);
     }
 
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+      transition: background-color var(--transition-speed) ease,
+                 color var(--transition-speed) ease,
+                 border-color var(--transition-speed) ease;
     }
 
     body {
-      font-family: 'Roboto', sans-serif;
-      background-color: var(--bg-color);
-      color: var(--text-color);
+      font-family: 'Space Grotesk', sans-serif;
+      background-color: var(--bg-light);
+      color: var(--text-light);
       line-height: 1.6;
       min-height: 100vh;
     }
 
-    /* Header - Estilo FisgarOne */
-    .header {
-      background: linear-gradient(135deg, var(--primary), var(--secondary));
-      color: white;
-      padding: var(--space-lg) var(--space-xl);
-      font-size: 1.5rem;
-      font-weight: 600;
-      position: relative;
-      overflow: hidden;
-      z-index: 10;
+    [data-theme="dark"] body {
+      background-color: var(--bg-dark);
+      color: var(--text-dark);
+    }
+
+    /* Sidebar */
+    .sidebar-container {
+      width: 280px;
+      height: 100vh;
+      position: fixed;
+      left: 0;
+      top: 0;
+      background: var(--menu-bg-light);
+      border-right: 2px solid var(--menu-border-light);
+      box-shadow: 5px 0 25px rgba(0, 208, 255, 0.2);
       display: flex;
-      justify-content: space-between;
-      align-items: center;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      flex-direction: column;
+      z-index: 1000;
     }
 
-    .header::after {
-      content: '';
-      position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: linear-gradient(
-        to bottom right,
-        transparent,
-        transparent,
-        transparent,
-        rgba(255, 255, 255, 0.1)
-      );
-      transform: rotate(30deg);
-      animation: shine 6s infinite linear;
+    [data-theme="dark"] .sidebar-container {
+      background: var(--menu-bg-dark);
+      border-right: 2px solid var(--menu-border-dark);
+      box-shadow: 5px 0 25px rgba(0, 240, 255, 0.2);
     }
 
-    @keyframes shine {
-      0% { transform: rotate(30deg) translate(-30%, -30%); }
-      100% { transform: rotate(30deg) translate(30%, 30%); }
+    .sidebar-logo {
+      padding: 30px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(0, 208, 255, 0.3);
+      background: linear-gradient(to bottom, rgba(224, 247, 255, 0.3), rgba(255, 255, 255, 0.1));
     }
 
-    /* Container Principal */
-    .container {
-      max-width: 1800px;
-      margin: 0 auto;
+    [data-theme="dark"] .sidebar-logo {
+      border-bottom: 1px solid rgba(0, 240, 255, 0.3);
+      background: linear-gradient(to bottom, rgba(0, 240, 255, 0.05), rgba(2, 6, 23, 0.1));
+    }
+
+    .sidebar-logo img {
+      width: 140px;
+      height: 180px;
+      object-fit: contain;
+      filter: drop-shadow(0 0 5px rgba(0, 208, 255, 0.5));
+    }
+
+    [data-theme="dark"] .sidebar-logo img {
+      filter: drop-shadow(0 0 5px rgba(0, 240, 255, 0.5));
+    }
+
+    /* Main Content */
+    .main-content {
+      margin-left: 280px;
       padding: var(--space-xl);
+      min-height: 100vh;
     }
 
-    /* Cards do Topo - Estilo FisgarOne */
+    /* Cards do Topo */
     .cards-dashboard {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -124,7 +146,7 @@
     }
 
     .card-dashboard {
-      background: var(--card-bg);
+      background: var(--menu-bg-light);
       border: 1px solid var(--border-color);
       border-radius: var(--border-radius);
       padding: var(--space-lg);
@@ -136,6 +158,10 @@
       transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
 
+    [data-theme="dark"] .card-dashboard {
+      background: var(--menu-bg-dark);
+    }
+
     .card-dashboard::before {
       content: '';
       position: absolute;
@@ -143,7 +169,11 @@
       left: 0;
       width: 100%;
       height: 4px;
-      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      background: linear-gradient(90deg, var(--primary-bright), var(--accent-light));
+    }
+
+    [data-theme="dark"] .card-dashboard::before {
+      background: linear-gradient(90deg, var(--primary-dark), var(--accent-dark));
     }
 
     .card-dashboard:hover {
@@ -176,7 +206,7 @@
     }
 
     .product-card {
-      background: var(--card-bg);
+      background: var(--menu-bg-light);
       border: 1px solid var(--border-color);
       border-radius: var(--border-radius);
       padding: var(--space-lg);
@@ -186,6 +216,10 @@
       animation: fadeIn 0.5s ease-in-out;
     }
 
+    [data-theme="dark"] .product-card {
+      background: var(--menu-bg-dark);
+    }
+
     .product-card::before {
       content: '';
       position: absolute;
@@ -193,8 +227,12 @@
       left: 0;
       width: 100%;
       height: 4px;
-      background: linear-gradient(90deg, var(--primary), var(--success));
+      background: linear-gradient(90deg, var(--primary-bright), var(--success));
       opacity: 0.7;
+    }
+
+    [data-theme="dark"] .product-card::before {
+      background: linear-gradient(90deg, var(--primary-dark), var(--success));
     }
 
     .product-card:hover {
@@ -225,9 +263,13 @@
     .product-card h3 {
       margin: 0 0 var(--space-sm);
       font-size: 1.1rem;
-      color: var(--primary);
+      color: var(--primary-bright);
       font-weight: 600;
       padding-right: 40px;
+    }
+
+    [data-theme="dark"] .product-card h3 {
+      color: var(--primary-dark);
     }
 
     .product-card .product-info {
@@ -241,8 +283,12 @@
 
     .product-card .product-info i {
       width: 20px;
-      color: var(--primary);
+      color: var(--primary-bright);
       opacity: 0.8;
+    }
+
+    [data-theme="dark"] .product-card .product-info i {
+      color: var(--primary-dark);
     }
 
     /* Bloco de Inputs */
@@ -256,7 +302,11 @@
     }
 
     .input-group:hover {
-      border-color: var(--primary);
+      border-color: var(--primary-bright);
+    }
+
+    [data-theme="dark"] .input-group:hover {
+      border-color: var(--primary-dark);
     }
 
     .input-group label {
@@ -273,14 +323,23 @@
       font-size: var(--body-size);
       border-radius: var(--border-radius-sm);
       border: 1px solid var(--border-color);
-      background-color: var(--card-bg);
+      background-color: var(--menu-bg-light);
       color: var(--text-color);
+    }
+
+    [data-theme="dark"] .input-group input[type="number"] {
+      background-color: var(--menu-bg-dark);
     }
 
     .input-group input[type="number"]:focus {
       outline: none;
-      border-color: var(--primary);
-      box-shadow: 0 0 0 2px rgba(0, 102, 255, 0.1);
+      border-color: var(--primary-bright);
+      box-shadow: 0 0 0 2px rgba(0, 208, 255, 0.1);
+    }
+
+    [data-theme="dark"] .input-group input[type="number"]:focus {
+      border-color: var(--primary-dark);
+      box-shadow: 0 0 0 2px rgba(0, 240, 255, 0.1);
     }
 
     /* Resultados */
@@ -329,25 +388,96 @@
     }
 
     .btn-primary {
-      background: var(--primary);
+      background: var(--success);
       color: white;
     }
 
     .btn-primary:hover {
-      background: var(--secondary);
+      background: #00b386;
       transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 204, 153, 0.3);
     }
 
     .btn-primary:disabled {
       background: var(--border-color);
       color: var(--text-muted);
       cursor: not-allowed;
+      box-shadow: none;
     }
 
     .btn-save {
       width: 100%;
       padding: var(--space-md);
       margin-top: var(--space-md);
+    }
+
+    /* Botão Flutuante */
+    .floating-btn {
+      position: fixed;
+      bottom: var(--space-xl);
+      right: var(--space-xl);
+      background: var(--success);
+      color: white;
+      border: none;
+      border-radius: 50px;
+      padding: var(--space-md) var(--space-lg);
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: none;
+      z-index: 100;
+      align-items: center;
+      gap: var(--space-sm);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      box-shadow: 0 4px 12px rgba(0, 204, 153, 0.3);
+    }
+
+    .floating-btn:hover {
+      background: #00b386;
+      transform: translateY(-3px);
+      box-shadow: 0 6px 16px rgba(0, 204, 153, 0.4);
+    }
+
+    .floating-btn:disabled {
+      background: var(--border-color);
+      color: var(--text-muted);
+      cursor: not-allowed;
+    }
+
+    /* Toggle Theme Button */
+    #theme-toggle {
+      position: fixed;
+      bottom: 30px;
+      left: 30px;
+      background: linear-gradient(45deg, var(--primary-bright), var(--accent-light));
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: var(--glow-effect-light);
+      transition: all var(--transition-speed) ease;
+      z-index: 1100;
+      font-size: 1.2rem;
+    }
+
+    [data-theme="dark"] #theme-toggle {
+      background: linear-gradient(45deg, var(--primary-dark), var(--accent-dark));
+      box-shadow: var(--glow-effect-dark);
+    }
+
+    #theme-toggle:hover {
+      transform: scale(1.1) rotate(30deg);
+      box-shadow: 0 0 25px rgba(255, 62, 128, 0.7);
+    }
+
+    [data-theme="dark"] #theme-toggle:hover {
+      box-shadow: 0 0 25px rgba(255, 45, 117, 0.7);
     }
 
     /* Checkbox */
@@ -368,8 +498,13 @@
     }
 
     .checkbox-container input[type="checkbox"]:checked {
-      background-color: var(--primary);
-      border-color: var(--primary);
+      background-color: var(--primary-bright);
+      border-color: var(--primary-bright);
+    }
+
+    [data-theme="dark"] .checkbox-container input[type="checkbox"]:checked {
+      background-color: var(--primary-dark);
+      border-color: var(--primary-dark);
     }
 
     .checkbox-container input[type="checkbox"]:checked::after {
@@ -407,7 +542,11 @@
 
     .select-all:hover {
       background: var(--hover-bg);
-      border-color: var(--primary);
+      border-color: var(--primary-bright);
+    }
+
+    [data-theme="dark"] .select-all:hover {
+      border-color: var(--primary-dark);
     }
 
     .select-all input[type="checkbox"] {
@@ -421,8 +560,13 @@
     }
 
     .select-all input[type="checkbox"]:checked {
-      background-color: var(--primary);
-      border-color: var(--primary);
+      background-color: var(--primary-bright);
+      border-color: var(--primary-bright);
+    }
+
+    [data-theme="dark"] .select-all input[type="checkbox"]:checked {
+      background-color: var(--primary-dark);
+      border-color: var(--primary-dark);
     }
 
     .select-all input[type="checkbox"]:checked::after {
@@ -441,7 +585,7 @@
       border-radius: var(--border-radius-sm);
       border: 1px solid var(--border-color);
       font-size: var(--body-size);
-      background-color: var(--card-bg);
+      background-color: var(--menu-bg-light);
       color: var(--text-color);
       min-width: 220px;
       cursor: pointer;
@@ -457,46 +601,22 @@
     }
 
     .select:hover {
-      border-color: var(--primary);
+      border-color: var(--primary-bright);
+    }
+
+    [data-theme="dark"] .select:hover {
+      border-color: var(--primary-dark);
     }
 
     .select:focus {
       outline: none;
-      border-color: var(--primary);
-      box-shadow: 0 0 0 2px rgba(0, 102, 255, 0.1);
+      border-color: var(--primary-bright);
+      box-shadow: 0 0 0 2px rgba(0, 208, 255, 0.1);
     }
 
-    /* Botão Flutuante */
-    .floating-btn {
-      position: fixed;
-      bottom: var(--space-xl);
-      right: var(--space-xl);
-      background: var(--primary);
-      color: white;
-      border: none;
-      border-radius: 50px;
-      padding: var(--space-md) var(--space-lg);
-      font-size: 1rem;
-      font-weight: 600;
-      cursor: pointer;
-      display: none;
-      z-index: 100;
-      align-items: center;
-      gap: var(--space-sm);
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-    }
-
-    .floating-btn:hover {
-      background: var(--secondary);
-      transform: translateY(-3px);
-    }
-
-    .floating-btn:disabled {
-      background: var(--border-color);
-      color: var(--text-muted);
-      cursor: not-allowed;
+    [data-theme="dark"] .select:focus {
+      border-color: var(--primary-dark);
+      box-shadow: 0 0 0 2px rgba(0, 240, 255, 0.1);
     }
 
     /* Notificações */
@@ -541,15 +661,20 @@
     }
 
     .modal-content {
-      background: var(--card-bg);
+      background: var(--menu-bg-light);
       border-radius: var(--border-radius);
       width: 90%;
       max-width: 800px;
       max-height: 90vh;
       overflow: auto;
-      border: 1px solid var(--primary);
+      border: 1px solid var(--primary-bright);
       padding: var(--space-xl);
       position: relative;
+    }
+
+    [data-theme="dark"] .modal-content {
+      background: var(--menu-bg-dark);
+      border: 1px solid var(--primary-dark);
     }
 
     .close-modal {
@@ -562,7 +687,11 @@
     }
 
     .close-modal:hover {
-      color: var(--highlight);
+      color: var(--accent-light);
+    }
+
+    [data-theme="dark"] .close-modal:hover {
+      color: var(--accent-dark);
     }
 
     /* Animações */
@@ -588,7 +717,17 @@
 
     /* Responsividade */
     @media (max-width: 768px) {
-      .container {
+      .sidebar-container {
+        transform: translateX(-100%);
+        transition: transform var(--transition-speed) ease;
+      }
+
+      .sidebar-container.open {
+        transform: translateX(0);
+      }
+
+      .main-content {
+        margin-left: 0;
         padding: var(--space-md);
       }
 
@@ -615,33 +754,39 @@
         padding: var(--space-sm) var(--space-md);
         font-size: 0.9rem;
       }
+
+      #theme-toggle {
+        bottom: 20px;
+        left: 20px;
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
+      }
     }
 
     @media (max-width: 480px) {
-      .header {
-        flex-direction: column;
-        gap: var(--space-sm);
-        text-align: center;
-        padding: var(--space-md);
-      }
-
       .cards-dashboard {
         grid-template-columns: 1fr;
       }
     }
   </style>
-{% endblock %}
+</head>
 
-{% block content %}
-    <div>
-      <i class="fas fa-file-invoice"></i> Painel de NF-e – FisgarOne
+<body>
+  <!-- Sidebar -->
+  <div class="sidebar-container">
+    <div class="sidebar-logo">
+      <img src="{{ url_for('static', filename='images/logofisgar.png') }}" alt="Logo FisgarOne" />
     </div>
-    <button class="btn btn-primary" onclick="toggleTheme()">
-      <i class="fas fa-moon"></i> Modo Escuro
-    </button>
-  </header>
+    <!-- Menu seria carregado dinamicamente aqui -->
+  </div>
 
-  <div class="container">
+  <!-- Botão de tema -->
+  <button id="theme-toggle" title="Alternar tema">
+    <i class="ri-contrast-2-fill"></i>
+  </button>
+
+  <div class="main-content">
     <!-- Cards do Topo -->
     <div class="cards-dashboard">
       <div class="card-dashboard" onclick="openModal('products')">
@@ -759,320 +904,493 @@
       <div id="modal-content"></div>
     </div>
   </div>
-{% endblock %}
 
-{% block extra_js %}
- <script>
+  <script>
     // Variáveis globais
     let savedProducts = [];
     let selectedProducts = new Set();
     let currentNfe = '';
     let openModalType = null;
     let debounceTimer;
-    let productHistory = {};
 
     // Inicialização
     document.addEventListener('DOMContentLoaded', function() {
-        setupProductCards();
+      // Verifica preferência de tema salva
+      if (localStorage.getItem('theme') === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+      }
 
-        document.getElementById('supplier-filter').addEventListener('change', filterProducts);
-        document.getElementById('nfe-filter').addEventListener('change', function() {
-            currentNfe = this.value;
-            filterProducts();
-            updateSelectAllState();
+      // Configura os eventos dos cards
+      setupProductCards();
+
+      // Configura os filtros
+      document.getElementById('supplier-filter').addEventListener('change', filterProducts);
+      document.getElementById('nfe-filter').addEventListener('change', function() {
+        currentNfe = this.value;
+        filterProducts();
+        updateSelectAllState();
+      });
+
+      // Configura botão de tema
+      document.getElementById('theme-toggle').addEventListener('click', toggleTheme);
+
+      // Verifica produtos salvos
+      checkSavedProducts();
+
+      // Mostra animação de entrada para os cards
+      setTimeout(() => {
+        document.querySelectorAll('.product-card').forEach(card => {
+          card.style.opacity = '1';
         });
-
-        if (localStorage.getItem('theme') === 'dark') {
-            document.documentElement.setAttribute('data-theme', 'dark');
-        }
-
-        document.getElementById('theme-toggle').addEventListener('click', function() {
-            const html = document.documentElement;
-            if (html.getAttribute('data-theme') === 'dark') {
-                html.removeAttribute('data-theme');
-                localStorage.setItem('theme', 'light');
-            } else {
-                html.setAttribute('data-theme', 'dark');
-                localStorage.setItem('theme', 'dark');
-            }
-        });
-
-        setTimeout(() => {
-            document.querySelectorAll('.product-card').forEach(card => {
-                card.style.opacity = '1';
-            });
-        }, 100);
+      }, 100);
     });
 
+    function toggleTheme() {
+      const html = document.documentElement;
+      if (html.getAttribute('data-theme') === 'dark') {
+        html.removeAttribute('data-theme');
+        localStorage.setItem('theme', 'light');
+      } else {
+        html.setAttribute('data-theme', 'dark');
+        localStorage.setItem('theme', 'dark');
+      }
+    }
+
     function setupProductCards() {
-        document.querySelectorAll('.product-card').forEach(card => {
-            if (card.dataset.status === 'salvo') {
-                savedProducts.push(card.dataset.id);
-                return;
-            }
-
-            const checkbox = card.querySelector('.product-checkbox');
-            checkbox.addEventListener('change', function() {
-                if (this.checked) {
-                    selectedProducts.add(card.dataset.id);
-                    card.style.borderColor = 'var(--primary)';
-                    card.style.boxShadow = '0 0 0 1px var(--primary)';
-                } else {
-                    selectedProducts.delete(card.dataset.id);
-                    card.style.borderColor = 'var(--border-color)';
-                    card.style.boxShadow = 'none';
-                }
-                updateFinishButton();
-                updateSelectAllState();
-            });
-
-            const inputs = card.querySelectorAll('input[type="number"]');
-            inputs.forEach(input => {
-                input.addEventListener('input', function() {
-                    clearTimeout(debounceTimer);
-                    debounceTimer = setTimeout(() => {
-                        calculateCosts(card);
-                        if (Array.from(inputs).every(i => i.value.trim() !== '') && !checkbox.checked) {
-                            checkbox.checked = true;
-                            checkbox.dispatchEvent(new Event('change'));
-                        }
-                    }, 300);
-                });
-            });
-
-            card.querySelector('.btn-save').addEventListener('click', function() {
-                saveProduct(card);
-            });
-
-            // Auto-preenche com histórico se existir
-            const history = productHistory[card.dataset.code];
-            if (history) {
-                card.querySelector('.quantity-volumes').value = history.qtd_volumes || '';
-                card.querySelector('.quantity-per-volume').value = history.qtd_por_volume || '';
-                calculateCosts(card);
-            }
-        });
-    }
-
-    // 1. CONFIGURAÇÃO INICIAL
-    const API_BASE_URL = window.location.origin; // Pega a URL base automaticamente
-    const ENDPOINTS = {
-        salvarProduto: '/painel-nfe/salvar-produto',
-        finalizarNfe: '/painel-nfe/finalizar-nfe'
-    };
-
-    // 2. VARIÁVEIS GLOBAIS
-    let savedProducts = [];
-    let selectedProducts = new Set();
-    let productHistory = {};
-
-    // 3. FUNÇÃO PRINCIPAL PARA SALVAR PRODUTO (COM TRATAMENTO DE ERRO COMPLETO)
-    async function saveProduct(card) {
+      document.querySelectorAll('.product-card').forEach(card => {
+        const inputs = card.querySelectorAll('input[type="number"]');
         const saveBtn = card.querySelector('.btn-save');
+        const checkbox = card.querySelector('.product-checkbox');
+        const status = card.dataset.status;
 
-        try {
-            // Validação dos campos
-            const qtdVolumes = parseFloat(card.querySelector('.quantity-volumes').value) || 0;
-            const qtdPorVolume = parseFloat(card.querySelector('.quantity-per-volume').value) || 0;
-
-            if (qtdVolumes <= 0 || qtdPorVolume <= 0) {
-                throw new Error('Preencha as quantidades corretamente!');
-            }
-
-            // Preparar dados
-            const productData = {
-                id: card.dataset.id,
-                codigo_fornecedor: card.dataset.code,
-                nome: card.querySelector('h3').textContent.trim(),
-                qtd_volumes: qtdVolumes,
-                qtd_por_volume: qtdPorVolume,
-                valor_total: parseFloat(card.dataset.value),
-                ipi: parseFloat(card.dataset.ipi) || 0,
-                quantidade: parseInt(card.dataset.quantity)
-            };
-
-            // Configurar UI
-            saveBtn.innerHTML = '<div class="loading"></div> Salvando...';
-            saveBtn.disabled = true;
-
-            // Verificação de endpoint (SOLUÇÃO PARA O ERRO 404)
-            const endpointExists = await verifyEndpoint(ENDPOINTS.salvarProduto);
-            if (!endpointExists) {
-                return simulateSave(card, productData);
-            }
-
-            // Chamada AJAX
-            const response = await fetch(ENDPOINTS.salvarProduto, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(productData)
-            });
-
-            // Tratamento de resposta
-            if (!response.ok) {
-                const error = await response.text();
-                throw new Error(error || 'Erro no servidor');
-            }
-
-            // Processar sucesso
-            processSuccessfulSave(card, productData);
-
-        } catch (error) {
-            handleSaveError(error, saveBtn);
+        // Se já estiver salvo, marca como tal
+        if (status === 'salvo') {
+          savedProducts.push(card.dataset.id);
+          return;
         }
-    }
 
-    // 4. FUNÇÕES AUXILIARES (COMPLETAS)
-
-    // Verifica se endpoint existe
-    async function verifyEndpoint(endpoint) {
-        try {
-            const response = await fetch(endpoint, { method: 'HEAD' });
-            return response.ok;
-        } catch {
-            return false;
-        }
-    }
-
-    // Modo simulado quando endpoint não existe
-    function simulateSave(card, data) {
-        return new Promise(resolve => {
-            setTimeout(() => {
-                processSuccessfulSave(card, data);
-                showNotification('(Modo simulado) Produto salvo localmente');
-                resolve();
-            }, 800);
+        // Configura eventos do checkbox
+        checkbox.addEventListener('change', function() {
+          if (this.checked) {
+            selectedProducts.add(card.dataset.id);
+            card.style.borderColor = 'var(--primary-bright)';
+            card.style.boxShadow = '0 0 0 1px var(--primary-bright)';
+          } else {
+            selectedProducts.delete(card.dataset.id);
+            card.style.borderColor = 'var(--border-color)';
+            card.style.boxShadow = 'none';
+          }
+          updateFinishButton();
+          updateSelectAllState();
         });
+
+        // Configura cálculo automático com debounce
+        inputs.forEach(input => {
+          input.addEventListener('input', function() {
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(() => {
+              calculateCosts(card);
+              // Auto-seleciona se todos os campos estiverem preenchidos
+              const allFilled = Array.from(card.querySelectorAll('input[type="number"]'))
+                .every(input => input.value.trim() !== '');
+              if (allFilled && !checkbox.checked) {
+                checkbox.checked = true;
+                checkbox.dispatchEvent(new Event('change'));
+              }
+            }, 300);
+          });
+        });
+
+        // Configura botão salvar
+        saveBtn.addEventListener('click', function() {
+          saveProduct(card);
+        });
+      });
     }
 
-    // Processamento após salvar
-    function processSuccessfulSave(card, data) {
-        // Animação de fade-out
-        card.style.opacity = '0';
-
-        setTimeout(() => {
-            // Atualiza interface
-            card.remove();
-            updateCounters();
-            updateFinishButton();
-
-            // Atualiza histórico
-            productHistory[data.codigo_fornecedor] = {
-                qtd_volumes: data.qtd_volumes,
-                qtd_por_volume: data.qtd_por_volume,
-                valor_anterior: data.valor_total
-            };
-
-            showNotification('Produto salvo com sucesso!');
-        }, 300);
-    }
-
-    // Tratamento de erros
-    function handleSaveError(error, saveBtn) {
-        console.error('Erro ao salvar:', error);
-
-        const errorMessage = error.message.includes('Not Found')
-            ? 'Endpoint não encontrado (404). Salvando localmente...'
-            : error.message;
-
-        showNotification(errorMessage, 'error');
-
-        // Restaura botão
-        saveBtn.innerHTML = '<i class="fas fa-save"></i> Salvar Produto';
-        saveBtn.disabled = false;
-    }
     function calculateCosts(card) {
-        const qtdVolumes = parseFloat(card.querySelector('.quantity-volumes').value) || 0;
-        const qtdPorVolume = parseFloat(card.querySelector('.quantity-per-volume').value) || 0;
-        const valorTotal = parseFloat(card.dataset.value);
-        const ipi = parseFloat(card.dataset.ipi) || 0;
+      const qtdVolumes = parseFloat(card.querySelector('.quantity-volumes').value) || 0;
+      const qtdPorVolume = parseFloat(card.querySelector('.quantity-per-volume').value) || 0;
+      const valorTotal = parseFloat(card.dataset.value);
+      const ipi = parseFloat(card.dataset.ipi) || 0;
+      const quantidadeTotal = parseInt(card.dataset.quantity);
 
-        if (qtdVolumes > 0 && qtdPorVolume > 0) {
-            const custoVolume = valorTotal / qtdVolumes;
-            const custoUnitario = custoVolume / qtdPorVolume;
-            const custoComIpi = custoUnitario * (1 + (ipi / 100));
-            const qtdRealUnidades = qtdVolumes * qtdPorVolume;
+      if (qtdVolumes > 0 && qtdPorVolume > 0) {
+        const custoVolume = valorTotal / qtdVolumes;
+        const custoUnitario = custoVolume / qtdPorVolume;
+        const custoComIpi = custoUnitario * (1 + (ipi / 100));
+        const qtdRealUnidades = qtdVolumes * qtdPorVolume;
 
-            card.querySelector('.results').innerHTML = `
-                <div class="result-item"><i class="fas fa-box-open"></i> Qtd Total: ${card.dataset.quantity} UN</div>
-                <div class="result-item"><i class="fas fa-tag"></i> Valor Total: R$ ${valorTotal.toFixed(2).replace('.', ',')}</div>
-                <div class="result-item"><i class="fas fa-boxes"></i> Custo por Volume: R$ ${custoVolume.toFixed(2).replace('.', ',')}</div>
-                <div class="result-item"><i class="fas fa-cube"></i> Custo Unitário: R$ ${custoUnitario.toFixed(4).replace('.', ',')}</div>
-                <div class="result-item"><i class="fas fa-percentage"></i> Custo com IPI: R$ ${custoComIpi.toFixed(4).replace('.', ',')}</div>
-            `;
+        // Limpa resultados anteriores
+        const resultados = card.querySelector('.results');
+        let resultadosHTML = `
+          <div class="result-item"><i class="fas fa-box-open"></i> Qtd Total: ${quantidadeTotal} UN</div>
+          <div class="result-item"><i class="fas fa-tag"></i> Valor Total: R$ ${valorTotal.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</div>
+        `;
+
+        // Adiciona os campos de cálculo
+        resultadosHTML += `
+          <div class="result-item"><i class="fas fa-boxes"></i> Custo por Volume: R$ ${custoVolume.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</div>
+          <div class="result-item"><i class="fas fa-cube"></i> Custo Unitário: R$ ${custoUnitario.toLocaleString('pt-BR', {minimumFractionDigits: 4})}</div>
+          <div class="result-item"><i class="fas fa-percentage"></i> Custo com IPI: R$ ${custoComIpi.toLocaleString('pt-BR', {minimumFractionDigits: 4})}</div>
+          <div class="result-item"><i class="fas fa-calculator"></i> Qtd Real Unidades: ${qtdRealUnidades}</div>
+        `;
+
+        resultados.innerHTML = resultadosHTML;
+      }
+    }
+
+    async function saveProduct(card) {
+      const qtdVolumes = parseFloat(card.querySelector('.quantity-volumes').value) || 0;
+      const qtdPorVolume = parseFloat(card.querySelector('.quantity-per-volume').value) || 0;
+
+      if (qtdVolumes <= 0 || qtdPorVolume <= 0) {
+        showNotification('Preencha as quantidades corretamente!', 'error');
+        return;
+      }
+
+      // Mostra estado de loading no botão
+      const saveBtn = card.querySelector('.btn-save');
+      const originalText = saveBtn.innerHTML;
+      saveBtn.innerHTML = '<div class="loading"></div> Salvando...';
+      saveBtn.disabled = true;
+
+      // Calcula os valores antes de enviar
+      const valorTotal = parseFloat(card.dataset.value);
+      const ipi = parseFloat(card.dataset.ipi) || 0;
+      const custoVolume = valorTotal / qtdVolumes;
+      const custoUnitario = custoVolume / qtdPorVolume;
+      const custoComIpi = custoUnitario * (1 + (ipi / 100));
+      const qtdRealUnidades = qtdVolumes * qtdPorVolume;
+
+      // Objeto de dados
+      const data = {
+        id: card.dataset.id,
+        codigo_fornecedor: card.dataset.code,
+        nome: card.querySelector('h3').textContent,
+        qtd_volumes: qtdVolumes,
+        qtd_por_volume: qtdPorVolume,
+        numero_nfe: card.dataset.nfe,
+        fornecedor: card.dataset.supplier,
+        data_emissao: card.dataset.emission,
+        valor_total: valorTotal,
+        ipi: ipi,
+        quantidade: parseInt(card.dataset.quantity),
+        caminho_xml: card.dataset.path,
+        custo_volume: custoVolume,
+        custo_unitario: custoUnitario,
+        custo_com_ipi: custoComIpi,
+        qtd_real_unidades: qtdRealUnidades
+      };
+
+      try {
+        const response = await fetch('/painel-nfe/salvar-produto', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+
+        const result = await response.json();
+
+        if (result.status === 'success') {
+          // Atualiza visual do card
+          card.classList.add('saved');
+          card.querySelector('.btn-save').innerHTML = '<i class="fas fa-check"></i> ✓ SALVO';
+          card.querySelector('.btn-save').disabled = true;
+          card.querySelectorAll('input').forEach(i => i.disabled = true);
+          card.querySelector('.product-checkbox').disabled = true;
+
+          // Adiciona aos salvos
+          savedProducts.push(card.dataset.id);
+          updateCounters();
+          updateFinishButton();
+
+          showNotification('Produto salvo com sucesso!');
+        } else {
+          throw new Error(result.message || 'Erro ao salvar');
         }
+      } catch (error) {
+        console.error('Erro:', error);
+        showNotification('Erro ao salvar produto: ' + error.message, 'error');
+      } finally {
+        // Restaura o botão se houve erro
+        if (!card.classList.contains('saved')) {
+          saveBtn.innerHTML = originalText;
+          saveBtn.disabled = false;
+        }
+      }
+    }
+
+    async function finishNfe() {
+      if (!confirm('Deseja realmente finalizar esta NF-e?\n\nEsta ação não pode ser desfeita.')) {
+        return;
+      }
+
+      const btn = document.getElementById('floating-finish-btn');
+      const originalText = btn.innerHTML;
+      btn.innerHTML = '<div class="loading"></div> Processando...';
+      btn.disabled = true;
+
+      try {
+        const selectedNfe = document.getElementById('nfe-filter').value;
+        const nfeProducts = Array.from(document.querySelectorAll(`.product-card[data-nfe="${selectedNfe}"]`));
+
+        if (nfeProducts.length === 0) {
+          throw new Error('Nenhum produto encontrado para esta NF-e');
+        }
+
+        // Preparar dados dos produtos para criação
+        const productsToCreate = nfeProducts.map(product => ({
+          code: product.dataset.code,
+          name: product.querySelector('h3').textContent,
+          quantity: product.dataset.quantity,
+          unit_value: (parseFloat(product.dataset.value) / parseInt(product.dataset.quantity)).toFixed(4),
+          supplier: product.dataset.supplier
+        }));
+
+        const finishData = {
+          numero_nfe: selectedNfe,
+          supplier: nfeProducts[0].dataset.supplier,
+          emission_date: nfeProducts[0].dataset.emission,
+          total_value: nfeProducts.reduce((total, product) => total + parseFloat(product.dataset.value), 0).toFixed(2),
+          xml_path: nfeProducts[0].dataset.path,
+          products: productsToCreate,
+          saved_products: savedProducts,
+          selected_products: Array.from(selectedProducts)
+        };
+
+        const response = await fetch('/painel-nfe/finalizar-nfe', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(finishData)
+        });
+
+        const result = await response.json();
+
+        if (result.status === 'success') {
+          // Atualizar interface apenas após confirmação do servidor
+          nfeProducts.forEach(product => {
+            product.style.opacity = '0';
+            setTimeout(() => product.remove(), 300);
+          });
+
+          showNotification('NF-e finalizada e produtos criados com sucesso!');
+
+          // Atualizar contadores e filtros após animação
+          setTimeout(() => {
+            updateCounters();
+            updateFilters();
+            document.getElementById('floating-finish-btn').style.display = 'none';
+          }, 350);
+
+        } else {
+          throw new Error(result.message || 'Erro ao finalizar');
+        }
+      } catch (error) {
+        console.error('Erro:', error);
+        showNotification('Erro ao finalizar NF-e: ' + error.message, 'error');
+        btn.innerHTML = originalText;
+        btn.disabled = false;
+      }
     }
 
     function filterProducts() {
-        const supplier = document.getElementById('supplier-filter').value;
-        const nfe = document.getElementById('nfe-filter').value;
+      const supplierFilter = document.getElementById('supplier-filter').value;
+      const nfeFilter = document.getElementById('nfe-filter').value;
 
-        document.querySelectorAll('.product-card').forEach(card => {
-            card.style.display =
-                (supplier && card.dataset.supplier !== supplier) ||
-                (nfe && card.dataset.nfe !== nfe)
-                ? 'none' : 'block';
-        });
-        updateSelectAllState();
-    }
+      document.querySelectorAll('.product-card').forEach(card => {
+        const showSupplier = !supplierFilter || card.dataset.supplier === supplierFilter;
+        const showNfe = !nfeFilter || card.dataset.nfe === nfeFilter;
 
-    function updateSelectAllState() {
-        const selectAll = document.getElementById('select-all');
-        const visibleCheckboxes = document.querySelectorAll('.product-card:not([style*="none"]) .product-checkbox:not(:disabled)');
+        card.style.display = (showSupplier && showNfe) ? 'block' : 'none';
+      });
 
-        selectAll.checked = visibleCheckboxes.length > 0 &&
-                           Array.from(visibleCheckboxes).every(cb => cb.checked);
+      updateSelectAllState();
     }
 
     function selectAll() {
-        const selectAll = document.getElementById('select-all');
-        document.querySelectorAll('.product-card:not([style*="none"]) .product-checkbox:not(:disabled)')
-            .forEach(checkbox => {
-                checkbox.checked = selectAll.checked;
-                const card = checkbox.closest('.product-card');
-                card.style.borderColor = selectAll.checked ? 'var(--primary)' : 'var(--border-color)';
-                card.style.boxShadow = selectAll.checked ? '0 0 0 1px var(--primary)' : 'none';
-            });
-        updateFinishButton();
+      const selectAllCheckbox = document.getElementById('select-all');
+      const checkboxes = document.querySelectorAll('.product-checkbox:not(:disabled)');
+
+      checkboxes.forEach(checkbox => {
+        const card = checkbox.closest('.product-card');
+        const cardId = card.dataset.id;
+
+        // Verifica se o card está visível (não filtrado)
+        if (card.style.display !== 'none') {
+          checkbox.checked = selectAllCheckbox.checked;
+
+          if (selectAllCheckbox.checked) {
+            selectedProducts.add(cardId);
+            card.style.borderColor = 'var(--primary-bright)';
+            card.style.boxShadow = '0 0 0 1px var(--primary-bright)';
+          } else {
+            selectedProducts.delete(cardId);
+            card.style.borderColor = 'var(--border-color)';
+            card.style.boxShadow = 'none';
+          }
+        }
+      });
+
+      updateFinishButton();
+    }
+
+    function updateSelectAllState() {
+      const selectAllCheckbox = document.getElementById('select-all');
+      const visibleCheckboxes = Array.from(document.querySelectorAll('.product-card:not([style*="display: none"]) .product-checkbox:not(:disabled)'));
+
+      if (visibleCheckboxes.length === 0) {
+        selectAllCheckbox.checked = false;
+        selectAllCheckbox.indeterminate = false;
+        return;
+      }
+
+      const checkedCount = visibleCheckboxes.filter(checkbox => checkbox.checked).length;
+
+      if (checkedCount === 0) {
+        selectAllCheckbox.checked = false;
+        selectAllCheckbox.indeterminate = false;
+      } else if (checkedCount === visibleCheckboxes.length) {
+        selectAllCheckbox.checked = true;
+        selectAllCheckbox.indeterminate = false;
+      } else {
+        selectAllCheckbox.checked = false;
+        selectAllCheckbox.indeterminate = true;
+      }
+    }
+
+    function checkSavedProducts() {
+      const saved = document.querySelectorAll('.product-card.saved').length;
+      const pending = document.querySelectorAll('.product-card:not(.saved)').length;
+
+      document.getElementById('review-count').textContent = pending;
+
+      if (saved > 0) {
+        document.getElementById('floating-finish-btn').style.display = 'flex';
+      }
     }
 
     function updateCounters() {
-        document.getElementById('review-count').textContent =
-            document.querySelectorAll('.product-card:not(.saved)').length;
+      const pending = document.querySelectorAll('.product-card:not(.saved)').length;
+      const newProducts = document.querySelectorAll('.product-card[data-status="new"]').length;
+      const changedPrices = document.querySelectorAll('.product-card[data-status="changed"]').length;
+
+      document.getElementById('review-count').textContent = pending;
+      document.getElementById('new-count').textContent = newProducts;
+      document.getElementById('changed-count').textContent = changedPrices;
     }
 
     function updateFinishButton() {
-        const btn = document.getElementById('floating-finish-btn');
-        btn.style.display = selectedProducts.size > 0 ? 'flex' : 'none';
+      const btn = document.getElementById('floating-finish-btn');
+      const totalSelected = selectedProducts.size;
+      const totalSaved = savedProducts.length;
+
+      if (totalSelected > 0 || totalSaved > 0) {
+        btn.style.display = 'flex';
+        btn.disabled = false;
+
+        // Atualiza texto com contagem
+        if (totalSelected > 0) {
+          btn.innerHTML = `<i class="fas fa-check-circle"></i> Finalizar (${totalSelected})`;
+        } else {
+          btn.innerHTML = '<i class="fas fa-check-circle"></i> Finalizar NF-e';
+        }
+      } else {
+        btn.style.display = 'none';
+      }
     }
 
     function showNotification(message, type = 'success') {
-        const notification = document.getElementById('notification');
-        notification.className = `notification ${type} show`;
-        notification.querySelector('#notification-message').textContent = message;
-        setTimeout(() => notification.classList.remove('show'), 5000);
+      const notification = document.getElementById('notification');
+      const messageEl = document.getElementById('notification-message');
+
+      messageEl.textContent = message;
+      notification.className = `notification ${type}`;
+      notification.classList.add('show');
+
+      setTimeout(() => {
+        notification.classList.remove('show');
+      }, 5000);
     }
 
-    // Funções do modal (mantidas originais)
     function openModal(type) {
-        openModalType = type;
-        document.getElementById('modal').style.display = 'flex';
-        document.getElementById('modal-content').innerHTML = `
-            <h2>${type === 'review' ? 'Produtos para Revisar' :
-                type === 'new' ? 'Produtos Novos' :
-                type === 'changed' ? 'Preços Alterados' : 'Detalhes'}</h2>
-            <p>Conteúdo do modal...</p>
-        `;
+      openModalType = type;
+      const modal = document.getElementById('modal');
+      const modalContent = document.getElementById('modal-content');
+
+      // Título baseado no tipo
+      let title = '';
+      let content = '';
+
+      switch(type) {
+        case 'products':
+          title = 'Todos os Produtos';
+          content = '<p>Lista completa de todos os produtos...</p>';
+          break;
+        case 'review':
+          title = 'Produtos para Revisar';
+          content = '<p>Lista de produtos que precisam ser revisados...</p>';
+          break;
+        case 'new':
+          title = 'Produtos Novos';
+          content = '<p>Lista de produtos novos no sistema...</p>';
+          break;
+        case 'changed':
+          title = 'Preços Alterados';
+          content = '<p>Lista de produtos com preços alterados...</p>';
+          break;
+        default:
+          title = 'Detalhes';
+          content = '<p>Conteúdo do modal...</p>';
+      }
+
+      modalContent.innerHTML = `
+        <h2 style="margin-top: 0; color: var(--primary-bright)">${title}</h2>
+        ${content}
+      `;
+
+      modal.style.display = 'flex';
     }
 
     function closeModal() {
-        document.getElementById('modal').style.display = 'none';
+      document.getElementById('modal').style.display = 'none';
+      openModalType = null;
     }
 
+    // Fechar modal ao clicar fora
     window.addEventListener('click', function(event) {
-        if (event.target === document.getElementById('modal')) {
-            closeModal();
-        }
+      const modal = document.getElementById('modal');
+      if (event.target === modal) {
+        closeModal();
+      }
     });
-</script>
-{% endblock %}
+
+    // Função para atualizar filtros após operações
+    function updateFilters() {
+      const nfeSelect = document.getElementById('nfe-filter');
+      const currentNfe = nfeSelect.value;
+
+      // Atualiza opções do filtro de NF-e
+      const nfes = Array.from(new Set(
+        Array.from(document.querySelectorAll('.product-card'))
+          .map(card => card.dataset.nfe)
+      ));
+
+      nfeSelect.innerHTML = '<option value="">Todas as NF-e</option>';
+      nfes.forEach(nfe => {
+        const option = document.createElement('option');
+        option.value = nfe;
+        option.textContent = nfe;
+        nfeSelect.appendChild(option);
+      });
+
+      // Restaura seleção anterior se ainda existir
+      if (nfes.includes(currentNfe)) {
+        nfeSelect.value = currentNfe;
+      }
+
+      filterProducts();
+    }
+  </script>
+</body>
+</html>
