@@ -1,14 +1,11 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>FisgarOne | Gestão de Produtos</title>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <!-- Ícones futuristas -->
-  <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+{% extends 'base.html' %}
 
+{% block title %}Produtos{% endblock %}
+{% block page_title %}Produtos{% endblock %}
+
+{% block extra_css %}
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
   <style>
     :root {
       /* Cores Tema Claro Neon */
@@ -398,71 +395,234 @@
       box-shadow: 0 0 0 3px rgba(0, 240, 255, 0.2);
     }
 
-    /* Grid de Produtos */
-    .products-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-      gap: 15px;
+    /* Lista Horizontal de Produtos - NOVO DESIGN */
+    .products-list-container {
+      width: 100%;
+      overflow-x: auto;
+      padding-bottom: 15px;
     }
 
-    .product-card {
+    .products-list {
+      display: table;
+      width: 100%;
+      min-width: 1000px;
+      border-collapse: separate;
+      border-spacing: 0 10px;
+    }
+
+    .list-header {
+      display: table-header-group;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .list-header-row {
+      display: table-row;
+    }
+
+    .list-header-cell {
+      display: table-cell;
+      padding: 12px 15px;
+      background: var(--primary-bright);
+      color: white;
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      letter-spacing: 0.5px;
+      border: none;
+      white-space: nowrap;
+    }
+
+    .dark-theme .list-header-cell {
+      background: var(--primary-dark);
+    }
+
+    .list-header-cell:first-child {
+      border-top-left-radius: var(--border-radius-sm);
+      border-bottom-left-radius: var(--border-radius-sm);
+    }
+
+    .list-header-cell:last-child {
+      border-top-right-radius: var(--border-radius-sm);
+      border-bottom-right-radius: var(--border-radius-sm);
+    }
+
+    .list-body {
+      display: table-row-group;
+    }
+
+    .product-row {
+      display: table-row;
+    }
+
+    .product-cell {
+      display: table-cell;
+      padding: 15px;
       background: var(--card-bg-light);
-      border-radius: var(--border-radius);
-      padding: 20px;
-      border: 1px solid var(--card-border-light);
+      border: none;
+      vertical-align: middle;
       transition: all var(--transition-speed) ease;
-      box-shadow: var(--shadow-sm);
-      position: relative;
-      overflow: hidden;
     }
 
-    .dark-theme .product-card {
+    .dark-theme .product-cell {
       background: var(--card-bg-dark);
-      border-color: var(--card-border-dark);
     }
 
-    .product-card:hover {
-      transform: translateY(-5px);
-      box-shadow: var(--shadow-md);
-      border-color: var(--primary-bright);
+    .product-row:first-child .product-cell:first-child {
+      border-top-left-radius: var(--border-radius-sm);
     }
 
-    .dark-theme .product-card:hover {
-      border-color: var(--primary-dark);
+    .product-row:first-child .product-cell:last-child {
+      border-top-right-radius: var(--border-radius-sm);
     }
 
-    .product-header {
+    .product-row:last-child .product-cell:first-child {
+      border-bottom-left-radius: var(--border-radius-sm);
+    }
+
+    .product-row:last-child .product-cell:last-child {
+      border-bottom-right-radius: var(--border-radius-sm);
+    }
+
+    .product-row:hover .product-cell {
+      background: rgba(0, 208, 255, 0.05);
+      transform: translateX(5px);
+    }
+
+    .dark-theme .product-row:hover .product-cell {
+      background: rgba(0, 240, 255, 0.05);
+    }
+
+    .product-info {
       display: flex;
-      justify-content: space-between;
-      margin-bottom: 20px;
+      align-items: center;
+    }
+
+    .product-image {
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      background: rgba(0, 208, 255, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 12px;
+      color: var(--primary-bright);
+      font-size: 1.2rem;
+    }
+
+    .dark-theme .product-image {
+      background: rgba(0, 240, 255, 0.1);
+      color: var(--primary-dark);
     }
 
     .product-name {
-      font-size: 0.9rem;
       font-weight: 600;
+      font-size: 0.9rem;
       color: var(--text-light);
-      line-height: 1.3;
-      word-break: break-word;
-      max-height: 2.6em;
-      overflow: hidden;
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
+      margin-bottom: 3px;
+      display: block;
     }
 
     .dark-theme .product-name {
       color: var(--text-dark);
     }
 
+    .product-code {
+      font-size: 0.75rem;
+      color: var(--text-light-contrast);
+      opacity: 0.8;
+    }
+
+    .dark-theme .product-code {
+      color: var(--text-dark);
+    }
+
+    .product-category {
+      font-size: 0.85rem;
+      color: var(--text-light);
+      display: inline-block;
+      padding: 0.2rem 0.5rem;
+      background: rgba(0, 208, 255, 0.1);
+      border-radius: 4px;
+      border-left: 3px solid var(--primary-bright);
+    }
+
+    .dark-theme .product-category {
+      color: var(--text-dark);
+      background: rgba(0, 240, 255, 0.1);
+      border-left-color: var(--primary-dark);
+    }
+
+    .product-value {
+      font-weight: 600;
+      color: var(--primary-bright);
+    }
+
+    .dark-theme .product-value {
+      color: var(--primary-dark);
+    }
+
+    .product-stock {
+      font-weight: 600;
+    }
+
+    .stock-high {
+      color: #00cc99;
+    }
+
+    .stock-low {
+      color: var(--accent-light);
+    }
+
+    .dark-theme .stock-low {
+      color: var(--accent-dark);
+    }
+
+    .product-status {
+      display: inline-block;
+      padding: 0.3rem 0.6rem;
+      border-radius: 50px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    .status-active {
+      background: rgba(0, 204, 153, 0.1);
+      color: #00cc99;
+      border: 1px solid #00cc99;
+    }
+
+    .status-inactive {
+      background: rgba(255, 62, 128, 0.1);
+      color: var(--accent-light);
+      border: 1px solid var(--accent-light);
+    }
+
+    .status-pending {
+      background: rgba(255, 153, 0, 0.1);
+      color: #ff9900;
+      border: 1px solid #ff9900;
+    }
+
+    .dark-theme .status-inactive {
+      background: rgba(255, 45, 117, 0.1);
+      color: var(--accent-dark);
+      border-color: var(--accent-dark);
+    }
+
     .product-actions {
       display: flex;
-      gap: 5px;
+      gap: 8px;
+      justify-content: flex-end;
     }
 
     .action-btn {
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
       background: var(--card-bg-light);
       border: 1px solid var(--card-border-light);
       color: var(--text-light-contrast);
@@ -471,7 +631,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 0.8rem;
+      font-size: 0.9rem;
     }
 
     .dark-theme .action-btn {
@@ -484,7 +644,7 @@
       background: rgba(0, 208, 255, 0.1);
       color: var(--primary-bright);
       border-color: var(--primary-bright);
-      transform: scale(1.1);
+      transform: translateY(-2px);
       box-shadow: var(--glow-effect-light);
     }
 
@@ -511,90 +671,6 @@
       color: #00cc99;
       border-color: #00cc99;
       background: rgba(0, 204, 153, 0.1);
-    }
-
-    .product-details {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 15px;
-      margin-top: 20px;
-      font-size: 0.9rem;
-    }
-
-    .detail-item {
-      margin-bottom: 10px;
-    }
-
-    .detail-label {
-      font-size: 0.8rem;
-      color: var(--text-light-contrast);
-      margin-bottom: 5px;
-      display: flex;
-      align-items: center;
-      gap: 5px;
-    }
-
-    .dark-theme .detail-label {
-      color: var(--text-dark);
-    }
-
-    .detail-value {
-      font-weight: 500;
-      color: var(--text-light);
-      word-break: break-all;
-    }
-
-    .dark-theme .detail-value {
-      color: var(--text-dark);
-    }
-
-    .highlight-value {
-      color: var(--primary-bright);
-      font-weight: 600;
-    }
-
-    .dark-theme .highlight-value {
-      color: var(--primary-dark);
-    }
-
-    .badge {
-      display: inline-block;
-      padding: 0.3rem 0.6rem;
-      border-radius: 50px;
-      font-size: 0.8rem;
-      font-weight: 600;
-      margin-top: 20px;
-      letter-spacing: 0.5px;
-    }
-
-    .badge-primary {
-      background: rgba(0, 208, 255, 0.1);
-      color: var(--primary-bright);
-      border: 1px solid var(--primary-bright);
-    }
-
-    .badge-success {
-      background: rgba(0, 204, 153, 0.1);
-      color: #00cc99;
-      border: 1px solid #00cc99;
-    }
-
-    .badge-warning {
-      background: rgba(255, 153, 0, 0.1);
-      color: #ff9900;
-      border: 1px solid #ff9900;
-    }
-
-    .badge-danger {
-      background: rgba(255, 62, 128, 0.1);
-      color: var(--accent-light);
-      border: 1px solid var(--accent-light);
-    }
-
-    .dark-theme .badge-danger {
-      background: rgba(255, 45, 117, 0.1);
-      color: var(--accent-dark);
-      border-color: var(--accent-dark);
     }
 
     /* Modal */
@@ -828,10 +904,33 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
+    /* Scrollbar personalizada */
+    .products-list-container::-webkit-scrollbar {
+      height: 8px;
+    }
+
+    .products-list-container::-webkit-scrollbar-track {
+      background: var(--card-bg-light);
+      border-radius: 10px;
+    }
+
+    .products-list-container::-webkit-scrollbar-thumb {
+      background: var(--primary-bright);
+      border-radius: 10px;
+    }
+
+    .dark-theme .products-list-container::-webkit-scrollbar-track {
+      background: var(--card-bg-dark);
+    }
+
+    .dark-theme .products-list-container::-webkit-scrollbar-thumb {
+      background: var(--primary-dark);
+    }
+
     /* Responsividade */
     @media (max-width: 1200px) {
-      .products-grid {
-        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      .products-list {
+        min-width: 900px;
       }
     }
 
@@ -858,10 +957,6 @@
     }
 
     @media (max-width: 576px) {
-      .products-grid {
-        grid-template-columns: 1fr;
-      }
-
       .stats {
         grid-template-columns: 1fr;
       }
@@ -906,8 +1001,9 @@
       box-shadow: 0 0 25px rgba(255, 45, 117, 0.7);
     }
   </style>
-</head>
-<body>
+{% endblock %}
+
+{% block content %}
 
   <!-- Botão de tema -->
   <button id="theme-toggle" title="Alternar tema">
@@ -1045,36 +1141,100 @@
       </div>
     </div>
 
-    <!-- Grid de Produtos -->
-    <div class="products-grid" id="products-container">
+    <!-- Lista de Produtos - NOVO DESIGN -->
+    <div class="products-list-container" id="products-container">
+  <div class="products-list">
+    <div class="list-header">
+      <div class="list-header-row">
+        <div class="list-header-cell">Produto</div>
+        <div class="list-header-cell">Categoria</div>
+        <div class="list-header-cell">Estoque</div>
+        <div class="list-header-cell">Valor Unitário</div>
+        <div class="list-header-cell">Valor Total</div>
+        <div class="list-header-cell">Fornecedor</div>
+        <div class="list-header-cell">Status</div>
+        <div class="list-header-cell">Ações</div>
+      </div>
+    </div>
+
+    <div class="list-body">
       {% for p in produtos %}
-      <div class="product-card"
-           data-id="{{ p.codigo }}"
-           data-name="{{ p.nome|lower }}"
-           data-category="{{ p.categoria }}"
-           data-stock="{{ p.quantidade_total }}"
-           data-value="{{ p.valor_total }}"
-           data-status="{{ p.status }}"
-           data-supplier="{{ p.fornecedor|lower }}"
-           data-date="{{ p.data_cadastro }}">
-        <div class="product-header">
-          <h3 class="product-name tooltip" title="{{ p.nome }}">
-            {{ p.nome|truncate(50) }}
-            {% if p.origem == 'nfe' %}
-            <i class="fas fa-file-invoice" style="color: #7b2dff; font-size: 0.8em;"></i>
-            {% endif %}
-          </h3>
+      <div class="product-row"
+           data-id="{{ p['codigo'] }}"
+           data-name="{{ p['nome']|lower }}"
+           data-category="{{ p['categoria'] }}"
+           data-stock="{{ p['quantidade'] }}"
+           data-value="{{ p['valor_total'] }}"
+           data-status="{{ p['status'] }}"
+           data-supplier="{{ p['fornecedor']|lower }}"
+           data-date="{{ p['data_cadastro'] }}">
+        <div class="product-cell">
+          <div class="product-info">
+            <div class="product-image">
+              <i class="fas fa-box"></i>
+            </div>
+            <div>
+              <span class="product-name tooltip" title="{{ p['nome'] }}">
+                {{ p['nome']|truncate(30) }}
+                {% if p['origem'] == 'nfe' %}
+                <i class="fas fa-file-invoice" style="color: #7b2dff; font-size: 0.8em;"></i>
+                {% endif %}
+              </span>
+              <span class="product-code">{{ p['codigo'] }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="product-cell">
+          <span class="product-category">{{ p['categoria'] or 'Não informado' }}</span>
+        </div>
+
+        <div class="product-cell">
+          <span class="product-stock {% if p['quantidade'] > 10 %}stock-high{% else %}stock-low{% endif %}">
+            {{ p['quantidade'] }} UN  <!-- Alterado de quantidade_total para quantidade -->
+          </span>
+        </div>
+
+        <div class="product-cell">
+          <span class="product-value">R$ {{ "%.4f"|format(p['custo_unitario']) }}</span>
+        </div>
+
+        <div class="product-cell">
+          <span class="product-value">R$ {{ "%.2f"|format(p['valor_total']) }}</span>
+        </div>
+
+        <div class="product-cell">
+          {{ p['fornecedor'] or 'Não informado' }}
+        </div>
+
+        <div class="product-cell">
+          {% if p['status'] == 'ativo' %}
+          <span class="product-status status-active">
+            <i class="fas fa-check-circle"></i> Ativo
+          </span>
+          {% elif p['status'] == 'inativo' %}
+          <span class="product-status status-inactive">
+            <i class="fas fa-times-circle"></i> Inativo
+          </span>
+          {% else %}
+          <span class="product-status status-pending">
+            <i class="fas fa-clock"></i> Pendente
+          </span>
+          {% endif %}
+        </div>
+
+        <div class="product-cell">
           <div class="product-actions">
-            <button class="action-btn edit-btn tooltip" title="Editar" data-id="{{ p.codigo }}">
+            <button class="action-btn edit-btn tooltip" title="Editar" data-id="{{ p['codigo'] }}">
               <i class="fas fa-edit"></i>
               <span class="tooltip-text">Editar produto</span>
             </button>
-            <button class="action-btn delete-btn tooltip" title="Excluir" data-id="{{ p.codigo }}">
+            <button class="action-btn delete-btn tooltip" title="Excluir" data-id="{{ p['codigo'] }}">
               <i class="fas fa-trash"></i>
               <span class="tooltip-text">Excluir produto</span>
             </button>
-            <button class="action-btn status-btn tooltip" title="Alterar Status" data-id="{{ p.codigo }}" data-status="{{ p.status }}">
-              {% if p.status == 'ativo' %}
+            <button class="action-btn status-btn tooltip" title="Alterar Status" data-id="{{ p['codigo'] }}" data-status="{{ p['status'] }}">
+              {% if p['status'] == 'ativo' %}
               <i class="fas fa-toggle-on"></i>
               <span class="tooltip-text">Desativar produto</span>
               {% else %}
@@ -1084,81 +1244,11 @@
             </button>
           </div>
         </div>
-
-        <div class="product-details">
-          <div class="detail-item">
-            <span class="detail-label">
-              <i class="fas fa-barcode"></i> Código
-            </span>
-            <span class="detail-value">{{ p.codigo }}</span>
-          </div>
-
-          <div class="detail-item">
-            <span class="detail-label">
-              <i class="fas fa-tags"></i> Categoria
-            </span>
-            <span class="detail-value">{{ p.categoria or 'Não informado' }}</span>
-          </div>
-
-          <div class="detail-item">
-            <span class="detail-label">
-              <i class="fas fa-balance-scale"></i> Unidade
-            </span>
-            <span class="detail-value">{{ p.unidade_compra }}</span>
-          </div>
-
-          <div class="detail-item">
-            <span class="detail-label">
-              <i class="fas fa-boxes"></i> Estoque
-            </span>
-            <span class="detail-value highlight-value">{{ p.quantidade_total }} UN</span>
-          </div>
-
-          <div class="detail-item">
-            <span class="detail-label">
-              <i class="fas fa-tag"></i> Custo Unitário
-            </span>
-            <span class="detail-value highlight-value">R$ {{ "%.4f"|format(p.custo_unitario) }}</span>
-          </div>
-
-          <div class="detail-item">
-            <span class="detail-label">
-              <i class="fas fa-money-bill-wave"></i> Valor Total
-            </span>
-            <span class="detail-value highlight-value">R$ {{ "%.2f"|format(p.valor_total) }}</span>
-          </div>
-
-          <div class="detail-item">
-            <span class="detail-label">
-              <i class="fas fa-percentage"></i> IPI
-            </span>
-            <span class="detail-value">{{ p.ipi }}%</span>
-          </div>
-
-          <div class="detail-item">
-            <span class="detail-label">
-              <i class="fas fa-truck"></i> Fornecedor
-            </span>
-            <span class="detail-value">{{ p.fornecedor or 'Não informado' }}</span>
-          </div>
-        </div>
-
-        {% if p.status == 'ativo' %}
-        <span class="badge badge-success">
-          <i class="fas fa-check-circle"></i> Ativo
-        </span>
-        {% elif p.status == 'inativo' %}
-        <span class="badge badge-danger">
-          <i class="fas fa-times-circle"></i> Inativo
-        </span>
-        {% else %}
-        <span class="badge badge-warning">
-          <i class="fas fa-clock"></i> Pendente
-        </span>
-        {% endif %}
       </div>
       {% endfor %}
     </div>
+  </div>
+</div>
   </div>
 
   <!-- Modal de Adição/Edição -->
@@ -1310,7 +1400,9 @@
       </form>
     </div>
   </div>
+{% endblock %}
 
+{% block extra_js %}
   <script>
 document.addEventListener('DOMContentLoaded', function() {
   // Referências DOM
@@ -1374,19 +1466,20 @@ if (addProductBtn) {
 const exportBtn = document.getElementById('export-btn');
 if (exportBtn) {
   exportBtn.addEventListener('click', function() {
-    fetch('/exportar-produtos')
+    fetch('/api/exportar-produtos')  // Adicione '/api/' ou o prefixo correto
       .then(response => response.blob())
       .then(blob => {
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = `produtos_fisgarone_${new Date().toISOString().split('T')[0]}.csv`;
+        a.download = `produtos_${new Date().toISOString().split('T')[0]}.csv`;
         document.body.appendChild(a);
         a.click();
         window.URL.revokeObjectURL(url);
       })
       .catch(error => {
-        alert('Erro ao exportar produtos: ' + error);
+        console.error('Erro ao exportar:', error);
+        alert('Erro ao exportar produtos. Verifique o console para detalhes.');
       });
   });
 }
@@ -1418,16 +1511,16 @@ window.addEventListener('click', function(e) {
     if (e.target.closest('.edit-btn')) {
       const btn = e.target.closest('.edit-btn');
       const productId = btn.getAttribute('data-id');
-      const productCard = btn.closest('.product-card');
+      const productRow = btn.closest('.product-row');
 
       const productData = {
-        codigo: productCard.getAttribute('data-id'),
-        nome: productCard.getAttribute('data-name'),
-        categoria: productCard.getAttribute('data-category'),
-        quantidade_total: productCard.getAttribute('data-stock'),
-        valor_total: productCard.getAttribute('data-value'),
-        status: productCard.getAttribute('data-status'),
-        fornecedor: productCard.getAttribute('data-supplier')
+        codigo: productRow.getAttribute('data-id'),
+        nome: productRow.getAttribute('data-name'),
+        categoria: productRow.getAttribute('data-category'),
+        quantidade_total: productRow.getAttribute('data-stock'),
+        valor_total: productRow.getAttribute('data-value'),
+        status: productRow.getAttribute('data-status'),
+        fornecedor: productRow.getAttribute('data-supplier')
       };
 
       document.getElementById('modal-title').textContent = 'Editar Produto';
@@ -1488,10 +1581,10 @@ window.addEventListener('click', function(e) {
     if (e.target.closest('.delete-btn')) {
       const btn = e.target.closest('.delete-btn');
       const productId = btn.getAttribute('data-id');
-      const productCard = btn.closest('.product-card');
+      const productRow = btn.closest('.product-row');
       if (confirm('Tem certeza que deseja excluir este produto? Esta ação não pode ser desfeita.')) {
         setTimeout(() => {
-          productCard.remove();
+          productRow.remove();
           const totalProducts = document.getElementById('total-products');
           totalProducts.textContent = parseInt(totalProducts.textContent) - 1;
           alert('Produto excluído com sucesso (simulação)!');
@@ -1507,17 +1600,19 @@ window.addEventListener('click', function(e) {
       const productId = btn.getAttribute('data-id');
       const currentStatus = btn.getAttribute('data-status');
       const newStatus = currentStatus === 'ativo' ? 'inativo' : 'ativo';
-      const productCard = btn.closest('.product-card');
-      productCard.setAttribute('data-status', newStatus);
+      const productRow = btn.closest('.product-row');
+      productRow.setAttribute('data-status', newStatus);
       btn.setAttribute('data-status', newStatus);
+
+      const statusBadge = productRow.querySelector('.product-status');
       if (newStatus === 'ativo') {
         btn.innerHTML = '<i class="fas fa-toggle-on"></i>';
-        productCard.querySelector('.badge').className = 'badge badge-success';
-        productCard.querySelector('.badge').innerHTML = '<i class="fas fa-check-circle"></i> Ativo';
+        statusBadge.className = 'product-status status-active';
+        statusBadge.innerHTML = '<i class="fas fa-check-circle"></i> Ativo';
       } else {
         btn.innerHTML = '<i class="fas fa-toggle-off"></i>';
-        productCard.querySelector('.badge').className = 'badge badge-danger';
-        productCard.querySelector('.badge').innerHTML = '<i class="fas fa-times-circle"></i> Inativo';
+        statusBadge.className = 'product-status status-inactive';
+        statusBadge.innerHTML = '<i class="fas fa-times-circle"></i> Inativo';
       }
       alert('Status alterado com sucesso (simulação)!');
     }
@@ -1532,7 +1627,5 @@ window.addEventListener('click', function(e) {
   // Inicializar cálculos
   calculateValues();
 });
-</script>
-
-</body>
-</html>
+ </script>
+{% endblock %}

@@ -82,7 +82,7 @@
     }
 
     .card {
-        min-width: 220px;
+        min-width: 180px;
         background: var(--card-bg);
         border-radius: 16px;
         padding: 20px;
@@ -704,26 +704,27 @@
   from { opacity: 0; transform: scale(0.95); }
   to { opacity: 1; transform: scale(1); }
 }
+/* Estilo do botão PDF no modal */
 .pdf-btn-modal {
-  background: linear-gradient(45deg, #00f2ff, #0088ff);
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 12px;
-  font-weight: 600;
-  font-size: 0.95rem;
-  cursor: pointer;
-  box-shadow: 0 0 10px #00f2ff80;
-  transition: all 0.3s ease;
+    background: #e74c3c;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-left: 10px; /* Espaço entre os botões */
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
 }
 
-.pdf-btn-modal i {
-  margin-right: 8px;
-}
-
-.pdf-btn-modal:hover {
-  transform: scale(1.05);
-  box-shadow: 0 0 14px #00f2ffcc;
+/* Garante que os botões fiquem alinhados */
+.edit-form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
 }
 
 
@@ -813,8 +814,6 @@
   </div>
 </div>
 
-
-
         <!-- Timeline Diária -->
         <div class="daily-timeline">
             <div class="timeline-header">
@@ -885,9 +884,13 @@
                     </select>
                 </div>
                 <div class="edit-form-actions">
-                    <button type="button" class="cancel-btn" onclick="closeEditModal()">Cancelar</button>
-                    <button type="button" class="save-btn" onclick="saveTransaction()">Salvar</button>
-                </div>
+    <button type="button" class="cancel-btn" onclick="closeEditModal()">Cancelar</button>
+    <button type="button" class="save-btn" onclick="saveTransaction()">Salvar</button>
+    <button type="button" class="pdf-btn-modal" onclick="gerarPdfDoLancamento()">
+        <i class="bi bi-file-earmark-pdf"></i> Gerar PDF
+    </button>
+</div>
+
             </form>
         </div>
     </div>
@@ -912,6 +915,10 @@
   <div class="custom-modal-content">
     <div class="custom-modal-header">
       <h2 id="modal-title">Lançamentos</h2>
+      <!-- BOTÃO ADICIONADO AQUI -->
+      <button id="btn-gerar-pdf-modal" class="pdf-btn-modal">
+        <i class="bi bi-file-earmark-pdf"></i> Gerar PDF
+      </button>
       <button onclick="fecharModal()" class="close-modal">&times;</button>
     </div>
     <div class="custom-modal-body" id="modal-body">
@@ -932,6 +939,37 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <script>
+    function gerarPDFDosLancamentos() {
+        try {
+            const modalTitle = document.getElementById('modal-title').textContent;
+            let filtro = 'all';
+
+            // Mapeia o título do modal para os filtros correspondentes
+            if (modalTitle.includes("Atrasados")) filtro = "overdue";
+            else if (modalTitle.includes("Pago")) filtro = "paid";
+            else if (modalTitle.includes("Hoje")) filtro = "today";
+            else if (modalTitle.includes("Previsto")) filtro = "all";
+            else if (modalTitle.includes("Saldo")) filtro = "balance";
+
+            // Adiciona parâmetros de mês/ano
+            const mes = '{{ current_month }}';
+            const ano = '{{ current_year }}';
+            window.open(`/contas-a-pagar/pdf?filtro=${filtro}&mes=${mes}&ano=${ano}`, '_blank');
+        } catch (error) {
+            console.error("Erro ao gerar PDF:", error);
+            alert("Ocorreu um erro ao gerar o PDF");
+        }
+    }
+
+    // Função para gerar PDF de um lançamento específico (modal de edição)
+    function gerarPdfDoLancamento() {
+        const codigo = document.getElementById('edit-codigo').value;
+        if (!codigo) {
+            alert('Nenhum lançamento selecionado!');
+            return;
+        }
+        window.open('/contas-a-pagar/pdf/' + codigo, '_blank');
+    }
         function togglePdfOptions() {
   const options = document.getElementById("pdf-options");
   options.style.display = options.style.display === "block" ? "none" : "block";
@@ -1005,9 +1043,13 @@ function gerarPDF() {
             document.querySelectorAll('.card').forEach(card => {
   card.addEventListener('click', () => {
     const filtro = card.dataset.filter;
-    const titulo = card.querySelector('.card-title')?.textContent || 'Lançamentos';
+    const titulo = card.querySelector('.card-title').textContent;
 
-    mostrarLancamentosFiltrados({ tipo: 'card', valor: filtro, titulo });
+    mostrarLancamentosFiltrados({
+      tipo: 'card',
+      valor: filtro,
+      titulo: titulo  // Adiciona o título explicitamente
+    });
   });
 });
 
@@ -1502,74 +1544,74 @@ document.getElementById('filtro-categoria').addEventListener('change', e => {
   carregarGraficoCategorias(e.target.value);
 });
 function mostrarLancamentosFiltrados(filtro) {
-  const mesAtual = '{{ current_month }}';
-  const anoAtual = '{{ current_year }}';
-  let url = `/contas-a-pagar/api/lancamentos_filtrados`;
+        const mesAtual = '{{ current_month }}';
+        const anoAtual = '{{ current_year }}';
+        let url = `/contas-a-pagar/api/lancamentos_filtrados`;
 
-if (filtro.tipo === 'categoria') {
-  url += `?tipo=categoria&valor=${encodeURIComponent(filtro.valor)}&mes={{ current_month }}&ano={{ current_year }}`;
-} else if (filtro.tipo === 'mes') {
-  url += `?tipo=mes&valor=${encodeURIComponent(filtro.valor)}`;
-} else if (filtro.tipo === 'card') {
-  url += `?tipo=card&valor=${encodeURIComponent(filtro.valor)}&mes={{ current_month }}&ano={{ current_year }}`;
-}
+        if (filtro.tipo === 'categoria') {
+            url += `?tipo=categoria&valor=${encodeURIComponent(filtro.valor)}&mes=${mesAtual}&ano=${anoAtual}`;
+        } else if (filtro.tipo === 'mes') {
+            url += `?tipo=mes&valor=${encodeURIComponent(filtro.valor)}`;
+        } else if (filtro.tipo === 'card') {
+            url += `?tipo=card&valor=${encodeURIComponent(filtro.valor)}&mes=${mesAtual}&ano=${anoAtual}`;
+        }
 
+        fetch(url)
+            .then(res => res.json())
+            .then(transactions => {
+                const title = filtro.titulo ||
+                             (filtro.tipo === 'mes' ? `Lançamentos de ${filtro.valor}` :
+                             `Lançamentos em ${filtro.valor} (${mesAtual}/${anoAtual})`);
 
-  if (filtro.tipo === 'categoria') {
-    url += `&mes=${mesAtual}&ano=${anoAtual}`;
-  }
+                document.getElementById('modal-title').textContent = title;
 
-  fetch(url)
-    .then(res => res.json())
-    .then(transactions => {
-      const title = filtro.tipo === 'mes'
-        ? `Lançamentos de ${filtro.valor}`
-        : `Lançamentos em ${filtro.valor} (${mesAtual}/${anoAtual})`;
+                // Configura o botão PDF para este modal
+                document.getElementById('btn-gerar-pdf-modal').onclick = gerarPDFDosLancamentos;
 
-      document.getElementById('modal-title').textContent = title;
+                if (!transactions.length) {
+                    document.getElementById('modal-body').innerHTML = '<p style="text-align:center;color:#777;">Nenhum lançamento encontrado.</p>';
+                } else {
+                    let html = `
+                        <table class="transactions-table" style="width:100%;">
+                            <thead>
+                                <tr>
+                                    <th>Fornecedor</th>
+                                    <th>Categoria</th>
+                                    <th>Plano</th>
+                                    <th>Vencimento</th>
+                                    <th>Valor</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                    `;
 
-      if (!transactions.length) {
-        document.getElementById('modal-body').innerHTML = '<p style="text-align:center;color:#777;">Nenhum lançamento encontrado.</p>';
-      } else {
-        let html = `
-          <table class="transactions-table" style="width:100%;">
-            <thead>
-              <tr>
-                <th>Fornecedor</th>
-                <th>Categoria</th>
-                <th>Plano</th>
-                <th>Vencimento</th>
-                <th>Valor</th>
-                <th>Status</th>
-              </tr>
-            </thead>
-            <tbody>
-        `;
+                    transactions.forEach(trans => {
+                        html += `
+                            <tr>
+                                <td>${trans.fornecedor}</td>
+                                <td>${trans.categoria}</td>
+                                <td>${trans.plano}</td>
+                                <td>${trans.vencimento}</td>
+                                <td>${formatar_brl(trans.valor)}</td>
+                                <td>${trans.status}</td>
+                            </tr>
+                        `;
+                    });
 
-        transactions.forEach(trans => {
-          html += `
-            <tr>
-              <td>${trans.fornecedor}</td>
-              <td>${trans.categoria}</td>
-              <td>${trans.plano}</td>
-              <td>${trans.vencimento}</td>
-              <td>${formatar_brl(trans.valor)}</td>
-              <td>${trans.status}</td>
-            </tr>
-          `;
-        });
+                    html += '</tbody></table>';
+                    document.getElementById('modal-body').innerHTML = html;
+                }
 
-        html += '</tbody></table>';
-        document.getElementById('modal-body').innerHTML = html;
-      }
+                document.getElementById('modal-lancamentos').style.display = 'flex';
+            });
+    }
 
-      document.getElementById('modal-lancamentos').style.display = 'flex';
-    });
-}
+    function fecharModal() {
+        document.getElementById('modal-lancamentos').style.display = 'none';
+    }
 
-function fecharModal() {
-  document.getElementById('modal-lancamentos').style.display = 'none';
-}
+// Remova a função de dentro do event listener
 document.getElementById('btn-exportar-pdf').addEventListener('click', () => {
   const filtro = document.getElementById('modal-title').textContent;
   const periodo = `mes={{ current_month }}&ano={{ current_year }}`;
