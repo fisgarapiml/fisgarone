@@ -1,65 +1,70 @@
-<!-- /fisgarone/templates/login.html -->
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <title>Login - Grupo Fisgar</title>
-    <style>
-        body {
-            background-color: #f2f2f2;
-            font-family: Arial, sans-serif;
-        }
-        .login-container {
-            width: 350px;
-            margin: 100px auto;
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.1);
-        }
-        h2 {
-            text-align: center;
-            color: #333;
-        }
-        input[type="email"],
-        input[type="password"] {
-            width: 100%;
-            padding: 10px;
-            margin-top: 15px;
-            margin-bottom: 10px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-        }
-        button {
-            width: 100%;
-            background-color: #4CAF50;
-            color: white;
-            padding: 12px;
-            border: none;
-            border-radius: 6px;
-            font-size: 16px;
-            cursor: pointer;
-        }
-        .msg {
-            color: red;
-            text-align: center;
-            margin-top: 10px;
-        }
-    </style>
+  <meta charset="utf-8">
+  <title>Login | FisgarOne</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <!-- Ícones (para olhinho) -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+  <!-- Estilo -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
 </head>
 <body>
-    <div class="login-container">
-        <h2>Grupo Fisgar</h2>
-        <form method="POST">
-            <input type="email" name="email" placeholder="E-mail" required>
-            <input type="password" name="senha" placeholder="Senha" required>
-            <button type="submit">Entrar</button>
-        </form>
-        {% with messages = get_flashed_messages() %}
-          {% if messages %}
-            <div class="msg">{{ messages[0] }}</div>
-          {% endif %}
-        {% endwith %}
+  <div class="login-container">
+  <div class="fisgar-logo-bar">
+    <img src="{{ url_for('static', filename='img/logofisgar.png') }}" alt="Fisgar Logo" class="fisgar-logo" />
+  </div>
+  <h1>FisgarOne</h1>
+  <h2>Entrar</h2>
+  <!-- ...restante do formulário... -->
+</div>
+
+      <form method="post" autocomplete="off" id="login-form">
+        <div class="input-group">
+          <input type="email" name="email" placeholder="E-mail" required autofocus>
+        </div>
+        <div class="input-group senha-group">
+          <input type="password" name="senha" id="senha" placeholder="Senha" required>
+          <button type="button" class="senha-toggle" tabindex="-1" aria-label="Mostrar/ocultar senha">
+            <i class="bi bi-eye"></i>
+          </button>
+        </div>
+        <div class="actions-row">
+          <a href="{{ url_for('usuarios.esqueci_senha') }}" class="link-aux">Esqueci a senha</a>
+        </div>
+        <button type="submit" class="btn-login">Entrar</button>
+      </form>
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          {% for cat, msg in messages %}
+            <div class="alert {{cat}}">{{msg}}</div>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+      <footer class="login-footer">
+        <span>&copy; {{ now.year }} Grupo Fisgar</span>
+
+      </footer>
     </div>
+  </div>
+  <script>
+    // Visualizador de senha
+    document.querySelector('.senha-toggle').addEventListener('click', function() {
+      const senhaInput = document.getElementById('senha');
+      if (senhaInput.type === 'password') {
+        senhaInput.type = 'text';
+        this.innerHTML = '<i class="bi bi-eye-slash"></i>';
+      } else {
+        senhaInput.type = 'password';
+        this.innerHTML = '<i class="bi bi-eye"></i>';
+      }
+    });
+    // Enter envia o formulário (opcional, já funciona pelo navegador)
+    document.getElementById('login-form').addEventListener('submit', function(){
+      document.querySelector('.btn-login').innerHTML = '<span class="spin"></span> Entrando...';
+    });
+  </script>
 </body>
 </html>

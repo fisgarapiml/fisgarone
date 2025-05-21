@@ -1,19 +1,27 @@
-# Ignorar ambientes virtuais
-# Python
-*.pyc
-__pycache__/
-.venv/
-venv/
-
-# IDEs
-.idea/
-.vscode/
-
-# Dados sensíveis
-grupo_fisgar.db
-uploads/
-*.log
-*.bak
-
-# Outros
+# NUNCA suba arquivos de ambiente ou sensíveis
 .env
+*.db
+*.sqlite
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+.DS_Store
+*.log

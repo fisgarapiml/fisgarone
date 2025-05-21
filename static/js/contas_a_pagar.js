@@ -1,225 +1,293 @@
-// =============================================
-// CONSTANTES E VARIÁVEIS GLOBAIS
-// =============================================
-let currentFilter = 'all';
+// Variáveis globais vindas do HTML
+const mes = currentMonth;
+const ano = currentYear;
+const mesAtual = currentMonth;
+const anoAtual = currentYear;
+const anoAtualEvolucao = currentYear;
 
-// =============================================
-// FUNÇÕES PRINCIPAIS
-// =============================================
+function gerarPDFDosLancamentos() {
+        try {
+            const modalTitle = document.getElementById('modal-title').textContent;
+            let filtro = 'all';
 
-/**
- * Renderiza a timeline diária de pagamentos
- */
-function renderDailyTimeline() {
-  const grid = document.getElementById('daily-grid');
-  if (!grid) return;
+            // Mapeia o título do modal para os filtros correspondentes
+            if (modalTitle.includes("Atrasados")) filtro = "overdue";
+            else if (modalTitle.includes("Pago")) filtro = "paid";
+            else if (modalTitle.includes("Hoje")) filtro = "today";
+            else if (modalTitle.includes("Previsto")) filtro = "all";
+            else if (modalTitle.includes("Saldo")) filtro = "balance";
 
-  grid.innerHTML = '';
-  const daysInMonth = new Date(currentYear, currentMonth, 0).getDate();
-  const today = new Date();
+            // Adiciona parâmetros de mês/ano
+            const mes = currentMonth;
+            window.open(`/contas-a-pagar/pdf?filtro=${filtro}&mes=${mes}&ano=${ano}`, '_blank');
 
-  for (let day = 1; day <= daysInMonth; day++) {
-    const dayStr = day.toString().padStart(2, '0');
-    const monthStr = currentMonth.toString().padStart(2, '0');
-    const dateKey = `${currentYear}-${monthStr}-${dayStr}`;
-    const date = new Date(currentYear, currentMonth - 1, day);
-    const dayData = dailyPayments[day] || { total: 0, status: "none" };
-
-    const dayCard = document.createElement('div');
-    dayCard.className = `day-card ${dayData.status}`;
-    dayCard.dataset.date = dateKey;
-
-    if (day === today.getDate() && currentMonth === today.getMonth() + 1 && currentYear === today.getFullYear()) {
-      dayCard.classList.add('current-day');
+        } catch (error) {
+            console.error("Erro ao gerar PDF:", error);
+            alert("Ocorreu um erro ao gerar o PDF");
+        }
     }
 
-    dayCard.innerHTML = `
-      <div class="day-header">
-        <span class="day-name">${date.toLocaleDateString('pt-BR', { weekday: 'short' })}</span>
-        <span class="day-date">${dayStr}</span>
-      </div>
-      <div class="day-total">
-        ${dayData.total > 0 ? 'R$ ' + dayData.total.toLocaleString('pt-BR', { minimumFractionDigits: 2 }) : '-'}
-      </div>
-    `;
-
-    dayCard.addEventListener('click', () => filterByDate(dateKey));
-    grid.appendChild(dayCard);
-  }
-}
-
-/**
- * Mostra transações conforme o filtro selecionado
- * @param {string} filterType - Tipo de filtro (all, paid, balance, today, overdue)
- */
-function showTransactions(filterType) {
-  currentFilter = filterType;
-
-  // Ativa o card clicado
-  document.querySelectorAll('.card').forEach(card => {
-    card.classList.remove('active');
-  });
-  document.querySelector(`.card[data-filter="${filterType}"]`).classList.add('active');
-
-  // Filtra os lançamentos
-  const filteredTransactions = filterTransactions(filterType);
-
-  // Atualiza o título
-  const titles = {
-    'all': 'Todos os Lançamentos',
-    'paid': 'Lançamentos Pagos',
-    'balance': 'Lançamentos em Aberto',
-    'today': 'Lançamentos para Hoje',
-    'overdue': 'Lançamentos Atrasados'
-  };
-  document.getElementById('transactions-title').textContent = titles[filterType];
-
-  // Renderiza a tabela
-  renderTransactionsTable(filteredTransactions);
-
-  // Mostra o container
-  document.getElementById('transactions-container').style.display = 'block';
-}
-
-/**
- * Filtra transações conforme o tipo
- */
-function filterTransactions(filterType) {
-  const hoje = new Date();
-  hoje.setHours(0, 0, 0, 0);
-
-  return lancamentosData.filter(transaction => {
-    const [day, month, year] = transaction.vencimento.split('/');
-    const vencimento = new Date(year, month - 1, day);
-
-    switch(filterType) {
-      case 'all': return true;
-      case 'paid': return transaction.pago > 0;
-      case 'balance': return transaction.pago <= 0;
-      case 'today': return transaction.pago <= 0 && vencimento.toDateString() === hoje.toDateString();
-      case 'overdue': return transaction.pago <= 0 && vencimento < hoje;
-      default: return true;
+    // Função para gerar PDF de um lançamento específico (modal de edição)
+    function gerarPdfDoLancamento() {
+        const codigo = document.getElementById('edit-codigo').value;
+        if (!codigo) {
+            alert('Nenhum lançamento selecionado!');
+            return;
+        }
+        window.open('/contas-a-pagar/pdf/' + codigo, '_blank');
     }
-  });
+        function togglePdfOptions() {
+  const options = document.getElementById("pdf-options");
+  options.style.display = options.style.display === "block" ? "none" : "block";
 }
 
-/**
- * Renderiza a tabela de transações
- */
-function renderTransactionsTable(transactions) {
-  const container = document.getElementById('transactions-content');
+function gerarPDF() {
+  const checkboxes = document.querySelectorAll("#pdf-options input[type='checkbox']");
+  const selecionados = [];
+  checkboxes.forEach(cb => {
+    if (cb.checked) selecionados.push(cb.value);
+  });
 
-  if (!transactions.length) {
-    container.innerHTML = `
-      <div class="no-transactions">
-        <i class="bi bi-database" style="font-size: 2rem; margin-bottom: 10px;"></i>
-        <p>Nenhum lançamento encontrado</p>
-      </div>
-    `;
+  if (selecionados.length === 0) {
+    alert("Selecione pelo menos uma opção para gerar o PDF.");
     return;
   }
 
-  let html = `
-    <table class="transactions-table">
-      <thead>
-        <tr>
-          <th>Fornecedor</th>
-          <th>Categoria</th>
-          <th>Plano</th>
-          <th>Vencimento</th>
-          <th>Valor</th>
-          <th>Status</th>
-          <th>Ações</th>
-        </tr>
-      </thead>
-      <tbody>
-  `;
+  const params = selecionados.map(v => `tipo=${v}`).join("&");
+  window.open(`/contas-a-pagar/pdf?${params}`, "_blank");
+}
 
-  transactions.forEach(trans => {
-    const [day, month, year] = trans.vencimento.split('/');
-    const venc = new Date(year, month - 1, day);
-    const hoje = new Date();
-    hoje.setHours(0, 0, 0, 0);
-    const status = trans.pago > 0 ? 'paid' : venc < hoje ? 'overdue' : 'pending';
-    const label = status === 'paid' ? 'Pago' : status === 'pending' ? 'Aberto' : 'Atrasado';
+        // Renderiza a timeline diária
+        function renderDailyTimeline() {
+            const grid = document.getElementById('daily-grid');
+            grid.innerHTML = '';
 
-    html += `
-      <tr>
-        <td>${trans.fornecedor || '-'}</td>
-        <td>${trans.categoria || '-'}</td>
-        <td>${trans.plano || '-'}</td>
-        <td>${trans.vencimento}</td>
-        <td>${formatar_brl(trans.valor)}</td>
-        <td><span class="transaction-status status-${status}">${label}</span></td>
-        <td>
-          <div class="transaction-actions">
-            <button class="action-btn" title="Editar" onclick="editTransaction(${trans.codigo})">
-              <i class="bi bi-pencil"></i>
-            </button>
-            ${trans.pago <= 0 ? `
-            <button class="action-btn complete" title="Dar Baixa" onclick="markAsPaid(${trans.codigo})">
-              <i class="bi bi-check-lg"></i>
-            </button>
-            ` : ''}
-            <button class="action-btn delete" title="Excluir" onclick="deleteTransaction(${trans.codigo})">
-              <i class="bi bi-trash"></i>
-            </button>
-          </div>
-        </td>
-      </tr>
-    `;
+            const daysInMonth = new Date(currentYear, currentMonth, 0).getDate();
+            const today = new Date();
+
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dayStr = String(day).padStart(2, '0');
+                const monthStr = String(currentMonth).padStart(2, '0');
+                const dateKey = `${currentYear}-${monthStr}-${dayStr}`;
+                const date = new Date(currentYear, currentMonth - 1, day);
+                const dayData = dailyPayments[dayStr] || { total: 0, status: "none" };
+
+                const dayCard = document.createElement('div');
+                dayCard.className = `day-card ${dayData.status}`;
+                dayCard.dataset.date = dateKey;
+
+                if (day === today.getDate() && currentMonth === today.getMonth() + 1 && currentYear === today.getFullYear()) {
+                    dayCard.classList.add('current-day');
+                }
+
+                dayCard.innerHTML = `
+                    <div class="day-header">
+                        <span class="day-name">${date.toLocaleDateString('pt-BR', { weekday: 'short' })}</span>
+                        <span class="day-date">${dayStr}</span>
+                    </div>
+                    <div class="day-total">
+  ${dayData.total > 0 ? 'R$ ' + dayData.total.toLocaleString('pt-BR', { minimumFractionDigits: 2 }) : '-'}
+</div>
+
+                `;
+
+                dayCard.addEventListener('click', () => filterByDate(dateKey));
+                grid.appendChild(dayCard);
+            }
+        }
+
+        // Mostra os lançamentos conforme o filtro
+        function showTransactions(filterType) {
+            currentFilter = filterType;
+            document.querySelectorAll('.card').forEach(card => {
+  card.addEventListener('click', () => {
+    const filtro = card.dataset.filter;
+    const titulo = card.querySelector('.card-title').textContent;
+
+    mostrarLancamentosFiltrados({
+      tipo: 'card',
+      valor: filtro,
+      titulo: titulo  // Adiciona o título explicitamente
+    });
   });
+});
 
-  html += '</tbody></table>';
-  container.innerHTML = html;
-}
+            // Ativa o card clicado
+            document.querySelectorAll('.card').forEach(card => {
+                card.classList.remove('active');
+            });
+            document.querySelector(`.card[data-filter="${filterType}"]`).classList.add('active');
 
-// =============================================
-// FUNÇÕES DE INTERAÇÃO
-// =============================================
+            // Filtra os lançamentos
+            const filteredTransactions = filterTransactions(filterType);
 
-function hideTransactions() {
-  document.getElementById('transactions-container').style.display = 'none';
-  document.querySelectorAll('.card').forEach(card => {
-    card.classList.remove('active');
-  });
-}
+            // Atualiza o título
+            const titles = {
+                'all': 'Todos os Lançamentos',
+                'paid': 'Lançamentos Pagos',
+                'balance': 'Lançamentos em Aberto',
+                'today': 'Lançamentos para Hoje',
+                'overdue': 'Lançamentos Atrasados'
+            };
 
-function editTransaction(codigo) {
-  const transaction = lancamentosData.find(t => t.codigo == codigo);
-  if (!transaction) return;
+            document.getElementById('transactions-title').textContent = titles[filterType];
 
-  document.getElementById('edit-codigo').value = transaction.codigo;
-  document.getElementById('edit-fornecedor').value = transaction.fornecedor || '';
-  document.getElementById('edit-categoria').value = transaction.categoria || '';
-  document.getElementById('edit-plano').value = transaction.plano || '';
+            // Renderiza a tabela
+            renderTransactionsTable(filteredTransactions);
 
-  // Formata data DD/MM/YYYY para YYYY-MM-DD
-  const [day, month, year] = transaction.vencimento.split('/');
-  document.getElementById('edit-vencimento').value = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+            // Mostra o container
+            document.getElementById('transactions-container').style.display = 'block';
+        }
 
-  document.getElementById('edit-valor').value = transaction.valor;
-  document.getElementById('edit-pago').value = transaction.pago > 0 ? '1' : '0';
-  document.getElementById('edit-modal').style.display = 'flex';
-}
+        // Filtra os lançamentos
+        function filterTransactions(filterType) {
+            const hoje = new Date();
+            hoje.setHours(0, 0, 0, 0);
 
-function closeEditModal() {
-  document.getElementById('edit-modal').style.display = 'none';
-}
+            return lancamentosData.filter(transaction => {
+                const vencimento = new Date(
+                    transaction.vencimento.split('/')[2],
+                    transaction.vencimento.split('/')[1] - 1,
+                    transaction.vencimento.split('/')[0]
+                );
 
-function saveTransaction() {
-  const codigo = document.getElementById('edit-codigo').value;
+                switch(filterType) {
+                    case 'all':
+                        return true;
+                    case 'paid':
+                        return transaction.pago > 0;
+                    case 'balance':
+                        return transaction.pago <= 0;
+                    case 'today':
+                        return transaction.pago <= 0 && vencimento.toDateString() === hoje.toDateString();
+                    case 'overdue':
+                        return transaction.pago <= 0 && vencimento < hoje;
+                    default:
+                        return true;
+                }
+            });
+        }
+
+        // Renderiza a tabela de lançamentos
+        function renderTransactionsTable(transactions) {
+            const container = document.getElementById('transactions-content');
+
+            if (transactions.length === 0) {
+                container.innerHTML = `
+                    <div class="no-transactions">
+                        <i class="bi bi-database" style="font-size: 2rem; margin-bottom: 10px;"></i>
+                        <p>Nenhum lançamento encontrado</p>
+                    </div>
+                `;
+                return;
+            }
+
+            let html = `
+                <table class="transactions-table">
+                    <thead>
+                        <tr>
+                            <th>Fornecedor</th>
+                            <th>Categoria</th>
+                            <th>Plano</th>
+                            <th>Vencimento</th>
+                            <th>Valor</th>
+                            <th>Status</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+            transactions.forEach(trans => {
+                html += `
+                    <tr>
+                        <td>${trans.fornecedor || '-'}</td>
+                        <td>${trans.categoria || '-'}</td>
+                        <td>${trans.plano || '-'}</td>
+                        <td>${trans.vencimento}</td>
+                        <td>${formatar_brl(trans.valor)}</td>
+                        <td>
+                            ${(() => {
+                                const venc = new Date(trans.vencimento.split('/').reverse().join('-'));
+                                const hoje = new Date();
+                                hoje.setHours(0, 0, 0, 0);
+                                const status = trans.pago > 0 ? 'paid' : venc < hoje ? 'overdue' : 'pending';
+                                const label = status === 'paid' ? 'Pago' : status === 'pending' ? 'Aberto' : 'Atrasado';
+                                return `<span class="transaction-status status-${status}">${label}</span>`;
+                            })()}
+                        </td>
+                        <td>
+                            <div class="transaction-actions">
+                                <button class="action-btn" title="Editar" onclick="editTransaction(${trans.codigo})">
+                                    <i class="bi bi-pencil"></i>
+                                </button>
+                                ${trans.pago <= 0 ? `
+                                <button class="action-btn complete" title="Dar Baixa" onclick="markAsPaid(${trans.codigo})">
+                                    <i class="bi bi-check-lg"></i>
+                                </button>
+                                ` : ''}
+                                <button class="action-btn delete" title="Excluir" onclick="deleteTransaction(${trans.codigo})">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            html += `</tbody></table>`;
+            container.innerHTML = html;
+        }
+
+        // Oculta a lista de lançamentos
+        function hideTransactions() {
+            document.getElementById('transactions-container').style.display = 'none';
+            document.querySelectorAll('.card').forEach(card => {
+                card.classList.remove('active');
+            });
+        }
+
+        // Funções de ação
+        function editTransaction(codigo) {
+            const transaction = lancamentosData.find(t => t.codigo == codigo);
+            if (!transaction) return;
+
+            // Preenche o formulário de edição
+            document.getElementById('edit-codigo').value = transaction.codigo;
+            document.getElementById('edit-fornecedor').value = transaction.fornecedor || '';
+            document.getElementById('edit-categoria').value = transaction.categoria || '';
+            document.getElementById('edit-plano').value = transaction.plano || '';
+
+            // Formata a data para o formato YYYY-MM-DD
+            const [day, month, year] = transaction.vencimento.split('/');
+            document.getElementById('edit-vencimento').value = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+
+            document.getElementById('edit-valor').value = transaction.valor;
+            document.getElementById('edit-pago').value = transaction.pago > 0 ? '1' : '0';
+
+            // Mostra o modal
+            document.getElementById('edit-modal').style.display = 'flex';
+        }
+
+        function closeEditModal() {
+            document.getElementById('edit-modal').style.display = 'none';
+        }
+
+        function saveTransaction() {
+  // 1) Coleta os campos do modal
+  const codigo     = document.getElementById('edit-codigo').value;
   const fornecedor = document.getElementById('edit-fornecedor').value;
-  const categoria = document.getElementById('edit-categoria').value;
-  const plano = document.getElementById('edit-plano').value;
-  const venc = document.getElementById('edit-vencimento').value;
-  const valor = document.getElementById('edit-valor').value;
-  const pago = document.getElementById('edit-pago').value;
+  const categoria  = document.getElementById('edit-categoria').value;
+  const plano      = document.getElementById('edit-plano').value;
+  const venc       = document.getElementById('edit-vencimento').value;
+  const valor      = document.getElementById('edit-valor').value;
+  const pago       = document.getElementById('edit-pago').value;
 
-  // Formata data de YYYY-MM-DD para DD/MM/YYYY
+  // 2) Formata a data de YYYY-MM-DD para DD/MM/YYYY
   const [year, month, day] = venc.split('-');
   const formattedDate = `${day}/${month}/${year}`;
 
+  // 3) Dispara o POST para /contas-a-pagar/editar_lancamento
   fetch('/contas-a-pagar/editar_lancamento', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -241,6 +309,8 @@ function saveTransaction() {
     if (data.success) {
       alert('Lançamento atualizado com sucesso!');
       closeEditModal();
+      // Se quiser recarregar a lista via AJAX, chame a função que atualiza a tabela.
+      // Aqui, para simplificar, você pode usar:
       location.reload();
     } else {
       alert('Erro ao atualizar: ' + data.error);
@@ -252,78 +322,116 @@ function saveTransaction() {
   });
 }
 
-function markAsPaid(codigo) {
-  if (confirm('Deseja marcar este lançamento como pago?')) {
-    fetch(`/marcar_pago?codigo=${codigo}`, { method: 'POST' })
-      .then(res => {
-        if (res.ok) {
-          alert('Lançamento marcado como pago.');
-          location.reload();
-        } else {
-          alert('Erro ao marcar como pago.');
+        function markAsPaid(codigo) {
+            if (confirm('Deseja marcar este lançamento como pago?')) {
+                fetch(`/marcar_pago?codigo=${codigo}`, { method: 'POST' })
+                    .then(res => {
+                        if (res.ok) {
+                            alert('Lançamento marcado como pago.');
+                            location.reload();
+                        } else {
+                            alert('Erro ao marcar como pago.');
+                        }
+                    });
+            }
         }
-      });
-  }
-}
 
-function deleteTransaction(codigo) {
-  if (confirm('Tem certeza que deseja excluir este lançamento?')) {
-    fetch(`/excluir?codigo=${codigo}`, { method: 'POST' })
-      .then(res => {
-        if (res.ok) {
-          alert('Lançamento excluído com sucesso.');
-          location.reload();
-        } else {
-          alert('Erro ao excluir o lançamento.');
+        function deleteTransaction(codigo) {
+            if (confirm('Tem certeza que deseja excluir este lançamento?')) {
+                fetch(`/excluir?codigo=${codigo}`, { method: 'POST' })
+                    .then(res => {
+                        if (res.ok) {
+                            alert('Lançamento excluído com sucesso.');
+                            location.reload();
+                        } else {
+                            alert('Erro ao excluir o lançamento.');
+                        }
+                    });
+            }
         }
-      });
-  }
+
+        // Função para formatar valores (simulando a função do Jinja2)
+        function formatar_brl(valor) {
+            return 'R$ ' + parseFloat(valor).toFixed(2).replace('.', ',');
+        }
+
+        // Navegação entre meses
+        function changeMonth(offset) {
+            currentMonth += offset;
+
+            if (currentMonth > 12) {
+                currentMonth = 1;
+                currentYear++;
+            } else if (currentMonth < 1) {
+                currentMonth = 12;
+                currentYear--;
+            }
+
+            window.location.href = `/contas-a-pagar?mes=${currentMonth}&ano=${currentYear}`;
+        }
+
+        // Filtro por data
+        function filterByDate(date = null) {
+            if (!date) {
+                const dateInput = document.getElementById('filter-date');
+                date = dateInput.value;
+            }
+
+            if (date) {
+                const [year, month, day] = date.split('-');
+                window.location.href = `/contas-a-pagar?mes=${month}&ano=${year}${day ? '&dia=' + day : ''}`;
+            }
+        }
+
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', () => {
+            renderDailyTimeline();
+
+            // Se houver um dia específico na URL, mostra os lançamentos
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.has('dia')) {
+                showTransactions('all');
+            }
+        });
+        function togglePDFOptions() {
+    const options = document.getElementById('pdfOptions');
+    options.style.display = options.style.display === 'block' ? 'none' : 'block';
 }
 
-// =============================================
-// FUNÇÕES DE NAVEGAÇÃO
-// =============================================
+function gerarPDF(filtro) {
+    const mes = new Date().getMonth() + 1;
+    const ano = new Date().getFullYear();
 
-function changeMonth(offset) {
-  currentMonth += offset;
+    // Fecha o menu de opções
+    document.getElementById('pdfOptions').style.display = 'none';
 
-  if (currentMonth > 12) {
-    currentMonth = 1;
-    currentYear++;
-  } else if (currentMonth < 1) {
-    currentMonth = 12;
-    currentYear--;
-  }
-
-  window.location.href = `/contas-a-pagar?mes=${currentMonth}&ano=${currentYear}`;
+    // Abre o PDF em nova aba
+    window.open(`/contas-a-pagar/pdf?filtro=${filtro}&mes=${mes}&ano=${ano}`, '_blank');
 }
 
-function filterByDate(date = null) {
-  if (!date) {
-    const dateInput = document.getElementById('filter-date');
-    date = dateInput.value;
-  }
+// Fecha o menu se clicar fora
+document.addEventListener('click', function(event) {
+    const options = document.getElementById('pdfOptions');
+    const button = document.querySelector('.pdf-main-button');
 
-  if (date) {
-    const [year, month, day] = date.split('-');
-    window.location.href = `/contas-a-pagar?mes=${month}&ano=${year}${day ? '&dia=' + day : ''}`;
-  }
-}
+    if (!options.contains(event.target) && event.target !== button) {
+        options.style.display = 'none';
+    }
+});
+        let chartBarras = null;
 
-// =============================================
-// FUNÇÕES DE GRÁFICOS
-// =============================================
-
-let chartBarras = null;
-let chartPizza = null;
 
 function carregarGraficoEvolucao(filtro = 'ano') {
   fetch('/contas-a-pagar/api/contas_por_mes')
     .then(response => response.json())
     .then(data => {
-      let dadosFiltrados = filtro === 'ano' ?
-        data.filter(item => item.mes.endsWith('/' + currentYear)) :
-        data;
+      let dadosFiltrados = [];
+
+      if (filtro === 'ano') {
+        dadosFiltrados = data.filter(item => item.mes && item.mes.endsWith('/' + anoAtualEvolucao));
+      } else {
+        dadosFiltrados = data; // Todos os meses
+      }
 
       const labels = dadosFiltrados.map(item => item.mes);
       const previsto = dadosFiltrados.map(item => item.previsto);
@@ -343,7 +451,9 @@ function carregarGraficoEvolucao(filtro = 'ano') {
               backgroundColor: 'rgba(0, 102, 255, 0.2)',
               borderColor: '#0066ff',
               borderWidth: 2,
-              borderRadius: 10
+              borderRadius: 10,
+              barPercentage: 0.5,
+              categoryPercentage: 0.6
             },
             {
               label: 'Pago',
@@ -351,161 +461,217 @@ function carregarGraficoEvolucao(filtro = 'ano') {
               backgroundColor: 'rgba(0, 200, 83, 0.2)',
               borderColor: '#00c853',
               borderWidth: 2,
-              borderRadius: 10
+              borderRadius: 10,
+              barPercentage: 0.5,
+              categoryPercentage: 0.6
             }
           ]
         },
         options: {
           responsive: true,
-          onClick: (evt, elements) => {
-            if (elements.length > 0) {
-              const mesSelecionado = chartBarras.data.labels[elements[0].index];
-              mostrarLancamentosFiltrados({ tipo: 'mes', valor: mesSelecionado });
+          maintainAspectRatio: false,
+          scales: {
+            x: {
+              ticks: { font: { size: 12 } },
+              grid: { display: false }
+            },
+            y: {
+              beginAtZero: true,
+              ticks: {
+                callback: valor => 'R$ ' + valor.toLocaleString('pt-BR', { minimumFractionDigits: 2 }),
+                font: { size: 12 }
+              },
+              grid: { color: '#f0f0f0' }
             }
-          }
+          },
+          plugins: {
+            legend: { labels: { font: { size: 13 } } },
+            tooltip: {
+              callbacks: {
+                label: context => {
+                  const valor = context.parsed.y || 0;
+                  return `${context.dataset.label}: R$ ${valor.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`;
+                }
+              }
+            }
+          },
+          onClick: (evt, elements) => {
+  if (elements.length > 0) {
+    const index = elements[0].index;
+    const mesSelecionado = chartBarras.data.labels[index];
+    mostrarLancamentosFiltrados({ tipo: 'mes', valor: mesSelecionado });
+  }
+}
         }
       });
     });
 }
 
+// Inicializa gráfico
+carregarGraficoEvolucao();
+
+// Listener do dropdown
+document.getElementById('filtro-evolucao').addEventListener('change', e => {
+  carregarGraficoEvolucao(e.target.value);
+});
+
+
+// Use as variáveis globais já definidas no HTML
+
+
+let chartPizza = null;
+
 function carregarGraficoCategorias(filtro = 'mes') {
   let url = '/contas-a-pagar/api/categorias_agrupadas';
-  if (filtro === 'mes') url += `?mes=${currentMonth}&ano=${currentYear}`;
-  if (filtro === 'ano') url += `?ano=${currentYear}`;
+
+  if (filtro === 'mes') {
+    url += `?mes=${mesAtual}&ano=${anoAtual}`;
+  } else if (filtro === 'ano') {
+    url += `?ano=${anoAtual}`;
+  }
 
   fetch(url)
     .then(response => response.json())
     .then(data => {
+      const categorias = data.map(item => item.categoria);
+      const valores = data.map(item => item.total);
+      const cores = [
+        '#0066ff', '#00c853', '#ffab00', '#ff3d00',
+        '#6200ea', '#00bcd4', '#607d8b', '#8bc34a',
+        '#f44336', '#9c27b0', '#3f51b5', '#795548'
+      ];
+
       if (chartPizza) chartPizza.destroy();
 
       chartPizza = new Chart(document.getElementById('graficoCategorias'), {
         type: 'doughnut',
         data: {
-          labels: data.map(item => item.categoria),
+          labels: categorias,
           datasets: [{
-            data: data.map(item => item.total),
-            backgroundColor: [
-              '#0066ff', '#00c853', '#ffab00', '#ff3d00',
-              '#6200ea', '#00bcd4', '#607d8b', '#8bc34a'
-            ]
+            label: 'Total por Categoria',
+            data: valores,
+            backgroundColor: cores,
+            borderColor: '#fff',
+            borderWidth: 2
           }]
         },
         options: {
-          onClick: (evt, elements) => {
-            if (elements.length > 0) {
-              const categoria = chartPizza.data.labels[elements[0].index];
-              mostrarLancamentosFiltrados({ tipo: 'categoria', valor: categoria });
-            }
-          }
+  responsive: true,
+  maintainAspectRatio: false,
+  plugins: {
+    legend: {
+      position: 'right',
+      align: 'start',
+      labels: {
+        font: { size: 13 },
+        boxWidth: 18,
+        padding: 12
+      }
+    },
+    tooltip: {
+      callbacks: {
+        label: context => {
+          const valor = context.parsed || 0;
+          return `${context.label}: R$ ${valor.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`;
         }
+      },
+      backgroundColor: 'rgba(0,0,0,0.7)',
+      titleFont: { size: 14 },
+      bodyFont: { size: 13 },
+      padding: 10
+    }
+  },
+  onClick: (evt, elements) => {
+    if (elements.length > 0) {
+      const index = elements[0].index;
+      const categoriaSelecionada = chartPizza.data.labels[index];
+      mostrarLancamentosFiltrados({ tipo: 'categoria', valor: categoriaSelecionada });
+    }
+  }
+}
+
       });
     });
 }
 
-// =============================================
-// FUNÇÕES AUXILIARES
-// =============================================
+// Inicializa gráfico
+carregarGraficoCategorias();
 
-function mostrarLancamentosFiltrados(filtro) {
-  let url = `/contas-a-pagar/api/lancamentos_filtrados?tipo=${filtro.tipo}&valor=${encodeURIComponent(filtro.valor)}`;
-
-  if (filtro.tipo === 'categoria') {
-    url += `&mes=${currentMonth}&ano=${currentYear}`;
-  }
-
-  fetch(url)
-    .then(res => res.json())
-    .then(transactions => {
-      const modalTitle = document.getElementById('modal-title');
-      const modalBody = document.getElementById('modal-body');
-
-      modalTitle.textContent = `Lançamentos - ${filtro.valor}`;
-
-      if (!transactions.length) {
-        modalBody.innerHTML = '<p style="text-align:center;color:#777;">Nenhum lançamento encontrado.</p>';
-      } else {
-        modalBody.innerHTML = `
-          <table style="width:100%;">
-            <thead>
-              <tr>
-                <th>Fornecedor</th>
-                <th>Vencimento</th>
-                <th>Valor</th>
-                <th>Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${transactions.map(trans => `
-                <tr>
-                  <td>${trans.fornecedor}</td>
-                  <td>${trans.vencimento}</td>
-                  <td>${formatar_brl(trans.valor)}</td>
-                  <td>${trans.pago > 0 ? 'Pago' : 'Pendente'}</td>
-                </tr>
-              `).join('')}
-            </tbody>
-          </table>
-        `;
-      }
-
-      document.getElementById('modal-lancamentos').style.display = 'flex';
-    });
-}
-
-function fecharModal() {
-  document.getElementById('modal-lancamentos').style.display = 'none';
-}
-
-function formatar_brl(valor) {
-  return 'R$ ' + parseFloat(valor).toFixed(2).replace('.', ',');
-}
-
-// =============================================
-// INICIALIZAÇÃO
-// =============================================
-
-document.addEventListener('DOMContentLoaded', () => {
-  renderDailyTimeline();
-
-  // Event listeners
-  document.getElementById('filtro-evolucao').addEventListener('change', e => {
-    carregarGraficoEvolucao(e.target.value);
-  });
-
-  document.getElementById('filtro-categoria').addEventListener('change', e => {
-    carregarGraficoCategorias(e.target.value);
-  });
-
-  document.getElementById('btn-exportar-pdf').addEventListener('click', () => {
-    const filtro = document.getElementById('modal-title').textContent;
-    window.open(`/contas-a-pagar/pdf?filtro=${encodeURIComponent(filtro)}`, '_blank');
-  });
-
-  // Inicializa gráficos
-  carregarGraficoEvolucao();
-  carregarGraficoCategorias();
+// Atualiza ao trocar filtro
+document.getElementById('filtro-categoria').addEventListener('change', e => {
+  carregarGraficoCategorias(e.target.value);
 });
+function mostrarLancamentosFiltrados(filtro) {
 
-// =============================================
-// FUNÇÕES DE PDF
-// =============================================
+        let url = `/contas-a-pagar/api/lancamentos_filtrados`;
 
-function togglePDFOptions() {
-  const options = document.getElementById('pdfOptions');
-  options.style.display = options.style.display === 'block' ? 'none' : 'block';
-}
+        if (filtro.tipo === 'categoria') {
+            url += `?tipo=categoria&valor=${encodeURIComponent(filtro.valor)}&mes=${mesAtual}&ano=${anoAtual}`;
+        } else if (filtro.tipo === 'mes') {
+            url += `?tipo=mes&valor=${encodeURIComponent(filtro.valor)}`;
+        } else if (filtro.tipo === 'card') {
+            url += `?tipo=card&valor=${encodeURIComponent(filtro.valor)}&mes=${mesAtual}&ano=${anoAtual}`;
+        }
 
-function gerarPDF(filtro) {
-  document.getElementById('pdfOptions').style.display = 'none';
-  window.open(`/contas-a-pagar/pdf?filtro=${filtro}&mes=${currentMonth}&ano=${currentYear}`, '_blank');
-}
+        fetch(url)
+            .then(res => res.json())
+            .then(transactions => {
+                const title = filtro.titulo ||
+                             (filtro.tipo === 'mes' ? `Lançamentos de ${filtro.valor}` :
+                             `Lançamentos em ${filtro.valor} (${mesAtual}/${anoAtual})`);
 
-// Fecha o menu PDF ao clicar fora
-document.addEventListener('click', (event) => {
-  const pdfOptions = document.getElementById('pdfOptions');
-  const pdfButton = document.querySelector('.pdf-main-button');
+                document.getElementById('modal-title').textContent = title;
 
-  if (!pdfOptions.contains(event.target) && event.target !== pdfButton) {
-    pdfOptions.style.display = 'none';
-  }
+                // Configura o botão PDF para este modal
+                document.getElementById('btn-gerar-pdf-modal').onclick = gerarPDFDosLancamentos;
+
+                if (!transactions.length) {
+                    document.getElementById('modal-body').innerHTML = '<p style="text-align:center;color:#777;">Nenhum lançamento encontrado.</p>';
+                } else {
+                    let html = `
+                        <table class="transactions-table" style="width:100%;">
+                            <thead>
+                                <tr>
+                                    <th>Fornecedor</th>
+                                    <th>Categoria</th>
+                                    <th>Plano</th>
+                                    <th>Vencimento</th>
+                                    <th>Valor</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                    `;
+
+                    transactions.forEach(trans => {
+                        html += `
+                            <tr>
+                                <td>${trans.fornecedor}</td>
+                                <td>${trans.categoria}</td>
+                                <td>${trans.plano}</td>
+                                <td>${trans.vencimento}</td>
+                                <td>${formatar_brl(trans.valor)}</td>
+                                <td>${trans.status}</td>
+                            </tr>
+                        `;
+                    });
+
+                    html += '</tbody></table>';
+                    document.getElementById('modal-body').innerHTML = html;
+                }
+
+                document.getElementById('modal-lancamentos').style.display = 'flex';
+            });
+    }
+
+    function fecharModal() {
+        document.getElementById('modal-lancamentos').style.display = 'none';
+    }
+
+// Remova a função de dentro do event listener
+document.getElementById('btn-exportar-pdf').addEventListener('click', () => {
+  const filtro = document.getElementById('modal-title').textContent;
+const periodo = `mes=${currentMonth}&ano=${currentYear}`;
+const url = `/contas-a-pagar/pdf?filtro=${encodeURIComponent(filtro)}&${periodo}`;
+  window.open(url, '_blank');
 });

@@ -1,0 +1,38 @@
+Resumo e Contexto do Módulo de Lançamentos
+Projeto: Sistema Grupo Fisgar – automação total e visual para o financeiro e operações do e-commerce.
+
+Módulo: Lançamentos Manuais (integrado ao Contas a Pagar, banco de dados centralizado).
+
+Situação Atual:
+
+Tela de Lançamentos já está visual, estilizada e separada do Contas a Pagar.
+
+Cards do topo (Pendentes, Pagos, Atrasados, Total) buscam dados do banco de dados.
+
+Formulário de lançamento manual alimenta a tabela contas_a_pagar.
+
+Filtros de mês e ano foram implementados e precisam sempre carregar o mês corrente como padrão.
+
+Integração entre backend (Flask + SQLite) e frontend (HTML + JS + Select2 + CSS) validada.
+
+Último ajuste foi aprimorar o filtro mensal, mantendo os valores do mês corrente nos cards.
+
+Backend está estruturado para receber e filtrar dados por status, mês e ano (rotas API funcionando).
+
+Desafios Superados:
+
+Cards dinâmicos, select2, integração de selects automáticos, formulário AJAX, filtros e design visual implementados.
+
+Correção de erros de variáveis, sumiço de gráficos e cards, bugs de integração resolvidos.
+
+Próximos Passos:
+
+Refinar as rotas de API para que os cards dos lançamentos mostrem sempre os dados do mês/ano filtrado.
+
+Garantir que todos lançamentos manuais alimentem a tabela central e reflitam em todos os dashboards.
+
+Validar funcionamento com vários lançamentos e diferentes status.
+
+Ajustar visuais, adicionar notificações e histórico de ações (se necessário).
+
+Documentar tudo para futuras integrações na nuvem e outros módulos.

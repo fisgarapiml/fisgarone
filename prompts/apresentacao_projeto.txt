@@ -1,0 +1,82 @@
+# Prompt de Apresentação do Usuário e Projeto
+
+---
+
+## Quem sou eu
+
+Sou um empreendedor brasileiro, prático e determinado, especializado em e-commerce e gestão de pequenas/médias empresas, mas **não sou programador**. Tenho habilidades autodidatas: aprendi tudo que sei na base da tentativa, erro e persistência. Não tenho formação em TI, mas **consigo executar, testar, corrigir e implementar soluções** seguindo instruções claras. Domino o básico de ferramentas como PyCharm, Android Studio e Power BI, mas não sei criar ou alterar códigos complexos sozinho.
+
+---
+
+## Meu objetivo e foco do projeto
+
+Estou desenvolvendo o **Sistema Grupo Fisgar**: um sistema financeiro e operacional moderno, visual, integrado e 100% adaptado às necessidades reais do meu negócio de e-commerce (mini brinquedos e doces). O objetivo é automatizar processos, integrar módulos (financeiro, estoque, vendas, contas a pagar, etc.) e **deixar de depender de ERPs tradicionais**, ganhando total independência e liberdade de gestão.
+
+---
+
+## Nível e etapa atual
+
+- Estou em **nível intermediário** de entendimento prático (sei testar, seguir instruções, copiar e colar códigos, montar ambiente virtual, clonar repositório e executar comandos).
+- **Atualmente, o projeto está na etapa de separar e refinar módulos do sistema**, principalmente:
+  - **Contas a Pagar** (já revisado e funcional, integrado ao banco de dados principal).
+  - **Lançamentos Manuais** (em fase de integração, conectando frontend com backend e refinando filtros/dashboards).
+- Já existe um banco de dados central (`contas_a_pagar.db` ou `grupo_fisgar.db`), alimentado e sendo utilizado em produção para contas a pagar.
+
+---
+
+## Maiores desafios
+
+- Não domino lógica de programação, por isso **preciso de explicações diretas, sem jargão técnico**.
+- Meu desafio principal é **automatizar ao máximo os processos**: leitura de notas fiscais, integração com APIs (Mercado Livre, Shopee, SEFAZ), geração de relatórios, controle de estoque, etc.
+- Garantir que todas as funcionalidades sejam **intuitivas e visuais** (nada de visual de planilha antiga ou tabelas amadoras).
+- Resolver bugs de integração entre backend e frontend (variáveis, filtros, dados dos cards), sem depender de conhecimentos avançados de programação.
+
+---
+
+## Principais conquistas até aqui
+
+- **Consegui criar e estruturar sozinho** (com ajuda de IA) um banco de dados 100% funcional e adaptado.
+- Montei e personalizei painéis visuais, cards, gráficos e dashboards com dados reais da empresa.
+- Integrei APIs do Mercado Livre e Shopee ao meu sistema e também ao Power BI, **mesmo sem nunca ter estudado programação**.
+- Automatizei diversos processos financeiros, vencendo limitações técnicas e insegurança inicial.
+
+---
+
+## Minhas limitações e como supero
+
+- Não programo do zero; **copio, colo e ajusto** conforme instruções bem detalhadas.
+- Não entendo bem erros complexos de código, então preciso de **respostas e comandos testados e explicados passo a passo**.
+- Valorizo soluções visuais e intuitivas – **não aceito visual amador ou desorganizado**.
+
+---
+
+## Tipo de pessoa que sou
+
+Sou **extremamente prático, focado em resultado real e automatização**, aprendo rápido na prática, **não aceito ficar parado em erros repetidos** e exijo clareza, eficiência e respeito pelo meu tempo. Busco sempre a melhor solução, mesmo que demore mais, desde que funcione de verdade no dia a dia.
+
+---
+
+## Onde posso chegar
+
+Se tiver suporte de instruções detalhadas e funcionais, **posso construir um sistema 100% alinhado às minhas necessidades e ainda ajudar outros lojistas a fazer o mesmo**. Meu objetivo é transformar o Grupo Fisgar em referência de eficiência, independência e automação para e-commerce.
+
+---
+
+## Próximas etapas do projeto
+
+1. Finalizar a integração do módulo de **Lançamentos Manuais** com filtros e cards dinâmicos.
+2. Subir o sistema para a nuvem, garantindo acesso remoto e backup.
+3. Automatizar a leitura de notas fiscais (XML/NF-e) direto da SEFAZ.
+4. Integrar os módulos de **Estoque**, **Compras** e **Vendas** ao sistema central.
+5. Aperfeiçoar a interface para dashboard visual e intuitivo em todos os módulos.
+6. Implementar controle de acesso por usuário/colaborador (com QR Code e permissões).
+7. Avançar para o módulo de **Expedição e Operações Internas**.
+8. Automatizar geração de anúncios e integração total com marketplaces.
+9. Transformar a solução em referência para outros lojistas (eventual SaaS ou white-label).
+
+---
+
+**Se está lendo isso, seja IA ou pessoa, entenda que:**
+- **Eu sei o que quero, sei testar e sei onde quero chegar.**
+- Preciso apenas de instruções claras, diretas, completas, sem pular passos, e de preferência já testadas.
+- O foco é sempre eficiência, autonomia, automação e visual profissional!

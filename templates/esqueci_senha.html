@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8">
+  <title>Esqueci a Senha • FisgarOne</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+</head>
+<body>
+  <div class="login-container">
+    <h1>Recuperar senha</h1>
+    <form method="post" autocomplete="off">
+      <input type="email" name="email" placeholder="Seu e-mail" required autofocus>
+      <button type="submit">Enviar link de recuperação</button>
+    </form>
+    {% if mensagem %}
+      <div class="alert success">{{ mensagem }}</div>
+    {% endif %}
+    <div style="margin-top: 18px;">
+      <a href="{{ url_for('usuarios.login') }}" class="link-aux">&larr; Voltar ao login</a>
+    </div>
+  </div>
+</body>
+</html>

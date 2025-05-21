@@ -1,12 +1,13 @@
 from flask import Blueprint, render_template, request, jsonify, current_app, make_response, abort
-import sqlite3
 import json
 from datetime import datetime, timedelta
 import pandas as pd
 import re
 from weasyprint import HTML
+from utils.conexao_postgres import get_db_connection  # Importa sua conexão correta (psycopg2)
 
 contas_a_pagar_bp = Blueprint('contas_a_pagar_bp', __name__)
+
 
 # ----------------------------
 # MAPEAMENTOS
@@ -118,52 +119,9 @@ def processar_dados(df):
     print("✅ Dados processados com sucesso.")
     return df
 
-def garantir_colunas_no_banco(df, banco, tabela):
-    conn = sqlite3.connect(banco)
-    cursor = conn.cursor()
-    cursor.execute(f"PRAGMA table_info({tabela})")
-    colunas_existentes = [info[1] for info in cursor.fetchall()]
-    for coluna in df.columns:
-        if coluna not in colunas_existentes:
-            cursor.execute(f"ALTER TABLE {tabela} ADD COLUMN {coluna} TEXT")
-            print(f"✅ Coluna adicionada: {coluna}")
-    conn.commit()
-    conn.close()
-
-def importar_para_sqlite(df, banco_dados):
-    conn = sqlite3.connect(banco_dados)
-    cursor = conn.cursor()
-    colunas_insert = ", ".join([f'"{col}"' for col in df.columns])
-    placeholders = ", ".join(["?" for _ in df.columns])
-    for _, row in df.iterrows():
-        cursor.execute(f'''
-            INSERT INTO contas_a_pagar ({colunas_insert}) VALUES ({placeholders})
-            ON CONFLICT(codigo) DO UPDATE SET
-            {", ".join([f'{col} = EXCLUDED.{col}' for col in df.columns if col != "codigo"])};
-        ''', tuple(row))
-    conn.commit()
-    conn.close()
-    print("✅ Dados importados com sucesso no banco SQLite.")
-
-def get_db_connection():
-    conn = sqlite3.connect(current_app.config['DATABASE'])
-    conn.row_factory = sqlite3.Row
-    return conn
-
-def atualizar_dados_contas_a_pagar():
-    sheet_id = "1zj7fuvta2T55G0-cPnWthEfrVnqaui9u2EJ2cBJp64M"
-    aba = "compras"
-    df = carregar_planilha_google_sheets(sheet_id, aba)
-    if df is not None:
-        df_processado = processar_dados(df)
-        if df_processado is not None:
-            garantir_colunas_no_banco(df_processado, current_app.config['DATABASE'], "contas_a_pagar")
-            importar_para_sqlite(df_processado, current_app.config['DATABASE'])
 
 @contas_a_pagar_bp.route("/")
 def contas_a_pagar():
-    #atualizar_dados_contas_a_pagar()
-
     try:
         conn = get_db_connection()
         cursor = conn.cursor()
@@ -183,18 +141,19 @@ def contas_a_pagar():
         filtro = request.args.get("filtro", "mes")
         mes_corrente = f"{int(mes_param):02d}/{ano_param}"
 
+        # 1. Query para daily_data (dados por dia)
         cursor.execute("""
             SELECT
-                substr(vencimento, 1, 2) as dia,
+                SUBSTRING(vencimento FROM 1 FOR 2) as dia,
                 SUM(CAST(valor AS FLOAT)) as total,
                 CASE
-                    WHEN date(substr(vencimento, 7, 4) || '-' || substr(vencimento, 4, 2) || '-' || substr(vencimento, 1, 2)) < date('now')
+                    WHEN TO_DATE(vencimento, 'DD/MM/YYYY') < CURRENT_DATE
                          AND (valor_pago IS NULL OR valor_pago = 0) THEN 'overdue'
                     WHEN valor_pago > 0 THEN 'paid'
                     ELSE 'pending'
                 END as status
             FROM contas_a_pagar
-            WHERE substr(vencimento, 4, 7) = ?
+            WHERE SUBSTRING(vencimento FROM 4 FOR 7) = %s
             GROUP BY dia, status
             ORDER BY dia
         """, (mes_corrente,))
@@ -222,12 +181,12 @@ def contas_a_pagar():
 
         total_previsto = get_sql_result("""
             SELECT SUM(CAST(valor AS FLOAT)) FROM contas_a_pagar
-            WHERE substr(vencimento, 4, 7) = ?
+            WHERE SUBSTRING(vencimento FROM 4 FOR 7) = %s
         """, (mes_corrente,))
 
         total_pago = get_sql_result("""
             SELECT SUM(CAST(valor_pago AS FLOAT)) FROM contas_a_pagar
-            WHERE substr(vencimento, 4, 7) = ?
+            WHERE SUBSTRING(vencimento FROM 4 FOR 7) = %s
         """, (mes_corrente,))
 
         saldo = total_pago + total_previsto
@@ -235,13 +194,13 @@ def contas_a_pagar():
         valor_vencido_total = get_sql_result("""
             SELECT SUM(CAST(valor AS FLOAT)) FROM contas_a_pagar
             WHERE (valor_pago IS NULL OR valor_pago = 0)
-            AND date(substr(vencimento, 7, 4) || '-' || substr(vencimento, 4, 2) || '-' || substr(vencimento, 1, 2)) < date('now')
+            AND TO_DATE(vencimento, 'DD/MM/YYYY') < CURRENT_DATE
         """)
 
         valor_hoje_total = get_sql_result("""
             SELECT SUM(CAST(valor AS FLOAT)) FROM contas_a_pagar
             WHERE (valor_pago IS NULL OR valor_pago = 0)
-            AND date(substr(vencimento, 7, 4) || '-' || substr(vencimento, 4, 2) || '-' || substr(vencimento, 1, 2)) = date('now')
+            AND TO_DATE(vencimento, 'DD/MM/YYYY') = CURRENT_DATE
         """)
 
         query_lancamentos = """
@@ -255,25 +214,25 @@ def contas_a_pagar():
             titulo_lancamentos = "Contas Vencidas"
             query_lancamentos += """
                 AND (valor_pago IS NULL OR valor_pago = 0)
-                AND date(substr(vencimento, 7, 4) || '-' || substr(vencimento, 4, 2) || '-' || substr(vencimento, 1, 2)) < date('now')
+                AND TO_DATE(vencimento, 'DD/MM/YYYY') < CURRENT_DATE
             """
         elif filtro == "hoje":
             titulo_lancamentos = "Contas a Pagar Hoje"
             query_lancamentos += """
                 AND (valor_pago IS NULL OR valor_pago = 0)
-                AND date(substr(vencimento, 7, 4) || '-' || substr(vencimento, 4, 2) || '-' || substr(vencimento, 1, 2)) = date('now')
+                AND TO_DATE(vencimento, 'DD/MM/YYYY') = CURRENT_DATE
             """
         else:
-            query_lancamentos += " AND substr(vencimento, 4, 7) = ?"
+            query_lancamentos += " AND SUBSTRING(vencimento FROM 4 FOR 7) = %s"
             params.append(mes_corrente)
             if dia_param:
-                query_lancamentos += " AND substr(vencimento, 1, 2) = ?"
+                query_lancamentos += " AND SUBSTRING(vencimento FROM 1 FOR 2) = %s"
                 params.append(f"{int(dia_param):02d}")
-                titulo_lancamentos = f"Lançamentos do dia {dia_param.zfill(2)}/{mes_corrente[-4:]}"
+                titulo_lancamentos = f"Lançamentos do dia {str(dia_param).zfill(2)}/{mes_corrente[-4:]}"
             else:
                 titulo_lancamentos = f"Lançamentos de {mes_corrente}"
 
-        query_lancamentos += " ORDER BY vencimento ASC"
+        query_lancamentos += " ORDER BY TO_DATE(vencimento, 'DD/MM/YYYY') ASC"
         cursor.execute(query_lancamentos, params)
 
         lancamentos = []
@@ -335,6 +294,7 @@ def calcular_status(vencimento, valor_pago):
     else:
         return "Pendente"
 
+
 @contas_a_pagar_bp.route('/api/contas_por_mes')
 def api_contas_por_mes():
     conn = get_db_connection()
@@ -342,17 +302,16 @@ def api_contas_por_mes():
 
     cursor.execute("""
         SELECT
-            substr(vencimento, 4, 7) as mes_ano,
+            SUBSTRING(vencimento FROM 4 FOR 7) as mes_ano,
             SUM(CAST(valor AS FLOAT)) as total_previsto,
             SUM(CAST(COALESCE(valor_pago, 0) AS FLOAT)) as total_pago
         FROM contas_a_pagar
         GROUP BY mes_ano
-        ORDER BY substr(vencimento, 7,
-     4), substr(vencimento, 4, 2)
-        """)
+        ORDER BY SUBSTRING(vencimento FROM 7 FOR 4), SUBSTRING(vencimento FROM 4 FOR 2)
+    """)
 
     dados = [
-        {"mes": row["mes_ano"], "previsto": (row["total_previsto"]), "pago": abs(row["total_pago"])}
+        {"mes": row[0], "previsto": row[1], "pago": abs(row[2])}
         for row in cursor.fetchall()
     ]
     conn.close()
@@ -370,40 +329,41 @@ def categorias_agrupadas():
     if mes and ano:
         mes_corrente = f"{int(mes):02d}/{ano}"
         cursor.execute("""
-                SELECT categorias, SUM(ABS(CAST(valor AS FLOAT))) as total
-                FROM contas_a_pagar
-                WHERE substr(vencimento, 4, 7) = ?
-                  AND categorias IS NOT NULL AND TRIM(categorias) != ''
-                  AND valor IS NOT NULL AND TRIM(valor) != ''
-                GROUP BY categorias
-                HAVING total > 0
-                ORDER BY total DESC
-            """, (mes_corrente,))
+            SELECT categorias, SUM(ABS(CAST(valor AS FLOAT))) as total
+            FROM contas_a_pagar
+            WHERE SUBSTRING(vencimento FROM 4 FOR 7) = %s
+              AND categorias IS NOT NULL AND TRIM(categorias) != ''
+              AND valor IS NOT NULL AND TRIM(valor) != ''
+            GROUP BY categorias
+            HAVING SUM(ABS(CAST(valor AS FLOAT))) > 0
+            ORDER BY total DESC
+        """, (mes_corrente,))
     elif ano:
         cursor.execute("""
-                SELECT categorias, SUM(ABS(CAST(valor AS FLOAT))) as total
-                FROM contas_a_pagar
-                WHERE substr(vencimento, 7, 4) = ?
-                  AND categorias IS NOT NULL AND TRIM(categorias) != ''
-                  AND valor IS NOT NULL AND TRIM(valor) != ''
-                GROUP BY categorias
-                HAVING total > 0
-                ORDER BY total DESC
-            """, (ano,))
+            SELECT categorias, SUM(ABS(CAST(valor AS FLOAT))) as total
+            FROM contas_a_pagar
+            WHERE SUBSTRING(vencimento FROM 7 FOR 4) = %s
+              AND categorias IS NOT NULL AND TRIM(categorias) != ''
+              AND valor IS NOT NULL AND TRIM(valor) != ''
+            GROUP BY categorias
+            HAVING SUM(ABS(CAST(valor AS FLOAT))) > 0
+            ORDER BY total DESC
+        """, (ano,))
     else:
         cursor.execute("""
-                SELECT categorias, SUM(ABS(CAST(valor AS FLOAT))) as total
-                FROM contas_a_pagar
-                WHERE categorias IS NOT NULL AND TRIM(categorias) != ''
-                  AND valor IS NOT NULL AND TRIM(valor) != ''
-                GROUP BY categorias
-                HAVING total > 0
-                ORDER BY total DESC
-            """)
+            SELECT categorias, SUM(ABS(CAST(valor AS FLOAT))) as total
+            FROM contas_a_pagar
+            WHERE categorias IS NOT NULL AND TRIM(categorias) != ''
+              AND valor IS NOT NULL AND TRIM(valor) != ''
+            GROUP BY categorias
+            HAVING SUM(ABS(CAST(valor AS FLOAT))) > 0
+            ORDER BY total DESC
+        """)
 
-    resultado = [{"categoria": row["categorias"], "total": row["total"]} for row in cursor.fetchall()]
+    resultado = [{"categoria": row[0], "total": row[1]} for row in cursor.fetchall()]
     conn.close()
     return jsonify(resultado)
+
 
 
 @contas_a_pagar_bp.route('/api/lancamentos_filtrados')
@@ -424,14 +384,14 @@ def lancamentos_filtrados():
     params = []
 
     if tipo == 'categoria':
-        query += " AND LOWER(categorias) = LOWER(?)"
+        query += " AND LOWER(categorias) = LOWER(%s)"
         params.append(valor)
         if mes and ano:
-            query += " AND substr(vencimento, 4, 7) = ?"
+            query += " AND SUBSTRING(vencimento FROM 4 FOR 7) = %s"
             params.append(f"{int(mes):02d}/{ano}")
 
     elif tipo == 'mes':
-        query += " AND substr(vencimento, 4, 7) = ?"
+        query += " AND SUBSTRING(vencimento FROM 4 FOR 7) = %s"
         params.append(valor)
 
     elif tipo == 'card':
@@ -442,46 +402,43 @@ def lancamentos_filtrados():
         elif valor == 'overdue':
             query += """
                     AND (valor_pago IS NULL OR valor_pago = 0)
-                    AND date(substr(vencimento, 7, 4) || '-' ||
-                             substr(vencimento, 4, 2) || '-' ||
-                             substr(vencimento, 1, 2)) < date('now')
+                    AND TO_DATE(vencimento, 'DD/MM/YYYY') < CURRENT_DATE
                 """
         elif valor == 'today':
             query += """
                     AND (valor_pago IS NULL OR valor_pago = 0)
-                    AND date(substr(vencimento, 7, 4) || '-' ||
-                             substr(vencimento, 4, 2) || '-' ||
-                             substr(vencimento, 1, 2)) = date('now')
+                    AND TO_DATE(vencimento, 'DD/MM/YYYY') = CURRENT_DATE
                 """
         elif valor == 'all':
             pass  # mostra tudo
 
         if mes and ano:
-            query += " AND substr(vencimento, 4, 7) = ?"
+            query += " AND SUBSTRING(vencimento FROM 4 FOR 7) = %s"
             params.append(f"{int(mes):02d}/{ano}")
 
     elif tipo == 'dia':
         dia_valor = valor.split('/')[0].zfill(2)
         mes_valor = valor.split('/')[1]
         ano_valor = valor.split('/')[2]
-        query += " AND substr(vencimento, 1, 2) = ? AND substr(vencimento, 4, 2) = ? AND substr(vencimento, 7, 4) = ?"
+        query += " AND SUBSTRING(vencimento FROM 1 FOR 2) = %s AND SUBSTRING(vencimento FROM 4 FOR 2) = %s AND SUBSTRING(vencimento FROM 7 FOR 4) = %s"
         params.extend([dia_valor, mes_valor, ano_valor])
 
-    query += " ORDER BY vencimento ASC"
+    query += " ORDER BY TO_DATE(vencimento, 'DD/MM/YYYY') ASC"
     cursor.execute(query, params)
 
     resultado = [{
-        "codigo": row["codigo"],
-        "vencimento": row["vencimento"],
-        "categoria": row["categorias"] or '-',
-        "fornecedor": row["fornecedor"] or '-',
-        "plano": row["plano_de_contas"] or '-',
-        "valor": float(row["valor"]) if row["valor"] else 0.0,
-        "status": calcular_status(row["vencimento"], row["valor_pago"])
+        "codigo": row[0],
+        "vencimento": row[1],
+        "categoria": row[2] or '-',
+        "fornecedor": row[3] or '-',
+        "plano": row[4] or '-',
+        "valor": float(row[5]) if row[5] else 0.0,
+        "status": calcular_status(row[1], row[6])
     } for row in cursor.fetchall()]
 
     conn.close()
     return jsonify(resultado)
+
 
 
 @contas_a_pagar_bp.route('/pdf')
@@ -490,15 +447,13 @@ def gerar_pdf_contas():
         conn = get_db_connection()
         cursor = conn.cursor()
 
-        # Obter parâmetros
         filtro = request.args.get('filtro', 'dia')
         mes = request.args.get('mes', datetime.today().month)
         ano = request.args.get('ano', datetime.today().year)
         hoje = datetime.today().date()
         titulo_param = request.args.get('titulo')
-        titulo = "CONTAS A PAGAR"  # Título padrão
+        titulo = "CONTAS A PAGAR"
 
-        # Definir consulta base
         query = """
                 SELECT vencimento, fornecedor, categorias, plano_de_contas,
                        valor, valor_pago, codigo
@@ -507,110 +462,87 @@ def gerar_pdf_contas():
             """
         params = []
 
-        # Aplicar filtros específicos
-        if filtro == "dia":
-            titulo = "CONTAS DO DIA"
+        # Ajuste de filtros para Postgres (substr -> substring, date parsing diferente)
+        if filtro == "dia" or filtro == "today":
+            titulo = "CONTAS DO DIA" if filtro == "dia" else "CONTAS A PAGAR HOJE"
             query += """
-                    AND date(substr(vencimento, 7, 4) || '-' ||
-                        substr(vencimento, 4, 2) || '-' ||
-                        substr(vencimento, 1, 2)) = date('now')
-                """
+                AND TO_DATE(vencimento, 'DD/MM/YYYY') = CURRENT_DATE
+            """
         elif filtro == "atrasados":
             titulo = "CONTAS ATRASADAS"
             query += """
-                    AND date(substr(vencimento, 7, 4) || '-' ||
-                        substr(vencimento, 4, 2) || '-' ||
-                        substr(vencimento, 1, 2)) < date('now')
-                """
+                AND TO_DATE(vencimento, 'DD/MM/YYYY') < CURRENT_DATE
+            """
         elif filtro == "segunda":
             titulo = "CONTAS SEGUNDA + FIM DE SEMANA"
-            # Calcula datas do fim de semana anterior
-            if hoje.weekday() == 0:  # Se hoje é segunda
+            if hoje.weekday() == 0:
                 sabado = hoje - timedelta(days=2)
                 domingo = hoje - timedelta(days=1)
+                segunda = hoje
             else:
-                # Encontra a próxima segunda
                 dias_para_segunda = (0 - hoje.weekday()) % 7
-                proxima_segunda = hoje + timedelta(days=dias_para_segunda)
-                sabado = proxima_segunda - timedelta(days=2)
-                domingo = proxima_segunda - timedelta(days=1)
-
+                segunda = hoje + timedelta(days=dias_para_segunda)
+                sabado = segunda - timedelta(days=2)
+                domingo = segunda - timedelta(days=1)
             query += """
-                    AND (
-                        date(substr(vencimento, 7, 4) || '-' ||
-                            substr(vencimento, 4, 2) || '-' ||
-                            substr(vencimento, 1, 2)) = date(?)
-                        OR
-                        date(substr(vencimento, 7, 4) || '-' ||
-                            substr(vencimento, 4, 2) || '-' ||
-                            substr(vencimento, 1, 2)) = date(?)
-                        OR
-                        date(substr(vencimento, 7, 4) || '-' ||
-                            substr(vencimento, 4, 2) || '-' ||
-                            substr(vencimento, 1, 2)) = date(?)
-                    )
-                """
+                AND (
+                    TO_DATE(vencimento, 'DD/MM/YYYY') = %s
+                    OR TO_DATE(vencimento, 'DD/MM/YYYY') = %s
+                    OR TO_DATE(vencimento, 'DD/MM/YYYY') = %s
+                )
+            """
             params.extend([
-                hoje.strftime('%Y-%m-%d') if hoje.weekday() == 0 else proxima_segunda.strftime('%Y-%m-%d'),
+                segunda.strftime('%Y-%m-%d'),
                 sabado.strftime('%Y-%m-%d'),
                 domingo.strftime('%Y-%m-%d')
             ])
-        elif filtro == "today":
-            titulo = "CONTAS A PAGAR HOJE"
-            query += """
-                    AND date(substr(vencimento, 7, 4) || '-' ||
-                        substr(vencimento, 4, 2) || '-' ||
-                        substr(vencimento, 1, 2)) = date('now')
-                """
         elif filtro == "all":
             titulo = "TODAS AS CONTAS A PAGAR"
             query = """
-                    SELECT vencimento, fornecedor, categorias, plano_de_contas,
-                           valor, valor_pago, codigo
-                    FROM contas_a_pagar
-                """
+                SELECT vencimento, fornecedor, categorias, plano_de_contas,
+                       valor, valor_pago, codigo
+                FROM contas_a_pagar
+            """
         elif filtro == "paid":
             titulo = "CONTAS PAGAS"
             query = """
-                    SELECT vencimento, fornecedor, categorias, plano_de_contas,
-                           valor, valor_pago, codigo
-                    FROM contas_a_pagar
-                    WHERE valor_pago > 0
-                """
+                SELECT vencimento, fornecedor, categorias, plano_de_contas,
+                       valor, valor_pago, codigo
+                FROM contas_a_pagar
+                WHERE valor_pago > 0
+            """
         elif filtro == "balance":
             titulo = "CONTAS EM ABERTO"
             query += """
-                    AND (valor_pago IS NULL OR valor_pago = 0)
-                """
+                AND (valor_pago IS NULL OR valor_pago = 0)
+            """
         elif filtro == "mes":
             titulo = f"CONTAS DE {request.args.get('valor', '')}"
-            query += " AND substr(vencimento, 4, 7) = ?"
+            query += " AND SUBSTRING(vencimento FROM 4 FOR 7) = %s"
             params.append(request.args.get('valor'))
         elif filtro == "categoria":
             titulo = f"CONTAS DA CATEGORIA {request.args.get('valor', '').upper()}"
-            query += " AND LOWER(categorias) = LOWER(?)"
+            query += " AND LOWER(categorias) = LOWER(%s)"
             params.append(request.args.get('valor'))
 
         cursor.execute(query, params)
 
-        # Processar resultados
         lancamentos = []
         for row in cursor.fetchall():
+            # psycopg2 retorna tupla, precisa acessar por índice
             lancamentos.append({
-                "vencimento": row['vencimento'],
-                "fornecedor": row['fornecedor'] or '-',
-                "categoria": row['categorias'] or '-',
-                "plano": row['plano_de_contas'] or '-',
-                "valor": float(row['valor']) if row['valor'] else 0.0,
-                "pago": float(row['valor_pago']) if row['valor_pago'] else 0.0,
-                "status": calcular_status(row['vencimento'], row['valor_pago'])
+                "vencimento": row[0],
+                "fornecedor": row[1] or '-',
+                "categoria": row[2] or '-',
+                "plano": row[3] or '-',
+                "valor": float(row[4]) if row[4] else 0.0,
+                "pago": float(row[5]) if row[5] else 0.0,
+                "status": calcular_status(row[0], row[5])
             })
 
-        # Usar o título do parâmetro se fornecido
         if titulo_param:
             titulo = titulo_param
 
-        # Gerar HTML para PDF
         html = render_template(
             "contas_pdf.html",
             lancamentos=lancamentos,
@@ -619,10 +551,8 @@ def gerar_pdf_contas():
             total_geral=sum(abs(item['valor']) for item in lancamentos)
         )
 
-        # Criar PDF
         pdf = HTML(string=html).write_pdf()
 
-        # Retornar PDF
         response = make_response(pdf)
         response.headers['Content-Type'] = 'application/pdf'
         response.headers['Content-Disposition'] = f'inline; filename=contas_a_pagar_{filtro}.pdf'
@@ -643,24 +573,24 @@ def editar_lancamento():
     if not codigo:
         return jsonify(success=False, error='Código não fornecido'), 400
 
-    # Monta dinamicamente a parte SET do UPDATE
-    campos = [f"{campo} = ?" for campo in dados.keys()]
+    # Monta dinamicamente a parte SET do UPDATE com %s para psycopg2
+    campos = [f"{campo} = %s" for campo in dados.keys()]
     valores = list(dados.values())
     valores.append(codigo)
 
-    conn = sqlite3.connect(current_app.config['DATABASE'])
+    conn = get_db_connection()
     try:
-        conn.execute(
-            f"UPDATE contas_a_pagar SET {', '.join(campos)} WHERE codigo = ?",
-            valores
-        )
-        conn.commit()
+        with conn:
+            with conn.cursor() as cursor:
+                cursor.execute(
+                    f"UPDATE contas_a_pagar SET {', '.join(campos)} WHERE codigo = %s",
+                    valores
+                )
+        return jsonify(success=True)
     except Exception as e:
         return jsonify(success=False, error=str(e)), 500
     finally:
         conn.close()
-
-    return jsonify(success=True)
 
 
 @contas_a_pagar_bp.route('/marcar_pago', methods=['POST'])
@@ -669,18 +599,20 @@ def marcar_pago():
     if not codigo:
         return jsonify(success=False, error='Código não fornecido'), 400
 
-    conn = sqlite3.connect(current_app.config['DATABASE'])
+    conn = get_db_connection()
     try:
-        conn.execute(
-            "UPDATE contas_a_pagar SET valor_pago = valor WHERE codigo = ?",
-            (codigo,)
-        )
-        conn.commit()
+        with conn:
+            with conn.cursor() as cursor:
+                cursor.execute(
+                    "UPDATE contas_a_pagar SET valor_pago = valor WHERE codigo = %s",
+                    (codigo,)
+                )
         return jsonify(success=True)
     except Exception as e:
         return jsonify(success=False, error=str(e)), 500
     finally:
         conn.close()
+
 
 
 @contas_a_pagar_bp.route('/excluir', methods=['POST'])
@@ -689,13 +621,14 @@ def excluir_lancamento():
     if not codigo:
         return jsonify(success=False, error='Código não fornecido'), 400
 
-    conn = sqlite3.connect(current_app.config['DATABASE'])
+    conn = get_db_connection()
     try:
-        conn.execute(
-            "DELETE FROM contas_a_pagar WHERE codigo = ?",
-            (codigo,)
-        )
-        conn.commit()
+        with conn:
+            with conn.cursor() as cursor:
+                cursor.execute(
+                    "DELETE FROM contas_a_pagar WHERE codigo = %s",
+                    (codigo,)
+                )
         return jsonify(success=True)
     except Exception as e:
         return jsonify(success=False, error=str(e)), 500
@@ -711,19 +644,26 @@ def api_daily_timeline():
         return jsonify({"error": "Parâmetros 'mes' e 'ano' são obrigatórios"}), 400
 
     conn = get_db_connection()
-    cursor = conn.cursor()
+    try:
+        with conn:
+            with conn.cursor() as cursor:
+                cursor.execute("""
+                    SELECT
+                        SUBSTRING(vencimento FROM 1 FOR 2) as day,
+                        SUM(CAST(valor AS FLOAT)) as total
+                    FROM contas_a_pagar
+                    WHERE SUBSTRING(vencimento FROM 4 FOR 2) = %s
+                      AND SUBSTRING(vencimento FROM 7 FOR 4) = %s
+                    GROUP BY day
+                    ORDER BY day
+                """, (f"{int(mes):02d}", ano))
+                rows = cursor.fetchall()
 
-    cursor.execute("""
-        SELECT
-            substr(vencimento, 1, 2) as day,
-            SUM(CAST(valor AS FLOAT)) as total
-        FROM contas_a_pagar
-        WHERE substr(vencimento, 4, 2) = ? AND substr(vencimento, 7, 4) = ?
-        GROUP BY day
-        ORDER BY day
-    """, (f"{int(mes):02d}", ano))
+                # Como psycopg2 retorna tuplas, não dict. Ajusta assim:
+                daily_data = [{"day": row[0], "total": abs(row[1]) if row[1] else 0.0} for row in rows]
 
-    daily_data = [{"day": row["day"], "total": abs(row["total"]) if row["total"] else 0.0} for row in cursor.fetchall()]
-
-    conn.close()
-    return jsonify(daily_data)
+        return jsonify(daily_data)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    finally:
+        conn.close()
