@@ -715,3 +715,59 @@
     gap: 10px;
     margin-top: 20px;
 }
+/* Estilos para o modal */
+.modal-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+.modal-table th, .modal-table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.modal-table th {
+    background-color: #f5f5f5;
+    font-weight: 600;
+}
+
+.loading-modal, .error-modal {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 200px;
+    gap: 15px;
+    font-size: 1.1rem;
+}
+
+.loading-modal i {
+    animation: spin 1s linear infinite;
+}
+
+.error-modal {
+    color: #ff3d00;
+}
+
+.no-data {
+    text-align: center;
+    padding: 40px;
+    color: #666;
+}
+
+/* Status colors */
+.status-pago {
+    color: #00c853;
+}
+.status-vencido {
+    color: #ff3d00;
+}
+.status-pendente {
+    color: #ffab00;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}

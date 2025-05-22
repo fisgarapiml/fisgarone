@@ -7,7 +7,6 @@
     <list default="true" id="e3aaa54f-aebd-4ecb-8523-c15f4bb10208" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/modulos/financeiro/contas_a_pagar.py" beforeDir="false" afterPath="$PROJECT_DIR$/modulos/financeiro/contas_a_pagar.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/js/contas_a_pagar.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/js/contas_a_pagar.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

@@ -333,6 +333,101 @@ def contas_a_pagar():
             conn.close()
 
 
+@contas_a_pagar_bp.route('/api/lancamentos_filtrados')
+def lancamentos_filtrados():
+    conn = None
+    try:
+        tipo = request.args.get("tipo")
+        valor = request.args.get("valor")
+        mes = request.args.get("mes")
+        ano = request.args.get("ano")
+
+        if not tipo:
+            return jsonify({"error": "Parâmetro 'tipo' é obrigatório"}), 400
+
+        conn = get_db_connection()
+        cursor = conn.cursor()
+
+        query = """
+            SELECT codigo, vencimento, categorias, fornecedor, plano_de_contas, 
+                   valor, valor_pago
+            FROM contas_a_pagar
+            WHERE 1=1
+        """
+        params = []
+
+        # Construção dos filtros
+        if tipo == 'categoria':
+            query += " AND LOWER(categorias) = LOWER(%s)"
+            params.append(valor)
+            if mes and ano:
+                query += " AND SUBSTRING(vencimento FROM 4 FOR 7) = %s"
+                params.append(f"{int(mes):02d}/{ano}")
+
+        elif tipo == 'mes':
+            query += " AND SUBSTRING(vencimento FROM 4 FOR 7) = %s"
+            params.append(valor)
+
+        elif tipo == 'card':
+            if valor == 'paid':
+                query += " AND valor_pago > 0"
+            elif valor == 'balance':
+                query += " AND (valor_pago IS NULL OR valor_pago = 0)"
+            elif valor == 'overdue':
+                query += """
+                    AND (valor_pago IS NULL OR valor_pago = 0)
+                    AND TO_DATE(vencimento, 'DD/MM/YYYY') < CURRENT_DATE
+                """
+            elif valor == 'today':
+                query += """
+                    AND (valor_pago IS NULL OR valor_pago = 0)
+                    AND TO_DATE(vencimento, 'DD/MM/YYYY') = CURRENT_DATE
+                """
+
+            if mes and ano:
+                query += " AND SUBSTRING(vencimento FROM 4 FOR 7) = %s"
+                params.append(f"{int(mes):02d}/{ano}")
+
+        query += " ORDER BY TO_DATE(vencimento, 'DD/MM/YYYY') ASC"
+        cursor.execute(query, params)
+
+        # Processamento seguro dos resultados
+        lancamentos = []
+        for row in cursor.fetchall():
+            try:
+                valor = row[5] if row[5] is not None else 0.0
+                pago = row[6] if row[6] is not None else 0.0
+
+                # Garante que os valores numéricos não sejam NaN
+                valor_float = float(valor) if str(valor).strip() else 0.0
+                pago_float = float(pago) if str(pago).strip() else 0.0
+
+                lancamentos.append({
+                    "codigo": row[0],
+                    "vencimento": row[1] or '-',
+                    "categoria": row[2] or '-',
+                    "fornecedor": row[3] or '-',
+                    "plano": row[4] or '-',
+                    "valor": abs(valor_float),
+                    "pago": abs(pago_float),
+                    "status": calcular_status(row[1], row[6])
+                })
+            except (TypeError, ValueError) as e:
+                current_app.logger.warning(f"Registro inválido ignorado: {row} - {str(e)}")
+                continue
+
+        return jsonify(lancamentos)
+
+    except Exception as e:
+        current_app.logger.error(f"Erro em lancamentos_filtrados: {str(e)}")
+        return jsonify({
+            "error": "Erro ao filtrar lançamentos",
+            "details": str(e)
+        }), 500
+    finally:
+        if conn:
+            conn.close()
+
 @contas_a_pagar_bp.route('/api/contas_por_mes')
 def api_contas_por_mes():
     conn = None
@@ -438,41 +533,49 @@ def categorias_agrupadas():
         if conn:
             conn.close()
 
+
 @contas_a_pagar_bp.route('/pdf')
 def gerar_pdf_contas():
+    conn = None
     try:
         conn = get_db_connection()
-        cursor = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+        cursor = conn.cursor()
 
         filtro = request.args.get('filtro', 'dia')
-        mes = request.args.get('mes', datetime.today().month)
-        ano = request.args.get('ano', datetime.today().year)
+        mes = request.args.get('mes', str(datetime.today().month))
+        ano = request.args.get('ano', str(datetime.today().year))
         hoje = datetime.today().date()
         titulo_param = request.args.get('titulo')
-        titulo = "CONTAS A PAGAR"
+
+        # Títulos padrão para cada filtro
+        titulos = {
+            'dia': "CONTAS DO DIA",
+            'today': "CONTAS A PAGAR HOJE",
+            'atrasados': "CONTAS ATRASADAS",
+            'segunda': "CONTAS SEGUNDA + FIM DE SEMANA",
+            'all': "TODAS AS CONTAS A PAGAR",
+            'paid': "CONTAS PAGAS",
+            'balance': "CONTAS EM ABERTO"
+        }
+        titulo = titulos.get(filtro, "RELATÓRIO DE CONTAS")
 
         query = """
-                SELECT vencimento, fornecedor, categorias, plano_de_contas,
-                       valor, valor_pago, codigo
-                FROM contas_a_pagar
-                WHERE (valor_pago IS NULL OR valor_pago = 0)
-            """
+            SELECT vencimento, fornecedor, categorias, plano_de_contas,
+                   valor, valor_pago, codigo
+            FROM contas_a_pagar
+        """
         params = []
 
-        # Ajuste de filtros para Postgres (substr -> substring, date parsing diferente)
-        if filtro == "dia" or filtro == "today":
-            titulo = "CONTAS DO DIA" if filtro == "dia" else "CONTAS A PAGAR HOJE"
+        # Filtros específicos
+        if filtro in ['dia', 'today']:
+            query += " WHERE TO_DATE(vencimento, 'DD/MM/YYYY') = CURRENT_DATE"
+        elif filtro == 'atrasados':
             query += """
-                AND TO_DATE(vencimento, 'DD/MM/YYYY') = CURRENT_DATE
-            """
-        elif filtro == "atrasados":
-            titulo = "CONTAS ATRASADAS"
-            query += """
+                WHERE (valor_pago IS NULL OR valor_pago = 0)
                 AND TO_DATE(vencimento, 'DD/MM/YYYY') < CURRENT_DATE
             """
-        elif filtro == "segunda":
-            titulo = "CONTAS SEGUNDA + FIM DE SEMANA"
-            if hoje.weekday() == 0:
+        elif filtro == 'segunda':
+            if hoje.weekday() == 0:  # Segunda-feira
                 sabado = hoje - timedelta(days=2)
                 domingo = hoje - timedelta(days=1)
                 segunda = hoje
@@ -481,8 +584,9 @@ def gerar_pdf_contas():
                 segunda = hoje + timedelta(days=dias_para_segunda)
                 sabado = segunda - timedelta(days=2)
                 domingo = segunda - timedelta(days=1)
+
             query += """
-                AND (
+                WHERE (
                     TO_DATE(vencimento, 'DD/MM/YYYY') = %s
                     OR TO_DATE(vencimento, 'DD/MM/YYYY') = %s
                     OR TO_DATE(vencimento, 'DD/MM/YYYY') = %s
@@ -493,53 +597,42 @@ def gerar_pdf_contas():
                 sabado.strftime('%Y-%m-%d'),
                 domingo.strftime('%Y-%m-%d')
             ])
-        elif filtro == "all":
-            titulo = "TODAS AS CONTAS A PAGAR"
-            query = """
-                SELECT vencimento, fornecedor, categorias, plano_de_contas,
-                       valor, valor_pago, codigo
-                FROM contas_a_pagar
-            """
-        elif filtro == "paid":
-            titulo = "CONTAS PAGAS"
-            query = """
-                SELECT vencimento, fornecedor, categorias, plano_de_contas,
-                       valor, valor_pago, codigo
-                FROM contas_a_pagar
-                WHERE valor_pago > 0
-            """
-        elif filtro == "balance":
-            titulo = "CONTAS EM ABERTO"
-            query += """
-                AND (valor_pago IS NULL OR valor_pago = 0)
-            """
-        elif filtro == "mes":
-            titulo = f"CONTAS DE {request.args.get('valor', '')}"
-            query += " AND SUBSTRING(vencimento FROM 4 FOR 7) = %s"
-            params.append(request.args.get('valor'))
-        elif filtro == "categoria":
-            titulo = f"CONTAS DA CATEGORIA {request.args.get('valor', '').upper()}"
-            query += " AND LOWER(categorias) = LOWER(%s)"
-            params.append(request.args.get('valor'))
+        elif filtro == 'paid':
+            query += " WHERE valor_pago > 0"
+        elif filtro == 'balance':
+            query += " WHERE (valor_pago IS NULL OR valor_pago = 0)"
+
+        # Filtro adicional por mês/ano
+        if mes and ano and filtro not in ['dia', 'today', 'atrasados', 'segunda']:
+            if 'WHERE' in query:
+                query += " AND"
+            else:
+                query += " WHERE"
+            query += " SUBSTRING(vencimento FROM 4 FOR 7) = %s"
+            params.append(f"{int(mes):02d}/{ano}")
 
         cursor.execute(query, params)
-
         lancamentos = []
         for row in cursor.fetchall():
-            # psycopg2 retorna tupla, precisa acessar por índice
-            lancamentos.append({
-                "vencimento": row[0],
-                "fornecedor": row[1] or '-',
-                "categoria": row[2] or '-',
-                "plano": row[3] or '-',
-                "valor": float(row[4]) if row[4] else 0.0,
-                "pago": float(row[5]) if row[5] else 0.0,
-                "status": calcular_status(row[0], row[5])
-            })
+            try:
+                lancamentos.append({
+                    "vencimento": row[0] or '-',
+                    "fornecedor": row[1] or '-',
+                    "categoria": row[2] or '-',
+                    "plano": row[3] or '-',
+                    "valor": abs(float(row[4])) if row[4] is not None else 0.0,
+                    "pago": abs(float(row[5])) if row[5] is not None else 0.0,
+                    "status": calcular_status(row[0], row[5])
+                })
+            except (TypeError, ValueError) as e:
+                current_app.logger.warning(f"Registro PDF inválido ignorado: {row} - {str(e)}")
+                continue
 
+        # Título customizado se fornecido
         if titulo_param:
             titulo = titulo_param
 
+        # Geração do PDF
         html = render_template(
             "contas_pdf.html",
             lancamentos=lancamentos,
@@ -549,6 +642,8 @@ def gerar_pdf_contas():
         )
 
         pdf = HTML(string=html).write_pdf()
+        if not pdf:
+            raise ValueError("Falha ao gerar PDF")
 
         response = make_response(pdf)
         response.headers['Content-Type'] = 'application/pdf'
@@ -559,8 +654,8 @@ def gerar_pdf_contas():
         current_app.logger.error(f"Erro ao gerar PDF: {str(e)}")
         abort(500, description="Erro ao gerar relatório PDF")
     finally:
-        conn.close()
-
+        if conn:
+            conn.close()
 
 @contas_a_pagar_bp.route('/editar_lancamento', methods=['POST'])
 def editar_lancamento():

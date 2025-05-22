@@ -605,67 +605,89 @@ document.getElementById('filtro-categoria').addEventListener('change', e => {
   carregarGraficoCategorias(e.target.value);
 });
 function mostrarLancamentosFiltrados(filtro) {
+    let url = `/contas-a-pagar/api/lancamentos_filtrados?tipo=${filtro.tipo}&valor=${filtro.valor}`;
 
-        let url = `/contas-a-pagar/api/lancamentos_filtrados`;
-
-        if (filtro.tipo === 'categoria') {
-            url += `?tipo=categoria&valor=${encodeURIComponent(filtro.valor)}&mes=${mesAtual}&ano=${anoAtual}`;
-        } else if (filtro.tipo === 'mes') {
-            url += `?tipo=mes&valor=${encodeURIComponent(filtro.valor)}`;
-        } else if (filtro.tipo === 'card') {
-            url += `?tipo=card&valor=${encodeURIComponent(filtro.valor)}&mes=${mesAtual}&ano=${anoAtual}`;
-        }
-
-        fetch(url)
-            .then(res => res.json())
-            .then(transactions => {
-                const title = filtro.titulo ||
-                             (filtro.tipo === 'mes' ? `Lançamentos de ${filtro.valor}` :
-                             `Lançamentos em ${filtro.valor} (${mesAtual}/${anoAtual})`);
-
-                document.getElementById('modal-title').textContent = title;
-
-                // Configura o botão PDF para este modal
-                document.getElementById('btn-gerar-pdf-modal').onclick = gerarPDFDosLancamentos;
-
-                if (!transactions.length) {
-                    document.getElementById('modal-body').innerHTML = '<p style="text-align:center;color:#777;">Nenhum lançamento encontrado.</p>';
-                } else {
-                    let html = `
-                        <table class="transactions-table" style="width:100%;">
-                            <thead>
-                                <tr>
-                                    <th>Fornecedor</th>
-                                    <th>Categoria</th>
-                                    <th>Plano</th>
-                                    <th>Vencimento</th>
-                                    <th>Valor</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                    `;
-
-                    transactions.forEach(trans => {
-                        html += `
-                            <tr>
-                                <td>${trans.fornecedor}</td>
-                                <td>${trans.categoria}</td>
-                                <td>${trans.plano}</td>
-                                <td>${trans.vencimento}</td>
-                                <td>${formatar_brl(trans.valor)}</td>
-                                <td>${trans.status}</td>
-                            </tr>
-                        `;
-                    });
-
-                    html += '</tbody></table>';
-                    document.getElementById('modal-body').innerHTML = html;
-                }
-
-                document.getElementById('modal-lancamentos').style.display = 'flex';
-            });
+    if (filtro.mes && filtro.ano) {
+        url += `&mes=${filtro.mes}&ano=${filtro.ano}`;
     }
+
+    // Exibe um loader enquanto carrega
+    const modalBody = document.getElementById('modal-body');
+    modalBody.innerHTML = '<div class="loading-modal"><i class="fas fa-circle-notch fa-spin"></i> Carregando...</div>';
+
+    fetch(url)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Erro HTTP: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            // Verifica se os dados são válidos
+            if (!Array.isArray(data)) {
+                throw new Error("Formato de dados inválido");
+            }
+
+            // Processa os dados para garantir que não há NaN
+            const lancamentos = data.map(item => ({
+                ...item,
+                valor: isNaN(item.valor) ? 0.0 : item.valor,
+                pago: isNaN(item.pago) ? 0.0 : item.pago
+            }));
+
+            const title = filtro.titulo ||
+                         (filtro.tipo === 'mes' ? `Lançamentos de ${filtro.valor}` :
+                         `Lançamentos em ${filtro.valor}`);
+
+            document.getElementById('modal-title').textContent = title;
+
+            if (lancamentos.length === 0) {
+                modalBody.innerHTML = '<p class="no-data">Nenhum lançamento encontrado</p>';
+            } else {
+                // Cria a tabela com os lançamentos
+                let html = `
+                    <table class="modal-table">
+                        <thead>
+                            <tr>
+                                <th>Fornecedor</th>
+                                <th>Categoria</th>
+                                <th>Vencimento</th>
+                                <th>Valor</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                `;
+
+                lancamentos.forEach(item => {
+                    html += `
+                        <tr>
+                            <td>${item.fornecedor}</td>
+                            <td>${item.categoria}</td>
+                            <td>${item.vencimento}</td>
+                            <td>R$ ${item.valor.toFixed(2).replace('.', ',')}</td>
+                            <td class="status-${item.status.toLowerCase()}">${item.status}</td>
+                        </tr>
+                    `;
+                });
+
+                html += `</tbody></table>`;
+                modalBody.innerHTML = html;
+            }
+
+            // Exibe o modal
+            document.getElementById('modal-lancamentos').style.display = 'flex';
+        })
+        .catch(error => {
+            console.error("Erro ao carregar lançamentos:", error);
+            modalBody.innerHTML = `
+                <div class="error-modal">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <p>Erro ao carregar os lançamentos</p>
+                </div>
+            `;
+        });
+}
 
     function fecharModal() {
         document.getElementById('modal-lancamentos').style.display = 'none';
