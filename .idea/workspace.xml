@@ -5,33 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e3aaa54f-aebd-4ecb-8523-c15f4bb10208" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/criar_admin.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/migrar_contasapagar_sqlite_para_postgres.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/models.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/modulos/usuarios/routes.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/procfile" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/prompts/apresentacao_projeto.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/prompts/e_possivel.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/prompts/lancamentos_telae cardsok.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/css/lancamentos.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/css/login.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/js/lancamentos.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/esqueci_senha.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/gerenciar_usuarios.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/novo_usuario.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/grupo_fisgar.db" beforeDir="false" afterPath="$PROJECT_DIR$/grupo_fisgar.db" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modulos/financeiro/lancamento_manual.py" beforeDir="false" afterPath="$PROJECT_DIR$/modulos/financeiro/lancamento_manual.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/css/contas_a_pagar.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/css/contas_a_pagar.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/css/lancamento.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/js/contas_a_pagar.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/js/contas_a_pagar.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/js/lancamento.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/contas_a_pagar.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/contas_a_pagar.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modulos/financeiro/contas_a_pagar.py" beforeDir="false" afterPath="$PROJECT_DIR$/modulos/financeiro/contas_a_pagar.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/css/lancamentos.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/css/lancamentos.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/js/produtos_manual.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/js/produtos_manual.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/lancamento_manual.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/lancamento_manual.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/login.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/teste.py" beforeDir="false" afterPath="$PROJECT_DIR$/teste.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -71,22 +49,22 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Python.agente_fisgar.executor": "Run",
-    "Python.appfinance.executor": "Run",
-    "Python.atualizar_db.executor": "Run",
-    "Python.home.executor": "Run",
-    "Python.painel_nfe.executor": "Run",
-    "Python.teste.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "main",
-    "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "C:/Users/USUÁRIO/Downloads/Base Central/Api ML Full",
-    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Python.agente_fisgar.executor&quot;: &quot;Run&quot;,
+    &quot;Python.appfinance.executor&quot;: &quot;Run&quot;,
+    &quot;Python.atualizar_db.executor&quot;: &quot;Run&quot;,
+    &quot;Python.home.executor&quot;: &quot;Run&quot;,
+    &quot;Python.painel_nfe.executor&quot;: &quot;Run&quot;,
+    &quot;Python.teste.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/USUÁRIO/Downloads/shoppee&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\fisgarone\compras_xml" />

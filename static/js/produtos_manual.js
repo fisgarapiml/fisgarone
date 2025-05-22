@@ -1,15 +1,109 @@
 // ==================== INICIALIZAÇÃO DO FORMULÁRIO ====================
 $(document).ready(function() {
-  // Configura todos os selects dinâmicos com Select2
-  $('.select-dinamico').select2({
-    tags: true,
-    placeholder: "Selecione ou digite para criar",
-    width: '100%'
-  }).on('select2:select', function(e) {
-    // Quando uma nova opção é criada (tag)
-    if (e.params.data.tag) {
-      const campo = $(this).data('campo');
-      const valor = e.params.data.text;
+  // Configuração responsiva dos selects dinâmicos
+  function initializeSelects() {
+    $('.select-dinamico, .select-criavel').select2({
+      tags: true,
+      placeholder: "Selecione ou digite",
+      width: '100%',
+      dropdownAutoWidth: true,
+      dropdownParent: $(window).width() < 768 ? $('body') : null,
+      createTag: function(params) {
+        return {
+          id: params.term,
+          text: params.term,
+          newOption: true
+        };
+      }
+    });
+
+    // Ajuste para mobile - fecha o teclado virtual após seleção
+    if ($(window).width() < 768) {
+      $('.select2-selection').on('touchstart', function() {
+        $(this).blur();
+      });
+    }
+  }
+
+  // Inicializa os selects
+  initializeSelects();
+
+  // Re-inicializa os selects quando a janela é redimensionada
+  $(window).on('resize', function() {
+    $('.select-dinamico, .select-criavel').select2('destroy');
+    initializeSelects();
+  });
+
+  // ==================== MANIPULAÇÃO DE DATAS (MOBILE-FRIENDLY) ====================
+  $('input[type="date"]').on('change', function() {
+    if ($(window).width() < 768) {
+      // Formato simplificado para mobile
+      const date = new Date(this.value);
+      if (!isNaN(date.getTime())) {
+        const day = date.getDate().toString().padStart(2, '0');
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        $(this).val(`${day}/${month}/${date.getFullYear()}`);
+      }
+    }
+  });
+
+  // ==================== LÓGICA DE STATUS ====================
+  function updateStatus() {
+    const valorPago = parseFloat($('input[name="valor_pago"]').val()) || 0;
+    const vencimento = $('input[name="vencimento"]').val();
+    const statusSelect = $('select[name="status"]');
+
+    if (valorPago > 0) {
+      statusSelect.val('paid').trigger('change');
+      return;
+    }
+
+    if (vencimento) {
+      const [day, month, year] = vencimento.split('/');
+      const vencDate = new Date(year, month - 1, day);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+      statusSelect.val(vencDate < today ? 'overdue' : 'pending').trigger('change');
+    }
+  }
+
+  // Eventos para atualização de status
+  $('input[name="valor_pago"], input[name="vencimento"]').on('change', updateStatus);
+
+  // ==================== BOTÕES PARA ADICIONAR OPÇÕES ====================
+  function setupAddOptionButtons() {
+    // Remove botões existentes para evitar duplicação
+    $('.btn-adicionar, .btn-add-option').remove();
+
+    // Adiciona botões apenas em telas maiores
+    if ($(window).width() >= 768) {
+      $('.select-dinamico').next('.select2').find('.select2-selection').append(
+        '<button type="button" class="btn-adicionar" title="Adicionar novo item">+</button>'
+      );
+
+      $('.btn-adicionar').click(function(e) {
+        e.stopPropagation();
+        const select = $(this).closest('.select2').prev('.select-dinamico');
+        select.select2('open');
+      });
+    }
+  }
+
+  // Configura os botões inicialmente e no redimensionamento
+  setupAddOptionButtons();
+  $(window).on('resize', setupAddOptionButtons);
+
+  // ==================== TRATAMENTO DE NOVAS OPÇÕES ====================
+  $('.select-dinamico, .select-criavel').on('select2:select', function(e) {
+    if (e.params.data.newOption) {
+      const novoValor = e.params.data.text;
+      const campo = $(this).data('campo') || $(this).attr('name');
+
+      // Feedback visual para mobile
+      if ($(window).width() < 768) {
+        $(this).select2('close');
+      }
 
       // Envia a nova opção para o servidor
       fetch('/api/adicionar_opcao', {
@@ -17,138 +111,64 @@ $(document).ready(function() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ campo, valor })
+        body: JSON.stringify({ campo, valor: novoValor })
       }).then(r => r.json()).then(data => {
         if (!data.success) {
           console.error("Erro ao salvar:", data.error);
           $(this).val(null).trigger('change');
+
+          // Feedback visual para o usuário
+          if ($(window).width() < 768) {
+            alert('Não foi possível adicionar o novo item');
+          }
         }
+      }).catch(error => {
+        console.error("Erro na requisição:", error);
+        $(this).val(null).trigger('change');
       });
     }
   });
+});
 
-  // ==================== MANIPULAÇÃO DE DATAS ====================
-  // Formata data para o padrão do seu DB (DD/MM/YYYY)
-  $('input[type="date"]').on('change', function() {
-    const date = new Date(this.value);
-    if (!isNaN(date.getTime())) {
-      const day = date.getDate().toString().padStart(2, '0');
-      const month = (date.getMonth() + 1).toString().padStart(2, '0');
-      this.value = `${day}/${month}/${date.getFullYear()}`;
+// ==================== MODAL PARA ADIÇÃO DE OPÇÕES (MOBILE) ====================
+$(document).ready(function() {
+  const modal = $('#modalAdicionar');
+
+  // Mostra modal apenas em mobile
+  $(document).on('click', '.select2-selection', function() {
+    if ($(window).width() < 768) {
+      const select = $(this).closest('.select2').prev('.select-dinamico');
+      const campo = select.attr('id') || select.data('campo');
+
+      modal.data('campo', campo).show();
+      return false; // Evita abrir o select2 padrão
     }
   });
 
-  // ==================== LÓGICA DE STATUS ====================
-  // Atualiza status quando valor pago ou vencimento mudar
-  $('input[name="valor_pago"], input[name="vencimento"]').on('change', function() {
-    const valorPago = $('input[name="valor_pago"]').val();
-    const vencimento = $('input[name="vencimento"]').val();
+  $('.close, #btnConfirmar').click(function() {
+    if ($(this).is('#btnConfirmar')) {
+      const campo = modal.data('campo');
+      const novoValor = $('#novoValor').val().trim();
 
-    // Se tem valor pago, marca como "Pago"
-    if (valorPago && parseFloat(valorPago) > 0) {
-      $('select[name="status"]').val('paid').trigger('change');
-    }
-    // Se não tem valor pago mas tem vencimento, verifica status
-    else if (vencimento) {
-      const [day, month, year] = vencimento.split('/');
-      const vencDate = new Date(year, month - 1, day);
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
+      if (novoValor) {
+        const select = $(`#${campo}`) || $(`[data-campo="${campo}"]`);
 
-      // Verifica se está atrasado
-      if (vencDate < today) {
-        $('select[name="status"]').val('overdue').trigger('change');
-      } else {
-        $('select[name="status"]').val('pending').trigger('change');
+        // Adiciona a nova opção
+        const novoOption = new Option(novoValor, novoValor, true, true);
+        select.append(novoOption).trigger('change');
+
+        // Envia para o backend
+        $.post('/api/adicionar-opcao', {
+          campo: campo,
+          valor: novoValor
+        }).fail(function() {
+          select.val(null).trigger('change');
+          alert('Erro ao salvar o novo item');
+        });
       }
     }
+
+    $('#novoValor').val('');
+    modal.hide();
   });
 });
-$(document).ready(function() {
-    // Configuração dos selects dinâmicos
-    $('.select-dinamico').select2({
-        tags: true,
-        placeholder: "Selecione ou digite para criar",
-        width: '100%'
-    });
-
-    // Botão "+" para adicionar novas opções
-    $('.select-dinamico').next('.select2').find('.select2-selection').append(
-        '<button type="button" class="btn-adicionar" title="Adicionar novo item">+</button>'
-    );
-
-    // Modal para adicionar novas opções
-    const modal = $('#modalAdicionar');
-    $('.btn-adicionar').click(function() {
-        const selectId = $(this).closest('.select2').prev('.select-dinamico').attr('id');
-        modal.data('campo', selectId).show();
-    });
-
-    $('.close, #btnConfirmar').click(function() {
-        const campo = modal.data('campo');
-        const novoValor = $('#novoValor').val();
-
-        if (novoValor && $(this).is('#btnConfirmar')) {
-            // Adiciona ao Select2
-            const novoOption = new Option(novoValor, novoValor, true, true);
-            $(`#${campo}`).append(novoOption).trigger('change');
-
-            // Envia para o backend (via AJAX)
-            $.post('/api/adicionar-opcao', {
-                campo: campo,
-                valor: novoValor
-            }, function(response) {
-                if (!response.success) {
-                    alert('Erro ao salvar: ' + response.error);
-                }
-            });
-        }
-
-        $('#novoValor').val('');
-        modal.hide();
-    });
-});
-$(document).ready(function() {
-    // Configuração dos selects com criação inline
-    $('.select-criavel').each(function() {
-        const select = $(this);
-
-        // Transforma em Select2 com tags
-        select.select2({
-            tags: true,
-            placeholder: "Selecione ou digite para criar",
-            width: '100%',
-            createTag: function(params) {
-                return {
-                    id: params.term,
-                    text: params.term,
-                    newOption: true
-                };
-            }
-        });
-
-        // Adiciona o botão "+" dentro do próprio select
-        select.next('.select2').find('.select2-selection').append(
-            '<button type="button" class="btn-add-option" title="Adicionar item">+</button>'
-        );
-
-        // Lógica para adicionar novos itens
-        select.on('select2:select', function(e) {
-            if (e.params.data.newOption) {
-                const novoValor = e.params.data.text;
-                const campo = select.data('campo');
-
-                // Envia para o backend
-                $.post('/api/adicionar-opcao', {
-                    campo: campo,
-                    valor: novoValor
-                }, function(response) {
-                    if (!response.success) {
-                        console.error("Erro ao salvar:", response.error);
-                        select.val(null).trigger('change');
-                    }
-                });
-            }
-        });
-    });
-

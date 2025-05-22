@@ -154,7 +154,13 @@ def contas_a_pagar():
                 END as status
             FROM contas_a_pagar
             WHERE SUBSTRING(vencimento FROM 4 FOR 7) = %s
-            GROUP BY dia, status
+            GROUP BY SUBSTRING(vencimento FROM 1 FOR 2),
+                     CASE
+                        WHEN TO_DATE(vencimento, 'DD/MM/YYYY') < CURRENT_DATE
+                             AND (valor_pago IS NULL OR valor_pago = 0) THEN 'overdue'
+                        WHEN valor_pago > 0 THEN 'paid'
+                        ELSE 'pending'
+                     END
             ORDER BY dia
         """, (mes_corrente,))
 
@@ -635,6 +641,7 @@ def excluir_lancamento():
     finally:
         conn.close()
 
+
 @contas_a_pagar_bp.route('/api/daily_timeline')
 def api_daily_timeline():
     mes = request.args.get('mes')
@@ -647,22 +654,52 @@ def api_daily_timeline():
     try:
         with conn:
             with conn.cursor() as cursor:
+                # Consulta corrigida - extrai apenas o dia para agrupamento
                 cursor.execute("""
                     SELECT
                         SUBSTRING(vencimento FROM 1 FOR 2) as day,
-                        SUM(CAST(valor AS FLOAT)) as total
+                        SUM(CAST(valor AS FLOAT)) as total,
+                        CASE
+                            WHEN TO_DATE(vencimento, 'DD/MM/YYYY') < CURRENT_DATE
+                                 AND (valor_pago IS NULL OR valor_pago = 0) THEN 'overdue'
+                            WHEN valor_pago > 0 THEN 'paid'
+                            ELSE 'pending'
+                        END as status
                     FROM contas_a_pagar
                     WHERE SUBSTRING(vencimento FROM 4 FOR 2) = %s
                       AND SUBSTRING(vencimento FROM 7 FOR 4) = %s
-                    GROUP BY day
+                    GROUP BY 
+                        SUBSTRING(vencimento FROM 1 FOR 2),
+                        CASE
+                            WHEN TO_DATE(vencimento, 'DD/MM/YYYY') < CURRENT_DATE
+                                 AND (valor_pago IS NULL OR valor_pago = 0) THEN 'overdue'
+                            WHEN valor_pago > 0 THEN 'paid'
+                            ELSE 'pending'
+                        END
                     ORDER BY day
                 """, (f"{int(mes):02d}", ano))
-                rows = cursor.fetchall()
 
-                # Como psycopg2 retorna tuplas, não dict. Ajusta assim:
-                daily_data = [{"day": row[0], "total": abs(row[1]) if row[1] else 0.0} for row in rows]
+                # Processa os resultados para consolidar por dia
+                daily_data = {}
+                for row in cursor.fetchall():
+                    day, total, status = row
+                    total = abs(total) if total else 0.0
+                    if day in daily_data:
+                        daily_data[day]['total'] += total
+                        # Mantém o status mais crítico (overdue > pending > paid)
+                        if status == 'overdue' or (status == 'pending' and daily_data[day]['status'] == 'paid'):
+                            daily_data[day]['status'] = status
+                    else:
+                        daily_data[day] = {'total': total, 'status': status}
 
-        return jsonify(daily_data)
+                # Preenche todos os dias do mês, mesmo sem lançamentos
+                complete_daily_data = {}
+                days_in_month = 31  # Máximo de dias em qualquer mês
+                for day in range(1, days_in_month + 1):
+                    day_str = f"{day:02d}"
+                    complete_daily_data[day_str] = daily_data.get(day_str, {'total': 0.0, 'status': 'none'})
+
+        return jsonify(complete_daily_data)
     except Exception as e:
         return jsonify({"error": str(e)}), 500
     finally:
