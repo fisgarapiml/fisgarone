@@ -5,9 +5,10 @@ import pandas as pd
 import re
 from weasyprint import HTML
 from utils.conexao_postgres import get_db_connection  # Importa sua conexão correta (psycopg2)
+import psycopg2.extras
+
 
 contas_a_pagar_bp = Blueprint('contas_a_pagar_bp', __name__)
-
 
 # ----------------------------
 # MAPEAMENTOS
@@ -119,12 +120,43 @@ def processar_dados(df):
     print("✅ Dados processados com sucesso.")
     return df
 
+def formatar_brl(valor):
+    """Formata o valor para o padrão BRL: R$ 1.234,56"""
+    try:
+        return f"R$ {float(valor):,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
+    except Exception:
+        return "R$ 0,00"
+
+def calcular_status(vencimento, valor_pago):
+    """Retorna o status do lançamento ('Pago', 'Vencido', 'Hoje', 'Pendente')"""
+    hoje = datetime.today().date()
+    try:
+        dia, mes, ano = map(int, vencimento.split("/"))
+        data_vencimento = datetime(ano, mes, dia).date()
+    except Exception:
+        return "erro"
+
+    try:
+        valor_pago_float = float(valor_pago) if valor_pago is not None else 0.0
+    except Exception:
+        valor_pago_float = 0.0
+
+    if valor_pago_float > 0:
+        return "Pago"
+    elif data_vencimento < hoje:
+        return "Vencido"
+    elif data_vencimento == hoje:
+        return "Hoje"
+    else:
+        return "Pendente"
+
 
 @contas_a_pagar_bp.route("/")
 def contas_a_pagar():
+    conn = None
     try:
         conn = get_db_connection()
-        cursor = conn.cursor()
+        cursor = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
 
         hoje = datetime.today()
         mes_param_raw = request.args.get("mes", hoje.month)
@@ -141,7 +173,7 @@ def contas_a_pagar():
         filtro = request.args.get("filtro", "mes")
         mes_corrente = f"{int(mes_param):02d}/{ano_param}"
 
-        # 1. Query para daily_data (dados por dia)
+        # Query para daily_data (dados por dia)
         cursor.execute("""
             SELECT
                 SUBSTRING(vencimento FROM 1 FOR 2) as dia,
@@ -166,8 +198,14 @@ def contas_a_pagar():
 
         daily_data = {}
         for row in cursor.fetchall():
-            dia, total, status = row
-            total = abs(total) if total else 0.0
+            # row pode ser dict ou tuple dependendo do driver, mas usando RealDictCursor é dict!
+            dia = row.get("dia") if isinstance(row, dict) else row[0]
+            total = row.get("total") if isinstance(row, dict) else row[1]
+            status = row.get("status") if isinstance(row, dict) else row[2]
+            try:
+                total = abs(float(total)) if total is not None else 0.0
+            except Exception:
+                total = 0.0
             if dia in daily_data:
                 daily_data[dia]['total'] += total
                 if status == 'overdue' or (status == 'pending' and daily_data[dia]['status'] == 'paid'):
@@ -182,8 +220,17 @@ def contas_a_pagar():
 
         def get_sql_result(query, params=()):
             cursor.execute(query, params)
-            result = cursor.fetchone()[0]
-            return float(result) if result is not None else 0.0
+            result = cursor.fetchone()
+            if result is None:
+                return 0.0
+            if isinstance(result, dict):
+                value = list(result.values())[0]
+            else:
+                value = result[0]
+            try:
+                return float(value) if value is not None else 0.0
+            except Exception:
+                return 0.0
 
         total_previsto = get_sql_result("""
             SELECT SUM(CAST(valor AS FLOAT)) FROM contas_a_pagar
@@ -243,7 +290,13 @@ def contas_a_pagar():
 
         lancamentos = []
         for row in cursor.fetchall():
-            codigo, vencimento, categoria, fornecedor, plano, valor, valor_pago = row
+            codigo = row.get("codigo") if isinstance(row, dict) else row[0]
+            vencimento = row.get("vencimento") if isinstance(row, dict) else row[1]
+            categoria = row.get("categorias") if isinstance(row, dict) else row[2]
+            fornecedor = row.get("fornecedor") if isinstance(row, dict) else row[3]
+            plano = row.get("plano_de_contas") if isinstance(row, dict) else row[4]
+            valor = row.get("valor") if isinstance(row, dict) else row[5]
+            valor_pago = row.get("valor_pago") if isinstance(row, dict) else row[6]
             status = calcular_status(vencimento, valor_pago)
             lancamentos.append({
                 "codigo": codigo,
@@ -276,182 +329,120 @@ def contas_a_pagar():
         print(f"Erro: {str(e)}")
         return render_template("error.html", error=str(e))
     finally:
-        conn.close()
-
-
-def formatar_brl(valor):
-    return f"R$ {valor:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
-
-
-def calcular_status(vencimento, valor_pago):
-    hoje = datetime.today().date()
-    try:
-        dia, mes, ano = map(int, vencimento.split("/"))
-        data_vencimento = datetime(ano, mes, dia).date()
-    except Exception:
-        return "erro"
-
-    if valor_pago and float(valor_pago) > 0:
-        return "Pago"
-    elif data_vencimento < hoje:
-        return "Vencido"
-    elif data_vencimento == hoje:
-        return "Hoje"
-    else:
-        return "Pendente"
+        if conn:
+            conn.close()
 
 
 @contas_a_pagar_bp.route('/api/contas_por_mes')
 def api_contas_por_mes():
-    conn = get_db_connection()
-    cursor = conn.cursor()
+    conn = None
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
 
-    cursor.execute("""
-        SELECT
-            SUBSTRING(vencimento FROM 4 FOR 7) as mes_ano,
-            SUM(CAST(valor AS FLOAT)) as total_previsto,
-            SUM(CAST(COALESCE(valor_pago, 0) AS FLOAT)) as total_pago
-        FROM contas_a_pagar
-        GROUP BY mes_ano
-        ORDER BY SUBSTRING(vencimento FROM 7 FOR 4), SUBSTRING(vencimento FROM 4 FOR 2)
-    """)
+        # Consulta corrigida - usando a expressão diretamente no ORDER BY
+        query = """
+            SELECT 
+                SUBSTRING(vencimento FROM 4 FOR 7) as mes_ano,
+                COALESCE(SUM(valor::float), 0) as total_previsto,
+                COALESCE(SUM(ABS(valor_pago::float)), 0) as total_pago
+            FROM contas_a_pagar
+            WHERE valor IS NOT NULL
+            GROUP BY SUBSTRING(vencimento FROM 4 FOR 7)
+            ORDER BY TO_DATE(SUBSTRING(vencimento FROM 4 FOR 7), 'MM/YYYY')
+        """
 
-    dados = [
-        {"mes": row[0], "previsto": row[1], "pago": abs(row[2])}
-        for row in cursor.fetchall()
-    ]
-    conn.close()
-    return jsonify(dados)
+        cursor.execute(query)
+        resultados = cursor.fetchall()
 
+        dados = []
+        for row in resultados:
+            try:
+                dados.append({
+                    "mes": row[0] if row[0] else '00/0000',
+                    "previsto": abs(float(row[1])) if row[1] is not None else 0.0,
+                    "pago": abs(float(row[2])) if row[2] is not None else 0.0
+                })
+            except (TypeError, ValueError) as e:
+                current_app.logger.warning(f"Registro inválido ignorado: {row} - {str(e)}")
+                continue
 
+        return jsonify(dados)
+
+    except Exception as e:
+        current_app.logger.error(f"Erro em contas_por_mes: {str(e)}")
+        return jsonify({
+            "error": "Erro ao gerar dados mensais",
+            "details": str(e)
+        }), 500
+    finally:
+        if conn:
+            conn.close()
 @contas_a_pagar_bp.route('/api/categorias_agrupadas')
 def categorias_agrupadas():
-    mes = request.args.get("mes")
-    ano = request.args.get("ano")
+    try:
+        mes = request.args.get("mes")
+        ano = request.args.get("ano")
 
-    conn = get_db_connection()
-    cursor = conn.cursor()
+        if not mes or not ano:
+            return jsonify({"error": "Parâmetros 'mes' e 'ano' são obrigatórios"}), 400
 
-    if mes and ano:
-        mes_corrente = f"{int(mes):02d}/{ano}"
-        cursor.execute("""
-            SELECT categorias, SUM(ABS(CAST(valor AS FLOAT))) as total
+        try:
+            mes_num = int(mes)
+            ano_num = int(ano)
+            if not (1 <= mes_num <= 12):
+                raise ValueError("Mês inválido")
+        except ValueError as e:
+            return jsonify({"error": "Parâmetros inválidos", "details": str(e)}), 400
+
+        conn = get_db_connection()
+        cursor = conn.cursor()
+
+        # Consulta corrigida - removendo TRIM de campos numéricos
+        query = """
+            SELECT 
+                COALESCE(NULLIF(TRIM(categorias), ''), 'Outros') as categoria,
+                COALESCE(ABS(SUM(NULLIF(valor, 0)::float)), 0) as total
             FROM contas_a_pagar
             WHERE SUBSTRING(vencimento FROM 4 FOR 7) = %s
               AND categorias IS NOT NULL AND TRIM(categorias) != ''
-              AND valor IS NOT NULL AND TRIM(valor) != ''
-            GROUP BY categorias
-            HAVING SUM(ABS(CAST(valor AS FLOAT))) > 0
+              AND valor IS NOT NULL
+            GROUP BY categoria
+            HAVING ABS(SUM(NULLIF(valor, 0)::float)) > 0
             ORDER BY total DESC
-        """, (mes_corrente,))
-    elif ano:
-        cursor.execute("""
-            SELECT categorias, SUM(ABS(CAST(valor AS FLOAT))) as total
-            FROM contas_a_pagar
-            WHERE SUBSTRING(vencimento FROM 7 FOR 4) = %s
-              AND categorias IS NOT NULL AND TRIM(categorias) != ''
-              AND valor IS NOT NULL AND TRIM(valor) != ''
-            GROUP BY categorias
-            HAVING SUM(ABS(CAST(valor AS FLOAT))) > 0
-            ORDER BY total DESC
-        """, (ano,))
-    else:
-        cursor.execute("""
-            SELECT categorias, SUM(ABS(CAST(valor AS FLOAT))) as total
-            FROM contas_a_pagar
-            WHERE categorias IS NOT NULL AND TRIM(categorias) != ''
-              AND valor IS NOT NULL AND TRIM(valor) != ''
-            GROUP BY categorias
-            HAVING SUM(ABS(CAST(valor AS FLOAT))) > 0
-            ORDER BY total DESC
-        """)
-
-    resultado = [{"categoria": row[0], "total": row[1]} for row in cursor.fetchall()]
-    conn.close()
-    return jsonify(resultado)
-
-
-
-@contas_a_pagar_bp.route('/api/lancamentos_filtrados')
-def lancamentos_filtrados():
-    tipo = request.args.get("tipo")
-    valor = request.args.get("valor")
-    mes = request.args.get("mes")
-    ano = request.args.get("ano")
-
-    conn = get_db_connection()
-    cursor = conn.cursor()
-
-    query = """
-            SELECT codigo, vencimento, categorias, fornecedor, plano_de_contas, valor, valor_pago
-            FROM contas_a_pagar
-            WHERE 1=1
         """
-    params = []
 
-    if tipo == 'categoria':
-        query += " AND LOWER(categorias) = LOWER(%s)"
-        params.append(valor)
-        if mes and ano:
-            query += " AND SUBSTRING(vencimento FROM 4 FOR 7) = %s"
-            params.append(f"{int(mes):02d}/{ano}")
+        cursor.execute(query, (f"{mes_num:02d}/{ano_num}",))
+        resultados = cursor.fetchall()
 
-    elif tipo == 'mes':
-        query += " AND SUBSTRING(vencimento FROM 4 FOR 7) = %s"
-        params.append(valor)
+        dados = []
+        for row in resultados:
+            try:
+                dados.append({
+                    "categoria": row[0] if row[0] else 'Outros',
+                    "total": abs(float(row[1])) if row[1] is not None else 0.0
+                })
+            except (TypeError, ValueError) as e:
+                current_app.logger.warning(f"Dado inválido ignorado: {row} - {str(e)}")
+                continue
 
-    elif tipo == 'card':
-        if valor == 'paid':
-            query += " AND valor_pago > 0"
-        elif valor == 'balance':
-            query += " AND (valor_pago IS NULL OR valor_pago = 0)"
-        elif valor == 'overdue':
-            query += """
-                    AND (valor_pago IS NULL OR valor_pago = 0)
-                    AND TO_DATE(vencimento, 'DD/MM/YYYY') < CURRENT_DATE
-                """
-        elif valor == 'today':
-            query += """
-                    AND (valor_pago IS NULL OR valor_pago = 0)
-                    AND TO_DATE(vencimento, 'DD/MM/YYYY') = CURRENT_DATE
-                """
-        elif valor == 'all':
-            pass  # mostra tudo
+        return jsonify(dados)
 
-        if mes and ano:
-            query += " AND SUBSTRING(vencimento FROM 4 FOR 7) = %s"
-            params.append(f"{int(mes):02d}/{ano}")
-
-    elif tipo == 'dia':
-        dia_valor = valor.split('/')[0].zfill(2)
-        mes_valor = valor.split('/')[1]
-        ano_valor = valor.split('/')[2]
-        query += " AND SUBSTRING(vencimento FROM 1 FOR 2) = %s AND SUBSTRING(vencimento FROM 4 FOR 2) = %s AND SUBSTRING(vencimento FROM 7 FOR 4) = %s"
-        params.extend([dia_valor, mes_valor, ano_valor])
-
-    query += " ORDER BY TO_DATE(vencimento, 'DD/MM/YYYY') ASC"
-    cursor.execute(query, params)
-
-    resultado = [{
-        "codigo": row[0],
-        "vencimento": row[1],
-        "categoria": row[2] or '-',
-        "fornecedor": row[3] or '-',
-        "plano": row[4] or '-',
-        "valor": float(row[5]) if row[5] else 0.0,
-        "status": calcular_status(row[1], row[6])
-    } for row in cursor.fetchall()]
-
-    conn.close()
-    return jsonify(resultado)
-
-
+    except Exception as e:
+        current_app.logger.error(f"Erro em categorias_agrupadas: {str(e)}")
+        return jsonify({
+            "error": "Erro ao processar categorias",
+            "details": str(e)
+        }), 500
+    finally:
+        if conn:
+            conn.close()
 
 @contas_a_pagar_bp.route('/pdf')
 def gerar_pdf_contas():
     try:
         conn = get_db_connection()
-        cursor = conn.cursor()
+        cursor = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
 
         filtro = request.args.get('filtro', 'dia')
         mes = request.args.get('mes', datetime.today().month)
@@ -585,6 +576,8 @@ def editar_lancamento():
     valores.append(codigo)
 
     conn = get_db_connection()
+    cursor = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+
     try:
         with conn:
             with conn.cursor() as cursor:
@@ -606,6 +599,8 @@ def marcar_pago():
         return jsonify(success=False, error='Código não fornecido'), 400
 
     conn = get_db_connection()
+    cursor = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+
     try:
         with conn:
             with conn.cursor() as cursor:
@@ -628,6 +623,8 @@ def excluir_lancamento():
         return jsonify(success=False, error='Código não fornecido'), 400
 
     conn = get_db_connection()
+    cursor = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+
     try:
         with conn:
             with conn.cursor() as cursor:
@@ -651,6 +648,8 @@ def api_daily_timeline():
         return jsonify({"error": "Parâmetros 'mes' e 'ano' são obrigatórios"}), 400
 
     conn = get_db_connection()
+    cursor = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+
     try:
         with conn:
             with conn.cursor() as cursor:

@@ -1,3 +1,6 @@
+
+
+
 // Variáveis globais vindas do HTML
 const mes = currentMonth;
 const ano = currentYear;
