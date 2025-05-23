@@ -5,8 +5,22 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e3aaa54f-aebd-4ecb-8523-c15f4bb10208" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/ARQUIVOS COPIAS/painel_nfe.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/css/painel_nfe.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/css/produtos.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/js/painel_nfe.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/nfe/partials/import_modal.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modulos/financeiro/contas_a_pagar.py" beforeDir="false" afterPath="$PROJECT_DIR$/modulos/financeiro/contas_a_pagar.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/grupo_fisgar.db" beforeDir="false" afterPath="$PROJECT_DIR$/grupo_fisgar.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/grupo_fisgar.db-journal" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/grupo_fisgar.sqbpro" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/modulos/nfe/painel_nfe.py" beforeDir="false" afterPath="$PROJECT_DIR$/modulos/nfe/painel_nfe.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/js/lancamentos.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/js/produtos.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/nfe/painel_nfe.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/nfe/painel_nfe.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/painel_nfes.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/painel_nfes.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/produtos.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/produtos.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/teste.py" beforeDir="false" afterPath="$PROJECT_DIR$/teste.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -46,34 +60,35 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Python.agente_fisgar.executor&quot;: &quot;Run&quot;,
-    &quot;Python.appfinance.executor&quot;: &quot;Run&quot;,
-    &quot;Python.atualizar_db.executor&quot;: &quot;Run&quot;,
-    &quot;Python.home.executor&quot;: &quot;Run&quot;,
-    &quot;Python.painel_nfe.executor&quot;: &quot;Run&quot;,
-    &quot;Python.teste.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/USUÁRIO/Downloads/shoppee&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Python.agente_fisgar.executor": "Run",
+    "Python.appfinance.executor": "Run",
+    "Python.atualizar_db.executor": "Run",
+    "Python.home.executor": "Run",
+    "Python.painel_nfe.executor": "Run",
+    "Python.teste.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "main",
+    "ignore.virus.scanning.warn.message": "true",
+    "last_opened_file_path": "C:/fisgarone/templates/nfe",
+    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\fisgarone\templates\nfe" />
       <recent name="C:\fisgarone\compras_xml" />
       <recent name="C:\fisgarone" />
       <recent name="C:\fisgarone\templates" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\fisgarone\static" />
-      <recent name="C:\fisgarone\templates" />
-      <recent name="C:\fisgarone\templates\financeiro" />
       <recent name="C:\fisgarone\templates\nfe" />
-      <recent name="C:\fisgarone\modulos" />
+      <recent name="C:\fisgarone\templates" />
+      <recent name="C:\fisgarone\ARQUIVOS COPIAS" />
+      <recent name="C:\fisgarone\static" />
+      <recent name="C:\fisgarone\templates\financeiro" />
     </key>
   </component>
   <component name="RunManager" selected="Python.teste">

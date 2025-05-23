@@ -48,13 +48,13 @@ from modulos.estoque.estoque_dashboard import estoque_bp
 from modulos.produtos.produtos_dashboard import produtos_bp
 from modulos.nfe.salvar_produto import salvar_produto_bp
 from modulos.nfe.config_unidades import config_unidades_bp
-from modulos.nfe.painel_nfe import nfe_bp
 from modulos.home import bp_home
 # from modulos.auth import auth as auth_blueprint
 from modulos.financeiro.contas_edicao import contas_edicao_bp
 from modulos.ponto.rotas import ponto_bp
 from modulos.usuarios.routes import usuarios_bp
 from modulos.estoque.api_estoque import api_estoque_bp
+from modulos.nfe.painel_nfe import nfe_bp
 
 
 # ========== REGISTRO DOS BLUEPRINTS ==========
@@ -77,7 +77,7 @@ app.register_blueprint(api_estoque_bp, url_prefix='/api/estoque')
 app.register_blueprint(produtos_bp, url_prefix='/produtos')
 app.register_blueprint(salvar_produto_bp, url_prefix='/nfe/produtos')
 app.register_blueprint(config_unidades_bp, url_prefix='/nfe/unidades')
-app.register_blueprint(nfe_bp, url_prefix='/nfe/painel')
+app.register_blueprint(nfe_bp, url_prefix='/nfe')
 
 # Usuários / Ponto
 app.register_blueprint(ponto_bp)

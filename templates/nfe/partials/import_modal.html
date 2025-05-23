@@ -1,0 +1,18 @@
+<!-- templates/nfe/partials/import_modal.html -->
+<div id="import-modal" class="modal">
+  <div class="modal-content">
+    <span class="close-modal">&times;</span>
+    <h3>Importar NF-e</h3>
+    <div class="modal-body">
+      <form id="upload-form" enctype="multipart/form-data">
+        <div class="form-group">
+          <label for="xml-file">Selecione o arquivo XML:</label>
+          <input type="file" id="xml-file" name="file" accept=".xml" required>
+        </div>
+        <button type="submit" class="btn btn-primary">
+          <i class="fas fa-upload"></i> Enviar XML
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
