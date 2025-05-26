@@ -5,21 +5,21 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e3aaa54f-aebd-4ecb-8523-c15f4bb10208" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/ARQUIVOS COPIAS/painel_nfe.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/css/painel_nfe.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/css/produtos.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/js/painel_nfe.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/nfe/partials/import_modal.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/modulos/configuracoes_unidade.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/css/config_unidades.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/js/config_unidades.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/config_unidades.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/grupo_fisgar.db" beforeDir="false" afterPath="$PROJECT_DIR$/grupo_fisgar.db" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/grupo_fisgar.db-journal" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/grupo_fisgar.sqbpro" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/modulos/financeiro/lancamento_manual.py" beforeDir="false" afterPath="$PROJECT_DIR$/modulos/financeiro/lancamento_manual.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modulos/home.py" beforeDir="false" afterPath="$PROJECT_DIR$/modulos/home.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modulos/nfe/config_unidades.py" beforeDir="false" afterPath="$PROJECT_DIR$/modulos/nfe/config_unidades.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/modulos/nfe/painel_nfe.py" beforeDir="false" afterPath="$PROJECT_DIR$/modulos/nfe/painel_nfe.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/js/lancamentos.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/js/produtos.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/css/painel_nfe.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/css/painel_nfe.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/js/painel_nfe.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/js/painel_nfe.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/lancamento_manual.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/lancamento_manual.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/nfe/painel_nfe.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/nfe/painel_nfe.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/painel_nfes.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/painel_nfes.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/produtos.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/produtos.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/teste.py" beforeDir="false" afterPath="$PROJECT_DIR$/teste.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -72,16 +72,17 @@
     "RunOnceActivity.git.unshallow": "true",
     "git-widget-placeholder": "main",
     "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "C:/fisgarone/templates/nfe",
+    "last_opened_file_path": "C:/Users/USUÁRIO/Downloads/fisgaroneunidades/fisgarone",
     "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
   }
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\fisgarone\templates\nfe" />
-      <recent name="C:\fisgarone\compras_xml" />
-      <recent name="C:\fisgarone" />
+      <recent name="C:\fisgarone\modulos" />
       <recent name="C:\fisgarone\templates" />
+      <recent name="C:\fisgarone\modulos\financeiro" />
+      <recent name="C:\fisgarone\modulos\nfe" />
+      <recent name="C:\fisgarone\templates\nfe" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\fisgarone\templates\nfe" />

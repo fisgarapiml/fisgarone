@@ -1,0 +1,182 @@
+
+{% extends 'base.html' %}
+
+{% block title %}Configurações de Unidades{% endblock %}
+{% block page_title %}Configurações de Unidades{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/config_unidades.css') }}">
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="header">
+            <h1 class="title">
+                <i class="fas fa-cubes"></i> Configuração de Unidades
+            </h1>
+            <div>
+                <button class="btn btn-primary" id="btn-atualizar">
+                    <i class="fas fa-sync-alt"></i> Atualizar
+                </button>
+            </div>
+        </div>
+
+        <div class="kpi-container">
+            <div class="kpi-card">
+                <div class="kpi-title">Total de Itens</div>
+                <div class="kpi-value" id="total-itens">{{ total_itens }}</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-title">Pendentes</div>
+                <div class="kpi-value" id="total-pendentes">{{ total_pendentes }}</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-title">Configurados</div>
+                <div class="kpi-value" id="total-configurados">{{ total_configurados }}</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-title">Última Atualização</div>
+                <div class="kpi-value" id="ultima-atualizacao">{{ ultima_atualizacao }}</div>
+            </div>
+        </div>
+
+        <div class="tabs">
+            <div class="tab active" data-tab="pendentes">
+                Pendentes <span class="tab-badge" id="badge-pendentes">{{ total_pendentes }}</span>
+            </div>
+            <div class="tab" data-tab="configurados">
+                Configurados <span class="tab-badge" id="badge-configurados">{{ total_configurados }}</span>
+            </div>
+            <div class="tab" data-tab="todos">
+                Todos <span class="tab-badge" id="badge-todos">{{ total_itens }}</span>
+            </div>
+        </div>
+
+        <div class="panel active" id="panel-pendentes">
+            <div class="products-grid" id="lista-pendentes">
+                {% for item in pendentes %}
+                <div class="product-card">
+                    <div class="product-header">
+                        <h3 class="product-title">
+                            <i class="fas fa-exclamation-circle" style="color: var(--warning);"></i>
+                            {{ item.nome }}
+                            <span class="product-badge">{{ item.unidade_compra }}</span>
+                        </h3>
+                    </div>
+                    <p class="product-code">Código: {{ item.codigo_fornecedor }}</p>
+                    <div class="form-group">
+                        <label class="form-label">Quantidade por Volume</label>
+                        <input type="number" class="form-input" id="volume-{{ item.codigo_fornecedor }}" placeholder="Ex: 10">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Quantidade por Pacote</label>
+                        <input type="number" class="form-input" id="pacote-{{ item.codigo_fornecedor }}" placeholder="Ex: 50">
+                    </div>
+                    <div class="form-actions">
+                        <button class="btn btn-primary" onclick="salvarConfiguracao(
+                            '{{ item.codigo_fornecedor }}',
+                            '{{ item.nome }}',
+                            '{{ item.unidade_compra }}',
+                            document.getElementById('volume-{{ item.codigo_fornecedor }}').value,
+                            document.getElementById('pacote-{{ item.codigo_fornecedor }}').value
+                        )">
+                            <i class="fas fa-save"></i> Salvar
+                        </button>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="panel" id="panel-configurados">
+            <div class="products-grid" id="lista-configurados">
+                {% for item in configurados %}
+                <div class="product-card">
+                    <div class="product-header">
+                        <h3 class="product-title">
+                            <i class="fas fa-check-circle" style="color: var(--success);"></i>
+                            {{ item.nome }}
+                            <span class="product-badge">{{ item.unidade_compra }}</span>
+                        </h3>
+                    </div>
+                    <p class="product-code">Código: {{ item.codigo_fornecedor }}</p>
+                    <div class="product-meta">
+                        <div class="meta-item">
+                            <i class="fas fa-box-open"></i>
+                            <span>Volume: <span class="meta-value">{{ item.qtd_por_volume }} {{ item.unidade_compra }}</span></span>
+                        </div>
+                        <div class="meta-item">
+                            <i class="fas fa-boxes"></i>
+                            <span>Pacote: <span class="meta-value">{{ item.qtd_por_pacote }} {{ item.unidade_compra }}</span></span>
+                        </div>
+                    </div>
+                    <p><i class="fas fa-clock"></i> Atualizado em: {{ item.atualizado_formatado }}</p>
+                    <div class="form-actions">
+                        <button class="btn btn-secondary" onclick="editarConfiguracao(
+                            '{{ item.codigo_fornecedor }}',
+                            '{{ item.nome }}',
+                            '{{ item.unidade_compra }}',
+                            '{{ item.qtd_por_volume }}',
+                            '{{ item.qtd_por_pacote }}'
+                        )">
+                            <i class="fas fa-edit"></i> Editar
+                        </button>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="panel" id="panel-todos">
+            <div class="products-grid" id="lista-todos">
+                <!-- Será preenchido dinamicamente via JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-edicao" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center;">
+        <div style="background: white; padding: 20px; border-radius: 10px; max-width: 500px; width: 90%;">
+            <h3 style="margin-bottom: 20px;"><i class="fas fa-edit"></i> Editar Configuração</h3>
+
+            <div class="form-group">
+                <label class="form-label">Produto</label>
+                <input type="text" class="form-input" id="modal-nome" readonly>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Código</label>
+                <input type="text" class="form-input" id="modal-codigo" readonly>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Unidade</label>
+                <input type="text" class="form-input" id="modal-unidade" readonly>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Volume</label>
+                <input type="number" class="form-input" id="modal-volume">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Pacote</label>
+                <input type="number" class="form-input" id="modal-pacote">
+            </div>
+
+            <div class="form-actions">
+                <button class="btn btn-secondary" onclick="fecharModal()">
+                    <i class="fas fa-times"></i> Cancelar
+                </button>
+                <button class="btn btn-primary" onclick="salvarEdicao()">
+                    <i class="fas fa-save"></i> Salvar
+                </button>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block extra_js %}
+    <script src="{{ url_for('static', filename='js/config_unidades.js') }}"></script>
+{% endblock %}

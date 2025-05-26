@@ -73,7 +73,6 @@ def buscar_todos_configurados():
         cur.execute("SELECT * FROM configuracoes_unidade ORDER BY nome")
         colunas = [desc[0] for desc in cur.description]
         return [dict(zip(colunas, row)) for row in cur.fetchall()]
-
 # ROTA PRINCIPAL DA TELA
 @config_unidades_bp.route('/config-unidades', methods=['GET'])
 def tela_config_unidades():

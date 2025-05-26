@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify, url_for, render_template
-from flask import current_app  # Modificação importante aqui
+from flask import current_app
 
 bp_home = Blueprint('bp_home', __name__)
 
@@ -66,14 +66,14 @@ def get_menu():
                     "nome": "NF-e",
                     "icone": "fas fa-file-invoice",
                     "submenu": [
-                        { "nome": "Painel NF-e", "url": url_for('nfe.painel') }
+                        # Atualizado para usar o endpoint correto do blueprint de NF-e
+                        { "nome": "Painel NF-e", "url": url_for('nfe_bp.painel') }
                     ]
                 }
             ]
         }
     ]
     return jsonify(menu)
-
 
 @bp_home.route('/debug-routes')
 def debug_routes():
