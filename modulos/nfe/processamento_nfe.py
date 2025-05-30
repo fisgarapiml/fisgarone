@@ -8,25 +8,7 @@ import xml.dom.minidom
 def processar_xmls(pasta_xml, caminho_db):
     xmls_processados = []
 
-    def obter_dados_nfe(caminho_db, filtro=None, valor=None):
-        try:
-            conn = sqlite3.connect(caminho_db)
-            cursor = conn.cursor()
-
-            # Verifica se a tabela existe
-            cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='nfe'")
-            if not cursor.fetchone():
-                raise ValueError("Tabela 'nfe' não encontrada no banco de dados")
-
-            # Sua lógica de consulta original aqui
-            # ...
-
-        except sqlite3.Error as e:
-            raise ValueError(f"Erro no banco de dados: {str(e)}")
-        finally:
-            if conn:
-                conn.close()
-
+    # 1. Processa os XMLs normalmente
     for arquivo in os.listdir(pasta_xml):
         if arquivo.endswith('.xml'):
             caminho_xml = os.path.join(pasta_xml, arquivo)
@@ -46,9 +28,99 @@ def processar_xmls(pasta_xml, caminho_db):
                     'status': f'Erro: {str(e)}'
                 })
 
+    # 2. Atualiza o estoque com verificação segura
+    try:
+        consolidar_estoque_produtos_nfe_seguro(caminho_db)
+    except Exception as e:
+        print(f"Erro ao atualizar estoque: {str(e)}")
+
     return xmls_processados
 
 
+def consolidar_estoque_produtos_nfe_seguro(caminho_db):
+    """Versão segura que verifica as colunas antes de operar"""
+    conn = sqlite3.connect(caminho_db)
+    cursor = conn.cursor()
+
+    try:
+        # Verifica se as colunas existem
+        cursor.execute("PRAGMA table_info(estoque)")
+        colunas = [info[1] for info in cursor.fetchall()]
+
+        colunas_necessarias = {'percentual_ipi', 'preco_custo_total'}
+        colunas_faltantes = colunas_necessarias - set(colunas)
+
+        if colunas_faltantes:
+            raise Exception(f"Colunas faltantes no banco: {', '.join(colunas_faltantes)}. "
+                            f"Execute manualmente: ALTER TABLE estoque ADD COLUMN percentual_ipi REAL DEFAULT 0; "
+                            f"ALTER TABLE estoque ADD COLUMN preco_custo_total REAL DEFAULT 0;")
+
+        # Consulta segura usando apenas colunas existentes
+        cursor.execute("""
+            WITH dados_produtos AS (
+                SELECT 
+                    codigo,
+                    MAX(descricao) as descricao,
+                    MAX(fornecedor) as fornecedor,
+                    MAX(ncm) as ncm,
+                    SUM(quantidade) as quantidade_total,
+                    SUM(valor_total) as valor_total,
+                    SUM(ipi) as ipi_total
+                FROM produtos_nfe
+                GROUP BY codigo
+            )
+            INSERT OR REPLACE INTO estoque (
+                codigo, nome, unidade, qtd_estoque, custo_unitario,
+                percentual_ipi, preco_custo_total, fornecedor_padrao, ncm,
+                data_atualizacao
+            )
+            SELECT 
+                codigo,
+                descricao,
+                'PC',
+                quantidade_total,
+                CASE WHEN quantidade_total > 0 THEN valor_total / quantidade_total ELSE 0 END,
+                CASE WHEN valor_total > 0 THEN (ipi_total / valor_total) * 100 ELSE 0 END,
+                CASE WHEN quantidade_total > 0 THEN 
+                    (valor_total / quantidade_total) * (1 + (ipi_total / valor_total)) 
+                ELSE 0 END,
+                fornecedor,
+                ncm,
+                datetime('now')
+            FROM dados_produtos
+        """)
+
+        conn.commit()
+        print(f"✅ Estoque atualizado com sucesso! {cursor.rowcount} itens processados.")
+    except Exception as e:
+        conn.rollback()
+        print(f"❌ Erro ao atualizar estoque: {str(e)}")
+    finally:
+        conn.close()
+
+
+def verificar_dados_seguro(caminho_db):
+    """Função de verificação segura"""
+    conn = sqlite3.connect(caminho_db)
+    cursor = conn.cursor()
+
+    try:
+        # Verifica se as colunas existem antes de consultar
+        cursor.execute("PRAGMA table_info(estoque)")
+        colunas = [info[1] for info in cursor.fetchall()]
+
+        if 'percentual_ipi' not in colunas or 'preco_custo_total' not in colunas:
+            print("⚠️ Colunas não existem no banco. Execute os comandos ALTER TABLE primeiro.")
+            return
+
+        cursor.execute("SELECT codigo, percentual_ipi, preco_custo_total FROM estoque LIMIT 5")
+        print("\n📋 Dados de exemplo do estoque:")
+        for row in cursor.fetchall():
+            print(row)
+    except Exception as e:
+        print(f"Erro ao verificar dados: {str(e)}")
+    finally:
+        conn.close()
 def extrair_dados_xml(caminho_xml):
     try:
         tree = ET.parse(caminho_xml)
@@ -106,6 +178,7 @@ def extrair_dados_xml(caminho_xml):
     except Exception as e:
         raise Exception(f"Erro ao processar XML: {str(e)}")
 
+
 def salvar_nfe_db(caminho_db, produtos):
     """
     Salva os produtos extraídos do XML de NF-e na tabela produtos_nfe.
@@ -149,17 +222,20 @@ def salvar_nfe_db(caminho_db, produtos):
     try:
         inseridos = 0
         for prod in produtos:
-            # Checa se já existe este produto da mesma NF-e
             nfe_chave = prod.get('nfe_chave')
             codigo = prod.get('codigo')
+            unidade = prod.get('unidade')
+            descricao = prod.get('descricao')
+
+            # Verifica duplicidade considerando unidade e descrição
             cursor.execute(
-                "SELECT 1 FROM produtos_nfe WHERE nfe_chave = ? AND codigo = ?",
-                (nfe_chave, codigo)
+                "SELECT 1 FROM produtos_nfe WHERE nfe_chave = ? AND codigo = ? AND unidade = ? AND descricao = ?",
+                (nfe_chave, codigo, unidade, descricao)
             )
             if cursor.fetchone():
                 continue  # Já existe, não insere de novo
 
-            # Insere no banco
+            # Insere normalmente:
             cursor.execute("""
                 INSERT INTO produtos_nfe (
                     nfe_chave, numero, fornecedor, data_emissao, descricao,
@@ -240,6 +316,83 @@ def obter_dados_nfe(caminho_db, filtro=None, valor=None):
     finally:
         conn.close()
 
+
+def consolidar_estoque_produtos_nfe():
+    import sqlite3
+
+    DB = 'grupo_fisgar.db'
+    conn = sqlite3.connect(DB)
+    cur = conn.cursor()
+
+    cur.execute("SELECT DISTINCT codigo FROM produtos_nfe")
+    codigos = [row[0] for row in cur.fetchall()]
+
+    for codigo in codigos:
+        cur.execute("""
+            SELECT unidade, SUM(quantidade) as qtd_total, SUM(valor_total) as valor_total,
+                   MAX(descricao) as nome, MAX(fornecedor) as fornecedor, MAX(ncm) as ncm
+            FROM produtos_nfe
+            WHERE codigo = ?
+            GROUP BY unidade
+        """, (codigo,))
+        lancamentos = cur.fetchall()
+
+        qtd_final = 0
+        valor_final = 0
+        ipi_total = 0  # Soma dos valores de IPI para esse código
+
+        for (unidade, qtd_total, valor_total, nome, fornecedor, ncm) in lancamentos:
+            cur.execute("""
+                SELECT COALESCE(qtd_por_volume, 1) * COALESCE(qtd_por_pacote, 1)
+                FROM configuracoes_unidades
+                WHERE codigo_fornecedor = ? AND unidade_compra = ?
+            """, (codigo, unidade))
+            fator_row = cur.fetchone()
+            fator = fator_row[0] if fator_row and fator_row[0] else 1
+
+            qtd_fracionada = (qtd_total or 0) * fator
+            qtd_final += qtd_fracionada
+            valor_final += (valor_total or 0)
+
+            # Agora busca todas as linhas dessa unidade/codigo para somar o ipi proporcional
+            cur.execute("""
+                SELECT ipi, quantidade FROM produtos_nfe WHERE codigo = ? AND unidade = ?
+            """, (codigo, unidade))
+            for ipi_reais, qtd in cur.fetchall():
+                if qtd and qtd > 0 and ipi_reais is not None:
+                    # Fraciona o IPI por unidade real
+                    ipi_total += (ipi_reais / (qtd * fator))
+
+        custo_unitario = round(valor_final / qtd_final, 3) if qtd_final else 0
+        preco_custo_total = round(custo_unitario + ipi_total, 3)  # Soma o IPI proporcional por unidade
+
+        # Busca SKU existente OU gera temporário
+        cur.execute("SELECT sku FROM estoque WHERE codigo = ? LIMIT 1", (codigo,))
+        sku_existente = cur.fetchone()
+        sku_final = sku_existente[0] if sku_existente and sku_existente[0] else f'SKU_{codigo}'
+
+        # INSERE/ATUALIZA sempre na unidade PC consolidada!
+        cur.execute("SELECT 1 FROM estoque WHERE codigo = ? AND unidade = ?", (codigo, 'PC'))
+        if cur.fetchone():
+            cur.execute("""
+                UPDATE estoque
+                SET sku = ?, nome = ?, unidade = ?, qtd_estoque = ?, custo_unitario = ?, fornecedor_padrao = ?, ncm = ?, 
+                    preco_custo_total = ?, data_atualizacao = datetime('now','localtime')
+                WHERE codigo = ? AND unidade = ?
+            """, (sku_final, nome, 'PC', int(qtd_final), custo_unitario, fornecedor, ncm,
+                  preco_custo_total, codigo, 'PC'))
+        else:
+            cur.execute("""
+                INSERT INTO estoque (
+                    sku, codigo, nome, unidade, qtd_estoque, custo_unitario, fornecedor_padrao, ncm,
+                    preco_custo_total, data_cadastro, data_atualizacao
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, datetime('now','localtime'), datetime('now','localtime'))
+            """, (sku_final, codigo, nome, 'PC', int(qtd_final), custo_unitario, fornecedor, ncm,
+                  preco_custo_total))
+
+    conn.commit()
+    conn.close()
+    print('✅ Estoque consolidado com custo total (incluindo IPI por unidade)!')
 
 def cadastrar_produtos_nfe(caminho_db, chave_nfe):
     conn = sqlite3.connect(caminho_db)

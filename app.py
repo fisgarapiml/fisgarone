@@ -4,6 +4,8 @@ import sqlite3
 
 # Inicialização da aplicação
 app = Flask(__name__)
+from processamento_nfe import consolidar_estoque_produtos_nfe
+consolidar_estoque_produtos_nfe()
 
 # =============================================
 # CONFIGURAÇÕES PRINCIPAIS
@@ -67,12 +69,15 @@ app.register_blueprint(dashboard)
 
 # Estoque
 from modulos.estoque.interface_estoque import estoque_interface_bp
-from modulos.estoque.estoque_dashboard import estoque_bp
 from modulos.estoque.api_estoque import api_estoque_bp  # Importação tardia para evitar circular imports
+from modulos.estoque.estoque import estoque_bp
+from modulos.estoque.lancamentos_estoque import lancamentos_estoque_bp
+
 
 app.register_blueprint(estoque_interface_bp, url_prefix='/estoque/interface')
-app.register_blueprint(estoque_bp, url_prefix='/estoque/dashboard')
+app.register_blueprint(estoque_bp, url_prefix='/estoque')
 app.register_blueprint(api_estoque_bp, url_prefix='/api/estoque')
+app.register_blueprint(lancamentos_estoque_bp)
 
 # Produtos e NF-e
 from modulos.produtos.produtos_dashboard import produtos_bp
@@ -87,9 +92,15 @@ app.register_blueprint(salvar_produto_bp, url_prefix='/nfe/produtos')
 app.register_blueprint(nfe_bp)
 app.register_blueprint(config_unidades_bp)
 
+#vendas
+from modulos.vendas.ml import ml_bp
+
+app.register_blueprint(ml_bp)
+
 # =============================================
 # INICIALIZAÇÃO
 # =============================================
+print(app.url_map)
 
 if __name__ == '__main__':
     # Criar pastas se não existirem

@@ -1,4 +1,4 @@
-# estoque_dashboard.py - gerado pelo agente Fisgar
+# estoque.py - gerado pelo agente Fisgar
 # Criado em 07/05/2025 10:28
 
 import streamlit as st

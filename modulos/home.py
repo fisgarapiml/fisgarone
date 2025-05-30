@@ -42,7 +42,7 @@ def get_menu():
                     "icone": "fas fa-boxes",
                     "submenu": [
                         { "nome": "Interface", "url": url_for('estoque_interface_bp.interface') },
-                        { "nome": "Dashboard", "url": url_for('estoque_bp.estoque_dashboard') }
+                        { "nome": "Dashboard", "url": url_for('estoque.dashboard') }
                     ]
                 }
             ]
@@ -63,11 +63,13 @@ def get_menu():
             "titulo": "NF-e",
             "itens": [
                 {
-                    "nome": "NF-e",
+                    "nome": "Compras",
                     "icone": "fas fa-file-invoice",
                     "submenu": [
-                        # Atualizado para usar o endpoint correto do blueprint de NF-e
-                        { "nome": "Painel NF-e", "url": url_for('nfe_bp.painel') }
+                        { "nome": "Painel NF-e", "url": url_for('nfe_bp.painel') },
+                        # --- NOVO SUBMENU AQUI ---
+                        { "nome": "Config. de Unidades", "url": url_for('config_unidades.painel_principal') }
+                        # O endpoint é 'config_unidades.painel_principal'
                     ]
                 }
             ]

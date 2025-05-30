@@ -1,0 +1,112 @@
+let
+    // Lista de contas com seus respectivos nomes (você pode adicionar mais contas conforme necessário)
+    Contas = [
+        FisgarToys = "FisgarToys",
+        Comercial = "Comercial",
+        Pesca = "Pesca",
+        FisgarCamping = "FisgarCamping"
+    ],
+
+    // Função para obter o token a partir do servidor
+    GetAccessToken = (SellerId as text) =>
+    let
+        FonteToken = Json.Document(Web.Contents("http://localhost:3000/token/" & SellerId)),  // Requisição ao servidor para obter o token
+        AccessToken = FonteToken[access_token]  // Acessa o access_token da resposta
+    in
+        AccessToken,
+
+    // Função para obter os pedidos pagos de uma conta específica, com limite de data
+    GetOrders = (SellerId as text, token as text, offset as number, startDate as date, endDate as date) =>
+    let
+        Fonte = Json.Document(Web.Contents("https://api.mercadolibre.com/orders/search", 
+            [
+                Query = [
+                    seller = SellerId, 
+                    status = "paid", 
+                    offset = Text.From(offset), 
+                    limit = "50", 
+                    date_created = Text.From(startDate) & "T00:00:00",  // Data inicial
+                    date_created.to = Text.From(endDate) & "T23:59:59"  // Data final
+                ],
+                Headers = [Authorization = "Bearer " & token]  // Usar o token obtido
+            ])),
+        Results = Fonte[results]  // Retorna os resultados dos pedidos
+    in
+        Results,
+
+    // Função para obter os pedidos pagos de todas as contas
+    GetOrdersForAllSellers = (SellerId as text, SellerName as text, startDate as date, endDate as date) =>
+    let
+        // Obter o token para o SellerId
+        Token = GetAccessToken(SellerId),
+
+        // Buscar os pedidos pagos da conta em questão, usando offset e data limitada
+        AllOrders = List.Combine(List.Transform({0..39}, each GetOrders(SellerId, Token, _ * 50, startDate, endDate))),  // Limite de 50 pedidos por requisição
+        OrdersWithAccount = List.Transform(AllOrders, each Record.AddField(_, "Conta", SellerName))  // Adiciona o nome da conta aos pedidos
+    in
+        OrdersWithAccount,
+
+    // Definir as datas de início e fim
+    StartDate = #date(2024, 1, 1),  // Início de janeiro
+    EndDate = Date.From(DateTime.LocalNow()),  // Até hoje
+
+    // Obter os pedidos de todas as contas
+    FisgarToysOrders = GetOrdersForAllSellers("FisgarToys", "FisgarToys", StartDate, EndDate),
+    ComercialOrders = GetOrdersForAllSellers("Comercial", "Comercial", StartDate, EndDate),
+    PescaOrders = GetOrdersForAllSellers("Pesca", "Pesca", StartDate, EndDate),
+    FisgarCampingOrders = GetOrdersForAllSellers("FisgarCamping", "FisgarCamping", StartDate, EndDate),
+
+    // Combinar todos os pedidos em uma tabela única
+    AllOrders = List.Combine({FisgarToysOrders, ComercialOrders, PescaOrders, FisgarCampingOrders}),
+    OrdersTable = Table.FromRecords(AllOrders),
+
+    // Função para obter os detalhes de envio de um pedido
+    GetShippingDetails = (OrderID as text, token as text) =>
+    let
+        ShippingURL = "https://api.mercadolibre.com/orders/" & OrderID & "/shipments",
+        ShippingResponse = try Json.Document(Web.Contents(ShippingURL, [Headers=[Authorization="Bearer " & token]])) otherwise null
+    in
+        ShippingResponse,
+
+    // Adicionar detalhes de envio para cada pedido
+    GetShippingForOrders = Table.AddColumn(OrdersTable, "Shipping Details", each 
+        let
+            contaName = [Conta],
+            token = GetAccessToken(contaName)  // Acesse o token baseado na coluna 'Conta'
+        in
+            GetShippingDetails(Text.From([id]), token)
+    ),
+
+    // Expandir as colunas necessárias de Shipping Details
+    #"Shipping Details Expandido" = Table.ExpandRecordColumn(GetShippingForOrders, "Shipping Details", 
+        {"base_cost", "order_cost", "shipping_option"}, 
+        {"Shipping Details.base_cost", "Shipping Details.order_cost", "Shipping Details.shipping_option"}),
+
+    // Expandir informações dentro de "shipping_option"
+    #"Shipping Details.shipping_option Expandido" = Table.ExpandRecordColumn(#"Shipping Details Expandido", "Shipping Details.shipping_option", 
+        {"cost", "list_cost"}, 
+        {"Shipping Details.shipping_option.cost", "Shipping Details.shipping_option.list_cost"}),
+
+    // Ajustar tipos de dados e remover colunas desnecessárias
+    #"Tipo Alterado" = Table.TransformColumnTypes(#"Shipping Details.shipping_option Expandido", 
+        {{"Shipping Details.base_cost", Currency.Type}, 
+         {"Shipping Details.order_cost", Currency.Type},
+         {"Shipping Details.shipping_option.cost", Currency.Type},
+         {"Shipping Details.shipping_option.list_cost", Currency.Type}}),
+    #"payments Expandido" = Table.ExpandListColumn(#"Tipo Alterado", "payments"),
+    #"payments Expandido1" = Table.ExpandRecordColumn(#"payments Expandido", "payments", {"date_approved", "taxes_amount", "id", "shipping_cost", "order_id"}, {"payments.date_approved", "payments.taxes_amount", "payments.id", "payments.shipping_cost", "payments.order_id"}),
+    #"seller Expandido" = Table.ExpandRecordColumn(#"payments Expandido1", "seller", {"nickname"}, {"seller.nickname"}),
+    #"order_items Expandido" = Table.ExpandListColumn(#"seller Expandido", "order_items"),
+    #"order_items Expandido1" = Table.ExpandRecordColumn(#"order_items Expandido", "order_items", {"item", "quantity", "unit_price", "currency_id", "picked_quantity", "requested_quantity", "sale_fee"}, {"order_items.item", "order_items.quantity", "order_items.unit_price", "order_items.currency_id", "order_items.picked_quantity", "order_items.requested_quantity", "order_items.sale_fee"}),
+    #"order_items.item Expandido" = Table.ExpandRecordColumn(#"order_items Expandido1", "order_items.item", {"id", "title", "category_id", "seller_custom_field", "global_price", "seller_sku"}, {"order_items.item.id", "order_items.item.title", "order_items.item.category_id", "order_items.item.seller_custom_field", "order_items.item.global_price", "order_items.item.seller_sku"}),
+    #"Colunas Removidas" = Table.RemoveColumns(#"order_items.item Expandido",{"shipping_cost", "date_created", "pickup_id", "status_detail", "tags", "buyer", "total_amount", "paid_amount", "currency_id", "status", "context", "payments.taxes_amount", "payments.id", "payments.order_id", "fulfilled", "taxes", "expiration_date", "feedback", "shipping", "date_closed", "manufacturing_ending_date", "order_items.item.seller_custom_field", "order_items.item.global_price", "order_items.currency_id", "order_items.picked_quantity", "order_items.requested_quantity", "date_last_updated", "last_updated", "comment", "pack_id", "coupon", "order_request"}),
+    #"Colunas Renomeadas" = Table.RenameColumns(#"Colunas Removidas",{{"Shipping Details.shipping_option.list_cost", "Detalhes de envio custo da lista de opções de envio"}, {"Shipping Details.shipping_option.cost", "Detalhes de envio custo da opção de envio"}, {"Shipping Details.order_cost", "Detalhes de envio custo do pedido"}, {"Shipping Details.base_cost", "Custo base de detalhes de envio"}, {"seller.nickname", "Seller"}, {"order_items.sale_fee", "Comissão de Vendas"}, {"order_items.unit_price", "Preço Unitario"}, {"order_items.quantity", "Unidades"}, {"order_items.item.seller_sku", "SKU"}, {"order_items.item.category_id", "Categoria"}, {"order_items.item.title", "Titulo do Anuncio"}, {"order_items.item.id", "MLB"}, {"id", "ID Pedido"}, {"payments.shipping_cost", "Custo de Envio"}, {"payments.date_approved", "Data da Venda"}}),
+    #"Tipo Alterado1" = Table.TransformColumnTypes(#"Colunas Renomeadas",{{"ID Pedido", type text}, {"MLB", type text}, {"Titulo do Anuncio", type text}, {"Categoria", type text}, {"SKU", type text}, {"Seller", type text}, {"Conta", type text}, {"Unidades", Int64.Type}, {"Custo de Envio", Currency.Type}, {"Preço Unitario", Currency.Type}, {"Comissão de Vendas", Currency.Type}}),
+    #"Dividir Coluna por Delimitador" = Table.SplitColumn(#"Tipo Alterado1", "Data da Venda", Splitter.SplitTextByDelimiter("T", QuoteStyle.None), {"Data da Venda.1", "Data da Venda.2"}),
+    #"Tipo Alterado2" = Table.TransformColumnTypes(#"Dividir Coluna por Delimitador",{{"Data da Venda.1", type date}, {"Data da Venda.2", type text}}),
+    #"Colunas Removidas1" = Table.RemoveColumns(#"Tipo Alterado2",{"Data da Venda.2"}),
+    #"Linhas Filtradas" = Table.SelectRows(#"Colunas Removidas1", each ([Data da Venda.1] <> null)),
+    #"Duplicatas Removidas" = Table.Distinct(#"Linhas Filtradas", {"ID Pedido"}),
+    #"Colunas Reordenadas" = Table.ReorderColumns(#"Duplicatas Removidas",{"ID Pedido", "Data da Venda.1", "Titulo do Anuncio", "MLB", "SKU", "Conta", "Categoria", "Preço Unitario", "Unidades", "Comissão de Vendas", "Seller", "Custo de Envio", "Custo base de detalhes de envio", "Detalhes de envio custo do pedido", "Detalhes de envio custo da opção de envio", "Detalhes de envio custo da lista de opções de envio"})
+in
+    #"Colunas Reordenadas"

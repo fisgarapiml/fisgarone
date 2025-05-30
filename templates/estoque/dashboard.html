@@ -1,0 +1,316 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard de Estoque{% endblock %}
+
+{% block extra_css %}
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/estoque.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    <!-- Toggle de Tema -->
+    <div class="theme-toggle" id="themeToggle">
+        <i class="bi bi-moon-fill"></i>
+    </div>
+
+    <!-- Cards Neon -->
+    <div class="neon-cards-grid">
+        <div class="neon-card" data-card="todos" data-color="blue">
+            <div class="card-content">
+                <div class="card-icon">
+                    <i class="bi bi-box-seam"></i>
+                </div>
+                <div class="card-details">
+                    <h3>Total de Itens</h3>
+                    <p class="card-value">{{ cards_data.total_itens or 0 }}</p>
+                </div>
+                <div class="card-wave"></div>
+            </div>
+        </div>
+
+        <div class="neon-card" data-card="ok" data-color="green">
+            <div class="card-content">
+                <div class="card-icon">
+                    <i class="bi bi-check-circle"></i>
+                </div>
+                <div class="card-details">
+                    <h3>Estoque OK</h3>
+                    <p class="card-value">{{ cards_data.itens_ok or 0 }}</p>
+                </div>
+                <div class="card-wave"></div>
+            </div>
+        </div>
+
+        <div class="neon-card" data-card="baixa" data-color="orange">
+            <div class="card-content">
+                <div class="card-icon">
+                    <i class="bi bi-exclamation-triangle"></i>
+                </div>
+                <div class="card-details">
+                    <h3>Estoque Baixo</h3>
+                    <p class="card-value">{{ cards_data.itens_baixos or 0 }}</p>
+                </div>
+                <div class="card-wave"></div>
+            </div>
+        </div>
+
+        <div class="neon-card" data-card="esgotados" data-color="red">
+            <div class="card-content">
+                <div class="card-icon">
+                    <i class="bi bi-x-circle"></i>
+                </div>
+                <div class="card-details">
+                    <h3>Esgotados</h3>
+                    <p class="card-value">{{ cards_data.itens_esgotados or 0 }}</p>
+                </div>
+                <div class="card-wave"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Seção de Análise Avançada -->
+    <div class="analytics-section">
+        <div class="analytics-card">
+            <h3><i class="bi bi-speedometer2"></i> Performance de Estoque</h3>
+            <div class="analytics-grid">
+                <div class="metric-card">
+                    <div class="metric-value">87%</div>
+                    <div class="metric-label">Taxa de Giro</div>
+                    <div class="metric-trend up"><i class="bi bi-graph-up"></i> 12%</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">23 dias</div>
+                    <div class="metric-label">Cobertura</div>
+                    <div class="metric-trend down"><i class="bi bi-graph-down"></i> 5%</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">R$ 12.450</div>
+                    <div class="metric-label">Valor Total</div>
+                    <div class="metric-trend up"><i class="bi bi-graph-up"></i> 8%</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="chart-card full-width">
+            <h3><i class="bi bi-calendar-heart"></i> Movimentação Mensal</h3>
+            <canvas id="movimentacaoChart"></canvas>
+        </div>
+    </div>
+
+    <!-- Seção de Itens Prioritários -->
+    <div class="priority-section">
+        <div class="section-header">
+            <h2><i class="bi bi-exclamation-octagon"></i> Itens Prioritários</h2>
+            <div class="view-options">
+                <button class="view-option active" data-view="criticos">Críticos</button>
+                <button class="view-option" data-view="vencimento">Próximo do Vencimento</button>
+                <button class="view-option" data-view="lentagem">Baixa Rotação</button>
+            </div>
+        </div>
+
+        <div class="priority-grid" id="priorityItemsContainer">
+            <!-- Itens serão carregados via JavaScript -->
+        </div>
+    </div>
+
+    <!-- Tabela de Itens Críticos -->
+    <div class="table-container">
+        <div class="table-header">
+            <h2><i class="bi bi-exclamation-octagon"></i> Itens Críticos</h2>
+            <div class="table-actions">
+                <button class="btn btn-primary" id="btnNovoItem"><i class="bi bi-plus-lg"></i> Novo Item</button>
+                <button class="btn btn-outline" id="btnImportar"><i class="bi bi-upload"></i> Importar</button>
+            </div>
+        </div>
+
+        <div class="table-responsive">
+            <table class="data-table" id="tabelaEstoque">
+                <thead>
+                    <tr>
+                        <th data-sort="codigo">Código</th>
+                        <th data-sort="nome">Item</th>
+                        <th data-sort="categoria">Categoria</th>
+                        <th data-sort="fornecedor">Fornecedor</th>
+                        <th data-sort="estoque">Estoque</th>
+                        <th data-sort="minimo">Mínimo</th>
+                        <th data-sort="status">Status</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in itens_criticos %}
+                    <tr data-id="{{ item['id'] }}">
+                        <td>{{ item['codigo'] }}</td>
+                        <td>{{ item['nome'] }}</td>
+                        <td>{{ item['tipo_produto'] or '-' }}</td>
+                        <td>{{ item['fornecedor_padrao'] or '-' }}</td>
+                        <td class="stock-value" data-value="{{ item['qtd_estoque'] }}">
+                            <div class="stock-bar-container">
+                                <div class="stock-bar" style="width: {{ (item['qtd_estoque'] / (item['estoque_maximo'] or item['qtd_estoque']+1)) * 100 }}%"></div>
+                                <span>{{ item['qtd_estoque'] }}</span>
+                            </div>
+                        </td>
+                        <td>{{ item['estoque_minimo'] }}</td>
+                        <td>
+                            {% if item['qtd_estoque'] == 0 %}
+                            <span class="badge badge-danger"><i class="bi bi-x-circle"></i> Esgotado</span>
+                            {% elif item['qtd_estoque'] <= item['estoque_minimo'] %}
+                            <span class="badge badge-warning"><i class="bi bi-exclamation-triangle"></i> Crítico</span>
+                            {% else %}
+                            <span class="badge badge-success"><i class="bi bi-check-circle"></i> OK</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <button class="btn btn-icon btn-edit" data-id="{{ item['id'] }}">
+        <i class="bi bi-pencil"></i>
+    </button>
+                            <button class="btn btn-icon btn-alert" data-id="{{ item['id'] }}"><i class="bi bi-bell"></i></button>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="8" class="no-items">Nenhum item crítico no momento</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de Edição Avançado -->
+<div class="cyber-modal" id="itemModal">
+    <div class="cyber-modal-content">
+        <div class="cyber-modal-header">
+            <h2><i class="bi bi-box-seam"></i> <span id="modalTitle">Gerenciar Item</span></h2>
+            <button class="cyber-modal-close" id="closeModal">&times;</button>
+        </div>
+        <div class="cyber-modal-body">
+            <form id="itemForm" class="advanced-form">
+                <!-- Seção Básica -->
+                <fieldset class="form-section">
+                    <legend><i class="bi bi-tags"></i> Informações Básicas</legend>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="itemSKU"><i class="bi bi-upc-scan"></i> SKU</label>
+                            <input type="text" id="itemSKU" class="cyber-input" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="itemCodigo"><i class="bi bi-barcode"></i> Código</label>
+                            <input type="text" id="itemCodigo" class="cyber-input">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="itemNome"><i class="bi bi-card-text"></i> Nome do Produto</label>
+                        <input type="text" id="itemNome" class="cyber-input" required>
+                    </div>
+                </fieldset>
+
+                <!-- Seção Estoque -->
+                <fieldset class="form-section">
+                    <legend><i class="bi bi-clipboard2-data"></i> Controle de Estoque</legend>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="itemQtd"><i class="bi bi-boxes"></i> Quantidade</label>
+                            <input type="number" id="itemQtd" class="cyber-input" min="0" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="itemUnidade"><i class="bi bi-rulers"></i> Unidade</label>
+                            <select id="itemUnidade" class="cyber-input">
+                                <option value="UN">UN - Unidade</option>
+                                <option value="CX">CX - Caixa</option>
+                                <option value="KG">KG - Quilograma</option>
+                                <!-- Outras unidades -->
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="itemMinimo"><i class="bi bi-exclamation-triangle"></i> Estoque Mínimo</label>
+                            <input type="number" id="itemMinimo" class="cyber-input" min="0" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="itemMaximo"><i class="bi bi-check-circle"></i> Estoque Máximo</label>
+                            <input type="number" id="itemMaximo" class="cyber-input" min="0">
+                        </div>
+                    </div>
+                </fieldset>
+
+                <!-- Seção Financeira -->
+                <fieldset class="form-section">
+                    <legend><i class="bi bi-cash-stack"></i> Dados Financeiros</legend>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="itemCusto"><i class="bi bi-currency-dollar"></i> Custo Unitário</label>
+                            <input type="number" id="itemCusto" class="cyber-input" step="0.01" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="itemPreco"><i class="bi bi-tag"></i> Preço de Venda</label>
+                            <input type="number" id="itemPreco" class="cyber-input" step="0.01" min="0">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="itemMargem"><i class="bi bi-graph-up"></i> Margem de Lucro</label>
+                        <input type="text" id="itemMargem" class="cyber-input" disabled>
+                    </div>
+                </fieldset>
+
+                <!-- Seção Avançada -->
+                <fieldset class="form-section">
+                    <legend><i class="bi bi-gear"></i> Configurações Avançadas</legend>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="itemNCM"><i class="bi bi-file-earmark-text"></i> NCM</label>
+                            <input type="text" id="itemNCM" class="cyber-input">
+                        </div>
+                        <div class="form-group">
+                            <label for="itemFornecedor"><i class="bi bi-truck"></i> Fornecedor</label>
+                            <select id="itemFornecedor" class="cyber-input">
+                                <!-- Opções serão preenchidas via JS -->
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="itemLocalizacao"><i class="bi bi-geo-alt"></i> Localização</label>
+                        <input type="text" id="itemLocalizacao" class="cyber-input">
+                    </div>
+                </fieldset>
+
+                <div class="form-actions">
+                    <button type="button" class="cyber-btn danger" id="btnExcluir">
+                        <i class="bi bi-trash"></i> Excluir Item
+                    </button>
+                    <button type="button" class="cyber-btn" id="btnCancelar">
+                        <i class="bi bi-x"></i> Cancelar
+                    </button>
+                    <button type="submit" class="cyber-btn primary">
+                        <i class="bi bi-save"></i> Salvar Alterações
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de Visualização -->
+<div class="modal" id="viewModal">
+    <div class="modal-content large">
+        <div class="modal-header">
+            <h2 id="viewModalTitle">Detalhes do Item</h2>
+            <span class="close-modal">&times;</span>
+        </div>
+        <div class="modal-body">
+            <div id="modalItemContent"></div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{{ url_for('static', filename='js/estoque.js') }}"></script>
+{% endblock %}

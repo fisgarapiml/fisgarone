@@ -5,7 +5,7 @@ import re
 # Mapeamento de Plano de Contas para Categorias
 mapeamento_categorias = {
     "Café da Manhã": "Alimentação",
-    "Reembolsos": "Custo de Vendas",
+    "Reembolsos": "Custo de vendas",
     "Procuradoria PGFN": "Impostos",
     "Inmetro 40x25": "Insumos",
     "DAS de Parcelamento": "Dívidas Parceladas",
@@ -69,7 +69,7 @@ mapeamento_nome_razao_social = {
     "Água": "Água/Luz/Telefone",
     "VALENT'S DESCARTAVEIS LTDA": "Fornecedores",
     "Simples Nacional Fisgar Camping": "Impostos",
-    "Reembolso": "Custo de Vendas",
+    "Reembolso": "Custo de vendas",
     "Prolabores": "Funcionários",
     "Parcelamento de Simples": "Impostos",
     "MAGALU/ACORDO": "Dívidas Parceladas",
