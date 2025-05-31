@@ -222,3 +222,228 @@ body.dark-mode .tabela-detalhada th { background: #7d3cff22; color: #fff; }
 body.dark-mode .tabela-detalhada td { color: #fff; }
 body.dark-mode .tabela-detalhada tr:nth-child(even) { background: #23272A; }
 body.dark-mode .tabela-detalhada tr:hover { background: #7d3cff18; }
+
+.ml-azul-titulo {
+    color: #1259c3 !important;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+}
+.fisgar-card-variacao {
+    font-size: 0.97em;
+    margin-top: 6px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+.variacao-positivo { color: #27ae60; }
+.variacao-negativo { color: #e74c3c; }
+.fisgar-card-variacao .seta {
+    font-size: 1.18em;
+    font-weight: 900;
+    margin-right: 2px;
+    vertical-align: middle;
+}
+.fisgar-card-variacao .txt {
+    font-size: 0.83em;
+    font-weight: 400;
+    margin-left: 6px;
+    color: #787878;
+}
+.ml-borda-azul {
+    border-left: 6px solid #1259c3 !important;
+    /* Ou #0076be para mais neon */
+    box-shadow: 0 2px 10px #1259c355;
+}
+.valor-anterior {
+    font-size: 0.93em;
+    margin-top: 2px;
+    color: #1259c3;
+    font-weight: 500;
+}
+.fisgar-card-variacao {
+    font-size: 0.97em;
+    margin-top: 6px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+.variacao-positivo { color: #27ae60; }
+.variacao-negativo { color: #e74c3c; }
+.fisgar-card-variacao .seta {
+    font-size: 1.18em;
+    font-weight: 900;
+    margin-right: 2px;
+    vertical-align: middle;
+}
+.fisgar-card-variacao .txt {
+    font-size: 0.83em;
+    font-weight: 400;
+    margin-left: 6px;
+    color: #787878;
+}
+.fisgar-card {
+    position: relative;
+    /* O resto dos seus estilos permanece igual */
+}
+
+.ml-triangulo {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    border-top: 42px solid #1259c3;  /* Azul Mercado Livre */
+    border-right: 42px solid transparent;
+    border-radius: 2px 0 0 0;
+    z-index: 2;
+}
+.graficos-ml {
+    display: flex;
+    gap: 32px;
+    justify-content: space-between;
+    margin-top: 32px;
+    flex-wrap: wrap;
+}
+.grafico-area {
+    background: #fafdff;
+    border-radius: 22px;
+    padding: 20px 20px 14px 20px;
+    box-shadow: 0 2px 18px #b3e5fc30;
+    min-width: 370px;
+    flex: 1 1 0;
+    max-width: 450px;
+}
+.grafico-area h4 {
+    font-size: 1.27em;
+    color: #1259c3;
+    font-weight: 700;
+    margin-bottom: 12px;
+}
+.grafico-wrapper {
+    width: 100%;
+    min-height: 265px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+@media (max-width: 1200px) {
+    .graficos-ml { flex-direction: column; gap: 20px; }
+    .grafico-area { min-width: unset; max-width: 100%; }
+}
+.graficos-ml-flex {
+    display: flex;
+    width: 100%;
+    gap: 28px;
+    margin-top: 32px;
+}
+.grafico-grande {
+    flex: 0 0 67%;
+    min-width: 0;
+    background: #fafdff;
+    border-radius: 22px;
+    padding: 24px 22px 22px 22px;
+    box-shadow: 0 2px 18px #b3e5fc30;
+    display: flex;
+    flex-direction: column;
+}
+.grafico-pequeno {
+    flex: 0 0 33%;
+    min-width: 0;
+    background: #fafdff;
+    border-radius: 22px;
+    padding: 24px 22px 22px 22px;
+    box-shadow: 0 2px 18px #b3e5fc30;
+    display: flex;
+    flex-direction: column;
+}
+.grafico-area h4,
+.grafico-grande h4,
+.grafico-pequeno h4 {
+    font-size: 1.22em;
+    color: #1259c3;
+    font-weight: 700;
+    margin-bottom: 12px;
+}
+.grafico-wrapper {
+    flex: 1 1 auto;
+    min-height: 400px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+@media (max-width: 1050px) {
+    .graficos-ml-flex { flex-direction: column; gap: 18px; }
+    .grafico-grande, .grafico-pequeno { flex: 1 1 100%; max-width: 100%; }
+}
+/* Adicione ao seu CSS existente */
+.grafico-medio {
+    flex: 0 0 48%;
+    min-width: 0;
+    background: #fafdff;
+    border-radius: 22px;
+    padding: 24px 22px 22px 22px;
+    box-shadow: 0 2px 18px #b3e5fc30;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Estilo para tooltips avançados */
+.tooltip-avancado {
+    position: absolute;
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 14px;
+    pointer-events: none;
+    z-index: 100;
+    max-width: 300px;
+    display: none;
+}
+
+/* Estilo para cards interativos */
+.fisgar-card-interativo {
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.fisgar-card-interativo:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+}
+
+/* Estilo para tabelas detalhadas */
+.tabela-detalhada-ml {
+    margin-top: 30px;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.tabela-detalhada-ml th {
+    background-color: #1259c3;
+    color: white;
+    font-weight: 600;
+}
+
+.tabela-detalhada-ml tr:nth-child(even) {
+    background-color: #f8f9fa;
+}
+
+.tabela-detalhada-ml tr:hover {
+    background-color: #e9f0ff;
+}
+
+/* Responsividade adicional */
+@media (max-width: 768px) {
+    .grafico-medio {
+        flex: 0 0 100%;
+    }
+
+    .fisgar-card {
+        min-width: 100%;
+    }
+}

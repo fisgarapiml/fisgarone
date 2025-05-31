@@ -1,5 +1,4 @@
 {% extends "base.html" %}
-
 {% block title %}Vendas Mercado Livre | Fisgar{% endblock %}
 
 {% block content %}
@@ -7,156 +6,198 @@
 
 <div class="fisgar-dashboard-ml">
     <div class="dashboard-header-ml">
-        <h1>Vendas Mercado Livre</h1>
+        <h1 class="ml-azul-titulo" style="display: flex; align-items: center; gap: 12px;">
+            <img src="{{ url_for('static', filename='images/logoml.png') }}" alt="Mercado Livre" style="height: 36px; margin-right: 6px;">
+            Mercado Livre
+        </h1>
         <form method="get" class="dashboard-filtros-ml">
             <select name="mes">
                 <option value="">Mês</option>
+                {% if meses %}
                 {% for m in meses %}
                 <option value="{{ m }}" {% if m == mes_select %}selected{% endif %}>{{ m }}</option>
                 {% endfor %}
+                {% endif %}
             </select>
             <select name="status">
-                <option value="">Status</option>
-                {% for s in statuses %}
-                <option value="{{ s }}" {% if s == status_select %}selected{% endif %}>{{ s }}</option>
+                <option value="">Situação</option>
+                {% if status_options %}
+                {% for status_value, status_label in status_options %}
+                    <option value="{{ status_value }}" {% if status_value == status_select %}selected{% endif %}>{{ status_label }}</option>
                 {% endfor %}
+                {% endif %}
             </select>
             <button type="submit" class="btn-fisgar-neon">Filtrar</button>
         </form>
     </div>
 
-    <div class="fisgar-cards-row">
-    <div class="fisgar-card neon-blue">
-        <div class="fisgar-card-label">Faturamento</div>
-        <div class="fisgar-card-value">R$ {{ "{:,.2f}".format(faturamento).replace(",", "X").replace(".", ",").replace("X", ".") }}</div>
+   <div class="fisgar-cards-row">
+
+    <!-- FATURAMENTO -->
+    <div class="fisgar-card neon-yellow" data-filtro="faturamento" onclick="abrirModalFiltro('faturamento')">
+        <div class="ml-triangulo"></div>
+        <div class="fisgar-card-label ml-azul-titulo">Faturamento</div>
+        <div class="fisgar-card-value ml-azul-titulo">
+            R$ {{ "{:,.2f}".format(faturamento or 0).replace(",", "X").replace(".", ",").replace("X", ".") }}
+        </div>
+        <div class="valor-anterior">
+            Mês anterior:
+            <span>
+                R$ {{ "{:,.2f}".format(faturamento_ant or 0).replace(",", "X").replace(".", ",").replace("X", ".") }}
+            </span>
+        </div>
+        <div class="fisgar-card-variacao {% if (faturamento_var or 0) >= 0 %}variacao-positivo{% else %}variacao-negativo{% endif %}">
+            {% if (faturamento_var or 0) >= 0 %}
+                <span class="seta">&#9650;</span>
+            {% else %}
+                <span class="seta">&#9660;</span>
+            {% endif %}
+            {{ faturamento_var or 0 }}%
+            <span class="txt">vs mês anterior</span>
+        </div>
     </div>
-    <div class="fisgar-card neon-purple">
-        <div class="fisgar-card-label">Unidades Vendidas</div>
-        <div class="fisgar-card-value">{{ unidades }}</div>
+
+    <!-- UNIDADES VENDIDAS -->
+    <div class="fisgar-card neon-yellow" data-filtro="unidades" onclick="abrirModalFiltro('unidades')">
+        <div class="ml-triangulo"></div>
+        <div class="fisgar-card-label ml-azul-titulo">Unidades Vendidas</div>
+        <div class="fisgar-card-value ml-azul-titulo">{{ unidades or 0 }}</div>
+        <div class="valor-anterior">
+            Mês anterior: <span>{{ unidades_ant or 0 }}</span>
+        </div>
+        <div class="fisgar-card-variacao {% if (unidades_var or 0) >= 0 %}variacao-positivo{% else %}variacao-negativo{% endif %}">
+            {% if (unidades_var or 0) >= 0 %}
+                <span class="seta">&#9650;</span>
+            {% else %}
+                <span class="seta">&#9660;</span>
+            {% endif %}
+            {{ unidades_var or 0 }}%
+            <span class="txt">vs mês anterior</span>
+        </div>
     </div>
-    <div class="fisgar-card neon-orange">
-        <div class="fisgar-card-label">Pedidos</div>
-        <div class="fisgar-card-value">{{ pedidos }}</div>
+
+    <!-- PEDIDOS -->
+    <div class="fisgar-card neon-yellow" data-filtro="pedidos" onclick="abrirModalFiltro('pedidos')">
+        <div class="ml-triangulo"></div>
+        <div class="fisgar-card-label ml-azul-titulo">Pedidos</div>
+        <div class="fisgar-card-value ml-azul-titulo">{{ pedidos or 0 }}</div>
+        <div class="valor-anterior">
+            Mês anterior: <span>{{ pedidos_ant or 0 }}</span>
+        </div>
+        <div class="fisgar-card-variacao {% if (pedidos_var or 0) >= 0 %}variacao-positivo{% else %}variacao-negativo{% endif %}">
+            {% if (pedidos_var or 0) >= 0 %}
+                <span class="seta">&#9650;</span>
+            {% else %}
+                <span class="seta">&#9660;</span>
+            {% endif %}
+            {{ pedidos_var or 0 }}%
+            <span class="txt">vs mês anterior</span>
+        </div>
     </div>
-    <div class="fisgar-card neon-yellow">
-        <div class="fisgar-card-label">Ticket Médio</div>
-        <div class="fisgar-card-value">R$ {{ "{:,.2f}".format(ticket_medio).replace(",", "X").replace(".", ",").replace("X", ".") }}</div>
+
+    <!-- TICKET MÉDIO -->
+    <div class="fisgar-card neon-yellow" data-filtro="ticket_medio" onclick="abrirModalFiltro('ticket_medio')">
+        <div class="ml-triangulo"></div>
+        <div class="fisgar-card-label ml-azul-titulo">Ticket Médio</div>
+        <div class="fisgar-card-value ml-azul-titulo">
+            R$ {{ "{:,.2f}".format(ticket_medio or 0).replace(",", "X").replace(".", ",").replace("X", ".") }}
+        </div>
+        <div class="valor-anterior">
+            Mês anterior:
+            <span>
+                R$ {{ "{:,.2f}".format(ticket_medio_ant or 0).replace(",", "X").replace(".", ",").replace("X", ".") }}
+            </span>
+        </div>
+        <div class="fisgar-card-variacao {% if (ticket_var or 0) >= 0 %}variacao-positivo{% else %}variacao-negativo{% endif %}">
+            {% if (ticket_var or 0) >= 0 %}
+                <span class="seta">&#9650;</span>
+            {% else %}
+                <span class="seta">&#9660;</span>
+            {% endif %}
+            {{ ticket_var or 0 }}%
+            <span class="txt">vs mês anterior</span>
+        </div>
     </div>
 </div>
 
-    <div class="graficos-ml">
-    <div class="grafico-area">
-        <h4>Top 10 SKUs Vendidos</h4>
-        <div class="grafico-wrapper">
-            <canvas id="top10Chart"></canvas>
+    <!-- GRÁFICOS COM TÍTULOS AZUIS -->
+    <div class="graficos-ml-flex">
+        <div class="grafico-grande">
+            <h4 class="ml-azul-titulo">Vendas Diárias</h4>
+            <div class="grafico-wrapper">
+                <canvas id="vendasDiaChart"></canvas>
+            </div>
+        </div>
+        <div class="grafico-pequeno">
+            <h4 class="ml-azul-titulo">Top 10 SKUs Vendidos</h4>
+            <div class="grafico-wrapper">
+                <canvas id="top10Chart"></canvas>
+            </div>
         </div>
     </div>
-    <div class="grafico-area">
-        <h4>Pedidos por Status</h4>
-        <div class="grafico-wrapper">
-            <canvas id="statusChart"></canvas>
-        </div>
-    </div>
-    <div class="grafico-area">
-        <h4>Vendas Diárias</h4>
-        <div class="grafico-wrapper">
-            <canvas id="vendasDiaChart"></canvas>
-        </div>
-    </div>
-</div>
 
+<script>
+    window.top10Labels = {{ top10['sku']|default([])|tojson }};
+    window.top10Data = {{ top10['quantity']|default([])|tojson }};
+    window.vendasDiaLabels = {{ vendas_dia['dia']|default([])|tojson }};
+    window.vendasDiaData = {{ vendas_dia['quantity']|default([])|tojson }};
+</script>
+
+<!-- MODAL FILTRO (INSIRA EXATAMENTE ABAIXO DOS GRÁFICOS, ANTES DO FIM DO BLOCK CONTENT) -->
+<div id="modalFiltro" style="display:none;position:fixed;z-index:9999;left:0;top:0;width:100vw;height:100vh;background:rgba(0,0,0,0.4)">
+  <div style="background:#fff;margin:60px auto;padding:30px;border-radius:12px;max-width:900px;min-height:320px;position:relative" id="modalContent">
+    <button onclick="fecharModal()" style="position:absolute;top:10px;right:20px;font-size:1.6em;background:none;border:none;cursor:pointer;">&times;</button>
+    <div id="modalDados"></div>
+  </div>
+</div>
 {% endblock %}
 
 {% block extra_js %}
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+<script src="{{ url_for('static', filename='js/vendas_ml_dashboard.js') }}"></script>
+
+<!-- JS PARA MODAL DE FILTRO E GRÁFICO CLICÁVEL -->
 <script>
-document.addEventListener("DOMContentLoaded", function() {
-    // Top 10 SKUs Vendidos
-    const top10Labels = {{ top10['sku'].tolist()|tojson }};
-    const top10Data = {{ top10['quantity'].tolist()|tojson }};
-    if (document.getElementById('top10Chart')) {
-        new Chart(document.getElementById('top10Chart').getContext('2d'), {
-            type: 'bar',
-            data: {
-                labels: top10Labels,
-                datasets: [{
-                    label: 'Unidades Vendidas',
-                    data: top10Data,
-                    backgroundColor: '#00e0ff99',
-                    borderColor: '#00e0ff',
-                    borderWidth: 2,
-                    borderRadius: 9
-                }]
-            },
-            options: {
-                responsive: true,
-                indexAxis: 'y',
-                plugins: { legend: { display: false }},
-                scales: {
-                    x: { grid: { color: '#e0f7fa33' }, ticks: { color: '#1d2547' } },
-                    y: { grid: { color: '#e0f7fa22' }, ticks: { color: '#1d2547' } }
+// Funções para modal global
+function abrirModalFiltro(filtro) {
+  fetch('/api/vendas_filtradas?filtro=' + encodeURIComponent(filtro))
+    .then(res => res.text())
+    .then(html => {
+      document.getElementById('modalDados').innerHTML = html;
+      document.getElementById('modalFiltro').style.display = 'block';
+    });
+}
+function fecharModal() {
+  document.getElementById('modalFiltro').style.display = 'none';
+}
+// Gráfico de Vendas Diárias Clicável (Chart.js)
+document.addEventListener('DOMContentLoaded', function() {
+    const ctx = document.getElementById('vendasDiaChart').getContext('2d');
+    const vendasDiaChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: window.vendasDiaLabels,
+            datasets: [{
+                label: 'Vendas',
+                data: window.vendasDiaData,
+                backgroundColor: 'rgba(0,208,255,0.4)',
+                borderColor: 'rgba(0,208,255,1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            onClick: function(evt, elements) {
+                if (elements.length > 0) {
+                    let dia = this.data.labels[elements[0].index];
+                    abrirModalFiltro(dia);
                 }
-            }
-        });
-    }
-
-    // Pedidos por Situação
-    const statusLabels = {{ status_contagem.keys()|list|tojson }};
-    const statusData = {{ status_contagem.values()|list|tojson }};
-    if (document.getElementById('statusChart')) {
-        new Chart(document.getElementById('statusChart').getContext('2d'), {
-            type: 'doughnut',
-            data: {
-                labels: statusLabels,
-                datasets: [{
-                    data: statusData,
-                    backgroundColor: [
-                        '#00e0ff', '#7d3cff', '#ff8800', '#fff500', '#ff29b7', '#39ff14'
-                    ],
-                    borderWidth: 3,
-                    borderColor: '#181f2b'
-                }]
             },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        display: true,
-                        position: 'bottom',
-                        labels: { color: '#1d2547', font: { weight: 700 } }
-                    }
-                }
-            }
-        });
-    }
-
-    // Vendas Diárias
-    const vendasDiaLabels = {{ vendas_dia['dia'].tolist()|tojson }};
-    const vendasDiaData = {{ vendas_dia['quantity'].tolist()|tojson }};
-    if (document.getElementById('vendasDiaChart')) {
-        new Chart(document.getElementById('vendasDiaChart').getContext('2d'), {
-            type: 'bar',
-            data: {
-                labels: vendasDiaLabels,
-                datasets: [{
-                    label: 'Unidades Vendidas',
-                    data: vendasDiaData,
-                    backgroundColor: '#7d3cff99',
-                    borderColor: '#7d3cff',
-                    borderWidth: 2,
-                    borderRadius: 9
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: { legend: { display: false }},
-                scales: {
-                    x: { grid: { color: '#e0f7fa33' }, ticks: { color: '#1d2547' } },
-                    y: { grid: { color: '#e0f7fa22' }, ticks: { color: '#1d2547' } }
-                }
-            }
-        });
-    }
+            plugins: {datalabels: {display: false}},
+            scales: { y: { beginAtZero: true } }
+        },
+        plugins: [ChartDataLabels]
+    });
 });
 </script>
 {% endblock %}

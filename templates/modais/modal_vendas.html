@@ -1,0 +1,30 @@
+<!-- templates/modais/modal_vendas.html -->
+<div style="padding:30px">
+  <h2>{{ titulo }}</h2>
+  {% if vendas and vendas|length > 0 %}
+    <table style="width:100%;border-collapse:collapse">
+      <tr style="background:#f2f2f2">
+        <th style="padding:8px;border:1px solid #ddd">Pedido</th>
+        <th style="padding:8px;border:1px solid #ddd">SKU</th>
+        <th style="padding:8px;border:1px solid #ddd">Título</th>
+        <th style="padding:8px;border:1px solid #ddd">Quantidade</th>
+        <th style="padding:8px;border:1px solid #ddd">Valor Unitário</th>
+        <th style="padding:8px;border:1px solid #ddd">Status</th>
+        <th style="padding:8px;border:1px solid #ddd">Data</th>
+      </tr>
+      {% for v in vendas %}
+        <tr>
+          <td style="padding:8px;border:1px solid #ddd">{{ v.order_id }}</td>
+          <td style="padding:8px;border:1px solid #ddd">{{ v.sku }}</td>
+          <td style="padding:8px;border:1px solid #ddd">{{ v.title }}</td>
+          <td style="padding:8px;border:1px solid #ddd">{{ v.quantity }}</td>
+          <td style="padding:8px;border:1px solid #ddd">R$ {{ "{:,.2f}".format(v.unit_price or 0).replace(",", "X").replace(".", ",").replace("X", ".") }}</td>
+          <td style="padding:8px;border:1px solid #ddd">{{ v.status }}</td>
+          <td style="padding:8px;border:1px solid #ddd">{{ v.date_created[:10] }}</td>
+        </tr>
+      {% endfor %}
+    </table>
+  {% else %}
+    <p>Nenhuma venda encontrada.</p>
+  {% endif %}
+</div>

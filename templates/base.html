@@ -411,64 +411,29 @@
   </div>
 
   <!-- Scripts -->
+  <script>document.addEventListener('DOMContentLoaded',function(){function createMenuItem(item){const menuItem=document.createElement('div');menuItem.className='menu-item';const mainLink=document.createElement('div');mainLink.className='menu-link';mainLink.innerHTML=`<i class="${item.icone||''}"></i> <span>${item.nome}</span>`;mainLink.onclick=()=>{if(item.submenu){menuItem.classList.toggle('open');}else if(item.url){window.location.href=item.url;}};menuItem.appendChild(mainLink);if(item.submenu){const submenu=document.createElement('div');submenu.className='submenu-list';item.submenu.forEach(sub=>{submenu.appendChild(createMenuItem(sub));});menuItem.appendChild(submenu);}return menuItem;}fetch('/api/menu').then(res=>res.json()).then(data=>{const menu=document.getElementById('main-menu');data.forEach(group=>{const groupTitle=document.createElement('div');groupTitle.className='menu-group-title';groupTitle.textContent=group.titulo;menu.appendChild(groupTitle);group.itens.forEach(item=>{menu.appendChild(createMenuItem(item));});});});if(localStorage.getItem('theme')==='dark'){document.body.classList.add('dark-theme');}document.getElementById('theme-toggle').addEventListener('click',()=>{document.body.classList.toggle('dark-theme');localStorage.setItem('theme',document.body.classList.contains('dark-theme')?'dark':'light');});});</script>
+
+<!-- MODAL FILTRO -->
+<div id="modalFiltro" style="display:none;position:fixed;z-index:9999;left:0;top:0;width:100vw;height:100vh;background:rgba(0,0,0,0.4)">
+  <div style="background:#fff;margin:60px auto;padding:30px;border-radius:12px;max-width:900px;min-height:320px;position:relative" id="modalContent">
+    <button onclick="fecharModal()" style="position:absolute;top:10px;right:20px;font-size:1.6em;background:none;border:none;cursor:pointer;">&times;</button>
+    <div id="modalDados"></div>
+  </div>
+</div>
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      // Carrega o menu via API
-      fetch('/api/menu')
-        .then(res => res.json())
-        .then(data => {
-          const menu = document.getElementById('main-menu');
-          data.forEach(group => {
-            const groupTitle = document.createElement('div');
-            groupTitle.className = 'menu-group-title';
-            groupTitle.textContent = group.titulo;
-            menu.appendChild(groupTitle);
-
-            group.itens.forEach(item => {
-              const menuItem = document.createElement('div');
-              menuItem.className = 'menu-item';
-
-              const mainLink = document.createElement('div');
-              mainLink.className = 'menu-link';
-              mainLink.innerHTML = `<i class="${item.icone}"></i> <span>${item.nome}</span>`;
-              mainLink.onclick = () => {
-                if (item.submenu) {
-                  menuItem.classList.toggle('open');
-                } else {
-                  window.location.href = item.url;
-                }
-              };
-              menuItem.appendChild(mainLink);
-
-              if (item.submenu) {
-                const submenu = document.createElement('div');
-                submenu.className = 'submenu-list';
-                item.submenu.forEach(sub => {
-                  const subLink = document.createElement('a');
-                  subLink.href = sub.url;
-                  subLink.innerHTML = `<span>${sub.nome}</span>`;
-                  submenu.appendChild(subLink);
-                });
-                menuItem.appendChild(submenu);
-              }
-
-              menu.appendChild(menuItem);
-            });
-          });
-        });
-
-      // Verifica tema ao carregar
-      if (localStorage.getItem('theme') === 'dark') {
-        document.body.classList.add('dark-theme');
-      }
-
-      // Alternância de tema
-      document.getElementById('theme-toggle').addEventListener('click', () => {
-        document.body.classList.toggle('dark-theme');
-        localStorage.setItem('theme', document.body.classList.contains('dark-theme') ? 'dark' : 'light');
-      });
+function abrirModalFiltro(filtro) {
+  fetch('/api/vendas_filtradas?filtro=' + encodeURIComponent(filtro))
+    .then(res => res.text())
+    .then(html => {
+      document.getElementById('modalDados').innerHTML = html;
+      document.getElementById('modalFiltro').style.display = 'block';
     });
-  </script>
+}
+function fecharModal() {
+  document.getElementById('modalFiltro').style.display = 'none';
+}
+</script>
+
 
   {% block extra_js %}{% endblock %}
 </body>

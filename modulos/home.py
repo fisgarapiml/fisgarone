@@ -60,6 +60,41 @@ def get_menu():
             ]
         },
         {
+            "titulo": "Vendas",
+            "itens": [
+                {
+                    "nome": "Vendas",
+                    "icone": "fas fa-shopping-cart",
+                    "submenu": [
+                        {
+                            "nome": "Mercado Livre",
+                            "submenu": [
+                                {
+                                    "nome": "Dashboard ML",
+                                    "url": url_for('ml_bp.dashboard_vendas_ml')  # <-- **NOME DO ENDPOINT DO DASHBOARD ML**
+                                }
+                                # Aqui adiciona futuras telas do ML
+                            ]
+                        },
+                        {
+                            "nome": "Shopee",
+                            "submenu": [
+                                # Adicione as telas Shopee quando criar
+                                # { "nome": "Dashboard Shopee", "url": url_for('shopee_bp.dashboard') }
+                            ]
+                        },
+                        {
+                            "nome": "Shein",
+                            "submenu": [
+                                # Adicione as telas Shein quando criar
+                                # { "nome": "Dashboard Shein", "url": url_for('shein_bp.dashboard') }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
             "titulo": "NF-e",
             "itens": [
                 {
@@ -67,9 +102,7 @@ def get_menu():
                     "icone": "fas fa-file-invoice",
                     "submenu": [
                         { "nome": "Painel NF-e", "url": url_for('nfe_bp.painel') },
-                        # --- NOVO SUBMENU AQUI ---
                         { "nome": "Config. de Unidades", "url": url_for('config_unidades.painel_principal') }
-                        # O endpoint é 'config_unidades.painel_principal'
                     ]
                 }
             ]
