@@ -1,20 +1,27 @@
+// Unica vez: declare como variáveis globais
+window.vendasDiaChartInstance = null;
+window.top10ChartInstance = null;
+
 document.addEventListener("DOMContentLoaded", function() {
+    console.log("---- FISGAR DASHBOARD ML JS LOAD ----", Date.now());
+
     const top10Labels = window.top10Labels;
     const top10Data = window.top10Data;
     const vendasDiaLabels = window.vendasDiaLabels;
     const vendasDiaData = window.vendasDiaData;
 
-    // --- Vendas Diárias (BARRA VERTICAL, OCUPA 70%) ---
+    // --- Vendas Diárias: Faturamento por Dia ---
     if (document.getElementById('vendasDiaChart')) {
         const ctxVendasDia = document.getElementById('vendasDiaChart').getContext('2d');
-        new Chart(ctxVendasDia, {
+        if (window.vendasDiaChartInstance) window.vendasDiaChartInstance.destroy();
+        window.vendasDiaChartInstance = new Chart(ctxVendasDia, {
             type: 'bar',
             data: {
                 labels: vendasDiaLabels,
                 datasets: [{
-                    label: 'Unidades',
+                    label: 'Faturamento',
                     data: vendasDiaData,
-                    backgroundColor: "#1259c3", // Azul ML
+                    backgroundColor: "#1259c3",
                     borderRadius: 12,
                     maxBarThickness: 28
                 }]
@@ -26,10 +33,13 @@ document.addEventListener("DOMContentLoaded", function() {
                         color: '#fff500',
                         backgroundColor: '#1259c3cc',
                         borderRadius: 8,
-                        font: { weight: 'bold', size: 15 },
-                        anchor: 'center',
-                        align: 'center',
-                        formatter: Math.round,
+                        font: { weight: 'bold', size: 14 },
+                        anchor: 'end',    // topo da barra
+                        align: 'end',     // topo da barra
+                        formatter: function(value) {
+                            // R$ 1.234,56 BR
+                            return 'R$ ' + (Math.round(value * 100) / 100).toLocaleString('pt-BR', {minimumFractionDigits: 2});
+                        },
                         padding: 5,
                         display: function(ctx) {
                             return ctx.dataset.data[ctx.dataIndex] > 0;
@@ -53,17 +63,18 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     }
 
-    // --- Top 10 SKUs Vendidos (BARRA HORIZONTAL, OCUPA 30%) ---
+    // --- Top 10 SKUs Vendidos (continua por Unidades) ---
     if (document.getElementById('top10Chart')) {
         const ctxTop10 = document.getElementById('top10Chart').getContext('2d');
-        new Chart(ctxTop10, {
+        if (window.top10ChartInstance) window.top10ChartInstance.destroy();
+        window.top10ChartInstance = new Chart(ctxTop10, {
             type: 'bar',
             data: {
                 labels: top10Labels,
                 datasets: [{
                     label: 'Unidades',
                     data: top10Data,
-                    backgroundColor: "#fff500", // Amarelo ML
+                    backgroundColor: "#fff500",
                     borderRadius: 12,
                     maxBarThickness: 28
                 }]

@@ -34,7 +34,7 @@
    <div class="fisgar-cards-row">
 
     <!-- FATURAMENTO -->
-    <div class="fisgar-card neon-yellow" data-filtro="faturamento" onclick="abrirModalFiltro('faturamento')">
+    <div class="fisgar-card neon-yellow">
         <div class="ml-triangulo"></div>
         <div class="fisgar-card-label ml-azul-titulo">Faturamento</div>
         <div class="fisgar-card-value ml-azul-titulo">
@@ -58,7 +58,7 @@
     </div>
 
     <!-- UNIDADES VENDIDAS -->
-    <div class="fisgar-card neon-yellow" data-filtro="unidades" onclick="abrirModalFiltro('unidades')">
+    <div class="fisgar-card neon-yellow">
         <div class="ml-triangulo"></div>
         <div class="fisgar-card-label ml-azul-titulo">Unidades Vendidas</div>
         <div class="fisgar-card-value ml-azul-titulo">{{ unidades or 0 }}</div>
@@ -77,7 +77,7 @@
     </div>
 
     <!-- PEDIDOS -->
-    <div class="fisgar-card neon-yellow" data-filtro="pedidos" onclick="abrirModalFiltro('pedidos')">
+    <div class="fisgar-card neon-yellow">
         <div class="ml-triangulo"></div>
         <div class="fisgar-card-label ml-azul-titulo">Pedidos</div>
         <div class="fisgar-card-value ml-azul-titulo">{{ pedidos or 0 }}</div>
@@ -96,7 +96,7 @@
     </div>
 
     <!-- TICKET MÉDIO -->
-    <div class="fisgar-card neon-yellow" data-filtro="ticket_medio" onclick="abrirModalFiltro('ticket_medio')">
+    <div class="fisgar-card neon-yellow">
         <div class="ml-triangulo"></div>
         <div class="fisgar-card-label ml-azul-titulo">Ticket Médio</div>
         <div class="fisgar-card-value ml-azul-titulo">
@@ -120,6 +120,7 @@
     </div>
 </div>
 
+
     <!-- GRÁFICOS COM TÍTULOS AZUIS -->
     <div class="graficos-ml-flex">
         <div class="grafico-grande">
@@ -140,7 +141,7 @@
     window.top10Labels = {{ top10['sku']|default([])|tojson }};
     window.top10Data = {{ top10['quantity']|default([])|tojson }};
     window.vendasDiaLabels = {{ vendas_dia['dia']|default([])|tojson }};
-    window.vendasDiaData = {{ vendas_dia['quantity']|default([])|tojson }};
+    window.vendasDiaData = {{ vendas_dia['faturamento']|default([])|tojson }};
 </script>
 
 <!-- MODAL FILTRO (INSIRA EXATAMENTE ABAIXO DOS GRÁFICOS, ANTES DO FIM DO BLOCK CONTENT) -->
@@ -157,9 +158,8 @@
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
 <script src="{{ url_for('static', filename='js/vendas_ml_dashboard.js') }}"></script>
 
-<!-- JS PARA MODAL DE FILTRO E GRÁFICO CLICÁVEL -->
 <script>
-// Funções para modal global
+// Funções globais para modal
 function abrirModalFiltro(filtro) {
   fetch('/api/vendas_filtradas?filtro=' + encodeURIComponent(filtro))
     .then(res => res.text())
@@ -171,33 +171,5 @@ function abrirModalFiltro(filtro) {
 function fecharModal() {
   document.getElementById('modalFiltro').style.display = 'none';
 }
-// Gráfico de Vendas Diárias Clicável (Chart.js)
-document.addEventListener('DOMContentLoaded', function() {
-    const ctx = document.getElementById('vendasDiaChart').getContext('2d');
-    const vendasDiaChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: window.vendasDiaLabels,
-            datasets: [{
-                label: 'Vendas',
-                data: window.vendasDiaData,
-                backgroundColor: 'rgba(0,208,255,0.4)',
-                borderColor: 'rgba(0,208,255,1)',
-                borderWidth: 1
-            }]
-        },
-        options: {
-            onClick: function(evt, elements) {
-                if (elements.length > 0) {
-                    let dia = this.data.labels[elements[0].index];
-                    abrirModalFiltro(dia);
-                }
-            },
-            plugins: {datalabels: {display: false}},
-            scales: { y: { beginAtZero: true } }
-        },
-        plugins: [ChartDataLabels]
-    });
-});
 </script>
 {% endblock %}
