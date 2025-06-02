@@ -7,10 +7,12 @@
     <list default="true" id="e3aaa54f-aebd-4ecb-8523-c15f4bb10208" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/grupo_fisgar.db" beforeDir="false" afterPath="$PROJECT_DIR$/grupo_fisgar.db" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modulos/home.py" beforeDir="false" afterPath="$PROJECT_DIR$/modulos/home.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/grupo_fisgar.sqbpro" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/modulos/vendas/ml.py" beforeDir="false" afterPath="$PROJECT_DIR$/modulos/vendas/ml.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/css/vendas_ml_dashboard.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/css/vendas_ml_dashboard.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/static/js/vendas_ml_dashboard.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/js/vendas_ml_dashboard.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/vendas/vendas_ml_dashboard.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/vendas/vendas_ml_dashboard.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/teste.py" beforeDir="false" afterPath="$PROJECT_DIR$/teste.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

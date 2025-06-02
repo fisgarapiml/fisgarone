@@ -1,6 +1,4 @@
 import sqlite3
-import aiohttp
-import asyncio
 from dotenv import load_dotenv, set_key
 import os
 from datetime import datetime
@@ -14,30 +12,30 @@ def inicializar_banco():
     with sqlite3.connect('grupo_fisgar.db') as conn:
         cursor = conn.cursor()
         cursor.execute('''CREATE TABLE IF NOT EXISTS vendas_ml (
-            order_id TEXT PRIMARY KEY,
-            unit_price REAL,
-            quantity INTEGER,
-            date_created TEXT,
-            sale_fee REAL,
-            shipping_cost REAL,
-            seller_id TEXT,
-            cancellations TEXT,
-            title TEXT,
-            mlb TEXT,
-            sku TEXT,
-            shipment_id TEXT,
-            buyer_id TEXT,
-            shipping_mode TEXT,
-            shipping_base_cost REAL,
-            shipping_option_cost REAL,
-            shipping_order_cost REAL,
-            shipping_list_cost REAL,
-            total_shipping_cost REAL,
-            logistic_type TEXT,
-            paid_by TEXT,
-            status TEXT,
-            delivery_status TEXT,
-            release_date TEXT
+            "ID Pedido" TEXT PRIMARY KEY,
+            "Preco Unitario" REAL,
+            "Quantidade" INTEGER,
+            "Data da Venda" TEXT,
+            "Taxa Mercado Livre" REAL,
+            "Frete" REAL,
+            "Conta" TEXT,
+            "Cancelamentos" TEXT,
+            "Titulo" TEXT,
+            "MLB" TEXT,
+            "SKU" TEXT,
+            "Codigo Envio" TEXT,
+            "Comprador" TEXT,
+            "Modo Envio" TEXT,
+            "Custo Frete Base" REAL,
+            "Custo Frete Opcional" REAL,
+            "Custo Pedido Frete" REAL,
+            "Custo Lista Frete" REAL,
+            "Custo Total Frete" REAL,
+            "Tipo Logistica" TEXT,
+            "Pago Por" TEXT,
+            "Situacao" TEXT,
+            "Situacao Entrega" TEXT,
+            "Data Liberacao" TEXT
         )''')
         conn.commit()
 
@@ -49,6 +47,9 @@ def atualizar_env_token(account_name, new_access_token, new_refresh_token):
 def dashboard_vendas_ml():
     mes = request.args.get('mes')
     status = request.args.get('status')
+    conta = request.args.get('conta')
+    sku = request.args.get('sku')
+    title = request.args.get('title')
 
     conn = sqlite3.connect('grupo_fisgar.db')
     conn.row_factory = sqlite3.Row
@@ -68,59 +69,77 @@ def dashboard_vendas_ml():
     filtro_data_atual = f"{ano_atual}-{mes_atual}"
     filtro_data_ant = f"{ano_ant}-{mes_ant}"
 
-    where_status = ""
-    params = []
+    # WHERE dinâmico PT-BR
+    wheres = ["substr(\"Data da Venda\", 7, 4) || '-' || substr(\"Data da Venda\", 4, 2) = ?"]
+    params_atual = [filtro_data_atual]
+    params_ant = [filtro_data_ant]
+
     if status:
-        where_status = "AND status = ?"
-        params.append(status)
+        wheres.append("\"Situacao\" = ?")
+        params_atual.append(status)
+        params_ant.append(status)
+    if conta:
+        wheres.append("\"Conta\" = ?")
+        params_atual.append(conta)
+        params_ant.append(conta)
+    if sku:
+        wheres.append("\"SKU\" = ?")
+        params_atual.append(sku)
+        params_ant.append(sku)
+    if title:
+        wheres.append("\"Titulo\" = ?")
+        params_atual.append(title)
+        params_ant.append(title)
+
+    where_clause = " AND ".join(wheres)
 
     # FATURAMENTO
     cur.execute(f"""
-        SELECT SUM(unit_price * quantity) as total
+        SELECT SUM("Preco Unitario" * "Quantidade") as total
         FROM vendas_ml
-        WHERE substr(date_created, 1, 7) = ? {where_status}
-    """, [filtro_data_atual] + params)
+        WHERE {where_clause}
+    """, params_atual)
     faturamento = cur.fetchone()['total'] or 0
 
     cur.execute(f"""
-        SELECT SUM(unit_price * quantity) as total
+        SELECT SUM("Preco Unitario" * "Quantidade") as total
         FROM vendas_ml
-        WHERE substr(date_created, 1, 7) = ? {where_status}
-    """, [filtro_data_ant] + params)
+        WHERE {where_clause}
+    """, params_ant)
     faturamento_ant = cur.fetchone()['total'] or 0
 
     faturamento_var = round(100 * ((faturamento - faturamento_ant) / faturamento_ant), 2) if faturamento_ant else 0
 
     # UNIDADES
     cur.execute(f"""
-        SELECT SUM(quantity) as unidades
+        SELECT SUM("Quantidade") as unidades
         FROM vendas_ml
-        WHERE substr(date_created, 1, 7) = ? {where_status}
-    """, [filtro_data_atual] + params)
+        WHERE {where_clause}
+    """, params_atual)
     unidades = cur.fetchone()['unidades'] or 0
 
     cur.execute(f"""
-        SELECT SUM(quantity) as unidades
+        SELECT SUM("Quantidade") as unidades
         FROM vendas_ml
-        WHERE substr(date_created, 1, 7) = ? {where_status}
-    """, [filtro_data_ant] + params)
+        WHERE {where_clause}
+    """, params_ant)
     unidades_ant = cur.fetchone()['unidades'] or 0
 
     unidades_var = round(100 * ((unidades - unidades_ant) / unidades_ant), 2) if unidades_ant else 0
 
     # PEDIDOS
     cur.execute(f"""
-        SELECT COUNT(DISTINCT order_id) as pedidos
+        SELECT COUNT(DISTINCT "ID Pedido") as pedidos
         FROM vendas_ml
-        WHERE substr(date_created, 1, 7) = ? {where_status}
-    """, [filtro_data_atual] + params)
+        WHERE {where_clause}
+    """, params_atual)
     pedidos = cur.fetchone()['pedidos'] or 0
 
     cur.execute(f"""
-        SELECT COUNT(DISTINCT order_id) as pedidos
+        SELECT COUNT(DISTINCT "ID Pedido") as pedidos
         FROM vendas_ml
-        WHERE substr(date_created, 1, 7) = ? {where_status}
-    """, [filtro_data_ant] + params)
+        WHERE {where_clause}
+    """, params_ant)
     pedidos_ant = cur.fetchone()['pedidos'] or 0
 
     pedidos_var = round(100 * ((pedidos - pedidos_ant) / pedidos_ant), 2) if pedidos_ant else 0
@@ -132,34 +151,90 @@ def dashboard_vendas_ml():
 
     # TOP 10 SKUs
     cur.execute(f"""
-        SELECT sku, SUM(quantity) AS quantity
+        SELECT "SKU", ROUND(SUM("Preco Unitario" * "Quantidade"), 0) AS valor, SUM("Quantidade") AS unidades
         FROM vendas_ml
-        WHERE substr(date_created, 1, 7) = ? {where_status}
-        GROUP BY sku
-        ORDER BY quantity DESC
+        WHERE {where_clause}
+        GROUP BY "SKU"
+        ORDER BY valor DESC
         LIMIT 10
-    """, [filtro_data_atual] + params)
+    """, params_atual)
     top10_rows = cur.fetchall()
     top10 = {
-        "sku": [row['sku'] for row in top10_rows],
-        "quantity": [row['quantity'] for row in top10_rows]
+        "sku": [row['SKU'] for row in top10_rows],
+        "valor": [row['valor'] for row in top10_rows],
+        "unidades": [row['unidades'] for row in top10_rows]
     }
 
-
-    # VENDAS DIÁRIAS (agora faturamento por dia, não unidades)
+    # --- FATURAMENTO DIÁRIO MÊS ATUAL
     cur.execute(f"""
-        SELECT strftime('%d/%m', substr(date_created, 1, 10)) AS dia,
-               ROUND(SUM(unit_price * quantity), 2) AS faturamento
+        SELECT substr("Data da Venda", 1, 2) || '/' || substr("Data da Venda", 4, 2) AS dia,
+               ROUND(SUM("Preco Unitario" * "Quantidade"), 2) AS faturamento
         FROM vendas_ml
-        WHERE substr(date_created, 1, 7) = ? {where_status}
+        WHERE substr("Data da Venda", 7, 4) = ? AND substr("Data da Venda", 4, 2) = ?
         GROUP BY dia
         ORDER BY dia
-    """, [filtro_data_atual] + params)
-    vendas_dia_rows = cur.fetchall()
+    """, [ano_atual, mes_atual])
+    vendas_dia_atual = cur.fetchall()
+
+    from calendar import monthrange
+
+    # Dias do mês atual
+    num_dias_atual = monthrange(int(ano_atual), int(mes_atual))[1]
+    num_dias_ant = monthrange(int(ano_ant), int(mes_ant))[1]
+
+    # Para alinhar certinho, só até o número de dias existentes em AMBOS os meses
+    num_dias_comparar = min(num_dias_atual, num_dias_ant)
+    dias = [str(i).zfill(2) for i in range(1, num_dias_comparar + 1)]
+
+    # Faturamento diário mês atual: monta dict só com o dia
+    cur.execute(f"""
+        SELECT substr("Data da Venda", 1, 2) AS dia,
+               ROUND(SUM("Preco Unitario" * "Quantidade"), 2) AS faturamento
+        FROM vendas_ml
+        WHERE substr("Data da Venda", 7, 4) = ? AND substr("Data da Venda", 4, 2) = ?
+        GROUP BY dia
+        ORDER BY dia
+    """, [ano_atual, mes_atual])
+    fat_atual_dict = {row['dia']: row['faturamento'] for row in cur.fetchall()}
+
+    # Faturamento diário mês anterior: monta dict só com o dia
+    cur.execute(f"""
+        SELECT substr("Data da Venda", 1, 2) AS dia,
+               ROUND(SUM("Preco Unitario" * "Quantidade"), 2) AS faturamento
+        FROM vendas_ml
+        WHERE substr("Data da Venda", 7, 4) = ? AND substr("Data da Venda", 4, 2) = ?
+        GROUP BY dia
+        ORDER BY dia
+    """, [ano_ant, mes_ant])
+    fat_ant_dict = {row['dia']: row['faturamento'] for row in cur.fetchall()}
+
+    # Agora SIM os dicionários são do tipo {'01': valor, '02': valor, ...}
+    print("DEBUG dias", dias)
+    print("DEBUG fat_atual_dict", fat_atual_dict)
+    print("DEBUG fat_ant_dict", fat_ant_dict)
+
+    # Agora gera os arrays alinhados pelo dia
+    fat_atual = [fat_atual_dict.get(d, 0) for d in dias]
+    fat_ant = [fat_ant_dict.get(d, 0) for d in dias]
+
+    # Para o JS, manda os labels no formato correto
+    labels = [f"{d}/{mes_atual}" for d in dias]
+
     vendas_dia = {
-        "dia": [row['dia'] for row in vendas_dia_rows],
-        "faturamento": [row['faturamento'] for row in vendas_dia_rows]
+        "dia": labels,
+        "faturamento": fat_atual,
+        "faturamento_ant": fat_ant
     }
+
+    # CAMPOS PARA FILTROS
+    cur.execute("SELECT DISTINCT \"Conta\" FROM vendas_ml ORDER BY \"Conta\"")
+    contas = [row['Conta'] for row in cur.fetchall() if row['Conta']]
+
+    cur.execute("SELECT DISTINCT \"SKU\" FROM vendas_ml ORDER BY \"SKU\"")
+    skus = [row['SKU'] for row in cur.fetchall() if row['SKU']]
+
+    cur.execute("SELECT DISTINCT \"Titulo\" FROM vendas_ml ORDER BY \"Titulo\"")
+    titles = [row['Titulo'] for row in cur.fetchall() if row['Titulo']]
 
     meses = [str(i).zfill(2) for i in range(1, 13)]
     status_options = [('paid', 'Pago'), ('cancelled', 'Cancelado'), ('pending', 'Pendente')]
@@ -185,8 +260,16 @@ def dashboard_vendas_ml():
         meses=meses,
         mes_select=mes_atual,
         status_options=status_options,
-        status_select=status or ''
+        status_select=status or '',
+        contas=contas,
+        conta_select=conta or '',
+        skus=skus,
+        sku_select=sku or '',
+        titles=titles,
+        title_select=title or ''
     )
+
+
 
 @ml_bp.route('/api/vendas_filtradas')
 def vendas_filtradas():
@@ -197,36 +280,54 @@ def vendas_filtradas():
     vendas = []
     titulo = "Vendas"
 
-    mes_atual = cur.execute("SELECT strftime('%Y-%m', 'now', '-3 hours')").fetchone()[0]
+    # Recupera mês e ano do banco, já em PT-BR
+    mes_ano_atual = datetime.now().strftime('%m/%Y')
 
     if filtro == 'faturamento':
-        cur.execute("SELECT * FROM vendas_ml WHERE status = 'paid' AND substr(date_created, 1, 7) = ? ORDER BY date_created DESC LIMIT 100", (mes_atual,))
+        cur.execute("""
+            SELECT * FROM vendas_ml 
+            WHERE "Situacao" = 'paid' 
+            AND substr("Data da Venda", 4, 7) = ? 
+            ORDER BY "Data da Venda" DESC LIMIT 100
+        """, (mes_ano_atual,))
         vendas = cur.fetchall()
         titulo = "Vendas Pagas do Mês"
     elif filtro == 'unidades':
-        cur.execute("SELECT * FROM vendas_ml WHERE substr(date_created, 1, 7) = ? ORDER BY date_created DESC LIMIT 100", (mes_atual,))
+        cur.execute("""
+            SELECT * FROM vendas_ml 
+            WHERE substr("Data da Venda", 4, 7) = ? 
+            ORDER BY "Data da Venda" DESC LIMIT 100
+        """, (mes_ano_atual,))
         vendas = cur.fetchall()
         titulo = "Unidades Vendidas"
     elif filtro == 'pedidos':
-        cur.execute("SELECT * FROM vendas_ml WHERE substr(date_created, 1, 7) = ? ORDER BY date_created DESC LIMIT 100", (mes_atual,))
+        cur.execute("""
+            SELECT * FROM vendas_ml 
+            WHERE substr("Data da Venda", 4, 7) = ? 
+            ORDER BY "Data da Venda" DESC LIMIT 100
+        """, (mes_ano_atual,))
         vendas = cur.fetchall()
         titulo = "Pedidos do Mês"
     elif filtro == 'ticket_medio':
-        cur.execute("SELECT * FROM vendas_ml WHERE substr(date_created, 1, 7) = ? ORDER BY date_created DESC LIMIT 100", (mes_atual,))
+        cur.execute("""
+            SELECT * FROM vendas_ml 
+            WHERE substr("Data da Venda", 4, 7) = ? 
+            ORDER BY "Data da Venda" DESC LIMIT 100
+        """, (mes_ano_atual,))
         vendas = cur.fetchall()
         titulo = "Ticket Médio"
     else:
+        # Filtro por dia ou SKU PT-BR
         cur.execute("""
             SELECT * FROM vendas_ml 
-            WHERE (strftime('%d/%m', substr(date_created, 1, 10)) = ? OR sku = ?) 
-            AND substr(date_created, 1, 7) = ? 
-            ORDER BY date_created DESC LIMIT 100
-            """, (filtro, filtro, mes_atual))
+            WHERE (substr("Data da Venda", 0, 6) = ? OR "SKU" = ?) 
+            AND substr("Data da Venda", 4, 7) = ? 
+            ORDER BY "Data da Venda" DESC LIMIT 100
+        """, (filtro, filtro, mes_ano_atual))
         vendas = cur.fetchall()
         titulo = f"Filtro: {filtro}"
     conn.close()
     return render_template('modais/modal_vendas.html', vendas=vendas, titulo=titulo)
 
 if __name__ == "__main__":
-    # asyncio.run(executar())  # Descomente se usar integração automática ML
     print("Para usar integração automática com Mercado Livre, descomente a linha acima.")

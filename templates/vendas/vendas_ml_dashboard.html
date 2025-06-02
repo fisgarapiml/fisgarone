@@ -11,24 +11,39 @@
             Mercado Livre
         </h1>
         <form method="get" class="dashboard-filtros-ml">
-            <select name="mes">
-                <option value="">Mês</option>
-                {% if meses %}
-                {% for m in meses %}
-                <option value="{{ m }}" {% if m == mes_select %}selected{% endif %}>{{ m }}</option>
-                {% endfor %}
-                {% endif %}
-            </select>
-            <select name="status">
-                <option value="">Situação</option>
-                {% if status_options %}
-                {% for status_value, status_label in status_options %}
-                    <option value="{{ status_value }}" {% if status_value == status_select %}selected{% endif %}>{{ status_label }}</option>
-                {% endfor %}
-                {% endif %}
-            </select>
-            <button type="submit" class="btn-fisgar-neon">Filtrar</button>
-        </form>
+    <select name="mes">
+        <option value="">Mês</option>
+        {% for m in meses %}
+        <option value="{{ m }}" {% if m == mes_select %}selected{% endif %}>{{ m }}</option>
+        {% endfor %}
+    </select>
+    <select name="status">
+        <option value="">Situação</option>
+        {% for status_value, status_label in status_options %}
+            <option value="{{ status_value }}" {% if status_value == status_select %}selected{% endif %}>{{ status_label }}</option>
+        {% endfor %}
+    </select>
+    <select name="conta">
+        <option value="">Conta</option>
+        {% for c in contas %}
+            <option value="{{ c }}" {% if c == conta_select %}selected{% endif %}>{{ c }}</option>
+        {% endfor %}
+    </select>
+    <select name="sku">
+        <option value="">SKU</option>
+        {% for s in skus %}
+            <option value="{{ s }}" {% if s == sku_select %}selected{% endif %}>{{ s }}</option>
+        {% endfor %}
+    </select>
+    <select name="title">
+        <option value="">Produto</option>
+        {% for t in titles %}
+            <option value="{{ t }}" {% if t == title_select %}selected{% endif %}>{{ t }}</option>
+        {% endfor %}
+    </select>
+    <button type="submit" class="btn-fisgar-neon">Filtrar</button>
+</form>
+
     </div>
 
    <div class="fisgar-cards-row">
@@ -139,9 +154,12 @@
 
 <script>
     window.top10Labels = {{ top10['sku']|default([])|tojson }};
-    window.top10Data = {{ top10['quantity']|default([])|tojson }};
-    window.vendasDiaLabels = {{ vendas_dia['dia']|default([])|tojson }};
-    window.vendasDiaData = {{ vendas_dia['faturamento']|default([])|tojson }};
+    window.top10Data = {{ top10['valor']|default([])|tojson }};
+    window.top10Unidades = {{ top10['unidades']|default([])|tojson }};
+
+    window.vendasDiaLabels = {{ vendas_dia['dia']|tojson }};
+    window.vendasDiaData = {{ vendas_dia['faturamento']|tojson }};
+    window.vendasDiaAntData = {{ vendas_dia['faturamento_ant']|tojson }};
 </script>
 
 <!-- MODAL FILTRO (INSIRA EXATAMENTE ABAIXO DOS GRÁFICOS, ANTES DO FIM DO BLOCK CONTENT) -->
