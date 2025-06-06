@@ -1,4 +1,4 @@
-# acesso_externo.py
+# atualizar_campos_antigos.py
 import os
 os.environ["PYTHONIOENCODING"] = "utf-8"
 

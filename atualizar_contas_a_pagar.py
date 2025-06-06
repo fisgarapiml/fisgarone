@@ -1,8 +1,22 @@
+import os
 import pandas as pd
 import sqlite3
 import re
 
-# Mapeamento de Plano de Contas para Categorias
+# =====================
+# CONFIGURAÇÕES INICIAIS
+# =====================
+
+# Caminho absoluto do banco local (muda aqui se for preciso)
+DB_PATH = os.path.join(os.path.dirname(__file__), "grupo_fisgar.db")
+TABELA = "contas_a_pagar"
+SHEET_ID = "1zj7fuvta2T55G0-cPnWthEfrVnqaui9u2EJ2cBJp64M"
+SHEET_NAME = "compras"
+
+# =====================
+# MAPEAMENTOS
+# =====================
+
 mapeamento_categorias = {
     "Café da Manhã": "Alimentação",
     "Reembolsos": "Custo de vendas",
@@ -34,7 +48,6 @@ mapeamento_categorias = {
     "Altamiris Goes": "Custo Fixo"
 }
 
-# Mapeamento de Nome Razão Social para Categorias
 mapeamento_nome_razao_social = {
     "Edilson": "Funcionários",
     "Anderson": "Funcionários",
@@ -94,7 +107,6 @@ mapeamento_nome_razao_social = {
     "Alarme": "Outros"
 }
 
-# Mapeamento de Plano de Contas para Custo Fixo/Variável
 custo_fixo_variavel = {
     "salário": "Fixo",
     "advocacia": "Fixo",
@@ -121,7 +133,6 @@ custo_fixo_variavel = {
     "Outros": "Variável"
 }
 
-# Correção de nomes de colunas da planilha
 mapeamento_colunas = {
     "r__valor": "valor",
     "r__pendente": "valor_pendente",
@@ -132,11 +143,13 @@ mapeamento_colunas = {
     "data_compet_ncia": "data_competencia"
 }
 
-# Normaliza nomes de colunas
+# =====================
+# FUNÇÕES AUXILIARES
+# =====================
+
 def normalizar_nome_coluna(nome):
     return re.sub(r'[^a-zA-Z0-9_]', '_', nome)
 
-# Carrega planilha Google
 def carregar_planilha_google_sheets(sheet_id, aba):
     url = f"https://docs.google.com/spreadsheets/d/{sheet_id}/gviz/tq?tqx=out:csv&sheet={aba}"
     try:
@@ -147,7 +160,6 @@ def carregar_planilha_google_sheets(sheet_id, aba):
         print(f"❌ Erro ao carregar a planilha: {e}")
         return None
 
-# Processa e estrutura os dados
 def processar_dados(df):
     df.columns = [normalizar_nome_coluna(c.lower().strip()) for c in df.columns]
     df.rename(columns=mapeamento_colunas, inplace=True)
@@ -169,22 +181,18 @@ def processar_dados(df):
         lambda x: "Fixo" if x == "Funcionários" or x == "Custo Fixo" else custo_fixo_variavel.get(x, "Variável")
     )
 
-    # ✅ Corrige vírgulas para ponto nos valores financeiros
     for col in ['valor', 'valor_pendente', 'valor_pago']:
         if col in df.columns:
             df[col] = df[col].astype(str).str.replace(",", ".").str.strip()
 
-    # ✅ Garante que os valores na coluna 'valor' sejam sempre negativos
     if 'valor' in df.columns:
         df['valor'] = df['valor'].astype(float)
-        df['valor'] = df['valor'].apply(lambda x: -abs(x))  # transforma para negativo
+        df['valor'] = df['valor'].apply(lambda x: -abs(x))
 
-    df.drop_duplicates(inplace=True)
+    df.drop_duplicates(subset=['codigo'], inplace=True)
     print("✅ Dados processados com sucesso.")
     return df
 
-
-# Garante que todas as colunas existam no banco
 def garantir_colunas_no_banco(df, banco, tabela):
     conn = sqlite3.connect(banco)
     cursor = conn.cursor()
@@ -197,36 +205,41 @@ def garantir_colunas_no_banco(df, banco, tabela):
     conn.commit()
     conn.close()
 
-# Insere ou atualiza os dados
-def importar_para_sqlite(df, banco_dados):
+def importar_para_sqlite(df, banco_dados, tabela):
     conn = sqlite3.connect(banco_dados)
     cursor = conn.cursor()
-
     colunas_insert = ", ".join([f'"{col}"' for col in df.columns])
     placeholders = ", ".join(["?" for _ in df.columns])
+    update_set = ", ".join([f'{col}=excluded.{col}' for col in df.columns if col != "codigo"])
 
     for _, row in df.iterrows():
+        valores = tuple(row[col] for col in df.columns)
         cursor.execute(f'''
-            INSERT INTO contas_a_pagar ({colunas_insert}) VALUES ({placeholders})
-            ON CONFLICT(codigo) DO UPDATE SET
-            {", ".join([f'{col} = EXCLUDED.{col}' for col in df.columns if col != "codigo"])}
-        ''', tuple(row))
+            INSERT INTO {tabela} ({colunas_insert}) VALUES ({placeholders})
+            ON CONFLICT(codigo) DO UPDATE SET {update_set}
+        ''', valores)
 
     conn.commit()
     conn.close()
     print("✅ Dados importados com sucesso no banco SQLite.")
 
-# Execução principal
-if __name__ == "__main__":
-    sheet_id = "1zj7fuvta2T55G0-cPnWthEfrVnqaui9u2EJ2cBJp64M"
-    sheet_name = "compras"
-    df = carregar_planilha_google_sheets(sheet_id, sheet_name)
+# =====================
+# EXECUÇÃO PRINCIPAL
+# =====================
 
+def atualizar_contas_a_pagar():
+    print("🔄 Atualizando tabela contas_a_pagar do .db local com Google Sheets...")
+    df = carregar_planilha_google_sheets(SHEET_ID, SHEET_NAME)
     if df is not None:
         df_processado = processar_dados(df)
         if df_processado is not None:
-            print("\n🧪 Exemplo de dados prontos:")
-            print(df_processado[['fornecedor', 'categorias', 'tipo_custo']].head())
+            garantir_colunas_no_banco(df_processado, DB_PATH, TABELA)
+            importar_para_sqlite(df_processado, DB_PATH, TABELA)
+            print("✅ Atualização automática concluída!")
+        else:
+            print("❌ Falha ao processar os dados.")
+    else:
+        print("❌ Falha ao carregar a planilha.")
 
-            garantir_colunas_no_banco(df_processado, "grupo_fisgar.db", "contas_a_pagar")
-            importar_para_sqlite(df_processado, "grupo_fisgar.db")
+if __name__ == "__main__":
+    atualizar_contas_a_pagar()
