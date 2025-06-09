@@ -4,12 +4,15 @@ import sqlite3
 
 # Inicialização da aplicação
 app = Flask(__name__)
+
 from processamento_nfe import consolidar_estoque_produtos_nfe
+from contas_pagar_integracao import ContasPagarIntegracao
+
 consolidar_estoque_produtos_nfe()
 
-# =============================================
-# CONFIGURAÇÕES PRINCIPAIS
-# =============================================
+with app.app_context():
+    contas_pagar = ContasPagarIntegracao(app)
+
 
 # Configurações básicas do Flask
 app.config.update({
@@ -61,6 +64,8 @@ from modulos.financeiro.lancamento_manual import lancamento_manual_bp
 from modulos.financeiro.contas_edicao import contas_edicao_bp
 from modulos.financeiro.dashboard import dashboard
 
+
+
 app.register_blueprint(contas_a_pagar_bp, url_prefix='/contas-a-pagar')
 app.register_blueprint(cards_bp, url_prefix='/financeiro/cards')
 app.register_blueprint(lancamento_manual_bp, url_prefix='/financeiro/lancamentos')
@@ -94,8 +99,10 @@ app.register_blueprint(config_unidades_bp)
 
 #vendas
 from modulos.vendas.ml import ml_bp
+from modulos.vendas.importador_automatico import importador_automatico_bp
 
 app.register_blueprint(ml_bp)
+app.register_blueprint(importador_automatico_bp, url_prefix='/vendas/importador')
 
 # =============================================
 # INICIALIZAÇÃO

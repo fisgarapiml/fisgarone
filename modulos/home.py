@@ -41,7 +41,7 @@ def get_menu():
                     "nome": "Estoque",
                     "icone": "fas fa-boxes",
                     "submenu": [
-                        { "nome": "Interface", "url": url_for('estoque_interface_bp.interface') },
+                        { "nome": "Lançamentos de Estoque", "url": url_for('lancamentos_estoque.tela_lancamentos_estoque') },
                         { "nome": "Dashboard", "url": url_for('estoque.dashboard') }
                     ]
                 }

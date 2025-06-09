@@ -6,10 +6,19 @@ import os
 from datetime import datetime, timedelta
 from dateutil import parser
 import pytz
+from flask import Blueprint
+from dotenv import load_dotenv
+from pathlib import Path
+
+## Caminho absoluto para o .env na raiz
+env_path = Path(__file__).resolve().parents[2] / '.env'
+load_dotenv(dotenv_path=env_path)
+
 
 # Carregar variáveis do arquivo .env
 load_dotenv()
 
+importador_automatico_bp = Blueprint('importador_automatico_bp', __name__)
 
 # Função para traduzir os valores das colunas
 def traduzir_valores(coluna, valor):
@@ -51,9 +60,7 @@ def traduzir_valores(coluna, valor):
         elif "555536943" in valor:
             return "Toys"
 
-    # Se não encontrar correspondência, retorna o valor original
     return valor
-
 
 def inicializar_banco():
     print("Inicializando o banco de dados...")
@@ -504,6 +511,10 @@ async def executar():
 
         await asyncio.gather(*tasks)
 
+@importador_automatico_bp.route('/executar')
+def executar_importacao():
+    asyncio.run(executar())
+    return {"status": "Importação concluída com sucesso."}
 
 if __name__ == "__main__":
     asyncio.run(executar())

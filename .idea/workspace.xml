@@ -5,13 +5,47 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e3aaa54f-aebd-4ecb-8523-c15f4bb10208" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/modulos/vendas/importador_automatico.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pyshopee2/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pyshopee2/accounthealth.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pyshopee2/addondeal.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pyshopee2/base.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pyshopee2/bundledeal.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pyshopee2/chat.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pyshopee2/client.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pyshopee2/discount.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pyshopee2/firstmile.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pyshopee2/followprize.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pyshopee2/get_credentials.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pyshopee2/logistics.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pyshopee2/mediaspace.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pyshopee2/merchant.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pyshopee2/order.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pyshopee2/payment.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pyshopee2/product.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pyshopee2/public.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pyshopee2/push.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pyshopee2/returns.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pyshopee2/shop.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pyshopee2/shopcategory.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pyshopee2/toppicks.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pyshopee2/voucher.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/shopee.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/shopee_code.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/fisgarone.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/fisgarone.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Fornecedores e Skus.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/Fornecedores e Skus.xlsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/acesso_externo.py" beforeDir="false" afterPath="$PROJECT_DIR$/acesso_externo.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/atualizar_campos_antigos.py" beforeDir="false" afterPath="$PROJECT_DIR$/atualizar_campos_antigos.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/atualizar_contas_a_pagar.py" beforeDir="false" afterPath="$PROJECT_DIR$/atualizar_contas_a_pagar.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/grupo_fisgar.db" beforeDir="false" afterPath="$PROJECT_DIR$/grupo_fisgar.db" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/grupo_fisgar.sqbpro" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modulos/vendas/ml.py" beforeDir="false" afterPath="$PROJECT_DIR$/modulos/vendas/ml.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/css/vendas_ml_dashboard.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/css/vendas_ml_dashboard.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/js/vendas_ml_dashboard.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/js/vendas_ml_dashboard.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/vendas/vendas_ml_dashboard.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/vendas/vendas_ml_dashboard.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ml.py" beforeDir="false" afterPath="$PROJECT_DIR$/ml.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modulos/estoque/lancamentos_estoque.py" beforeDir="false" afterPath="$PROJECT_DIR$/modulos/estoque/lancamentos_estoque.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modulos/financeiro/contas_a_pagar.py" beforeDir="false" afterPath="$PROJECT_DIR$/modulos/financeiro/contas_a_pagar.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modulos/home.py" beforeDir="false" afterPath="$PROJECT_DIR$/modulos/home.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/paid_seller.py" beforeDir="false" afterPath="$PROJECT_DIR$/paid_seller.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/teste.py" beforeDir="false" afterPath="$PROJECT_DIR$/teste.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -52,22 +86,27 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Python.agente_fisgar.executor&quot;: &quot;Run&quot;,
-    &quot;Python.appfinance.executor&quot;: &quot;Run&quot;,
-    &quot;Python.atualizar_db.executor&quot;: &quot;Run&quot;,
-    &quot;Python.home.executor&quot;: &quot;Run&quot;,
-    &quot;Python.painel_nfe.executor&quot;: &quot;Run&quot;,
-    &quot;Python.teste.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/USUÁRIO/Downloads/Base Central/Api ML Full&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Python.agente_fisgar.executor": "Run",
+    "Python.appfinance.executor": "Run",
+    "Python.atualizar_campos_antigos.executor": "Run",
+    "Python.atualizar_contas_a_pagar.executor": "Run",
+    "Python.atualizar_db.executor": "Run",
+    "Python.home.executor": "Run",
+    "Python.importador_automatico.executor": "Run",
+    "Python.paid_seller (1).executor": "Run",
+    "Python.paid_seller.executor": "Run",
+    "Python.painel_nfe.executor": "Run",
+    "Python.teste.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "main",
+    "ignore.virus.scanning.warn.message": "true",
+    "last_opened_file_path": "C:/fisgarone",
+    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\fisgarone" />
@@ -77,15 +116,15 @@
       <recent name="C:\fisgarone\modulos\nfe" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\fisgarone\modulos\vendas" />
+      <recent name="C:\fisgarone" />
       <recent name="C:\fisgarone\static\js" />
       <recent name="C:\fisgarone\templates\estoque" />
       <recent name="C:\fisgarone\templates\nfe" />
-      <recent name="C:\fisgarone\templates" />
-      <recent name="C:\fisgarone\ARQUIVOS COPIAS" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.ml">
-    <configuration name="acesso_externo" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="Python.importador_automatico">
+    <configuration name="atualizar_campos_antigos" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="fisgarone" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -98,7 +137,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="C:\fisgarone\acesso_externo.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/atualizar_campos_antigos.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -107,7 +146,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="home" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="atualizar_contas_a_pagar" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="fisgarone" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -116,11 +155,33 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/modulos/home" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="C:\fisgarone\modulos\home.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/atualizar_contas_a_pagar.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="importador_automatico" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="fisgarone" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/modulos/vendas" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/modulos/vendas/importador_automatico.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -151,7 +212,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="ml" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="paid_seller (1)" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="fisgarone" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -164,29 +225,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/ml.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="painel_nfe" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="fisgarone" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/modulos/nfe" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/modulos/nfe/painel_nfe.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/paid_seller.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -219,18 +258,18 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.ml" />
+        <item itemvalue="Python.importador_automatico" />
+        <item itemvalue="Python.atualizar_contas_a_pagar" />
+        <item itemvalue="Python.atualizar_campos_antigos" />
         <item itemvalue="Python.teste" />
-        <item itemvalue="Python.home" />
-        <item itemvalue="Python.painel_nfe" />
-        <item itemvalue="Python.acesso_externo" />
+        <item itemvalue="Python.paid_seller (1)" />
       </list>
     </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-python-sdk-4f4e415b4190-aa17d162503b-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-243.26053.29" />
+        <option value="bundled-python-sdk-a5bc9544c897-aa17d162503b-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-243.23654.177" />
       </set>
     </attachedChunks>
   </component>

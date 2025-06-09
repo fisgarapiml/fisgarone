@@ -1,34 +1,37 @@
 import sqlite3
 
-conn = sqlite3.connect('grupo_fisgar.db')
-cur = conn.cursor()
+db_path = r"C:\fisgarone\grupo_fisgar.db"
+with sqlite3.connect(db_path) as conn:
+    cursor = conn.cursor()
 
-# TRATAMENTO DE "Tipo Logistica"
-cur.execute("""
-    UPDATE vendas_ml SET "Tipo Logistica" = 'Full' WHERE "Tipo Logistica" = 'fulfillment'
-""")
-cur.execute("""
-    UPDATE vendas_ml SET "Tipo Logistica" = 'Flex' WHERE "Tipo Logistica" = 'self_service'
-""")
-cur.execute("""
-    UPDATE vendas_ml SET "Tipo Logistica" = 'Ponto de Coleta' WHERE "Tipo Logistica" = 'xd_drop_off'
-""")
+    # Atualiza Taxa Fixa ML
+    cursor.execute("""
+        UPDATE vendas_ml
+        SET "Taxa Fixa ML" =
+            CASE
+                WHEN "Preco Unitario" < 79 AND "MLB" IN ('MLB3776836339', 'MLB3804566539', 'MLB5116841236')
+                    THEN 1 * COALESCE("Quantidade",0)
+                WHEN "Preco Unitario" < 79
+                    THEN 6 * COALESCE("Quantidade",0)
+                ELSE 0
+            END;
+    """)
 
-# TRATAMENTO DE "Conta"
-cur.execute("""
-    UPDATE vendas_ml SET "Conta" = 'Toys ML' WHERE "Conta" = '555536943'
-""")
-cur.execute("""
-    UPDATE vendas_ml SET "Conta" = 'Comercial ML' WHERE "Conta" = '202989490'
-""")
-cur.execute("""
-    UPDATE vendas_ml SET "Conta" = 'Pesca ML' WHERE "Conta" = '263678949'
-""")
-cur.execute("""
-    UPDATE vendas_ml SET "Conta" = 'Camping ML' WHERE "Conta" = '702704896'
-""")
+    # Atualiza Comissoes
+    cursor.execute("""
+        UPDATE vendas_ml
+        SET "Comissoes" = (COALESCE("Taxa Mercado Livre",0) * COALESCE("Quantidade",0)) - COALESCE("Taxa Fixa ML",0);
+    """)
 
-conn.commit()
-conn.close()
+    # Atualiza Comissao (%)
+    cursor.execute("""
+        UPDATE vendas_ml
+        SET "Comissao (%)" =
+            CASE 
+                WHEN COALESCE("Preco Unitario",0) * COALESCE("Quantidade",0) = 0 THEN 0
+                ELSE COALESCE("Comissoes",0) / (COALESCE("Preco Unitario",0) * COALESCE("Quantidade",0))
+            END;
+    """)
 
-print("Substituição de Tipo Logistica e Conta feita com sucesso!")
+    conn.commit()
+print("Tudo recalculado conforme a nova lógica!")
