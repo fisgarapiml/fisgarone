@@ -5,48 +5,52 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e3aaa54f-aebd-4ecb-8523-c15f4bb10208" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/modulos/vendas/importador_automatico.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pyshopee2/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pyshopee2/accounthealth.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pyshopee2/addondeal.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pyshopee2/base.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pyshopee2/bundledeal.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pyshopee2/chat.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pyshopee2/client.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pyshopee2/discount.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pyshopee2/firstmile.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pyshopee2/followprize.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pyshopee2/get_credentials.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pyshopee2/logistics.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pyshopee2/mediaspace.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pyshopee2/merchant.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pyshopee2/order.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pyshopee2/payment.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pyshopee2/product.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pyshopee2/public.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pyshopee2/push.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pyshopee2/returns.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pyshopee2/shop.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pyshopee2/shopcategory.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pyshopee2/toppicks.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pyshopee2/voucher.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/shopee.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/shopee_code.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/fisgarone.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/fisgarone.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/modulos/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/modulos/shopee/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/modulos/shopee/importador_shopee.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/modulos/shopee/pyshopee2/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/modulos/shopee/pyshopee2/accounthealth.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/modulos/shopee/pyshopee2/addondeal.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/modulos/shopee/pyshopee2/base.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/modulos/shopee/pyshopee2/bundledeal.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/modulos/shopee/pyshopee2/chat.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/modulos/shopee/pyshopee2/client.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/modulos/shopee/pyshopee2/discount.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/modulos/shopee/pyshopee2/firstmile.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/modulos/shopee/pyshopee2/followprize.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/modulos/shopee/pyshopee2/get_credentials.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/modulos/shopee/pyshopee2/logistics.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/modulos/shopee/pyshopee2/mediaspace.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/modulos/shopee/pyshopee2/merchant.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/modulos/shopee/pyshopee2/order.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/modulos/shopee/pyshopee2/payment.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/modulos/shopee/pyshopee2/product.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/modulos/shopee/pyshopee2/public.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/modulos/shopee/pyshopee2/push.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/modulos/shopee/pyshopee2/returns.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/modulos/shopee/pyshopee2/shop.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/modulos/shopee/pyshopee2/shopcategory.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/modulos/shopee/pyshopee2/toppicks.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/modulos/shopee/pyshopee2/voucher.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/modulos/vendas/Custos Anúncios Mercado Livre.xlsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/modulos/vendas/monitor_ml.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/modulos/vendas/shopee/dashboard_shopee.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/modulos/vendas/shopee/monitor_shopee.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/modulos/vendas/shopee/queries.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/modulos/vendas/shopee/vendas_shopee.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/srefresh.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/css/dashboard.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/css/shopee_dark.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/css/shopee_pro.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/js/dashboard.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/js/shopee_charts.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/js/shopee_pro_charts.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/shopee/dashboard_shopee.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Fornecedores e Skus.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/Fornecedores e Skus.xlsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/acesso_externo.py" beforeDir="false" afterPath="$PROJECT_DIR$/acesso_externo.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/atualizar_campos_antigos.py" beforeDir="false" afterPath="$PROJECT_DIR$/atualizar_campos_antigos.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/atualizar_contas_a_pagar.py" beforeDir="false" afterPath="$PROJECT_DIR$/atualizar_contas_a_pagar.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/grupo_fisgar.db" beforeDir="false" afterPath="$PROJECT_DIR$/grupo_fisgar.db" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ml.py" beforeDir="false" afterPath="$PROJECT_DIR$/ml.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modulos/estoque/lancamentos_estoque.py" beforeDir="false" afterPath="$PROJECT_DIR$/modulos/estoque/lancamentos_estoque.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modulos/financeiro/contas_a_pagar.py" beforeDir="false" afterPath="$PROJECT_DIR$/modulos/financeiro/contas_a_pagar.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modulos/home.py" beforeDir="false" afterPath="$PROJECT_DIR$/modulos/home.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/paid_seller.py" beforeDir="false" afterPath="$PROJECT_DIR$/paid_seller.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/teste.py" beforeDir="false" afterPath="$PROJECT_DIR$/teste.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/grupo_fisgar.sqbpro" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/shopee_code.py" beforeDir="false" afterPath="$PROJECT_DIR$/shopee_code.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -86,45 +90,50 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Python.agente_fisgar.executor": "Run",
-    "Python.appfinance.executor": "Run",
-    "Python.atualizar_campos_antigos.executor": "Run",
-    "Python.atualizar_contas_a_pagar.executor": "Run",
-    "Python.atualizar_db.executor": "Run",
-    "Python.home.executor": "Run",
-    "Python.importador_automatico.executor": "Run",
-    "Python.paid_seller (1).executor": "Run",
-    "Python.paid_seller.executor": "Run",
-    "Python.painel_nfe.executor": "Run",
-    "Python.teste.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "main",
-    "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "C:/fisgarone",
-    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Python.agente_fisgar.executor&quot;: &quot;Run&quot;,
+    &quot;Python.appfinance.executor&quot;: &quot;Run&quot;,
+    &quot;Python.atualizar_campos_antigos.executor&quot;: &quot;Run&quot;,
+    &quot;Python.atualizar_contas_a_pagar.executor&quot;: &quot;Run&quot;,
+    &quot;Python.atualizar_db.executor&quot;: &quot;Run&quot;,
+    &quot;Python.home.executor&quot;: &quot;Run&quot;,
+    &quot;Python.importador_automatico.executor&quot;: &quot;Run&quot;,
+    &quot;Python.importador_shopee.executor&quot;: &quot;Run&quot;,
+    &quot;Python.monitor_ml.executor&quot;: &quot;Run&quot;,
+    &quot;Python.monitor_shopee.executor&quot;: &quot;Run&quot;,
+    &quot;Python.paid_seller (1).executor&quot;: &quot;Run&quot;,
+    &quot;Python.paid_seller.executor&quot;: &quot;Run&quot;,
+    &quot;Python.painel_nfe.executor&quot;: &quot;Run&quot;,
+    &quot;Python.shopee.executor&quot;: &quot;Run&quot;,
+    &quot;Python.teste.executor&quot;: &quot;Run&quot;,
+    &quot;Python.vendas_shopee.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/fisgarone/modulos/vendas&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\fisgarone\modulos\vendas" />
       <recent name="C:\fisgarone" />
       <recent name="C:\fisgarone\modulos" />
       <recent name="C:\fisgarone\templates" />
       <recent name="C:\fisgarone\modulos\financeiro" />
-      <recent name="C:\fisgarone\modulos\nfe" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\fisgarone\static\js" />
+      <recent name="C:\fisgarone\static\css" />
+      <recent name="C:\fisgarone\modulos\shopee" />
       <recent name="C:\fisgarone\modulos\vendas" />
       <recent name="C:\fisgarone" />
-      <recent name="C:\fisgarone\static\js" />
-      <recent name="C:\fisgarone\templates\estoque" />
-      <recent name="C:\fisgarone\templates\nfe" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.importador_automatico">
-    <configuration name="atualizar_campos_antigos" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="Python.monitor_ml">
+    <configuration name="importador_shopee" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="fisgarone" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -133,55 +142,11 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/modulos/shopee" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/atualizar_campos_antigos.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="atualizar_contas_a_pagar" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="fisgarone" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/atualizar_contas_a_pagar.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="importador_automatico" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="fisgarone" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/modulos/vendas" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/modulos/vendas/importador_automatico.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/modulos/shopee/importador_shopee.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -212,7 +177,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="paid_seller (1)" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="monitor_ml" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="fisgarone" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -221,11 +186,11 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/modulos/vendas" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/paid_seller.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/modulos/vendas/monitor_ml.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -234,7 +199,29 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="teste" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="monitor_shopee" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="fisgarone" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/modulos/vendas/shopee" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/modulos/vendas/shopee/monitor_shopee.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="shopee" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="fisgarone" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -247,7 +234,29 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/teste.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/shopee.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="vendas_shopee" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="fisgarone" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/modulos/vendas/shopee" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/modulos/vendas/shopee/vendas_shopee.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -258,11 +267,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.importador_automatico" />
-        <item itemvalue="Python.atualizar_contas_a_pagar" />
-        <item itemvalue="Python.atualizar_campos_antigos" />
-        <item itemvalue="Python.teste" />
-        <item itemvalue="Python.paid_seller (1)" />
+        <item itemvalue="Python.monitor_ml" />
+        <item itemvalue="Python.monitor_shopee" />
+        <item itemvalue="Python.importador_shopee" />
+        <item itemvalue="Python.vendas_shopee" />
+        <item itemvalue="Python.shopee" />
       </list>
     </recent_temporary>
   </component>
