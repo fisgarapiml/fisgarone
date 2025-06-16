@@ -105,15 +105,14 @@ function initCharts() {
         }
       },
       scales: {
-        x: {
-          grid: {
-            display: false
-          },
-          ticks: {
-            font: {
-              size: 12
-            }
-          }
+  x: {
+    grid: { display: false, drawBorder: false }
+  },
+  y: {
+    grid: { display: false, drawBorder: false }
+  }
+}
+
         },
         y: {
           beginAtZero: true,
@@ -135,76 +134,6 @@ function initCharts() {
   });
 
 
-// Gráfico de top produtos
-const ctxTop = document.getElementById('chartTopProdutos').getContext('2d');
-
-const topChart = new Chart(ctxTop, {
-  type: 'bar',
-  data: {
-    labels: dashboardData.topProdutos.map(p => p.SKU),
-    datasets: [{
-      label: 'Faturamento',
-      data: dashboardData.topProdutos.map(p => p.valor_total),
-      backgroundColor: 'rgba(0, 180, 255, 0.7)',
-      borderColor: 'rgba(0, 150, 255, 1)',
-      borderWidth: 1,
-      borderRadius: 10
-    }]
-  },
-  options: {
-    indexAxis: 'y',
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-      legend: {
-        display: false
-      },
-      tooltip: {
-        backgroundColor: 'rgba(0, 0, 0, 0.8)',
-        titleColor: '#fff',
-        bodyColor: '#fff',
-        borderColor: 'rgba(255, 255, 255, 0.1)',
-        borderWidth: 1,
-        padding: 10,
-        callbacks: {
-          label: function(context) {
-            return 'R$ ' + context.raw.toLocaleString('pt-BR', { minimumFractionDigits: 2 });
-          }
-        }
-      }
-    },
-    scales: {
-      x: {
-        beginAtZero: true,
-        grid: {
-          color: 'rgba(0, 0, 0, 0.05)'
-        },
-        ticks: {
-          callback: function(value) {
-            return 'R$ ' + value.toLocaleString('pt-BR');
-          }
-        }
-      },
-      y: {
-        grid: {
-          display: false
-        },
-        ticks: {
-          autoSkip: false
-        },
-        // Aumenta o espaçamento entre as barras
-        categoryPercentage: 1.0,
-        barPercentage: 0.4  // Menor valor = mais espaço entre as barras
-      }
-    },
-    layout: {
-      padding: {
-        top: 10,
-        bottom: 10
-      }
-    }
-  }
-});
 
 
 function setupCardInteractions() {

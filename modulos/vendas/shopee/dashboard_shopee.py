@@ -5,20 +5,19 @@ from datetime import datetime, timedelta
 import locale
 import os
 
-# Configuração de localização
+# Configuração regional para moeda
 try:
     locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
 except locale.Error:
     locale.setlocale(locale.LC_ALL, 'Portuguese_Brazil')
 
-# Blueprint configurado corretamente
-shopee_bp = Blueprint(
-    'shopee_bp',
-    __name__,
-    template_folder=os.path.join('..', '..', '..', 'templates', 'vendas', 'shopee'),
-    static_folder=os.path.join('..', '..', '..', 'static'),
-    url_prefix='/modulos/vendas'
-)
+# Criação do Blueprint
+shopee_bp = Blueprint('shopee_bp', __name__)
+
+# Caminho absoluto para o banco de dados (garante que funcione independente do diretório atual)
+BASE_DIR = os.path.abspath(os.path.dirname(__file__))
+DB_PATH = os.path.join(BASE_DIR, '../../../grupo_fisgar.db')
+
 
 def calcular_metricas(df, df_original):
     hoje = datetime.today()
@@ -39,7 +38,6 @@ def calcular_metricas(df, df_original):
     def calcular_variacao(atual, anterior):
         return round(((atual - anterior) / anterior) * 100, 2) if anterior else 0
 
-    # Cálculos principais
     fat_atual = float(df_mes_atual['valor_total'].sum())
     fat_anterior = float(df_mes_anterior['valor_total'].sum())
     fat_equivalente = float(df_equivalente['valor_total'].sum())
@@ -53,7 +51,6 @@ def calcular_metricas(df, df_original):
     ticket_atual = fat_atual / pedidos_atual if pedidos_atual else 0
     ticket_anterior = fat_anterior / pedidos_anterior if pedidos_anterior else 0
 
-    # Preparação do resumo CORRIGIDO
     resumo = {
         'faturamento': formatar_moeda(fat_atual),
         'faturamento_anterior': formatar_moeda(fat_anterior),
@@ -76,7 +73,6 @@ def calcular_metricas(df, df_original):
         }
     }
 
-    # Dados para gráficos
     vendas_diarias = []
     if not df_mes_atual.empty:
         vendas_diarias = df_mes_atual.groupby(
@@ -87,37 +83,31 @@ def calcular_metricas(df, df_original):
 
     top_produtos = []
     if not df_mes_atual.empty:
-        top_produtos = df_mes_atual.groupby('SKU')['valor_total'].sum().nlargest(
-            10
-        ).reset_index().rename(
-            columns={'valor_total': 'valor'}
-        ).to_dict(orient='records')
+        top_produtos = df_mes_atual.groupby('SKU')['valor_total'].sum().nlargest(10).reset_index()
+        top_produtos = top_produtos.rename(columns={'valor_total': 'valor'}).to_dict(orient='records')
 
     return resumo, vendas_diarias, top_produtos
 
-@shopee_bp.route('/modulos/vendas/shopee', endpoint='dashboard_shopee')
+
+@shopee_bp.route('/shopee', endpoint='dashboard_shopee')
 def dashboard():
     try:
-        # Obter parâmetros de filtro
         filtro_sku = request.args.get('sku')
         filtro_conta = request.args.get('conta')
         filtro_mes = request.args.get('mes')
 
-        # Conexão com o banco de dados
-        con = sqlite3.connect("grupo_fisgar.db")
+        # Abre conexão com caminho absoluto do banco
+        con = sqlite3.connect(DB_PATH)
         df_original = pd.read_sql_query("SELECT * FROM vendas_shopee", con)
         con.close()
 
-        # Processamento dos dados
         df_original['data'] = pd.to_datetime(df_original['data'])
         df = df_original.copy()
 
-        # Listas para filtros
         lista_skus = sorted(df['SKU'].dropna().unique().tolist())
         lista_contas = sorted(df['tipo_conta'].dropna().unique().tolist())
         lista_meses = sorted(df['data'].dt.strftime('%m').unique().tolist())
 
-        # Aplicar filtros
         if filtro_sku:
             df = df[df['SKU'] == filtro_sku]
         if filtro_conta:
@@ -129,12 +119,11 @@ def dashboard():
             fim = datetime(ano, mes + 1, 1) - timedelta(days=1) if mes < 12 else datetime(ano, 12, 31)
             df = df[(df['data'] >= inicio) & (df['data'] <= fim)]
 
-        # Calcular métricas
         resumo, vendas_diarias, top_produtos = calcular_metricas(df, df_original)
 
         return render_template(
             'shopee/dashboard.html',
-            resumo=resumo,  # Certifique-se que está usando 'resumo' no template, não 'cards_data'
+            resumo=resumo,
             vendas_diarias=vendas_diarias,
             top_produtos=top_produtos,
             lista_skus=lista_skus,
@@ -149,4 +138,6 @@ def dashboard():
         print(f"Erro inesperado: {str(e)}")
         return render_template('error.html', message="Erro ao processar os dados"), 500
 
+
+# Exposição do Blueprint
 blueprint = shopee_bp

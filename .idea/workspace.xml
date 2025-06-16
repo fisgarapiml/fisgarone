@@ -5,20 +5,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e3aaa54f-aebd-4ecb-8523-c15f4bb10208" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/modulos/vendas/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/modulos/vendas/dashboard_shopee.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/shopee/dashboard.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/modulos/vendas/shopee/__init__.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/fisgarone.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/fisgarone.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modulos/home.py" beforeDir="false" afterPath="$PROJECT_DIR$/modulos/home.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modulos/vendas/shopee/dashboard_shopee.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/grupo_fisgar.db" beforeDir="false" afterPath="$PROJECT_DIR$/grupo_fisgar.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modulos/vendas/dashboard_shopee.py" beforeDir="false" afterPath="$PROJECT_DIR$/modulos/vendas/shopee/dashboard_shopee.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/static/css/dashboard.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/css/dashboard.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/static/js/dashboard.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/js/dashboard.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/base.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/shopee/dashboard_shopee.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/js/shopee_charts.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/js/shopee_pro_charts.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/shopee/dashboard.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/shopee/dashboard.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -93,14 +91,14 @@
       <recent name="C:\fisgarone\modulos\financeiro" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\fisgarone\modulos\vendas\shopee" />
       <recent name="C:\fisgarone\templates\shopee" />
       <recent name="C:\fisgarone\templates" />
       <recent name="C:\fisgarone\templates\vendas" />
       <recent name="C:\fisgarone\modulos\vendas" />
-      <recent name="C:\fisgarone\static\js" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.monitor_ml">
+  <component name="RunManager" selected="Python.monitor_shopee">
     <configuration name="importador_shopee" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="fisgarone" />
       <option name="ENV_FILES" value="" />
@@ -235,10 +233,10 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.monitor_ml" />
         <item itemvalue="Python.monitor_shopee" />
-        <item itemvalue="Python.importador_shopee" />
         <item itemvalue="Python.vendas_shopee" />
+        <item itemvalue="Python.monitor_ml" />
+        <item itemvalue="Python.importador_shopee" />
         <item itemvalue="Python.shopee" />
       </list>
     </recent_temporary>

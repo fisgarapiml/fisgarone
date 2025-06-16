@@ -1,11 +1,12 @@
 import os
+import sqlite3
+
 from flask import Flask, g, current_app # Importe 'g' e 'current_app'
 
 # Inicialização da aplicação
 app = Flask(__name__)
 
 # --- Seu código original para processamento e integração ---
-from processamento_nfe import consolidar_estoque_produtos_nfe
 from contas_pagar_integracao import ContasPagarIntegracao
 
 # Chamadas fora do contexto da aplicação, se necessário (verifique a ordem de execução)
@@ -105,17 +106,15 @@ app.register_blueprint(nfe_bp)
 app.register_blueprint(config_unidades_bp)
 
 # Vendas
-from modulos.vendas.ml import ml_bp
-from modulos.vendas.importador_automatico import importador_automatico_bp
 
 # --- IMPORTANTE: Registro do Blueprint do Dashboard Shopee ---
 # Certifique-se de que o caminho para o seu arquivo dashboard_shopee.py está correto:
 # modulos/vendas/shopee/dashboard_shopee.py
-from modulos.vendas.dashboard_shopee import shopee_bp
+from modulos.vendas.shopee.dashboard_shopee import shopee_bp
 from modulos.vendas.ml import ml_bp
 
 # Registra o Blueprint do dashboard Shopee com o prefixo de URL '/shopee/dashboard'
-app.register_blueprint(shopee_bp)
+app.register_blueprint(shopee_bp, url_prefix='/modulos/vendas')
 app.register_blueprint(ml_bp)
 
 

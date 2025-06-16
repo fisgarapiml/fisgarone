@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/shopee.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
 {% endblock %}
 
 {% block content %}
@@ -102,17 +102,19 @@
     {% endfor %}
   </section>
 
+  <div class="cardzao-graficos-3d">
   <section class="graficos-container">
-  <div class="grafico-card grafico-vendas">
-    <h3><i class="ri-line-chart-line"></i> Vendas Diárias</h3>
-    <canvas id="graficoVendas"></canvas>
-  </div>
+    <div class="grafico-card grafico-vendas">
+      <h3>Vendas Diárias</h3>
+      <canvas id="graficoVendas"></canvas>
+    </div>
+    <div class="grafico-card grafico-top-produtos">
+      <h3>Top Produtos</h3>
+      <canvas id="graficoTopProdutos"></canvas>
+    </div>
+  </section>
+</div>
 
-  <div class="grafico-card grafico-top-produtos">
-    <h3><i class="ri-bar-chart-horizontal-line"></i> Top Produtos</h3>
-    <canvas id="graficoTopProdutos"></canvas>
-  </div>
-</section>
 
 {% endblock %}
 
@@ -160,8 +162,8 @@ document.addEventListener('DOMContentLoaded', function() {
       datasets: [{
         label: 'Faturamento R$',
         data: {{ top_produtos | map(attribute='valor') | list | tojson }},
-        backgroundColor: 'rgba(0, 180, 255, 0.7)',
-        borderColor: 'rgba(0, 150, 255, 1)',
+        backgroundColor: 'rgba(0, 200, 150, 0.2)',
+        borderColor: 'rgba(0, 200, 150, 1)',
         borderWidth: 1
       }]
     },
@@ -177,4 +179,6 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 });
 </script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
 {% endblock %}
