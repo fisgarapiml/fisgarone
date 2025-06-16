@@ -1,0 +1,180 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/shopee.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+  <header class="dashboard-header">
+    <h1><i class="ri-store-line"></i> Dashboard Shopee</h1>
+
+    <div class="filtros-container">
+      <form method="get" class="filtros-form">
+        <div class="filtro-group">
+          <select name="sku" class="form-select">
+            <option value="">Todos os SKUs</option>
+            {% for sku in lista_skus %}
+              <option value="{{ sku }}" {% if filtro_sku == sku %}selected{% endif %}>{{ sku }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="filtro-group">
+          <select name="conta" class="form-select">
+            <option value="">Todas as Contas</option>
+            {% for conta in lista_contas %}
+              <option value="{{ conta }}" {% if filtro_conta == conta %}selected{% endif %}>{{ conta }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="filtro-group">
+          <select name="mes" class="form-select">
+            <option value="">Mês Atual</option>
+            {% for mes in lista_meses %}
+              <option value="{{ mes }}" {% if filtro_mes == mes %}selected{% endif %}>Mês {{ mes }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <button type="submit" class="btn-filtrar">
+          <i class="ri-filter-line"></i> Filtrar
+        </button>
+      </form>
+    </div>
+  </header>
+
+  <!-- Cards de Métricas -->
+  <section class="metricas-grid">
+    {% for card in [
+      {
+        'titulo': 'Faturamento',
+        'icone': 'ri-money-dollar-circle-line',
+        'valor': resumo.faturamento,
+        'anterior': resumo.faturamento_anterior,
+        'variacao': resumo.faturamento_dif,
+        'extra': 'Período Equiv.: ' + resumo.faturamento_equivalente_pct|string + '%',
+        'progresso': resumo.barras_percentuais.faturamento
+      },
+      {
+        'titulo': 'Unidades',
+        'icone': 'ri-box-line',
+        'valor': resumo.unidades,
+        'anterior': resumo.unidades_anterior,
+        'variacao': resumo.unidades_dif,
+        'progresso': resumo.barras_percentuais.unidades
+      },
+      {
+        'titulo': 'Pedidos',
+        'icone': 'ri-shopping-bag-line',
+        'valor': resumo.pedidos,
+        'anterior': resumo.pedidos_anterior,
+        'variacao': resumo.pedidos_dif,
+        'progresso': resumo.barras_percentuais.pedidos
+      },
+      {
+        'titulo': 'Ticket Médio',
+        'icone': 'ri-ticket-line',
+        'valor': resumo.ticket_medio,
+        'anterior': resumo.ticket_medio_anterior,
+        'variacao': resumo.ticket_medio_dif,
+        'progresso': resumo.barras_percentuais.ticket
+      }
+    ] %}
+    <div class="metrica-card">
+      <div class="metrica-header">
+        <i class="{{ card.icone }}"></i>
+        <h3>{{ card.titulo }}</h3>
+      </div>
+      <div class="metrica-valor">{{ card.valor }}</div>
+      <div class="metrica-comparativo">
+        <div>Anterior: {{ card.anterior }}</div>
+        <div class="variacao {% if card.variacao >= 0 %}positiva{% else %}negativa{% endif %}">
+          {{ card.variacao }}%
+        </div>
+        {% if card.extra %}<div>{{ card.extra }}</div>{% endif %}
+      </div>
+      <div class="progress-bar">
+        <div class="progress" style="width: {{ card.progresso }}%"></div>
+      </div>
+    </div>
+    {% endfor %}
+  </section>
+
+  <section class="graficos-container">
+  <div class="grafico-card grafico-vendas">
+    <h3><i class="ri-line-chart-line"></i> Vendas Diárias</h3>
+    <canvas id="graficoVendas"></canvas>
+  </div>
+
+  <div class="grafico-card grafico-top-produtos">
+    <h3><i class="ri-bar-chart-horizontal-line"></i> Top Produtos</h3>
+    <canvas id="graficoTopProdutos"></canvas>
+  </div>
+</section>
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Gráfico de Vendas Diárias
+  const ctxVendas = document.getElementById('graficoVendas').getContext('2d');
+  new Chart(ctxVendas, {
+    type: 'line',
+    data: {
+     labels: {{ vendas_diarias | map(attribute='dia') | list | tojson }},
+      datasets: [{
+        label: 'Vendas R$',
+        data: {{ vendas_diarias | map(attribute='valor') | list | tojson }},
+        backgroundColor: 'rgba(0, 200, 150, 0.2)',
+        borderColor: 'rgba(0, 200, 150, 1)',
+        borderWidth: 2,
+        tension: 0.1,
+        fill: true
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: {
+          display: false
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    }
+  });
+
+  // Gráfico de Top Produtos
+  const ctxTop = document.getElementById('graficoTopProdutos').getContext('2d');
+  new Chart(ctxTop, {
+    type: 'bar',
+    data: {
+      labels: {{ top_produtos | map(attribute='SKU') | list | tojson }},
+      datasets: [{
+        label: 'Faturamento R$',
+        data: {{ top_produtos | map(attribute='valor') | list | tojson }},
+        backgroundColor: 'rgba(0, 180, 255, 0.7)',
+        borderColor: 'rgba(0, 150, 255, 1)',
+        borderWidth: 1
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true,
+      plugins: {
+        legend: {
+          display: false
+        }
+      }
+    }
+  });
+});
+</script>
+{% endblock %}

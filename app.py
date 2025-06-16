@@ -111,11 +111,12 @@ from modulos.vendas.importador_automatico import importador_automatico_bp
 # --- IMPORTANTE: Registro do Blueprint do Dashboard Shopee ---
 # Certifique-se de que o caminho para o seu arquivo dashboard_shopee.py está correto:
 # modulos/vendas/shopee/dashboard_shopee.py
-from modulos.vendas.shopee.dashboard_shopee import shopee_dashboard_bp
+from modulos.vendas.dashboard_shopee import shopee_bp
+from modulos.vendas.ml import ml_bp
 
 # Registra o Blueprint do dashboard Shopee com o prefixo de URL '/shopee/dashboard'
-# Este é o caminho que seu navegador usará para acessar o dashboard HTML
-app.register_blueprint(shopee_dashboard_bp, url_prefix="/shopee/dashboard")
+app.register_blueprint(shopee_bp)
+app.register_blueprint(ml_bp)
 
 
 if __name__ == '__main__':

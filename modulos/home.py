@@ -12,82 +12,120 @@ def get_menu():
     menu = [
         {
             "titulo": "Principal",
+            "icone": "ri-home-line",
             "itens": [
                 {
                     "nome": "Painel",
-                    "icone": "fas fa-tachometer-alt",
+                    "icone": "ri-dashboard-line",
                     "url": url_for('bp_home.index')
                 }
             ]
         },
         {
             "titulo": "Financeiro",
+            "icone": "ri-wallet-line",
             "itens": [
                 {
                     "nome": "Financeiro",
-                    "icone": "fas fa-wallet",
+                    "icone": "ri-bank-line",
                     "submenu": [
-                        { "nome": "Contas a Pagar", "url": url_for('contas_a_pagar_bp.contas_a_pagar') },
-                        { "nome": "Lançamentos", "url": url_for('lancamento_manual.pagina_lancamento') },
-                        { "nome": "Fluxo de Caixa", "url": url_for('cards_bp.get_cards') }
+                        {
+                            "nome": "Contas a Pagar",
+                            "icone": "ri-money-dollar-circle-line",
+                            "url": url_for('contas_a_pagar_bp.contas_a_pagar')
+                        },
+                        {
+                            "nome": "Lançamentos",
+                            "icone": "ri-exchange-line",
+                            "url": url_for('lancamento_manual.pagina_lancamento')
+                        },
+                        {
+                            "nome": "Fluxo de Caixa",
+                            "icone": "ri-flow-chart",
+                            "url": url_for('cards_bp.get_cards')
+                        }
                     ]
                 }
             ]
         },
         {
             "titulo": "Estoque",
+            "icone": "ri-store-line",
             "itens": [
                 {
                     "nome": "Estoque",
-                    "icone": "fas fa-boxes",
+                    "icone": "ri-archive-line",
                     "submenu": [
-                        { "nome": "Lançamentos de Estoque", "url": url_for('lancamentos_estoque.tela_lancamentos_estoque') },
-                        { "nome": "Dashboard", "url": url_for('estoque.dashboard') }
+                        {
+                            "nome": "Lançamentos de Estoque",
+                            "icone": "ri-input-method-line",
+                            "url": url_for('lancamentos_estoque.tela_lancamentos_estoque')
+                        },
+                        {
+                            "nome": "Dashboard",
+                            "icone": "ri-bar-chart-2-line",
+                            "url": url_for('estoque.dashboard')
+                        }
                     ]
                 }
             ]
         },
         {
             "titulo": "Produtos",
+            "icone": "ri-price-tag-line",
             "itens": [
                 {
                     "nome": "Produtos",
-                    "icone": "fas fa-tags",
+                    "icone": "ri-product-hunt-line",
                     "submenu": [
-                        { "nome": "Catálogo", "url": url_for('produtos.index') }
+                        {
+                            "nome": "Catálogo",
+                            "icone": "ri-list-check",
+                            "url": url_for('produtos.index')
+                        }
                     ]
                 }
             ]
         },
         {
             "titulo": "Vendas",
+            "icone": "ri-shopping-cart-line",
             "itens": [
                 {
                     "nome": "Vendas",
-                    "icone": "fas fa-shopping-cart",
+                    "icone": "ri-shopping-bag-line",
                     "submenu": [
                         {
                             "nome": "Mercado Livre",
+                            "icone": "ri-store-2-line",
                             "submenu": [
                                 {
                                     "nome": "Dashboard ML",
-                                    "url": url_for('ml_bp.dashboard_vendas_ml')  # <-- **NOME DO ENDPOINT DO DASHBOARD ML**
+                                    "icone": "ri-dashboard-2-line",
+                                    "url": url_for('ml_bp.dashboard_vendas_ml')
                                 }
-                                # Aqui adiciona futuras telas do ML
                             ]
                         },
                         {
                             "nome": "Shopee",
+                            "icone": "ri-global-line",
                             "submenu": [
-                                # Adicione as telas Shopee quando criar
-                                # { "nome": "Dashboard Shopee", "url": url_for('shopee_bp.dashboard') }
+                                {
+                                    "nome": "Dashboard Shopee",
+                                    "icone": "ri-dashboard-2-line",
+                                    "url": url_for('shopee_bp.dashboard_shopee')
+                                }
                             ]
                         },
                         {
                             "nome": "Shein",
+                            "icone": "ri-t-shirt-line",
                             "submenu": [
-                                # Adicione as telas Shein quando criar
-                                # { "nome": "Dashboard Shein", "url": url_for('shein_bp.dashboard') }
+                                {
+                                    "nome": "Dashboard Shein",
+                                    "icone": "ri-dashboard-2-line",
+                                    "url": "#"
+                                }
                             ]
                         }
                     ]
@@ -96,13 +134,22 @@ def get_menu():
         },
         {
             "titulo": "NF-e",
+            "icone": "ri-file-text-line",
             "itens": [
                 {
                     "nome": "Compras",
-                    "icone": "fas fa-file-invoice",
+                    "icone": "ri-shopping-cart-2-line",
                     "submenu": [
-                        { "nome": "Painel NF-e", "url": url_for('nfe_bp.painel') },
-                        { "nome": "Config. de Unidades", "url": url_for('config_unidades.painel_principal') }
+                        {
+                            "nome": "Painel NF-e",
+                            "icone": "ri-file-list-line",
+                            "url": url_for('nfe_bp.painel')
+                        },
+                        {
+                            "nome": "Config. de Unidades",
+                            "icone": "ri-settings-3-line",
+                            "url": url_for('config_unidades.painel_principal')
+                        }
                     ]
                 }
             ]
