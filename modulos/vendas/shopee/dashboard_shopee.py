@@ -4,49 +4,106 @@ import pandas as pd
 from datetime import datetime, timedelta
 import locale
 import os
+from calendar import monthrange
 
-# Configuração regional para moeda
+# Config regional
 try:
     locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
 except locale.Error:
     locale.setlocale(locale.LC_ALL, 'Portuguese_Brazil')
 
-# Criação do Blueprint
 shopee_bp = Blueprint('shopee_bp', __name__)
-
-# Caminho absoluto para o banco de dados (garante que funcione independente do diretório atual)
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 DB_PATH = os.path.join(BASE_DIR, '../../../grupo_fisgar.db')
 
 
+from calendar import monthrange
+
 def calcular_metricas(df, df_original):
-    hoje = datetime.today()
+    # Garante datas como date
+    df['data'] = pd.to_datetime(df['data']).dt.date
+    df_original['data'] = pd.to_datetime(df_original['data']).dt.date
+
+    hoje = datetime.today().date()
     inicio_mes_atual = hoje.replace(day=1)
-    inicio_mes_anterior = (inicio_mes_atual - timedelta(days=1)).replace(day=1)
-    fim_mes_anterior = inicio_mes_atual - timedelta(days=1)
+    mes_atual = inicio_mes_atual.month
+    ano_atual = inicio_mes_atual.year
 
-    df_mes_atual = df[df['data'] >= inicio_mes_atual]
-    df_mes_anterior = df_original[
-        (df_original['data'] >= inicio_mes_anterior) &
-        (df_original['data'] <= fim_mes_anterior)
-    ]
-    df_equivalente = df_mes_anterior[df_mes_anterior['data'].dt.day <= hoje.day]
+    if mes_atual == 1:
+        mes_anterior = 12
+        ano_anterior = ano_atual - 1
+    else:
+        mes_anterior = mes_atual - 1
+        ano_anterior = ano_atual
 
+    inicio_mes_anterior = datetime(ano_anterior, mes_anterior, 1).date()
+    fim_mes_anterior = datetime(ano_atual, mes_atual, 1).date() - timedelta(days=1)
+
+    df_mes_atual = df[(df['data'] >= inicio_mes_atual) & (df['data'] <= hoje)]
+    df_mes_anterior = df_original[(df_original['data'] >= inicio_mes_anterior) & (df_original['data'] <= fim_mes_anterior)]
+
+    # ---------------- VENDAS DIÁRIAS ---------------- #
+    max_dias = max(
+        monthrange(ano_atual, mes_atual)[1],
+        monthrange(ano_anterior, mes_anterior)[1]
+    )
+    vendas_diarias = []
+    for dia in range(1, max_dias + 1):
+        try:
+            data_atual = datetime(ano_atual, mes_atual, dia).date()
+        except ValueError:
+            data_atual = None
+        try:
+            data_ant = datetime(ano_anterior, mes_anterior, dia).date()
+        except ValueError:
+            data_ant = None
+        valor_atual = float(df_mes_atual[df_mes_atual['data'] == data_atual]['valor_total'].sum()) if data_atual else 0.0
+        valor_anterior = float(df_mes_anterior[df_mes_anterior['data'] == data_ant]['valor_total'].sum()) if data_ant else 0.0
+        vendas_diarias.append({
+            'dia': f"{dia:02d}",
+            'valor': valor_atual,
+            'valor_anterior': valor_anterior
+        })
+    # Garante ordem (apesar de não ser necessário pois o loop já gera ordenado)
+    vendas_diarias = sorted(vendas_diarias, key=lambda x: int(x['dia']))
+
+    # ---------------- TOP PRODUTOS ---------------- #
+    # 1. Pega TODOS os SKUs do mês atual e do mês anterior
+    # Top 10 SKUs do mês atual
+    skus_top_atual = (
+        df_mes_atual.groupby('SKU')['valor_total']
+        .sum()
+        .sort_values(ascending=False)
+        .head(10)
+        .index.tolist()
+    )
+
+    # Para cada SKU do top 10, pega o valor do mês atual e mês anterior
+    top_produtos = []
+    for sku in skus_top_atual:
+        valor_atual = float(df_mes_atual[df_mes_atual['SKU'] == sku]['valor_total'].sum())
+        valor_anterior = float(df_mes_anterior[df_mes_anterior['SKU'] == sku]['valor_total'].sum())
+        top_produtos.append({
+            'SKU': sku,
+            'valor': valor_atual,
+            'valor_anterior': valor_anterior
+        })
+
+    # ------------- DEMAIS MÉTRICAS (resumo, etc) ------------- #
     def formatar_moeda(valor):
-        return locale.currency(valor, grouping=True, symbol=False)
+        return locale.currency(valor, grouping=True, symbol=False) if valor is not None else "0,00"
 
     def calcular_variacao(atual, anterior):
-        return round(((atual - anterior) / anterior) * 100, 2) if anterior else 0
+        return round(((atual - anterior) / anterior * 100), 2) if anterior else 0
 
-    fat_atual = float(df_mes_atual['valor_total'].sum())
-    fat_anterior = float(df_mes_anterior['valor_total'].sum())
-    fat_equivalente = float(df_equivalente['valor_total'].sum())
+    fat_atual = float(df_mes_atual['valor_total'].sum()) if not df_mes_atual.empty else 0.0
+    fat_anterior = float(df_mes_anterior['valor_total'].sum()) if not df_mes_anterior.empty else 0.0
 
-    unidades_atual = int(df_mes_atual['qtd_comprada'].sum())
-    unidades_anterior = int(df_mes_anterior['qtd_comprada'].sum())
+    unidades_atual = int(df_mes_atual['qtd_comprada'].sum()) if not df_mes_atual.empty else 0
+    unidades_anterior = int(df_mes_anterior['qtd_comprada'].sum()) if not df_mes_anterior.empty else 0
 
-    pedidos_atual = int(df_mes_atual['pedido_id'].nunique())
-    pedidos_anterior = int(df_mes_anterior['pedido_id'].nunique())
+    pedidos_atual = int(df_mes_atual['pedido_id'].nunique()) if not df_mes_atual.empty else 0
+    pedidos_anterior = int(df_mes_anterior['pedido_id'].nunique()) if not df_mes_anterior.empty else 0
 
     ticket_atual = fat_atual / pedidos_atual if pedidos_atual else 0
     ticket_anterior = fat_anterior / pedidos_anterior if pedidos_anterior else 0
@@ -55,7 +112,7 @@ def calcular_metricas(df, df_original):
         'faturamento': formatar_moeda(fat_atual),
         'faturamento_anterior': formatar_moeda(fat_anterior),
         'faturamento_dif': calcular_variacao(fat_atual, fat_anterior),
-        'faturamento_equivalente_pct': calcular_variacao(fat_atual, fat_equivalente),
+        'faturamento_equivalente_pct': 0,
         'unidades': unidades_atual,
         'unidades_anterior': unidades_anterior,
         'unidades_dif': calcular_variacao(unidades_atual, unidades_anterior),
@@ -73,21 +130,7 @@ def calcular_metricas(df, df_original):
         }
     }
 
-    vendas_diarias = []
-    if not df_mes_atual.empty:
-        vendas_diarias = df_mes_atual.groupby(
-            df_mes_atual['data'].dt.strftime('%d/%m')
-        )['valor_total'].sum().reset_index().rename(
-            columns={'data': 'dia', 'valor_total': 'valor'}
-        ).to_dict(orient='records')
-
-    top_produtos = []
-    if not df_mes_atual.empty:
-        top_produtos = df_mes_atual.groupby('SKU')['valor_total'].sum().nlargest(10).reset_index()
-        top_produtos = top_produtos.rename(columns={'valor_total': 'valor'}).to_dict(orient='records')
-
     return resumo, vendas_diarias, top_produtos
-
 
 @shopee_bp.route('/shopee', endpoint='dashboard_shopee')
 def dashboard():
@@ -96,13 +139,16 @@ def dashboard():
         filtro_conta = request.args.get('conta')
         filtro_mes = request.args.get('mes')
 
-        # Abre conexão com caminho absoluto do banco
         con = sqlite3.connect(DB_PATH)
         df_original = pd.read_sql_query("SELECT * FROM vendas_shopee", con)
         con.close()
 
         df_original['data'] = pd.to_datetime(df_original['data'])
+
+        # FILTRO dos status indesejados:
+        df_original = df_original[~df_original['status_pedido'].isin(['TO_RETURN', 'CANCELLED', 'UNPAID'])].copy()
         df = df_original.copy()
+
 
         lista_skus = sorted(df['SKU'].dropna().unique().tolist())
         lista_contas = sorted(df['tipo_conta'].dropna().unique().tolist())
@@ -139,5 +185,4 @@ def dashboard():
         return render_template('error.html', message="Erro ao processar os dados"), 500
 
 
-# Exposição do Blueprint
 blueprint = shopee_bp

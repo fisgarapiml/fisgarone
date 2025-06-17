@@ -2,13 +2,13 @@
 
 {% block extra_css %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/modal-dashboard.css') }}">
 {% endblock %}
 
 {% block content %}
 <div class="dashboard-container">
   <header class="dashboard-header">
     <h1><i class="ri-store-line"></i> Dashboard Shopee</h1>
-
     <div class="filtros-container">
       <form method="get" class="filtros-form">
         <div class="filtro-group">
@@ -19,7 +19,6 @@
             {% endfor %}
           </select>
         </div>
-
         <div class="filtro-group">
           <select name="conta" class="form-select">
             <option value="">Todas as Contas</option>
@@ -28,7 +27,6 @@
             {% endfor %}
           </select>
         </div>
-
         <div class="filtro-group">
           <select name="mes" class="form-select">
             <option value="">Mês Atual</option>
@@ -37,7 +35,6 @@
             {% endfor %}
           </select>
         </div>
-
         <button type="submit" class="btn-filtrar">
           <i class="ri-filter-line"></i> Filtrar
         </button>
@@ -55,7 +52,8 @@
         'anterior': resumo.faturamento_anterior,
         'variacao': resumo.faturamento_dif,
         'extra': 'Período Equiv.: ' + resumo.faturamento_equivalente_pct|string + '%',
-        'progresso': resumo.barras_percentuais.faturamento
+        'progresso': resumo.barras_percentuais.faturamento,
+        'slug': 'faturamento'
       },
       {
         'titulo': 'Unidades',
@@ -63,7 +61,8 @@
         'valor': resumo.unidades,
         'anterior': resumo.unidades_anterior,
         'variacao': resumo.unidades_dif,
-        'progresso': resumo.barras_percentuais.unidades
+        'progresso': resumo.barras_percentuais.unidades,
+        'slug': 'unidades'
       },
       {
         'titulo': 'Pedidos',
@@ -71,7 +70,8 @@
         'valor': resumo.pedidos,
         'anterior': resumo.pedidos_anterior,
         'variacao': resumo.pedidos_dif,
-        'progresso': resumo.barras_percentuais.pedidos
+        'progresso': resumo.barras_percentuais.pedidos,
+        'slug': 'pedidos'
       },
       {
         'titulo': 'Ticket Médio',
@@ -79,10 +79,11 @@
         'valor': resumo.ticket_medio,
         'anterior': resumo.ticket_medio_anterior,
         'variacao': resumo.ticket_medio_dif,
-        'progresso': resumo.barras_percentuais.ticket
+        'progresso': resumo.barras_percentuais.ticket,
+        'slug': 'ticket'
       }
     ] %}
-    <div class="metrica-card">
+    <div class="metrica-card" style="cursor:pointer" onclick="abrirModal('{{ card.slug }}')">
       <div class="metrica-header">
         <i class="{{ card.icone }}"></i>
         <h3>{{ card.titulo }}</h3>
@@ -103,82 +104,42 @@
   </section>
 
   <div class="cardzao-graficos-3d">
-  <section class="graficos-container">
-    <div class="grafico-card grafico-vendas">
-      <h3>Vendas Diárias</h3>
-      <canvas id="graficoVendas"></canvas>
+    <section class="graficos-container">
+      <div class="grafico-card grafico-vendas">
+        <h3>Vendas Diárias</h3>
+        <canvas id="graficoVendas"></canvas>
+      </div>
+      <div class="grafico-card grafico-top-produtos">
+        <h3>Top Produtos</h3>
+        <canvas id="graficoTopProdutos"></canvas>
+      </div>
+    </section>
+  </div>
+
+  <!-- Modal de Resumo dos Cards -->
+  <div id="premiumModal">
+    <div class="modal-content">
+      <button class="close" onclick="fecharModalPremium()" title="Fechar">&times;</button>
+      <div class="modal-header" id="modalTitle">Detalhes</div>
+      <div id="modalContent">Carregando...</div>
+      <div class="modal-btn-group">
+        <button class="modal-btn" onclick="exportarModal('excel')"><i class="ri-file-excel-2-line"></i> Exportar Excel</button>
+        <button class="modal-btn" onclick="exportarModal('pdf')"><i class="ri-file-pdf-2-line"></i> Exportar PDF</button>
+      </div>
     </div>
-    <div class="grafico-card grafico-top-produtos">
-      <h3>Top Produtos</h3>
-      <canvas id="graficoTopProdutos"></canvas>
-    </div>
-  </section>
+  </div>
 </div>
-
-
 {% endblock %}
 
 {% block extra_js %}
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-  // Gráfico de Vendas Diárias
-  const ctxVendas = document.getElementById('graficoVendas').getContext('2d');
-  new Chart(ctxVendas, {
-    type: 'line',
-    data: {
-     labels: {{ vendas_diarias | map(attribute='dia') | list | tojson }},
-      datasets: [{
-        label: 'Vendas R$',
-        data: {{ vendas_diarias | map(attribute='valor') | list | tojson }},
-        backgroundColor: 'rgba(0, 200, 150, 0.2)',
-        borderColor: 'rgba(0, 200, 150, 1)',
-        borderWidth: 2,
-        tension: 0.1,
-        fill: true
-      }]
-    },
-    options: {
-      responsive: true,
-      plugins: {
-        legend: {
-          display: false
-        }
-      },
-      scales: {
-        y: {
-          beginAtZero: true
-        }
-      }
-    }
-  });
-
-  // Gráfico de Top Produtos
-  const ctxTop = document.getElementById('graficoTopProdutos').getContext('2d');
-  new Chart(ctxTop, {
-    type: 'bar',
-    data: {
-      labels: {{ top_produtos | map(attribute='SKU') | list | tojson }},
-      datasets: [{
-        label: 'Faturamento R$',
-        data: {{ top_produtos | map(attribute='valor') | list | tojson }},
-        backgroundColor: 'rgba(0, 200, 150, 0.2)',
-        borderColor: 'rgba(0, 200, 150, 1)',
-        borderWidth: 1
-      }]
-    },
-    options: {
-      indexAxis: 'y',
-      responsive: true,
-      plugins: {
-        legend: {
-          display: false
-        }
-      }
-    }
-  });
-});
+  // Dados JS fornecidos pelo Flask (substitua conforme necessário)
+  const dashboardData = {
+    resumo: {{ resumo | tojson }},
+    vendasDiarias: {{ vendas_diarias | tojson }},
+    topProdutos: {{ top_produtos | tojson }}
+  };
 </script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
 {% endblock %}

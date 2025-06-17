@@ -472,3 +472,35 @@
   font-weight: 600;
   margin-bottom: 18px;
 }
+/* Modal customizado */
+#premiumModal .modal-content, #modalContent {
+  background: #00e5cf !important;  /* Azul turquesa */
+  color: #FF6A00 !important;       /* Laranja Shopee no texto principal */
+  border-radius: 18px;
+  border: 3px solid #FF6A00;
+  box-shadow: 0 0 24px 0 #00b3a6a0;
+  padding: 30px 38px;
+}
+#premiumModal .modal-details, #modalContent .modal-details {
+  color: #111 !important;
+}
+#premiumModal .detail-label {
+  color: #FF6A00 !important;  /* Laranja Shopee */
+  font-weight: 700;
+}
+#premiumModal .detail-value {
+  color: #222 !important;  /* Preto */
+  font-weight: 600;
+  margin-left: 6px;
+}
+#premiumModal .highlight.up .detail-value {
+  color: #43B581 !important; /* Verde para positivo */
+}
+#premiumModal .highlight.down .detail-value {
+  color: #ED4245 !important; /* Vermelho para negativo */
+}
+#premiumModal .modal-info {
+  color: #222 !important; /* Preto */
+  font-size: 14px;
+  margin-top: 14px;
+}

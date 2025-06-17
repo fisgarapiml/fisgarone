@@ -1,0 +1,83 @@
+#premiumModal {
+  display: none;
+  position: fixed;
+  z-index: 9999;
+  left: 0; top: 0; width: 100vw; height: 100vh;
+  background: rgba(25,25,40,0.88);
+  justify-content: center; align-items: center;
+  animation: fadeIn .3s;
+}
+#premiumModal .modal-content {
+  background: #19192a;
+  border-radius: 18px;
+  padding: 32px 32px 24px 32px;
+  box-shadow: 0 8px 48px 0 #0ef6e359;
+  color: #fff;
+  min-width: 370px;
+  max-width: 95vw;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  font-size: 1.11rem;
+}
+#premiumModal .close {
+  position: absolute;
+  right: 14px; top: 14px;
+  font-size: 1.7em;
+  color: #00c896;
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+#premiumModal .modal-header {
+  font-size: 1.28em; font-weight: bold; margin-bottom: 16px;
+  display: flex; align-items: center; gap: 10px;
+}
+#premiumModal .modal-details { margin-bottom: 18px; }
+#premiumModal .modal-info { font-size: 1em; color: #fff4; margin-top: 1em; }
+#premiumModal .detail-item { margin-bottom: 6px; display: flex; gap: 8px; align-items: center; }
+#premiumModal .detail-label { min-width: 135px; color: #0ef6e3; font-weight: 600; }
+#premiumModal .highlight.up .detail-value { color: #30ff6b; font-weight: bold;}
+#premiumModal .highlight.down .detail-value { color: #ff5c5c; font-weight: bold;}
+#premiumModal .modal-btn-group { display: flex; gap: 16px; margin-top: 10px; }
+#premiumModal .modal-btn {
+  background: linear-gradient(90deg,#00c896 40%,#ffe358 100%);
+  color: #181828; font-weight: bold; padding: 8px 20px;
+  border: none; border-radius: 8px; cursor: pointer;
+  box-shadow: 0 2px 8px #0ef6e322;
+  transition: background 0.15s;
+}
+#premiumModal .modal-btn:active { background: #19192a; color: #fff; }
+@keyframes fadeIn { from{opacity:0} to{opacity:1} }
+/* Modal customizado */
+#premiumModal .modal-content, #modalContent {
+  background: #00e5cf !important;  /* Azul turquesa */
+  color: #FF6A00 !important;       /* Laranja Shopee no texto principal */
+  border-radius: 18px;
+  border: 3px solid #FF6A00;
+  box-shadow: 0 0 24px 0 #00b3a6a0;
+  padding: 30px 38px;
+}
+#premiumModal .modal-details, #modalContent .modal-details {
+  color: #111 !important;
+}
+#premiumModal .detail-label {
+  color: #FF6A00 !important;  /* Laranja Shopee */
+  font-weight: 700;
+}
+#premiumModal .detail-value {
+  color: #222 !important;  /* Preto */
+  font-weight: 600;
+  margin-left: 6px;
+}
+#premiumModal .highlight.up .detail-value {
+  color: #43B581 !important; /* Verde para positivo */
+}
+#premiumModal .highlight.down .detail-value {
+  color: #ED4245 !important; /* Vermelho para negativo */
+}
+#premiumModal .modal-info {
+  color: #222 !important; /* Preto */
+  font-size: 14px;
+  margin-top: 14px;
+}

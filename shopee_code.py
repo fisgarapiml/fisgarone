@@ -6,9 +6,9 @@ import json
 
 def get_token_shop_level():
     # Dados fornecidos
-    code = "5665577a427377486674794675564256"  # 🔁 Substitua pelo seu code real
+    code = "504e484d6158684a797756736e59496b"  # 🔁 Substitua pelo seu code real
     partner_id = 2009954
-    partner_key = "466e495a65766f594a584f4747796c784e454265427247764f6c6a4d4a575361"
+    partner_key = "43634d7677435050467965586f636a797446646a776158576356457674617a57"
     shop_id = 383162027
 
     # === Configuração de autenticação
