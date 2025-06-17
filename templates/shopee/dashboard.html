@@ -115,6 +115,12 @@
       </div>
     </section>
   </div>
+  <div class="grafico-card grafico-pareto"
+     style="width: 70%; min-width: 420px; max-width: 980px; margin: 22px 0 22px 0; float: left;">
+  <h3>Pareto 80/20</h3>
+  <canvas id="graficoPareto"></canvas>
+</div>
+
 
   <!-- Modal de Resumo dos Cards -->
   <div id="premiumModal">
@@ -140,6 +146,7 @@
     vendasDiarias: {{ vendas_diarias | tojson }},
     topProdutos: {{ top_produtos | tojson }}
   };
+const paretoData = {{ pareto_produtos | tojson }};
 </script>
 <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
 {% endblock %}

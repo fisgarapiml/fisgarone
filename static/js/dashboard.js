@@ -186,6 +186,101 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 
+// JS — bloco para dashboard.js
+
+if (document.getElementById('graficoPareto')) {
+  const dataMax = 30; // só mostra os top 30 por padrão
+  const data = paretoData.slice(0, dataMax);
+
+  const paretoLabels = data.map(x => x.SKU);
+  const paretoValores = data.map(x => x.valor_total || x.valor);
+  const paretoAcumulado = data.map(x => x.acumulado);
+
+  new Chart(document.getElementById('graficoPareto').getContext('2d'), {
+    type: 'bar',
+    data: {
+      labels: paretoLabels,
+      datasets: [
+        {
+          type: 'bar',
+          label: 'Faturamento',
+          data: paretoValores,
+          backgroundColor: paretoAcumulado.map(v => v <= 80 ? 'rgba(0,200,150,0.88)' : 'rgba(220,220,220,0.28)'),
+          borderRadius: 7,
+          borderSkipped: false,
+          yAxisID: 'y',
+        },
+        {
+          type: 'line',
+          label: '% Acumulado',
+          data: paretoAcumulado,
+          borderColor: '#ff9800',
+          backgroundColor: '#ff9800',
+          borderWidth: 2,
+          fill: false,
+          yAxisID: 'y1',
+          pointRadius: 4,
+          pointBackgroundColor: '#ff9800',
+          tension: 0.16
+        }
+      ]
+    },
+    options: {
+      responsive: false,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: true, position: 'top' },
+        tooltip: {
+          callbacks: {
+            label: function(context) {
+              const i = context.dataIndex;
+              if (context.dataset.type === 'bar') {
+                return [
+                  `SKU: ${paretoLabels[i]}`,
+                  `Faturamento: R$ ${paretoValores[i].toLocaleString('pt-BR', {minimumFractionDigits:2})}`,
+                  `Acumulado: ${paretoAcumulado[i].toFixed(1)}%`
+                ];
+              }
+              if (context.dataset.type === 'line') {
+                return [`% Acumulado: ${paretoAcumulado[i].toFixed(1)}%`];
+              }
+            }
+          }
+        }
+      },
+      scales: {
+        x: {
+          ticks: {
+            color: '#222',
+            font: { weight: 500, size: 13 },
+            autoSkip: false,
+            maxRotation: 65,
+            minRotation: 27,
+          }
+        },
+        y: {
+          beginAtZero: true,
+          title: { display: true, text: 'Faturamento', color: '#00c896' },
+          grid: { display: false }
+        },
+        y1: {
+          beginAtZero: true,
+          min: 0,
+          max: 100,
+          title: { display: true, text: '% Acumulado', color: '#ff9800' },
+          position: 'right',
+          grid: { drawOnChartArea: false },
+          ticks: {
+            color: '#ff9800',
+            callback: val => `${val}%`
+          }
+        }
+      }
+    }
+  });
+}
+
+
 // ---- MODAL DOS CARDS ----
 window.abrirModal = function(tipo) {
   const modal = document.getElementById('premiumModal');

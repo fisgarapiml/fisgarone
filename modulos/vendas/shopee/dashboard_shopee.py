@@ -42,7 +42,7 @@ def calcular_metricas(df, df_original):
     df_mes_atual = df[(df['data'] >= inicio_mes_atual) & (df['data'] <= hoje)]
     df_mes_anterior = df_original[(df_original['data'] >= inicio_mes_anterior) & (df_original['data'] <= fim_mes_anterior)]
 
-    # ---------------- VENDAS DIÁRIAS ---------------- #
+    # Vendas diárias
     max_dias = max(
         monthrange(ano_atual, mes_atual)[1],
         monthrange(ano_anterior, mes_anterior)[1]
@@ -64,12 +64,8 @@ def calcular_metricas(df, df_original):
             'valor': valor_atual,
             'valor_anterior': valor_anterior
         })
-    # Garante ordem (apesar de não ser necessário pois o loop já gera ordenado)
-    vendas_diarias = sorted(vendas_diarias, key=lambda x: int(x['dia']))
 
-    # ---------------- TOP PRODUTOS ---------------- #
-    # 1. Pega TODOS os SKUs do mês atual e do mês anterior
-    # Top 10 SKUs do mês atual
+    # Top produtos
     skus_top_atual = (
         df_mes_atual.groupby('SKU')['valor_total']
         .sum()
@@ -77,8 +73,6 @@ def calcular_metricas(df, df_original):
         .head(10)
         .index.tolist()
     )
-
-    # Para cada SKU do top 10, pega o valor do mês atual e mês anterior
     top_produtos = []
     for sku in skus_top_atual:
         valor_atual = float(df_mes_atual[df_mes_atual['SKU'] == sku]['valor_total'].sum())
@@ -89,7 +83,7 @@ def calcular_metricas(df, df_original):
             'valor_anterior': valor_anterior
         })
 
-    # ------------- DEMAIS MÉTRICAS (resumo, etc) ------------- #
+    # Métricas principais
     def formatar_moeda(valor):
         return locale.currency(valor, grouping=True, symbol=False) if valor is not None else "0,00"
 
@@ -98,13 +92,10 @@ def calcular_metricas(df, df_original):
 
     fat_atual = float(df_mes_atual['valor_total'].sum()) if not df_mes_atual.empty else 0.0
     fat_anterior = float(df_mes_anterior['valor_total'].sum()) if not df_mes_anterior.empty else 0.0
-
     unidades_atual = int(df_mes_atual['qtd_comprada'].sum()) if not df_mes_atual.empty else 0
     unidades_anterior = int(df_mes_anterior['qtd_comprada'].sum()) if not df_mes_anterior.empty else 0
-
     pedidos_atual = int(df_mes_atual['pedido_id'].nunique()) if not df_mes_atual.empty else 0
     pedidos_anterior = int(df_mes_anterior['pedido_id'].nunique()) if not df_mes_anterior.empty else 0
-
     ticket_atual = fat_atual / pedidos_atual if pedidos_atual else 0
     ticket_anterior = fat_anterior / pedidos_anterior if pedidos_anterior else 0
 
@@ -130,7 +121,17 @@ def calcular_metricas(df, df_original):
         }
     }
 
-    return resumo, vendas_diarias, top_produtos
+    # Pareto produtos
+    produtos = df.groupby('SKU').agg({'valor_total': 'sum'}).reset_index()
+    produtos = produtos.sort_values('valor_total', ascending=False)
+    total = produtos['valor_total'].sum()
+    produtos['acumulado'] = produtos['valor_total'].cumsum() / total * 100
+    produtos['top20'] = produtos['acumulado'] <= 80  # Top 80% do valor
+
+    pareto_produtos = produtos.to_dict('records')
+
+    return resumo, vendas_diarias, top_produtos, pareto_produtos
+
 
 @shopee_bp.route('/shopee', endpoint='dashboard_shopee')
 def dashboard():
@@ -149,7 +150,6 @@ def dashboard():
         df_original = df_original[~df_original['status_pedido'].isin(['TO_RETURN', 'CANCELLED', 'UNPAID'])].copy()
         df = df_original.copy()
 
-
         lista_skus = sorted(df['SKU'].dropna().unique().tolist())
         lista_contas = sorted(df['tipo_conta'].dropna().unique().tolist())
         lista_meses = sorted(df['data'].dt.strftime('%m').unique().tolist())
@@ -165,7 +165,8 @@ def dashboard():
             fim = datetime(ano, mes + 1, 1) - timedelta(days=1) if mes < 12 else datetime(ano, 12, 31)
             df = df[(df['data'] >= inicio) & (df['data'] <= fim)]
 
-        resumo, vendas_diarias, top_produtos = calcular_metricas(df, df_original)
+        # --- Aqui pega os 4 resultados
+        resumo, vendas_diarias, top_produtos, pareto_produtos = calcular_metricas(df, df_original)
 
         return render_template(
             'shopee/dashboard.html',
@@ -177,12 +178,11 @@ def dashboard():
             lista_meses=lista_meses,
             filtro_sku=filtro_sku,
             filtro_conta=filtro_conta,
-            filtro_mes=filtro_mes
+            filtro_mes=filtro_mes,
+            pareto_produtos=pareto_produtos,  # <-- Aqui!
         )
-
     except Exception as e:
         print(f"Erro inesperado: {str(e)}")
         return render_template('error.html', message="Erro ao processar os dados"), 500
-
 
 blueprint = shopee_bp

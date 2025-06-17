@@ -5,11 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e3aaa54f-aebd-4ecb-8523-c15f4bb10208" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/static/css/modal-dashboard.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/grupo_fisgar.db" beforeDir="false" afterPath="$PROJECT_DIR$/grupo_fisgar.db" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/modulos/vendas/shopee/dashboard_shopee.py" beforeDir="false" afterPath="$PROJECT_DIR$/modulos/vendas/shopee/dashboard_shopee.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/shopee_code.py" beforeDir="false" afterPath="$PROJECT_DIR$/shopee_code.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/static/css/dashboard.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/css/dashboard.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/static/js/dashboard.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/js/dashboard.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/shopee/dashboard.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/shopee/dashboard.html" afterDir="false" />

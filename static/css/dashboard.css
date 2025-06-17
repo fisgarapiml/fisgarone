@@ -504,3 +504,22 @@
   font-size: 14px;
   margin-top: 14px;
 }
+.dashboard-card {
+  overflow-x: auto;
+  background: #f8fcfe;
+  border-radius: 18px;
+  box-shadow: 0 2px 12px 0 rgba(0,0,0,.04);
+  margin-bottom: 30px;
+  padding: 18px 20px 16px 20px;
+}
+.grafico-pareto canvas {
+  height: 460px !important;  /* ajuste aqui: 220, 240, 280px... */
+  max-height: 500px;
+  min-height: 200px;
+  width: 100% !important;
+}
+.grafico-pareto {
+  padding: 18px 16px 28px 16px;
+  margin: 20px auto;
+  /* O resto mantém igual ao seu padrão */
+}
