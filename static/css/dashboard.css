@@ -523,3 +523,127 @@
   margin: 20px auto;
   /* O resto mantém igual ao seu padrão */
 }
+.dashboard-cards-top {
+  display: flex;
+  justify-content: center;
+  gap: 2.5rem;
+  margin-top: 12px;
+  margin-bottom: 12px;
+}
+.top-card {
+  background: #fff;
+  border-radius: 2.2rem;
+  box-shadow: 0 4px 24px 0 rgba(48,119,255,0.07);
+  padding: 1.3rem 2.2rem;
+  display: flex;
+  align-items: center;
+  min-width: 210px;
+  max-width: 320px;
+  min-height: 100px;
+  flex-shrink: 0;
+  transition: transform .16s;
+  font-weight: 600;
+  box-sizing: border-box;
+}
+.top-card i {
+  font-size: 2.2rem;
+  margin-right: 1.1rem;
+  color: #00c896;
+}
+.top-card.lucro i { color: #00c896;}
+.top-card.margem i { color: #ffb300;}
+.top-card.frete i { color: #2196f3;}
+.top-card-title {
+  font-size: 1.15rem;
+  margin-bottom: 3px;
+  color: #232c47;
+  font-weight: bold;
+}
+.top-card-value {
+  font-size: 2.1rem;
+  font-weight: 800;
+  color: #181b23;
+  margin-bottom: 4px;
+}
+.top-card-compare {
+  font-size: 1.02rem;
+  font-weight: 600;
+  margin-top: 0px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.top-card-desc {
+  font-size: 0.98rem;
+  color: #666;
+}
+@media (max-width: 1000px) {
+  .dashboard-cards-top { flex-direction: column; align-items: center; }
+  .top-card { margin-bottom: 1rem; }
+}
+.lista-prejuizo-container {
+  margin: 30px 0;
+  padding: 15px;
+  background: rgba(255,255,255,0.7);
+  border-radius: 2rem;
+  box-shadow: 0 6px 32px 0 rgba(70,200,255,0.15);
+  overflow-x: auto;
+}
+.prejuizo-header, .prejuizo-card {
+  display: flex;
+  align-items: center;
+  min-width: 1100px;
+}
+.prejuizo-header {
+  position: sticky;
+  top: 0;
+  background: rgba(255,255,255,0.95);
+  z-index: 2;
+  font-weight: bold;
+  font-size: 1.1rem;
+  color: #2b444b;
+  border-bottom: 2px solid #e7ecfa;
+}
+.prejuizo-card {
+  margin: 12px 0;
+  background: linear-gradient(90deg, #e0f8ff 0%, #f8fdff 100%);
+  border-radius: 1.5rem;
+  box-shadow: 0 3px 12px 0 rgba(0,200,150,0.07);
+  transition: transform .13s;
+  cursor: pointer;
+  font-size: 1rem;
+}
+.prejuizo-card:hover {
+  transform: scale(1.03) translateY(-2px);
+  box-shadow: 0 7px 24px 0 rgba(255,152,0,0.17);
+}
+.prejuizo-cell {
+  padding: 8px 18px;
+  text-align: left;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.col-sku { width: 120px; }
+.col-nome { width: 270px; }
+.col-valor, .col-custo, .col-lucro, .col-margem { width: 135px; }
+.col-fonte { width: 150px; }
+
+.prejuizo-negativo {
+  color: #ff3b00;
+  font-weight: 600;
+  animation: alertaNegativo 1s infinite alternate;
+}
+@keyframes alertaNegativo {
+  from { background: transparent; }
+  to { background: rgba(255, 230, 210, 0.6);}
+}
+.fonte-dica {
+  background: #ff9800;
+  color: #fff;
+  padding: 2px 12px;
+  border-radius: 30px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 2px 8px 0 rgba(255,152,0,0.12);
+}

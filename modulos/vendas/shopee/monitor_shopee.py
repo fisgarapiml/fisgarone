@@ -86,7 +86,7 @@ def criar_tabela_vendas_shopee():
     final['taxa_fixa'] = (final['qtd_comprada'] * 4.00).round(2)
     final['custo_operacional'] = (final['valor_total'] * 0.05).round(2)
 
-    final['total_com_frete'] = final['valor_total'] + final['frete_unitario']
+    final['total_com_frete'] = final['valor_total']
 
     final['sm_contas_pct'] = final['tipo_conta'].map({
         'TOYS': 9.27,
@@ -102,7 +102,7 @@ def criar_tabela_vendas_shopee():
     final['custo_fixo'] = (final['valor_total'] * 0.13).round(2)
 
     final['custo_op_total'] = (
-        final[['preco_custo', 'comissao_unitaria', 'taxa_fixa', 'custo_operacional']]
+        final[['preco_custo', 'comissao_unitaria', 'taxa_fixa', 'custo_operacional', 'sm_contas_reais']]
         .sum(axis=1)
     ).round(2)
 

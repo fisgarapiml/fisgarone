@@ -173,6 +173,19 @@ def extrair_dados_xml(caminho_xml):
                 'modelo': modelo,
                 'cnpj_emitente': cnpj_emitente
             }
+            # Calcular o percentual de IPI
+            if produto['valor_total'] > 0:
+                percentual_ipi = (produto['ipi'] / produto['valor_total']) * 100
+            else:
+                percentual_ipi = 0.0
+            produto['percentual_ipi'] = percentual_ipi
+
+            # Calcular o custo_com_ipi (regra central)
+            if percentual_ipi > 0:
+                produto['custo_com_ipi'] = produto['valor_unitario'] * (1 + percentual_ipi / 100.0)
+            else:
+                produto['custo_com_ipi'] = produto['valor_unitario']
+
             produtos.append(produto)
         return produtos
     except Exception as e:

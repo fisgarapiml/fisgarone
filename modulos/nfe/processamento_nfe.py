@@ -183,6 +183,7 @@ def salvar_nfe_db(caminho_db, produtos):
     """
     Salva os produtos extraídos do XML de NF-e na tabela produtos_nfe.
     Evita duplicidade usando nfe_chave + codigo.
+    E alimenta automaticamente a tabela produtos_processados para produtos com configuração.
     Retorna status e mensagem clara para o frontend.
 
     Parâmetros:
@@ -220,7 +221,7 @@ def salvar_nfe_db(caminho_db, produtos):
         raise Exception("produtos deve ser uma lista de dicionários")
 
     try:
-        inseridos = 0
+        inseridos_nfe = 0
         for prod in produtos:
             nfe_chave = prod.get('nfe_chave')
             codigo = prod.get('codigo')
@@ -260,19 +261,89 @@ def salvar_nfe_db(caminho_db, produtos):
                 prod.get('modelo'),
                 prod.get('cnpj_emitente')
             ))
-            inseridos += 1
+            inseridos_nfe += 1
 
         conn.commit()
-        if inseridos == 0:
+
+        # === NOVO BLOCO: Alimenta produtos_processados ===
+        try:
+            if produtos and 'numero' in produtos[0]:
+                numero_nfe = produtos[0]['numero']
+                inseridos_pp, pulados = 0, []
+                for prod in produtos:
+                    codigo_fornecedor = prod.get('codigo')
+                    unidade_compra = prod.get('unidade')
+                    nome = prod.get('descricao')
+                    quantidade = prod.get('quantidade')
+                    valor_total = prod.get('valor_total')
+                    ipi = prod.get('ipi')
+                    fornecedor = prod.get('fornecedor')
+                    data_emissao = prod.get('data_emissao')
+                    caminho_xml = prod.get('nfe_chave')
+
+                    # Busca configuração de unidade
+                    cursor.execute("""
+                        SELECT qtd_por_volume, qtd_por_pacote
+                        FROM configuracoes_unidades
+                        WHERE codigo_fornecedor = ? AND unidade_compra = ? AND ativo = 1
+                        ORDER BY atualizado_em DESC LIMIT 1
+                    """, (codigo_fornecedor, unidade_compra))
+                    config = cursor.fetchone()
+                    if not config:
+                        pulados.append((codigo_fornecedor, unidade_compra, 'SEM configuração de unidade'))
+                        continue
+
+                    qtd_por_volume = int(config[0]) if config[0] else 1
+                    qtd_por_pacote = int(config[1]) if config[1] else 1
+                    qtd_volumes = int(quantidade) if quantidade else 1
+                    qtd_real_unidades = qtd_volumes * qtd_por_volume * qtd_por_pacote
+                    custo_volume = float(valor_total) / qtd_volumes if qtd_volumes else 0.0
+                    custo_unitario = float(valor_total) / qtd_real_unidades if qtd_real_unidades else 0.0
+                    ipi_valor = float(ipi) if ipi else 0.0
+                    percentual_ipi = ipi_valor / float(valor_total) if valor_total else 0.0
+                    custo_com_ipi = custo_unitario * (1 + percentual_ipi)
+
+                    # Proteção contra duplicidade
+                    cursor.execute("""
+                        SELECT 1 FROM produtos_processados
+                        WHERE codigo_fornecedor = ? AND numero_nfe = ? AND unidade_compra = ?
+                    """, (codigo_fornecedor, numero_nfe))
+                    if cursor.fetchone():
+                        continue
+
+                    cursor.execute("""
+                        INSERT INTO produtos_processados (
+                            codigo_fornecedor, nome, unidade_compra, quantidade, valor_total, ipi,
+                            qtd_volumes, qtd_por_volume, qtd_real_unidades, custo_volume, custo_unitario,
+                            custo_com_ipi, fornecedor, numero_nfe, data_emissao, caminho_xml,
+                            novo, status
+                        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    """, (
+                        codigo_fornecedor, nome, unidade_compra, quantidade, valor_total, ipi_valor,
+                        qtd_volumes, qtd_por_volume, qtd_real_unidades, custo_volume, custo_unitario,
+                        custo_com_ipi, fornecedor, numero_nfe, data_emissao, caminho_xml,
+                        '0', 'sincronizado'
+                    ))
+                    inseridos_pp += 1
+
+                if inseridos_pp > 0:
+                    print(f"✅ {inseridos_pp} produtos alimentados automaticamente em produtos_processados.")
+                if pulados:
+                    print("⚠️ Produtos NÃO alimentados por falta de configuração:")
+                    for info in pulados:
+                        print("  -", info)
+        except Exception as e:
+            print(f"[ATENÇÃO] Falha ao alimentar produtos_processados: {e}")
+        # === FIM DO BLOCO ===
+
+        if inseridos_nfe == 0:
             return {'status': 'info', 'message': 'Nenhum produto novo para cadastrar (todos já existem)'}
-        return {'status': 'success', 'message': f'{inseridos} produto(s) cadastrado(s) com sucesso'}
+        return {'status': 'success', 'message': f'{inseridos_nfe} produto(s) cadastrado(s) com sucesso'}
     except Exception as e:
         conn.rollback()
         raise Exception(f"Erro ao salvar no banco de dados: {str(e)}")
     finally:
         conn.close()
-
-
 
 def obter_dados_nfe(caminho_db, filtro=None, valor=None):
     conn = sqlite3.connect(caminho_db)

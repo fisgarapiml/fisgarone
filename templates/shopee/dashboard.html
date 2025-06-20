@@ -9,6 +9,59 @@
 <div class="dashboard-container">
   <header class="dashboard-header">
     <h1><i class="ri-store-line"></i> Dashboard Shopee</h1>
+    <div class="dashboard-cards-top" style="display: flex; justify-content: center; gap: 2rem; margin: 2rem 0 1.2rem 0;">
+  <!-- Lucro -->
+  <div class="top-card lucro">
+    <i class="ri-money-dollar-circle-fill"></i>
+    <div>
+      <div class="top-card-title">Lucro</div>
+      <div class="top-card-value">R$ {{ resumo.lucro }}</div>
+      <div class="top-card-desc">
+        <span style="color:#aaa; font-size:13px;">Mês atual</span>
+      </div>
+      <div class="top-card-compare">
+        <span style="color:#ffa500;"><i class="ri-arrow-up-down-line"></i>
+          {{ resumo.lucro_anterior }}&nbsp;({{ resumo.lucro_var }}%)</span>
+        <span style="color:#aaa; font-size:13px;">Mês anterior</span>
+      </div>
+    </div>
+  </div>
+  <!-- Margem -->
+  <div class="top-card margem">
+    <i class="ri-percent-fill"></i>
+    <div>
+      <div class="top-card-title">Margem de Contribuição</div>
+      <div class="top-card-value">{{ resumo.margem }}%</div>
+      <div class="top-card-desc">
+        <span style="color:#aaa; font-size:13px;">Sobre o faturamento</span>
+      </div>
+      <div class="top-card-compare">
+        <span style="color:#ffa500;"><i class="ri-arrow-up-down-line"></i>
+          {{ resumo.margem_anterior }}%&nbsp;({{ resumo.margem_var }}%)</span>
+        <span style="color:#aaa; font-size:13px;">Mês anterior</span>
+      </div>
+    </div>
+  </div>
+  <!-- Frete Shopee Direta -->
+  <div class="top-card frete">
+    <i class="ri-truck-fill"></i>
+    <div>
+      <div class="top-card-title">Frete Shopee Direta</div>
+      <div class="top-card-value">R$ {{ resumo.frete_shopee_total }}</div>
+      <div class="top-card-desc">
+        <span style="color:#aaa; font-size:13px;">Total (R$8/envio)</span>
+      </div>
+      <div class="top-card-compare">
+        <span style="color:#2196f3;">
+          <i class="ri-shipment-fill"></i>
+          {{ resumo.frete_shopee_qtd }} envios
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+
+
     <div class="filtros-container">
       <form method="get" class="filtros-form">
         <div class="filtro-group">
@@ -39,6 +92,12 @@
           <i class="ri-filter-line"></i> Filtrar
         </button>
       </form>
+      <input type="date" name="data_inicio" value="{{ data_inicio or '' }}" class="form-input">
+  <input type="date" name="data_fim" value="{{ data_fim or '' }}" class="form-input">
+  <button type="submit" class="btn-filtrar">
+    <i class="ri-filter-line"></i> Filtrar
+  </button>
+</form>
     </div>
   </header>
 
@@ -122,19 +181,6 @@
 </div>
 
 
-  <!-- Modal de Resumo dos Cards -->
-  <div id="premiumModal">
-    <div class="modal-content">
-      <button class="close" onclick="fecharModalPremium()" title="Fechar">&times;</button>
-      <div class="modal-header" id="modalTitle">Detalhes</div>
-      <div id="modalContent">Carregando...</div>
-      <div class="modal-btn-group">
-        <button class="modal-btn" onclick="exportarModal('excel')"><i class="ri-file-excel-2-line"></i> Exportar Excel</button>
-        <button class="modal-btn" onclick="exportarModal('pdf')"><i class="ri-file-pdf-2-line"></i> Exportar PDF</button>
-      </div>
-    </div>
-  </div>
-</div>
 {% endblock %}
 
 {% block extra_js %}
