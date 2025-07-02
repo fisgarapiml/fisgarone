@@ -1,0 +1,57 @@
+body {
+    background: #10142c;
+    color: #f1f3f7;
+    min-height: 100vh;
+    font-family: 'Space Grotesk', Arial, sans-serif;
+}
+.nav-tabs .nav-link.active {
+    background: linear-gradient(90deg, #11cfd4 40%, #0e8fff 100%);
+    color: #fff !important;
+    border: none;
+}
+.nav-tabs .nav-link {
+    color: #11cfd4 !important;
+    border: none;
+}
+.tab-content {
+    background: #171c3a;
+    border-radius: 16px;
+    padding: 32px;
+    box-shadow: 0 0 24px #11cfd455;
+}
+.table-neon th, .table-neon td {
+    border: none;
+    vertical-align: middle;
+    color: #f1f3f7;
+    background: transparent;
+}
+.table-neon thead th {
+    color: #11cfd4;
+    font-size: 1.1rem;
+    font-weight: 700;
+    border-bottom: 2px solid #11cfd4;
+}
+.btn-neon {
+    background: linear-gradient(90deg, #11cfd4 60%, #0e8fff 100%);
+    border: none;
+    color: #fff;
+    border-radius: 10px;
+    transition: 0.2s;
+    box-shadow: 0 0 8px #11cfd499;
+}
+.btn-neon:hover {
+    background: linear-gradient(90deg, #0e8fff 30%, #11cfd4 100%);
+    color: #fff;
+    box-shadow: 0 0 16px #11cfd4cc;
+}
+.neon-title {
+    color: #11cfd4;
+    font-weight: 700;
+    font-size: 2.1rem;
+    letter-spacing: 2px;
+    text-shadow: 0 0 14px #11cfd455;
+}
+.ri {
+    vertical-align: middle;
+    font-size: 1.4em;
+}

@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FisgarOne | {% block title %}{% endblock %}</title>
+
+  <!-- Fontes e Ícones -->
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+  <!-- Bibliotecas para gráficos e visualizações -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+  <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
+  <!-- Animações -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+
+  <style>
+    :root {
+      /* Cores Tema Claro Neon */
+      --primary-light: #e0f7ff;
+      --primary-bright: #00d0ff;
+      --accent-light: #ff3e80;
+      --text-light: #1a237e;
+      --text-light-contrast: #0d47a1;
+      --bg-light: #f5fdff;
+      --menu-bg-light: #ffffff;
+      --menu-border-light: #00d0ff;
+      --success-color: #00c896;
+      --error-color: #ff3e5f;
+      --warning-color: #ffaa00;
+
+      /* Cores Tema Escuro */
+      --primary-dark: #00f0ff;
+      --primary-dark-bright: #00a8b5;
+      --accent-dark: #ff2d75;
+      --text-dark: #e0e0e0;
+      --bg-dark: #020617;
+      --menu-bg-dark: rgba(2, 6, 23, 0.9);
+      --menu-border-dark: #00f0ff;
+      --success-dark: #00e3b0;
+      --error-dark: #ff2d4d;
+      --warning-dark: #ff9900;
+
+      /* Constantes */
+      --border-radius: 16px;
+      --border-radius-sm: 12px;
+      --transition-speed: 0.4s;
+      --glow-effect-light: 0 0 15px rgba(0, 208, 255, 0.3);
+      --glow-effect-dark: 0 0 15px rgba(0, 240, 255, 0.5);
+      --card-shadow-light: 0 10px 30px rgba(0, 200, 150, 0.15);
+      --card-shadow-dark: 0 10px 30px rgba(0, 240, 255, 0.1);
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Inter', 'Space Grotesk', sans-serif;
+      background-color: var(--bg-light);
+      color: var(--text-light);
+      transition: all var(--transition-speed) ease;
+      overflow-x: hidden;
+    }
+
+    .dark-theme {
+      background-color: var(--bg-dark);
+      color: var(--text-dark);
+    }
+
+    /* Sidebar Modernizada */
+    .sidebar-container {
+      width: 280px;
+      height: 100vh;
+      position: fixed;
+      left: 0;
+      top: 0;
+      background: var(--menu-bg-light);
+      border-right: 2px solid var(--menu-border-light);
+      box-shadow: 5px 0 25px rgba(0, 208, 255, 0.2);
+      display: flex;
+      flex-direction: column;
+      z-index: 1000;
+      transition: all var(--transition-speed) ease;
+      backdrop-filter: blur(10px);
+    }
+
+    .dark-theme .sidebar-container {
+      background: var(--menu-bg-dark);
+      border-right: 2px solid var(--menu-border-dark);
+      box-shadow: 5px 0 25px rgba(0, 240, 255, 0.2);
+    }
+
+    /* Logo com Efeito Holográfico */
+    .sidebar-logo {
+      padding: 30px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(0, 208, 255, 0.3);
+      background: linear-gradient(to bottom, rgba(224, 247, 255, 0.3), rgba(255, 255, 255, 0.1));
+      position: relative;
+      overflow: hidden;
+    }
+
+    .sidebar-logo::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(
+        to bottom right,
+        rgba(0, 208, 255, 0.1) 0%,
+        rgba(0, 208, 255, 0) 20%,
+        rgba(0, 208, 255, 0) 80%,
+        rgba(0, 208, 255, 0.1) 100%
+      );
+      transform: rotate(30deg);
+      animation: hologram 6s linear infinite;
+    }
+
+    @keyframes hologram {
+      0% { transform: rotate(30deg) translateX(-25%); }
+      100% { transform: rotate(30deg) translateX(25%); }
+    }
+
+    .dark-theme .sidebar-logo {
+      border-bottom: 1px solid rgba(0, 240, 255, 0.3);
+      background: linear-gradient(to bottom, rgba(0, 240, 255, 0.05), rgba(2, 6, 23, 0.1));
+    }
+
+    .sidebar-logo img {
+      width: 140px;
+      height: 180px;
+      object-fit: contain;
+      filter: drop-shadow(0 0 5px rgba(0, 208, 255, 0.5));
+      transition: all var(--transition-speed) ease;
+      position: relative;
+    }
+
+    .dark-theme .sidebar-logo img {
+      filter: drop-shadow(0 0 5px rgba(0, 240, 255, 0.5));
+    }
+
+    .sidebar-logo:hover img {
+      filter: drop-shadow(0 0 15px rgba(0, 208, 255, 0.8));
+      transform: scale(1.03);
+    }
+
+    .dark-theme .sidebar-logo:hover img {
+      filter: drop-shadow(0 0 15px rgba(0, 240, 255, 0.8));
+    }
+
+    /* Menu Principal - Estilo Cyberpunk */
+    #main-menu {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px 15px;
+      scrollbar-width: thin;
+      scrollbar-color: var(--primary-bright) transparent;
+    }
+
+    #main-menu::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    #main-menu::-webkit-scrollbar-thumb {
+      background-color: var(--primary-bright);
+      border-radius: 3px;
+    }
+
+    .dark-theme #main-menu::-webkit-scrollbar-thumb {
+      background-color: var(--primary-dark);
+    }
+
+    .menu-group-title {
+      color: var(--primary-bright);
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin: 30px 0 15px 0;
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgba(0, 208, 255, 0.3);
+      font-weight: 700;
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .menu-group-title::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 40px;
+      height: 2px;
+      background: var(--accent-light);
+      animation: scanline 2s linear infinite;
+    }
+
+    @keyframes scanline {
+      0% { width: 0; opacity: 0; }
+      50% { width: 40px; opacity: 1; }
+      100% { width: 0; opacity: 0; left: 40px; }
+    }
+
+    .dark-theme .menu-group-title {
+      color: var(--primary-dark);
+      border-bottom: 1px solid rgba(0, 240, 255, 0.3);
+    }
+
+    /* Itens de Menu com Efeito de Circuito */
+    .menu-item {
+      margin: 12px 0;
+      border-radius: var(--border-radius-sm);
+      overflow: hidden;
+      transition: all var(--transition-speed) ease;
+      position: relative;
+      background: rgba(224, 247, 255, 0.1);
+    }
+
+    .menu-item::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(
+        135deg,
+        transparent 0%,
+        transparent 45%,
+        var(--primary-bright) 50%,
+        transparent 55%,
+        transparent 100%
+      );
+      background-size: 300% 300%;
+      opacity: 0;
+      transition: all 0.5s ease;
+    }
+
+    .menu-item:hover::before {
+      opacity: 0.3;
+      background-position: 100% 100%;
+    }
+
+    .menu-link {
+      display: flex;
+      align-items: center;
+      padding: 15px 20px;
+      color: var(--text-light-contrast);
+      text-decoration: none;
+      cursor: pointer;
+      transition: all var(--transition-speed) ease;
+      position: relative;
+      z-index: 1;
+    }
+
+    .dark-theme .menu-link {
+      color: var(--text-dark);
+    }
+
+    .menu-link:hover {
+      color: var(--accent-light);
+      transform: translateX(5px);
+    }
+
+    .dark-theme .menu-link:hover {
+      color: var(--accent-dark);
+    }
+
+    .menu-link i {
+      font-size: 1.2rem;
+      margin-right: 15px;
+      width: 24px;
+      text-align: center;
+      color: var(--primary-bright);
+      transition: all var(--transition-speed) ease;
+    }
+
+    .dark-theme .menu-link i {
+      color: var(--primary-dark);
+    }
+
+    .menu-link:hover i {
+      color: var(--accent-light);
+      transform: scale(1.2);
+    }
+
+    .dark-theme .menu-link:hover i {
+      color: var(--accent-dark);
+    }
+
+    .menu-link span {
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      position: relative;
+    }
+
+    .menu-link span::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--accent-light);
+      transition: width var(--transition-speed) ease;
+    }
+
+    .menu-link:hover span::after {
+      width: 100%;
+    }
+
+    .dark-theme .menu-link span::after {
+      background: var(--accent-dark);
+    }
+
+    /* Submenu com Efeito de Expansão */
+    .submenu-list {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height var(--transition-speed) ease;
+      background: rgba(224, 247, 255, 0.2);
+      border-left: 2px solid var(--primary-bright);
+      margin-left: 20px;
+      border-radius: 0 0 var(--border-radius-sm) var(--border-radius-sm);
+    }
+
+    .dark-theme .submenu-list {
+      background: rgba(0, 240, 255, 0.05);
+      border-left: 2px solid var(--primary-dark);
+    }
+
+    .menu-item.open .submenu-list {
+      max-height: 500px;
+    }
+
+    .submenu-list a {
+      display: block;
+      padding: 12px 20px 12px 60px;
+      color: var(--text-light-contrast);
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: all var(--transition-speed) ease;
+      position: relative;
+    }
+
+    .dark-theme .submenu-list a {
+      color: var(--text-dark);
+    }
+
+    .submenu-list a:hover {
+      background: rgba(255, 62, 128, 0.1);
+      color: var(--primary-bright);
+      padding-left: 65px;
+    }
+
+    .dark-theme .submenu-list a:hover {
+      background: rgba(255, 45, 117, 0.1);
+      color: var(--primary-dark);
+    }
+
+    .submenu-list a::before {
+      content: '⯈';
+      position: absolute;
+      left: 35px;
+      color: var(--primary-bright);
+      transition: all var(--transition-speed) ease;
+    }
+
+    .dark-theme .submenu-list a::before {
+      color: var(--primary-dark);
+    }
+
+    .submenu-list a:hover::before {
+      color: var(--accent-light);
+      transform: translateX(5px);
+    }
+
+    .dark-theme .submenu-list a:hover::before {
+      color: var(--accent-dark);
+    }
+
+    /* Botão de Tema Flutuante */
+    #theme-toggle {
+      position: fixed;
+      bottom: 30px;
+      left: 30px;
+      background: linear-gradient(45deg, var(--primary-bright), var(--accent-light));
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: var(--glow-effect-light);
+      transition: all var(--transition-speed) ease;
+      z-index: 1100;
+      font-size: 1.2rem;
+    }
+
+    .dark-theme #theme-toggle {
+      background: linear-gradient(45deg, var(--primary-dark), var(--accent-dark));
+      box-shadow: var(--glow-effect-dark);
+    }
+
+    #theme-toggle:hover {
+      transform: scale(1.1) rotate(30deg);
+      box-shadow: 0 0 25px rgba(255, 62, 128, 0.7);
+    }
+
+    .dark-theme #theme-toggle:hover {
+      box-shadow: 0 0 25px rgba(255, 45, 117, 0.7);
+    }
+
+    /* Conteúdo Principal */
+    .main-content {
+      margin-left: 280px;
+      padding: 30px;
+      min-height: 100vh;
+      transition: margin-left var(--transition-speed) ease;
+      background-color: var(--bg-light);
+    }
+
+    .dark-theme .main-content {
+      background-color: var(--bg-dark);
+    }
+
+    /* Notificações */
+    .notification {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 15px 25px;
+      border-radius: var(--border-radius-sm);
+      background: var(--success-color);
+      color: white;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      z-index: 1200;
+      transform: translateX(150%);
+      transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+      display: flex;
+      align-items: center;
+    }
+
+    .notification.show {
+      transform: translateX(0);
+    }
+
+    .notification.error {
+      background: var(--error-color);
+    }
+
+    .notification.warning {
+      background: var(--warning-color);
+    }
+
+    .notification i {
+      margin-right: 10px;
+      font-size: 1.2rem;
+    }
+
+    /* Modal Premium */
+    .modal-premium {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      z-index: 1300;
+      backdrop-filter: blur(5px);
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .modal-container {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 90%;
+      max-width: 800px;
+      background: var(--menu-bg-light);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+      animation: slideUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      max-height: 90vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .dark-theme .modal-container {
+      background: var(--menu-bg-dark);
+    }
+
+    @keyframes slideUp {
+      from { transform: translate(-50%, 100%); opacity: 0; }
+      to { transform: translate(-50%, -50%); opacity: 1; }
+    }
+
+    .modal-header {
+      padding: 20px 25px;
+      background: linear-gradient(135deg, var(--primary-bright), var(--accent-light));
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .dark-theme .modal-header {
+      background: linear-gradient(135deg, var(--primary-dark), var(--accent-dark));
+    }
+
+    .modal-header h2 {
+      font-size: 1.5rem;
+      margin: 0;
+      font-weight: 600;
+    }
+
+    .modal-close {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 1.8rem;
+      cursor: pointer;
+      padding: 5px;
+      transition: transform 0.2s ease;
+    }
+
+    .modal-close:hover {
+      transform: rotate(90deg);
+    }
+
+    .modal-body {
+      padding: 30px;
+      overflow-y: auto;
+      flex: 1;
+    }
+
+    .modal-footer {
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      background: rgba(0, 0, 0, 0.02);
+      border-top: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .dark-theme .modal-footer {
+      background: rgba(255, 255, 255, 0.02);
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    /* Responsividade */
+    @media (max-width: 992px) {
+      .sidebar-container {
+        transform: translateX(-100%);
+        width: 280px;
+      }
+
+      .sidebar-container.open {
+        transform: translateX(0);
+      }
+
+      .main-content {
+        margin-left: 0;
+      }
+
+      #mobile-menu-toggle {
+        display: block;
+        position: fixed;
+        top: 20px;
+        left: 20px;
+        z-index: 1100;
+        background: var(--primary-bright);
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        font-size: 1.5rem;
+        cursor: pointer;
+        box-shadow: var(--glow-effect-light);
+      }
+
+      .dark-theme #mobile-menu-toggle {
+        background: var(--primary-dark);
+        box-shadow: var(--glow-effect-dark);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .modal-container {
+        width: 95%;
+        max-height: 85vh;
+      }
+
+      .modal-footer {
+        flex-direction: column;
+      }
+    }
+  </style>
+  {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+  <!-- Sidebar -->
+  <div class="sidebar-container" id="sidebar">
+    <div class="sidebar-logo">
+      <img src="{{ url_for('static', filename='images/logofisgar.png') }}" alt="Logo FisgarOne" />
+    </div>
+    <div id="main-menu"></div>
+  </div>
+
+  <!-- Botão de Tema -->
+  <button id="theme-toggle" title="Alternar tema">
+    <i class="ri-contrast-2-fill"></i>
+  </button>
+
+  <!-- Botão Mobile Menu (oculto por padrão) -->
+  <button id="mobile-menu-toggle" style="display: none;">
+    <i class="ri-menu-line"></i>
+  </button>
+
+  <!-- Conteúdo Principal -->
+  <div class="main-content">
+    {% block content %}{% endblock %}
+  </div>
+
+  <!-- Notificação -->
+  <div id="notification" class="notification">
+    <i class="ri-check-line"></i>
+    <span id="notification-message"></span>
+  </div>
+
+  <!-- Modal Premium -->
+  <div id="premiumModal" class="modal-premium">
+    <div class="modal-container">
+      <div class="modal-header">
+        <h2 id="modalTitle">Detalhes</h2>
+        <button class="modal-close" onclick="fecharModalPremium()">
+          <i class="ri-close-line"></i>
+        </button>
+      </div>
+      <div class="modal-body" id="modalContent">
+        <!-- Conteúdo será carregado dinamicamente -->
+      </div>
+      <div class="modal-footer">
+        <button class="modal-action-btn export" onclick="exportarDashboard()">
+          <i class="ri-download-line"></i>
+          <span>Exportar</span>
+        </button>
+        <button class="modal-action-btn compare" onclick="compararPeriodos()">
+          <i class="ri-bar-chart-line"></i>
+          <span>Comparar</span>
+        </button>
+        <button class="modal-action-btn details" onclick="verDetalhes()">
+          <i class="ri-eye-line"></i>
+          <span>Detalhes</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts Base -->
+  <script>
+    // Menu Dinâmico
+    document.addEventListener('DOMContentLoaded', function() {
+      function createMenuItem(item) {
+  const menuItem = document.createElement('div');
+  menuItem.className = 'menu-item';
+
+  const mainLink = document.createElement('div');
+  mainLink.className = 'menu-link';
+  mainLink.innerHTML = `<i class="${item.icone || 'ri-question-line'}"></i> <span>${item.nome}</span>`;
+
+  // Evento de clique no menu principal
+  mainLink.onclick = () => {
+    if (item.submenu && item.submenu.length) {
+      menuItem.classList.toggle('open');
+    } else if (item.url) {
+      window.location.href = item.url;
+    }
+  };
+
+  menuItem.appendChild(mainLink);
+
+  // Se houver submenu
+  if (item.submenu && item.submenu.length) {
+    const submenu = document.createElement('div');
+    submenu.className = 'submenu-list';
+
+    item.submenu.forEach(sub => {
+      const subItem = document.createElement('div');
+      subItem.className = 'menu-item'; // Para sub-submenus
+
+      const subLink = document.createElement('div');
+      subLink.className = 'menu-link';
+      subLink.innerHTML = `<i class="${sub.icone || 'ri-arrow-right-s-line'}"></i> <span>${sub.nome}</span>`;
+
+      subLink.onclick = () => {
+        if (sub.submenu && sub.submenu.length) {
+          subItem.classList.toggle('open');
+        } else if (sub.url) {
+          window.location.href = sub.url;
+        }
+      };
+
+      subItem.appendChild(subLink);
+
+      if (sub.submenu && sub.submenu.length) {
+        const subSubMenu = document.createElement('div');
+        subSubMenu.className = 'submenu-list';
+
+        sub.submenu.forEach(subsub => {
+          const subSubLink = document.createElement('a');
+          subSubLink.href = subsub.url || '#';
+          subSubLink.innerHTML = `<i class="${subsub.icone || 'ri-arrow-right-s-line'}"></i> <span>${subsub.nome}</span>`;
+          subSubMenu.appendChild(subSubLink);
+        });
+
+        subItem.appendChild(subSubMenu);
+      }
+
+      submenu.appendChild(subItem);
+    });
+
+    menuItem.appendChild(submenu);
+  }
+
+  return menuItem;
+}
+
+      // Carregar menu da API
+      fetch('/api/menu')
+        .then(res => res.json())
+        .then(data => {
+          const menu = document.getElementById('main-menu');
+          data.forEach(group => {
+            const groupTitle = document.createElement('div');
+            groupTitle.className = 'menu-group-title';
+            groupTitle.innerHTML = `<i class="${group.icone || 'ri-folder-2-line'}"></i> <span>${group.titulo}</span>`;
+            menu.appendChild(groupTitle);
+
+            group.itens.forEach(item => {
+              menu.appendChild(createMenuItem(item));
+            });
+          });
+        });
+
+      // Tema Dark/Light
+      if (localStorage.getItem('theme') === 'dark') {
+        document.body.classList.add('dark-theme');
+      }
+
+      document.getElementById('theme-toggle').addEventListener('click', () => {
+        document.body.classList.toggle('dark-theme');
+        localStorage.setItem('theme', document.body.classList.contains('dark-theme') ? 'dark' : 'light');
+      });
+
+      // Menu Mobile
+      const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+      const sidebar = document.getElementById('sidebar');
+
+      if (window.innerWidth <= 992) {
+        mobileMenuToggle.style.display = 'block';
+
+        mobileMenuToggle.addEventListener('click', () => {
+          sidebar.classList.toggle('open');
+        });
+      }
+
+      window.addEventListener('resize', () => {
+        if (window.innerWidth <= 992) {
+          mobileMenuToggle.style.display = 'block';
+        } else {
+          mobileMenuToggle.style.display = 'none';
+          sidebar.classList.remove('open');
+        }
+      });
+    });
+
+    // Funções de Notificação
+    function showNotification(message, type = 'success', duration = 5000) {
+      const notification = document.getElementById('notification');
+      const notificationMessage = document.getElementById('notification-message');
+
+      notification.className = `notification ${type}`;
+      notificationMessage.textContent = message;
+      notification.classList.add('show');
+
+      setTimeout(() => {
+        notification.classList.remove('show');
+      }, duration);
+    }
+
+    // Funções do Modal Premium
+    function abrirModalPremium(title, content, options = {}) {
+      document.getElementById('modalTitle').textContent = title;
+      document.getElementById('modalContent').innerHTML = content;
+      document.getElementById('premiumModal').style.display = 'block';
+      document.body.style.overflow = 'hidden';
+
+      // Configurar botões do footer
+      const footer = document.querySelector('.modal-footer');
+      footer.innerHTML = '';
+
+      if (options.buttons) {
+        options.buttons.forEach(button => {
+          const btn = document.createElement('button');
+          btn.className = `modal-action-btn ${button.type || ''}`;
+          btn.innerHTML = `<i class="${button.icon || 'ri-information-line'}"></i> <span>${button.text}</span>`;
+          btn.onclick = button.action;
+          footer.appendChild(btn);
+        });
+      }
+    }
+
+    function fecharModalPremium() {
+      document.getElementById('premiumModal').style.display = 'none';
+      document.body.style.overflow = 'auto';
+    }
+
+    // Funções Globais
+    function exportarDashboard() {
+      // Implementação específica pode ser sobrescrita em cada página
+      showNotification('Exportação iniciada', 'info');
+    }
+
+    function compararPeriodos() {
+      showNotification('Comparação de períodos ativada', 'info');
+    }
+
+    function verDetalhes() {
+      showNotification('Visualizando detalhes', 'info');
+    }
+
+    // Fechar modal ao clicar fora
+    window.addEventListener('click', function(event) {
+      const modal = document.getElementById('premiumModal');
+      if (event.target === modal) {
+        fecharModalPremium();
+      }
+    });
+  </script>
+
+  {% block extra_js %}{% endblock %}
+</body>
+</html>

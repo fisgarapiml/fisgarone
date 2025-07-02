@@ -1,0 +1,1089 @@
+{% extends 'base.html' %}
+
+{% block title %}Lançamentos{% endblock %}
+{% block page_title %}Lançamentos{% endblock %}
+
+{% block extra_css %}
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+<style>
+  .select2-container {
+    width: 100% !important;
+  }
+
+  .select2-container--default .select2-selection--single {
+    height: auto;
+    min-height: 48px;
+    padding: 0.8rem 1rem;
+    border-radius: 12px;
+    border: 1px solid rgba(0, 102, 255, 0.2);
+    background-color: white;
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+    font-size: 1rem;
+    font-family: 'Space Grotesk', sans-serif;
+  }
+
+  .select2-container--default .select2-selection--single .select2-selection__rendered {
+    padding-left: 0;
+    color: rgba(0, 0, 0, 0.6);
+    line-height: 1.5;
+  }
+
+  .select2-container--default .select2-selection--single .select2-selection__arrow {
+    height: 100%;
+    right: 12px;
+    top: 0;
+    position: absolute;
+  }
+
+    :root {
+      --primary: #0066ff;
+      --primary-light: rgba(0, 102, 255, 0.1);
+      --accent: #00ffaa;
+      --text: #2b2d42;
+      --bg: #f8faff;
+      --card-bg: rgba(255, 255, 255, 0.95);
+      --card-shadow: 0 4px 20px rgba(0, 102, 255, 0.08);
+      --status-paid: #00c853;
+      --status-pending: #ffab00;
+      --status-overdue: #ff3d00;
+      --text-secondary: #4a4a6a;
+      --font: 'Space Grotesk', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 2rem;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 3rem;
+      position: relative;
+    }
+
+    .header h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      display: inline-block;
+      margin-bottom: 1rem;
+    }
+
+    .header p {
+      color: var(--text-secondary);
+      font-size: 1.1rem;
+      font-weight: 400;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      box-shadow: var(--card-shadow);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 32px rgba(0, 102, 255, 0.15);
+    }
+
+    .card h2 {
+      font-size: 1.5rem;
+      margin-bottom: 1.5rem;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      font-weight: 600;
+    }
+
+    .card h2 i {
+      color: var(--accent);
+    }
+
+    .grid {
+      display: grid;
+      gap: 1.5rem;
+    }
+
+    .grid-2 {
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    }
+
+    .form-group {
+      position: relative;
+      margin-bottom: 1.5rem;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      color: var(--text);
+      font-size: 0.95rem;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 0.8rem 1rem;
+      border-radius: 12px;
+      border: 1px solid rgba(0, 102, 255, 0.2);
+      background: white;
+      color: var(--text);
+      font-family: var(--font);
+      font-size: 1rem;
+      transition: all 0.3s;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(0, 102, 255, 0.1);
+    }
+
+    input::placeholder, textarea::placeholder {
+      color: rgba(74, 74, 106, 0.5);
+    }
+
+    .file-upload {
+      border: 2px dashed rgba(0, 102, 255, 0.3);
+      padding: 1.5rem;
+      text-align: center;
+      border-radius: 12px;
+      background: var(--primary-light);
+      cursor: pointer;
+      transition: all 0.3s;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      min-height: 150px;
+    }
+
+    .file-upload i {
+      font-size: 2rem;
+      color: var(--primary);
+      margin-bottom: 1rem;
+    }
+
+    .file-upload span {
+      color: var(--text-secondary);
+      font-size: 1rem;
+    }
+
+    .file-upload input[type="file"] {
+      position: absolute;
+      opacity: 0;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      cursor: pointer;
+    }
+
+    .file-upload:hover {
+      border-color: var(--primary);
+      background: rgba(0, 102, 255, 0.15);
+    }
+
+    .btn-row {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .btn {
+      padding: 0.8rem 2rem;
+      font-weight: 600;
+      font-size: 1rem;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .btn-save {
+      background: var(--primary);
+      color: white;
+      box-shadow: var(--card-shadow);
+    }
+
+    .btn-save:hover {
+      background: #005ce6;
+      transform: translateY(-2px);
+    }
+
+    .btn-reset {
+      background: white;
+      color: var(--text);
+      border: 1px solid rgba(0, 102, 255, 0.2);
+    }
+
+    .btn-reset:hover {
+      background: #f0f5ff;
+      border-color: var(--primary);
+    }
+
+    .btn i {
+      font-size: 1.2rem;
+    }
+
+    /* Status colors */
+    select[name="status"] option[value="pending"] {
+      color: var(--status-pending);
+    }
+    select[name="status"] option[value="paid"] {
+      color: var(--status-paid);
+    }
+    select[name="status"] option[value="overdue"] {
+      color: var(--status-overdue);
+    }
+
+    .select2-container {
+  width: 100% !important;
+}
+
+.select2-container--default .select2-selection--single {
+  height: 48px !important;
+  border: 1px solid rgba(0, 102, 255, 0.2);
+  border-radius: 12px;
+  background-color: white;
+  display: flex;
+  align-items: center;
+  padding: 0 1rem;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+  color: rgba(0, 0, 0, 0.6); /* estilo de placeholder */
+  padding: 0;
+  margin: 0;
+  line-height: normal;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+  height: 100%;
+  position: absolute;
+  right: 12px;
+  top: 0;
+  width: 34px;
+}
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .grid-2 {
+        grid-template-columns: 1fr;
+      }
+
+      .btn-row {
+        flex-direction: column;
+      }
+
+      .btn {
+        width: 100%;
+      }
+
+      .header h1 {
+        font-size: 2rem;
+      }
+    }
+
+    /* Custom select arrow */
+    select {
+      appearance: none;
+      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230066ff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+      background-repeat: no-repeat;
+      background-position: right 1rem center;
+      background-size: 1rem;
+      padding-right: 2.5rem;
+    }
+
+    /* New styles for info cards */
+    .info-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .info-card {
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 1.5rem;
+      box-shadow: var(--card-shadow);
+      transition: transform 0.3s, box-shadow 0.3s;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .info-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px rgba(0, 102, 255, 0.12);
+    }
+
+    .info-card .icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1rem;
+      font-size: 1.5rem;
+    }
+
+    .info-card.pending .icon {
+      background-color: rgba(255, 171, 0, 0.1);
+      color: var(--status-pending);
+    }
+
+    .info-card.overdue .icon {
+      background-color: rgba(255, 61, 0, 0.1);
+      color: var(--status-overdue);
+    }
+
+    .info-card.paid .icon {
+      background-color: rgba(0, 200, 83, 0.1);
+      color: var(--status-paid);
+    }
+
+    .info-card.total .icon {
+      background-color: rgba(0, 102, 255, 0.1);
+      color: var(--primary);
+    }
+
+    .info-card .value {
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin: 0.5rem 0;
+    }
+
+    .info-card .label {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+
+    .info-card .change {
+      font-size: 0.8rem;
+      margin-top: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .info-card .change.positive {
+      color: var(--status-paid);
+    }
+
+    .info-card .change.negative {
+      color: var(--status-overdue);
+    }
+
+    /* Boleto installments section */
+    .boleto-installments {
+      display: none;
+      margin-top: 1rem;
+      padding: 1rem;
+      background-color: rgba(0, 102, 255, 0.05);
+      border-radius: 12px;
+    }
+
+    .installment-row {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 0.5rem;
+      align-items: center;
+    }
+
+    .installment-row input[type="date"] {
+      flex: 1;
+    }
+
+    .installment-row input[type="number"] {
+      width: 80px;
+    }
+
+    .add-installment {
+      margin-top: 0.5rem;
+      background: var(--primary-light);
+      color: var(--primary);
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .add-installment:hover {
+      background: rgba(0, 102, 255, 0.2);
+    }
+
+    /* Cartão section */
+    .cartao-section {
+      display: none;
+      margin-top: 1rem;
+      padding: 1rem;
+      background-color: rgba(0, 102, 255, 0.05);
+      border-radius: 12px;
+    }
+
+    /* Pix section */
+    .pix-section {
+      display: none;
+      margin-top: 1rem;
+      padding: 1rem;
+      background-color: rgba(0, 102, 255, 0.05);
+      border-radius: 12px;
+    }
+  .auto-preenchido {
+  border: 2px solid red !important;
+  background-color: rgba(255, 0, 0, 0.05);
+  box-shadow: 0 0 10px red;
+  transition: all 0.3s ease;
+}
+
+
+  </style>
+{% endblock %}
+
+{% block content %}
+  <div class="container">
+    <div class="header">
+      <h1>LANÇAMENTO MANUAL</h1>
+      <p>Preencha os dados para registrar um novo pagamento</p>
+    </div>
+
+    <!-- Cards de Informações -->
+    <div class="info-cards">
+      <div class="info-card pending">
+        <div class="icon">
+          <i class="bi bi-clock"></i>
+        </div>
+        <div class="value" id="valor-pendente">R$ 0,00</div>
+        <div class="label">Pendentes</div>
+        <div class="change negative">
+          <i class="bi bi-arrow-up"></i> <span id="variacao-pendente">0%</span> no mês
+        </div>
+      </div>
+
+      <div class="info-card overdue">
+        <div class="icon">
+          <i class="bi bi-exclamation-triangle"></i>
+        </div>
+        <div class="value" id="valor-atrasado">R$ 0,00</div>
+        <div class="label">Atrasados</div>
+        <div class="change positive">
+          <i class="bi bi-arrow-down"></i> <span id="variacao-atrasado">0%</span> no mês
+        </div>
+      </div>
+
+      <div class="info-card paid">
+        <div class="icon">
+          <i class="bi bi-check-circle"></i>
+        </div>
+        <div class="value" id="valor-pago">R$ 0,00</div>
+        <div class="label">Pagamentos</div>
+        <div class="change positive">
+          <i class="bi bi-arrow-up"></i> <span id="variacao-pago">0%</span> no mês
+        </div>
+      </div>
+
+      <div class="info-card total">
+        <div class="icon">
+          <i class="bi bi-cash-stack"></i>
+        </div>
+        <div class="value" id="valor-total">R$ 0,00</div>
+        <div class="label">Total em Contas</div>
+        <div class="change positive">
+          <i class="bi bi-arrow-up"></i> <span id="variacao-total">0%</span> no mês
+        </div>
+      </div>
+    </div>
+
+    <form id="lancamento-form" method="POST" enctype="multipart/form-data">
+      <!-- Seção 1: Informações Principais -->
+      <div class="card">
+        <h2><i class="bi bi-card-checklist"></i> Informações Principais</h2>
+        <div class="grid grid-2">
+          <!-- Fornecedor -->
+          <div class="form-group">
+            <label>Fornecedor *</label>
+            <select name="fornecedor" class="select-dinamico" data-campo="fornecedor" required>
+              <option value=""></option>
+            </select>
+          </div>
+
+          <!-- Categoria -->
+          <div class="form-group">
+            <label>Categoria *</label>
+            <select name="categorias" class="select-dinamico" data-campo="categorias" required>
+              <option value=""></option>
+            </select>
+          </div>
+
+          <!-- Plano de Contas -->
+          <div class="form-group">
+            <label>Plano de Contas *</label>
+            <select name="plano_de_contas" class="select-dinamico" data-campo="plano_de_contas" required>
+              <option value=""></option>
+            </select>
+          </div>
+
+          <!-- Centro de Custo -->
+          <div class="form-group">
+            <label>Centro de Custo</label>
+            <select name="centro_de_custo" class="select-dinamico" data-campo="centro_de_custo">
+              <option value=""></option>
+            </select>
+          </div>
+
+          <!-- Empresa -->
+          <div class="form-group">
+            <label>Empresa</label>
+            <select name="empresa" class="select-dinamico" data-campo="empresa">
+              <option value=""></option>
+            </select>
+          </div>
+
+          <!-- Conta -->
+          <div class="form-group">
+            <label>Conta</label>
+            <select name="conta" class="select-dinamico" data-campo="conta">
+              <option value=""></option>
+            </select>
+          </div>
+
+          <!-- Tipo de Custo -->
+          <div class="form-group">
+            <label>Tipo de Custo</label>
+            <select name="tipo_custo" class="select-dinamico" data-campo="tipo_custo">
+              <option value=""></option>
+            </select>
+          </div>
+
+          <!-- Tipo -->
+          <div class="form-group">
+            <label>Tipo</label>
+            <select name="tipo" class="select-dinamico" data-campo="tipo">
+              <option value=""></option>
+            </select>
+          </div>
+
+          <!-- Status -->
+          <div class="form-group">
+            <label>Status</label>
+            <select name="status">
+              <option value="pending">Pendente</option>
+              <option value="paid">Pago</option>
+              <option value="overdue">Atrasado</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Seção 2: Valores e Datas -->
+      <div class="card">
+        <h2><i class="bi bi-cash-stack"></i> Valores e Datas</h2>
+        <div class="grid grid-2">
+          <!-- Valor -->
+          <div class="form-group">
+            <label>Valor *</label>
+            <input type="number" step="0.01" name="valor" placeholder="0,00" required>
+          </div>
+
+          <!-- Vencimento -->
+          <div class="form-group">
+            <label>Vencimento *</label>
+            <input type="date" name="vencimento" required>
+          </div>
+
+          <!-- Valor Pago -->
+          <div class="form-group">
+            <label>Valor Pago</label>
+            <input type="number" step="0.01" name="valor_pago" placeholder="0,00">
+          </div>
+
+          <!-- Data de Pagamento -->
+          <div class="form-group">
+            <label>Data de Pagamento</label>
+            <input type="date" name="data_pagamento">
+          </div>
+
+          <!-- Data Competência -->
+          <div class="form-group">
+            <label>Data Competência</label>
+            <input type="date" name="data_competencia">
+          </div>
+
+          <!-- Data Documento -->
+          <div class="form-group">
+            <label>Data Documento</label>
+            <input type="date" name="data_documento">
+          </div>
+        </div>
+      </div>
+
+      <!-- Seção 3: Documentação -->
+      <div class="card">
+        <h2><i class="bi bi-file-earmark-text"></i> Documentação</h2>
+        <div class="grid grid-2">
+          <!-- Documento -->
+          <div class="form-group">
+            <label>Documento</label>
+            <input type="text" name="documento" placeholder="Número do documento">
+          </div>
+
+          <!-- Tipo de Documento -->
+          <div class="form-group">
+            <label>Tipo de Documento</label>
+            <select name="tipo_documento" class="select-dinamico" data-campo="tipo_documento">
+              <option value=""></option>
+            </select>
+          </div>
+
+          <!-- Tipo de Pagamento -->
+          <div class="form-group">
+            <label>Forma de Pagamento *</label>
+            <select name="pagamento_tipo" id="pagamento_tipo" class="select-dinamico" data-campo="pagamento_tipo" required>
+              <option value=""></option>
+              <option value="Boleto">Boleto</option>
+              <option value="Cartão de Crédito">Cartão de Crédito</option>
+              <option value="Cartão de Débito">Cartão de Débito</option>
+              <option value="PIX">PIX</option>
+              <option value="Transferência Bancária">Transferência Bancária</option>
+              <option value="Dinheiro">Dinheiro</option>
+              <option value="Outro">Outro</option>
+            </select>
+          </div>
+
+          <!-- Comentário -->
+          <div class="form-group">
+            <label>Comentário</label>
+            <textarea name="comentario" rows="3" placeholder="Adicione um comentário..."></textarea>
+          </div>
+        </div>
+
+        <!-- Boleto Installments Section -->
+        <div id="boleto-section" class="boleto-installments">
+          <h3><i class="bi bi-receipt"></i> Parcelas do Boleto</h3>
+          <div id="installments-container">
+            <div class="installment-row">
+              <input type="date" name="boleto_data[]" placeholder="Data de vencimento" class="installment-date">
+              <input type="number" step="0.01" name="boleto_valor[]" placeholder="Valor" class="installment-value">
+              <button type="button" class="remove-installment" style="display: none;"><i class="bi bi-trash"></i></button>
+            </div>
+          </div>
+          <button type="button" id="add-installment" class="add-installment">
+            <i class="bi bi-plus-circle"></i> Adicionar Parcela
+          </button>
+        </div>
+
+        <!-- Cartão Section -->
+        <div id="cartao-section" class="cartao-section">
+          <h3><i class="bi bi-credit-card"></i> Informações do Cartão</h3>
+          <div class="grid grid-2">
+            <div class="form-group">
+              <label>Data da Fatura</label>
+              <input type="date" name="cartao_data_fatura">
+            </div>
+            <div class="form-group">
+              <label>Número de Parcelas</label>
+              <select name="cartao_parcelas">
+                <option value="1">1x</option>
+                <option value="2">2x</option>
+                <option value="3">3x</option>
+                <option value="4">4x</option>
+                <option value="5">5x</option>
+                <option value="6">6x</option>
+                <option value="7">7x</option>
+                <option value="8">8x</option>
+                <option value="9">9x</option>
+                <option value="10">10x</option>
+                <option value="11">11x</option>
+                <option value="12">12x</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- PIX Section -->
+        <div id="pix-section" class="pix-section">
+          <h3><i class="bi bi-qr-code"></i> Informações do PIX</h3>
+          <div class="grid grid-2">
+            <div class="form-group">
+              <label>Chave PIX</label>
+              <input type="text" name="pix_chave" placeholder="Chave PIX">
+            </div>
+            <div class="form-group">
+              <label>Data da Transação</label>
+              <input type="date" name="pix_data">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Seção 4: Anexos -->
+      <div class="card">
+        <h2><i class="bi bi-paperclip"></i> Anexar Arquivos</h2>
+        <div class="grid grid-2">
+          <!-- Arquivo de Pagamento -->
+          <div class="form-group">
+            <label>Arquivo de Pagamento</label>
+            <div class="file-upload">
+              <input type="file" name="arquivo_pagamento">
+              <i class="bi bi-cloud-arrow-up"></i>
+              <span>Clique ou arraste o arquivo</span>
+            </div>
+          </div>
+
+          <!-- Arquivo Documento -->
+          <div class="form-group">
+            <label>Arquivo Documento</label>
+            <div class="file-upload">
+              <input type="file" name="arquivo_documento">
+              <i class="bi bi-cloud-arrow-up"></i>
+              <span>Clique ou arraste o arquivo</span>
+            </div>
+          </div>
+
+          <!-- Arquivo XML -->
+          <div class="form-group">
+            <label>Arquivo XML</label>
+            <div class="file-upload">
+              <input type="file" name="arquivo_xml">
+              <i class="bi bi-cloud-arrow-up"></i>
+              <span>Clique ou arraste o arquivo</span>
+            </div>
+          </div>
+
+          <!-- Arquivo Boleto -->
+          <div class="form-group">
+            <label>Arquivo Boleto</label>
+            <div class="file-upload">
+              <input type="file" name="arquivo_boleto">
+              <i class="bi bi-cloud-arrow-up"></i>
+              <span>Clique ou arraste o arquivo</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Botões de Ação -->
+      <div class="btn-row">
+        <button class="btn btn-reset" type="reset">
+          <i class="bi bi-x-circle"></i> Limpar
+        </button>
+        <button class="btn btn-save" type="submit">
+          <i class="bi bi-check-circle"></i> Salvar
+        </button>
+      </div>
+    </form>
+  </div>
+{% endblock %}
+
+{% block extra_js %}
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script>
+    $(document).ready(function () {
+  const $planoSelect = $('select[name="plano_de_contas"]');
+
+  console.log("Campo plano detectado?", $planoSelect.length); // Deve ser 1
+
+  $planoSelect.on('change', function () {
+    const plano = $(this).val();
+    console.log("Plano selecionado:", plano);
+
+    if (!plano) return;
+
+    $.get(`/financeiro/lancamentos/api/plano_info?plano=${encodeURIComponent(plano)}`, function (data) {
+      console.log("Dados recebidos:", data);
+
+      function preencher(nomeCampo, valor) {
+        if (!valor) return;
+        const $campo = $(`select[name="${nomeCampo}"]`);
+        $campo.val(valor).trigger('change');
+
+        // Destaca o campo visualmente
+        const $container = $campo.next('.select2');
+        $container.addClass('auto-preenchido');
+        setTimeout(() => $container.removeClass('auto-preenchido'), 1500);
+      }
+
+      preencher("fornecedor", data.fornecedor);
+      preencher("categorias", data.categorias);
+      preencher("tipo_custo", data.tipo_custo);
+      preencher("empresa", data.empresa);
+      preencher("conta", data.conta);
+    });
+  });
+
+      // URL base para as APIs
+      const API_BASE = '/financeiro/lancamentos/api';
+
+
+      // Função para formatar valor em moeda brasileira
+      function formatCurrency(value) {
+        return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value);
+      }
+
+      // Função para carregar dados do banco de dados
+      function carregarDados() {
+        // Carrega os cards de informações
+        $.ajax({
+          url: `${API_BASE}/resumo_contas`,
+          method: 'GET',
+          dataType: 'json',
+          success: function(data) {
+            $('#valor-pendente').text(formatCurrency(data.pendente));
+            $('#valor-atrasado').text(formatCurrency(data.atrasado));
+            $('#valor-pago').text(formatCurrency(data.pago));
+            $('#valor-total').text(formatCurrency(data.total));
+            $('#variacao-pendente').text(data.variacao_pendente + '%');
+            $('#variacao-atrasado').text(data.variacao_atrasado + '%');
+            $('#variacao-pago').text(data.variacao_pago + '%');
+            $('#variacao-total').text(data.variacao_total + '%');
+          },
+          error: function(xhr) {
+            console.error('Erro ao carregar resumo:', xhr.responseText);
+          }
+        });
+
+        // Carrega as opções dos selects dinâmicos
+        const campos = [
+          'fornecedor', 'categorias', 'plano_de_contas', 'centro_de_custo',
+          'empresa', 'conta', 'tipo_custo', 'tipo', 'tipo_documento'
+        ];
+
+        campos.forEach(function(campo) {
+          $.ajax({
+            url: `${API_BASE}/opcoes_select`,
+            method: 'GET',
+            data: { campo: campo },
+            dataType: 'json',
+            success: function(data) {
+              const select = $(`select[name="${campo}"]`);
+              select.empty().append('<option value=""></option>');
+
+              data.forEach(function(item) {
+                select.append(`<option value="${item}">${item}</option>`);
+              });
+
+              // Re-inicializa o Select2 após adicionar opções
+              select.select2({
+                tags: true,
+                placeholder: "Selecione ou digite para criar",
+                width: '100%'
+              });
+            },
+            error: function(xhr) {
+              console.error(`Erro ao carregar opções para ${campo}:`, xhr.responseText);
+            }
+          });
+        });
+      }
+
+      // Configura todos os selects dinâmicos
+      $('.select-dinamico').select2({
+        tags: true,
+        placeholder: "Selecione ou digite para criar",
+        width: '100%'
+      }).on('select2:select', function(e) {
+        if (e.params.data.tag) {
+          const campo = $(this).data('campo');
+          const valor = e.params.data.text;
+
+          $.ajax({
+            url: `${API_BASE}/adicionar_opcao`,
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({ campo, valor }),
+            success: function(response) {
+              if (!response.success) {
+                console.error("Erro ao salvar:", response.error);
+                $(this).val(null).trigger('change');
+              }
+            },
+            error: function(xhr) {
+              console.error("Erro na requisição:", xhr.responseText);
+              $(this).val(null).trigger('change');
+            }
+          });
+        }
+      });
+
+      // Mostra/oculta seções específicas baseadas no tipo de pagamento
+      $('#pagamento_tipo').on('change', function() {
+        const tipo = $(this).val();
+
+        // Oculta todas as seções primeiro
+        $('#boleto-section, #cartao-section, #pix-section').hide();
+
+        // Mostra a seção relevante
+        if (tipo === 'Boleto') {
+          $('#boleto-section').show();
+        } else if (tipo === 'Cartão de Crédito' || tipo === 'Cartão de Débito') {
+          $('#cartao-section').show();
+        } else if (tipo === 'PIX') {
+          $('#pix-section').show();
+        }
+      });
+
+      // Lógica para parcelas de boleto
+      $('#add-installment').on('click', function() {
+        const container = $('#installments-container');
+        const newRow = $('.installment-row:first').clone();
+
+        // Limpa os valores do novo campo
+        newRow.find('input').val('');
+
+        // Mostra o botão de remover
+        newRow.find('.remove-installment').show().on('click', function() {
+          $(this).closest('.installment-row').remove();
+          calcularValorTotal();
+        });
+
+        container.append(newRow);
+
+        // Configura o evento de mudança para calcular o valor total
+        newRow.find('.installment-value').on('change', calcularValorTotal);
+      });
+
+      // Função para calcular o valor total das parcelas
+      function calcularValorTotal() {
+        let total = 0;
+        $('.installment-value').each(function() {
+          const valor = parseFloat($(this).val()) || 0;
+          total += valor;
+        });
+
+        // Atualiza o campo de valor principal
+        $('input[name="valor"]').val(total.toFixed(2));
+      }
+
+      // Configura o evento de mudança para a primeira parcela
+      $('.installment-value:first').on('change', calcularValorTotal);
+
+      // Configura o botão de remover para a primeira linha (se necessário)
+      $('.remove-installment:first').on('click', function() {
+        $(this).closest('.installment-row').remove();
+        calcularValorTotal();
+      });
+
+      // Atualiza status quando valor pago ou vencimento mudar
+      $('input[name="valor_pago"], input[name="vencimento"]').on('change', function() {
+        const valorPago = $('input[name="valor_pago"]').val();
+        const vencimento = $('input[name="vencimento"]').val();
+
+        if (valorPago && parseFloat(valorPago) > 0) {
+          $('select[name="status"]').val('paid').trigger('change');
+        } else if (vencimento) {
+          const [day, month, year] = vencimento.split('/');
+          const vencDate = new Date(year, month - 1, day);
+          const today = new Date();
+          today.setHours(0, 0, 0, 0);
+
+          if (vencDate < today) {
+            $('select[name="status"]').val('overdue').trigger('change');
+          } else {
+            $('select[name="status"]').val('pending').trigger('change');
+          }
+        }
+      });
+
+      // Envio do formulário
+      $('#lancamento-form').on('submit', function(e) {
+        e.preventDefault();
+
+        const formData = new FormData(this);
+        const pagamentoTipo = $('#pagamento_tipo').val();
+
+        // Validação básica
+        if (!$('input[name="valor"]').val() || !$('input[name="vencimento"]').val()) {
+          alert('Valor e vencimento são obrigatórios!');
+          return;
+        }
+
+        // Mostrar loading
+        $('.btn-save').html('<i class="bi bi-arrow-repeat spin"></i> Salvando...').prop('disabled', true);
+
+        $.ajax({
+          url: `${API_BASE}/salvar_lancamento`,
+          method: 'POST',
+          data: formData,
+          processData: false,
+          contentType: false,
+          success: function(response) {
+            if (response.success) {
+              alert('Lançamento salvo com sucesso!');
+              $('#lancamento-form')[0].reset();
+              carregarDados();
+
+              // Limpa seções específicas
+              $('#boleto-section, #cartao-section, #pix-section').hide();
+              $('#installments-container').html(`
+                <div class="installment-row">
+                  <input type="date" name="boleto_data[]" placeholder="Data de vencimento" class="installment-date">
+                  <input type="number" step="0.01" name="boleto_valor[]" placeholder="Valor" class="installment-value">
+                  <button type="button" class="remove-installment" style="display: none;"><i class="bi bi-trash"></i></button>
+                </div>
+              `);
+            } else {
+              alert('Erro ao salvar: ' + (response.error || 'Erro desconhecido'));
+            }
+          },
+          error: function(xhr) {
+            alert('Erro na comunicação com o servidor: ' + xhr.responseText);
+          },
+          complete: function() {
+            $('.btn-save').html('<i class="bi bi-check-circle"></i> Salvar').prop('disabled', false);
+          }
+        });
+      });
+
+      // Carrega os dados iniciais
+      carregarDados();
+
+      // Adiciona estilo para ícone de loading
+      $('<style>.spin {animation: spin 1s linear infinite;} @keyframes spin {100% {transform: rotate(360deg);}}</style>').appendTo('head');
+    });
+   </script>
+{% endblock %}

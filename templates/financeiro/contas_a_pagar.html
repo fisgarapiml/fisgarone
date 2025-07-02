@@ -1,0 +1,192 @@
+{% extends 'base.html' %}
+
+{% block title %}Contas a Pagar{% endblock %}
+{% block page_title %}Contas a Pagar{% endblock %}
+
+{% block extra_css %}
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/contas_a_pagar.css') }}">
+    <style>
+        /* Só exceções rápidas aqui dentro */
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="dashboard-container">
+        <header class="dashboard-header">
+            <h1 class="page-title">{{ self.page_title() }}</h1>
+            <div class="date-filter">
+                <input type="date" id="filter-date">
+                <button onclick="filterByDate()">
+                    <i class="bi bi-funnel"></i> Filtrar
+                </button>
+            </div>
+        </header>
+
+        <!-- Cards Resumo -->
+        <div class="cards-row">
+            <div class="card" data-filter="all" onclick="showTransactions('all')">
+                <div class="card-icon"><i class="bi bi-cash-stack"></i></div>
+                <h3 class="card-title">Total Previsto</h3>
+                <p class="card-value">{{ formatar_brl(total_previsto) }}</p>
+            </div>
+            <div class="card" data-filter="paid" onclick="showTransactions('paid')">
+                <div class="card-icon"><i class="bi bi-check-circle"></i></div>
+                <h3 class="card-title">Total Pago</h3>
+                <p class="card-value">{{ formatar_brl(total_pago) }}</p>
+            </div>
+            <div class="card" data-filter="balance" onclick="showTransactions('balance')">
+                <div class="card-icon"><i class="bi bi-graph-up"></i></div>
+                <h3 class="card-title">Saldo</h3>
+                <p class="card-value" style="color: {{ 'var(--accent)' if saldo >= 0 else 'var(--status-overdue)' }}">{{ formatar_brl(saldo) }}</p>
+            </div>
+            <div class="card" data-filter="today" onclick="showTransactions('today')">
+                <div class="card-icon"><i class="bi bi-calendar-event"></i></div>
+                <h3 class="card-title">A Pagar Hoje</h3>
+                <p class="card-value">{{ formatar_brl(a_vencer) }}</p>
+            </div>
+            <div class="card" data-filter="overdue" onclick="showTransactions('overdue')">
+                <div class="card-icon"><i class="bi bi-exclamation-triangle"></i></div>
+                <h3 class="card-title">Atrasados</h3>
+                <p class="card-value">{{ formatar_brl(vencidas) }}</p>
+            </div>
+        </div>
+
+        <div class="chart-duplo">
+            <div class="chart-box">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                    <h3>Evolução Mensal</h3>
+                    <select id="filtro-evolucao" style="padding: 5px 10px; border-radius: 8px; border: 1px solid #ccc;">
+                        <option value="ano">Ano Atual</option>
+                        <option value="todos">Todos os Anos</option>
+                    </select>
+                </div>
+                <canvas id="graficoContasMensais"></canvas>
+            </div>
+            <div class="chart-box">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                    <h3>Distribuição por Categoria</h3>
+                    <select id="filtro-categoria" style="padding: 5px 10px; border-radius: 8px; border: 1px solid #ccc;">
+                        <option value="mes">Mês Atual</option>
+                        <option value="ano">Ano Atual</option>
+                        <option value="todos">Todos os Lançamentos</option>
+                    </select>
+                </div>
+                <canvas id="graficoCategorias"></canvas>
+            </div>
+        </div>
+
+        <div class="daily-timeline">
+            <div class="timeline-header">
+                <h3 class="timeline-title">
+                    <i class="bi bi-calendar-range"></i>
+                    Fluxo Diário - {{ mes_corrente }}
+                </h3>
+                <div class="timeline-nav">
+                    <button onclick="changeMonth(-1)"><i class="bi bi-chevron-left"></i></button>
+                    <button onclick="changeMonth(1)"><i class="bi bi-chevron-right"></i></button>
+                </div>
+            </div>
+            <div class="daily-grid" id="daily-grid"></div>
+        </div>
+
+        <div class="transactions-container" id="transactions-container">
+            <div class="transactions-header">
+                <h2 class="transactions-title" id="transactions-title"></h2>
+                <button class="close-transactions" onclick="hideTransactions()">
+                    <i class="bi bi-x-lg"></i>
+                </button>
+            </div>
+            <div id="transactions-content"></div>
+        </div>
+    </div>
+
+    <div class="edit-modal" id="edit-modal">
+        <div class="edit-modal-content">
+            <div class="edit-modal-header">
+                <h2 class="edit-modal-title">Editar Lançamento</h2>
+                <button class="close-edit-modal" onclick="closeEditModal()"><i class="bi bi-x-lg"></i></button>
+            </div>
+            <form id="edit-form">
+                <input type="hidden" id="edit-codigo">
+                <div class="edit-form-group">
+                    <label for="edit-fornecedor">Fornecedor</label>
+                    <input type="text" id="edit-fornecedor" required>
+                </div>
+                <div class="edit-form-group">
+                    <label for="edit-categoria">Categoria</label>
+                    <input type="text" id="edit-categoria" required>
+                </div>
+                <div class="edit-form-group">
+                    <label for="edit-plano">Plano</label>
+                    <input type="text" id="edit-plano" required>
+                </div>
+                <div class="edit-form-group">
+                    <label for="edit-vencimento">Vencimento</label>
+                    <input type="date" id="edit-vencimento" required>
+                </div>
+                <div class="edit-form-group">
+                    <label for="edit-valor">Valor</label>
+                    <input type="number" step="0.01" id="edit-valor" required>
+                </div>
+                <div class="edit-form-group">
+                    <label for="edit-pago">Status</label>
+                    <select id="edit-pago">
+                        <option value="0">Pendente</option>
+                        <option value="1">Pago</option>
+                    </select>
+                </div>
+                <div class="edit-form-actions">
+                    <button type="button" class="cancel-btn" onclick="closeEditModal()">Cancelar</button>
+                    <button type="button" class="save-btn" onclick="saveTransaction()">Salvar</button>
+                    <!-- Remova o botão PDF se não tiver a função gerarPdfDoLancamento() no JS -->
+                    <!-- <button type="button" class="pdf-btn-modal" onclick="gerarPdfDoLancamento()">
+                        <i class="bi bi-file-earmark-pdf"></i> Gerar PDF
+                    </button> -->
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="pdf-floating-container">
+        <button class="pdf-main-button" onclick="togglePDFOptions()">
+            <i class="fas fa-file-pdf"></i> GERAR PDF
+        </button>
+        <div class="pdf-options" id="pdfOptions">
+            <button onclick="gerarPDF('dia')"><i class="fas fa-calendar-day"></i> Contas do Dia</button>
+            <button onclick="gerarPDF('atrasados')"><i class="fas fa-exclamation-triangle"></i> Contas Atrasadas</button>
+            <button onclick="gerarPDF('segunda')"><i class="fas fa-calendar-week"></i> Segunda + Fim de Semana</button>
+        </div>
+    </div>
+
+    <div class="custom-modal" id="modal-lancamentos">
+        <div class="custom-modal-content">
+            <div class="custom-modal-header">
+                <h2 id="modal-title">Lançamentos</h2>
+                <button id="btn-gerar-pdf-modal" class="pdf-btn-modal"><i class="bi bi-file-earmark-pdf"></i> Gerar PDF</button>
+                <button onclick="fecharModal()" class="close-modal">&times;</button>
+            </div>
+            <div class="custom-modal-body" id="modal-body"></div>
+        </div>
+    </div>
+    <div style="text-align: right; margin-top: 20px;">
+        <button id="btn-exportar-pdf" class="pdf-btn-modal"><i class="bi bi-file-earmark-pdf"></i> Exportar PDF</button>
+    </div>
+
+{% endblock %}
+
+{% block extra_js %}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+
+    // Essas variáveis vêm do Flask
+    const currentMonth = parseInt('{{ current_month }}');
+    const currentYear = parseInt('{{ current_year }}');
+    const dailyPayments = JSON.parse('{{ daily_payments|safe }}');
+    const lancamentosData = {{ lancamentos|tojson|safe }};
+</script>
+<script src="{{ url_for('static', filename='js/contas_a_pagar.js') }}"></script>
+
+{% endblock %}
+

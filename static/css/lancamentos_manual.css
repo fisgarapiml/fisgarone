@@ -1,0 +1,683 @@
+ .select2-container {
+    width: 100% !important;
+  }
+
+  .select2-container--default .select2-selection--single {
+    height: auto;
+    min-height: 48px;
+    padding: 0.8rem 1rem;
+    border-radius: 12px;
+    border: 1px solid rgba(0, 102, 255, 0.2);
+    background-color: white;
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+    font-size: 1rem;
+    font-family: 'Space Grotesk', sans-serif;
+  }
+
+  .select2-container--default .select2-selection--single .select2-selection__rendered {
+    padding-left: 0;
+    color: rgba(0, 0, 0, 0.6);
+    line-height: 1.5;
+  }
+
+  .select2-container--default .select2-selection--single .select2-selection__arrow {
+    height: 100%;
+    right: 12px;
+    top: 0;
+    position: absolute;
+  }
+
+    :root {
+      --primary: #0066ff;
+      --primary-light: rgba(0, 102, 255, 0.1);
+      --accent: #00ffaa;
+      --text: #2b2d42;
+      --bg: #f8faff;
+      --card-bg: rgba(255, 255, 255, 0.95);
+      --card-shadow: 0 4px 20px rgba(0, 102, 255, 0.08);
+      --status-paid: #00c853;
+      --status-pending: #ffab00;
+      --status-overdue: #ff3d00;
+      --text-secondary: #4a4a6a;
+      --font: 'Space Grotesk', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 2rem;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 3rem;
+      position: relative;
+    }
+
+    .header h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      display: inline-block;
+      margin-bottom: 1rem;
+    }
+
+    .header p {
+      color: var(--text-secondary);
+      font-size: 1.1rem;
+      font-weight: 400;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      box-shadow: var(--card-shadow);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 32px rgba(0, 102, 255, 0.15);
+    }
+
+    .card h2 {
+      font-size: 1.5rem;
+      margin-bottom: 1.5rem;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      font-weight: 600;
+    }
+
+    .card h2 i {
+      color: var(--accent);
+    }
+
+    .grid {
+      display: grid;
+      gap: 1.5rem;
+    }
+
+    .grid-2 {
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    }
+
+    .form-group {
+      position: relative;
+      margin-bottom: 1.5rem;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      color: var(--text);
+      font-size: 0.95rem;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 0.8rem 1rem;
+      border-radius: 12px;
+      border: 1px solid rgba(0, 102, 255, 0.2);
+      background: white;
+      color: var(--text);
+      font-family: var(--font);
+      font-size: 1rem;
+      transition: all 0.3s;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(0, 102, 255, 0.1);
+    }
+
+    input::placeholder, textarea::placeholder {
+      color: rgba(74, 74, 106, 0.5);
+    }
+
+    .file-upload {
+      border: 2px dashed rgba(0, 102, 255, 0.3);
+      padding: 1.5rem;
+      text-align: center;
+      border-radius: 12px;
+      background: var(--primary-light);
+      cursor: pointer;
+      transition: all 0.3s;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      min-height: 150px;
+    }
+
+    .file-upload i {
+      font-size: 2rem;
+      color: var(--primary);
+      margin-bottom: 1rem;
+    }
+
+    .file-upload span {
+      color: var(--text-secondary);
+      font-size: 1rem;
+    }
+
+    .file-upload input[type="file"] {
+      position: absolute;
+      opacity: 0;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      cursor: pointer;
+    }
+
+    .file-upload:hover {
+      border-color: var(--primary);
+      background: rgba(0, 102, 255, 0.15);
+    }
+
+    .btn-row {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .btn {
+      padding: 0.8rem 2rem;
+      font-weight: 600;
+      font-size: 1rem;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .btn-save {
+      background: var(--primary);
+      color: white;
+      box-shadow: var(--card-shadow);
+    }
+
+    .btn-save:hover {
+      background: #005ce6;
+      transform: translateY(-2px);
+    }
+
+    .btn-reset {
+      background: white;
+      color: var(--text);
+      border: 1px solid rgba(0, 102, 255, 0.2);
+    }
+
+    .btn-reset:hover {
+      background: #f0f5ff;
+      border-color: var(--primary);
+    }
+
+    .btn i {
+      font-size: 1.2rem;
+    }
+
+    /* Status colors */
+    select[name="status"] option[value="pending"] {
+      color: var(--status-pending);
+    }
+    select[name="status"] option[value="paid"] {
+      color: var(--status-paid);
+    }
+    select[name="status"] option[value="overdue"] {
+      color: var(--status-overdue);
+    }
+
+    .select2-container {
+  width: 100% !important;
+}
+
+.select2-container--default .select2-selection--single {
+  height: 48px !important;
+  border: 1px solid rgba(0, 102, 255, 0.2);
+  border-radius: 12px;
+  background-color: white;
+  display: flex;
+  align-items: center;
+  padding: 0 1rem;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+  color: rgba(0, 0, 0, 0.6); /* estilo de placeholder */
+  padding: 0;
+  margin: 0;
+  line-height: normal;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+  height: 100%;
+  position: absolute;
+  right: 12px;
+  top: 0;
+  width: 34px;
+}
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .grid-2 {
+        grid-template-columns: 1fr;
+      }
+
+      .btn-row {
+        flex-direction: column;
+      }
+
+      .btn {
+        width: 100%;
+      }
+
+      .header h1 {
+        font-size: 2rem;
+      }
+    }
+
+    /* Custom select arrow */
+    select {
+      appearance: none;
+      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230066ff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+      background-repeat: no-repeat;
+      background-position: right 1rem center;
+      background-size: 1rem;
+      padding-right: 2.5rem;
+    }
+
+    /* New styles for info cards */
+    .info-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .info-card {
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 1.5rem;
+      box-shadow: var(--card-shadow);
+      transition: transform 0.3s, box-shadow 0.3s;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .info-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px rgba(0, 102, 255, 0.12);
+    }
+
+    .info-card .icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1rem;
+      font-size: 1.5rem;
+    }
+
+    .info-card.pending .icon {
+      background-color: rgba(255, 171, 0, 0.1);
+      color: var(--status-pending);
+    }
+
+    .info-card.overdue .icon {
+      background-color: rgba(255, 61, 0, 0.1);
+      color: var(--status-overdue);
+    }
+
+    .info-card.paid .icon {
+      background-color: rgba(0, 200, 83, 0.1);
+      color: var(--status-paid);
+    }
+
+    .info-card.total .icon {
+      background-color: rgba(0, 102, 255, 0.1);
+      color: var(--primary);
+    }
+
+    .info-card .value {
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin: 0.5rem 0;
+    }
+
+    .info-card .label {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+
+    .info-card .change {
+      font-size: 0.8rem;
+      margin-top: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .info-card .change.positive {
+      color: var(--status-paid);
+    }
+
+    .info-card .change.negative {
+      color: var(--status-overdue);
+    }
+
+    /* Boleto installments section */
+    .boleto-installments {
+      display: none;
+      margin-top: 1rem;
+      padding: 1rem;
+      background-color: rgba(0, 102, 255, 0.05);
+      border-radius: 12px;
+    }
+
+    .installment-row {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 0.5rem;
+      align-items: center;
+    }
+
+    .installment-row input[type="date"] {
+      flex: 1;
+    }
+
+    .installment-row input[type="number"] {
+      width: 80px;
+    }
+
+    .add-installment {
+      margin-top: 0.5rem;
+      background: var(--primary-light);
+      color: var(--primary);
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .add-installment:hover {
+      background: rgba(0, 102, 255, 0.2);
+    }
+
+    /* Cartão section */
+    .cartao-section {
+      display: none;
+      margin-top: 1rem;
+      padding: 1rem;
+      background-color: rgba(0, 102, 255, 0.05);
+      border-radius: 12px;
+    }
+
+    /* Pix section */
+    .pix-section {
+      display: none;
+      margin-top: 1rem;
+      padding: 1rem;
+      background-color: rgba(0, 102, 255, 0.05);
+      border-radius: 12px;
+    }
+  .auto-preenchido {
+  border: 2px solid red !important;
+  background-color: rgba(255, 0, 0, 0.05);
+  box-shadow: 0 0 10px red;
+  transition: all 0.3s ease;
+}
+/* Barra superior fixa para filtro de data */
+.filter-bar {
+  width: 100%;
+  background: #fafdff;
+  border-radius: 20px 20px 12px 12px;
+  box-shadow: 0 2px 12px rgba(41, 101, 231, 0.07);
+  padding: 12px 0 4px 0;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  position: relative;
+  z-index: 2;
+}
+
+/* Filtro bem alinhado e compacto, sem quebrar linha */
+.filter-row {
+  display: flex;
+  gap: 18px;
+  align-items: center;
+  margin: 0 32px 0 0; /* Alinha à direita, pode ajustar */
+}
+
+.filter-row label {
+  font-family: 'Space Grotesk', sans-serif;
+  color: #434e61;
+  font-size: 1rem;
+  font-weight: 500;
+  margin: 0 6px 0 0;
+  letter-spacing: 0.01em;
+}
+
+.filter-row select {
+  appearance: none;
+  border: none;
+  border-radius: 8px;
+  background: #f1f7ff;
+  color: #174381;
+  font-size: 1rem;
+  font-family: 'Space Grotesk', sans-serif;
+  padding: 8px 32px 8px 14px;
+  box-shadow: 0 1px 6px rgba(41, 101, 231, 0.06);
+  transition: border 0.2s, box-shadow 0.2s;
+  outline: none;
+  font-weight: 600;
+  cursor: pointer;
+  min-width: 88px;
+  margin: 0 4px;
+  position: relative;
+}
+
+.filter-row select:focus {
+  border: 2px solid #2ca2fa;
+  box-shadow: 0 0 0 2px #c2e2fa;
+}
+
+.filter-row select::-ms-expand {
+  display: none;
+}
+
+.filter-row select::-webkit-input-placeholder { color: #b0b6c2; }
+.filter-row select::-moz-placeholder { color: #b0b6c2; }
+.filter-row select:-ms-input-placeholder { color: #b0b6c2; }
+.filter-row select::placeholder { color: #b0b6c2; }
+
+/* Custom seta */
+.filter-row select {
+  background-image: url("data:image/svg+xml,%3Csvg fill='none' stroke='%23174381' stroke-width='2' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M6 9l6 6 6-6'%3E%3C/path%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 18px 18px;
+}
+/* Estilos base - já existentes */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Media Queries */
+@media (max-width: 1200px) {
+  .container {
+    padding: 15px;
+  }
+}
+
+@media (max-width: 992px) {
+  .info-cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .grid.grid-2 {
+    grid-template-columns: 1fr;
+  }
+
+  .form-group {
+    margin-bottom: 15px;
+  }
+}
+
+@media (max-width: 768px) {
+  .header h1 {
+    font-size: 1.5rem;
+  }
+
+  .header p {
+    font-size: 0.9rem;
+  }
+
+  .info-cards {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+
+  .info-card {
+    padding: 15px;
+  }
+
+  .filter-row {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .filter-row label {
+    width: 100%;
+  }
+
+  .filter-row select {
+    width: 100%;
+  }
+
+  .btn-row {
+    flex-direction: column;
+  }
+
+  .btn {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  /* Ajustes para seções específicas */
+  .boleto-installments,
+  .cartao-section,
+  .pix-section {
+    padding: 15px;
+  }
+
+  .installment-row {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .installment-row input {
+    width: 100%;
+  }
+
+  .file-upload {
+    padding: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 10px;
+  }
+
+  .card h2 {
+    font-size: 1.2rem;
+  }
+
+  .card h2 i {
+    font-size: 1rem;
+  }
+
+  /* Ajuste para selects */
+  .select2-container {
+    width: 100% !important;
+  }
+
+  /* Ajuste para campos de data */
+  input[type="date"] {
+    padding: 8px;
+  }
+}
+/* Ajustes para selects em mobile */
+.select2-container--open .select2-dropdown {
+  position: fixed !important;
+  top: auto !important;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100% !important;
+  max-height: 50vh;
+  overflow-y: auto;
+}
+
+/* Modal para adição de opções em mobile */
+#modalAdicionar {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 20px;
+  background: white;
+  z-index: 1051;
+  box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+}
+
+@media (min-width: 768px) {
+  #modalAdicionar {
+    display: none !important;
+  }
+}

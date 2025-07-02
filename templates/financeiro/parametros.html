@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+
+{% block title %}Parâmetros Financeiros{% endblock %}
+{% block page_title %}Parâmetros Financeiros{% endblock %}
+
+{% block extra_css %}
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/parametros.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <h2 class="neon-title mb-4"><i class="ri-settings-5-fill"></i> Parâmetros Financeiros</h2>
+    <ul class="nav nav-tabs" id="paramTabs" role="tablist">
+        <li class="nav-item"><button class="nav-link active" id="tab-categorias" data-bs-toggle="tab" data-bs-target="#categorias" type="button">Categorias</button></li>
+        <li class="nav-item"><button class="nav-link" id="tab-fornecedores" data-bs-toggle="tab" data-bs-target="#fornecedores" type="button">Fornecedores</button></li>
+        <li class="nav-item"><button class="nav-link" id="tab-centro" data-bs-toggle="tab" data-bs-target="#centro" type="button">Centro de Custo</button></li>
+        <li class="nav-item"><button class="nav-link" id="tab-banco" data-bs-toggle="tab" data-bs-target="#banco" type="button">Contas Bancárias</button></li>
+    </ul>
+    <div class="tab-content mt-4">
+        <!-- Categorias -->
+        <div class="tab-pane fade show active" id="categorias" role="tabpanel">
+            <h4><i class="ri-price-tag-3-line"></i> Categorias</h4>
+            <form class="row g-2 mb-2" id="form-categoria">
+                <div class="col-7 col-md-5">
+                    <input type="text" class="form-control" placeholder="Nome da Categoria" name="nome" required autocomplete="off">
+                </div>
+                <div class="col-4 col-md-4">
+                    <input type="text" class="form-control" placeholder="Descrição" name="descricao">
+                </div>
+                <div class="col-1 col-md-3">
+                    <button type="submit" class="btn btn-neon w-100"><i class="ri-add-fill"></i></button>
+                </div>
+            </form>
+            <table class="table table-neon table-hover">
+                <thead><tr><th>Nome</th><th>Descrição</th><th>Ações</th></tr></thead>
+                <tbody id="lista-categorias"></tbody>
+            </table>
+        </div>
+        <!-- Fornecedores -->
+        <div class="tab-pane fade" id="fornecedores" role="tabpanel">
+            <h4><i class="ri-truck-line"></i> Fornecedores</h4>
+            <form class="row g-2 mb-2" id="form-fornecedor">
+                <div class="col-5"><input type="text" class="form-control" placeholder="Nome" name="nome" required autocomplete="off"></div>
+                <div class="col-3"><input type="text" class="form-control" placeholder="CNPJ" name="cnpj"></div>
+                <div class="col-2"><input type="text" class="form-control" placeholder="Email" name="email"></div>
+                <div class="col-1"><input type="text" class="form-control" placeholder="Tel" name="telefone"></div>
+                <div class="col-1"><button type="submit" class="btn btn-neon w-100"><i class="ri-add-fill"></i></button></div>
+            </form>
+            <table class="table table-neon table-hover">
+                <thead><tr><th>Nome</th><th>CNPJ</th><th>Email</th><th>Tel</th><th>Ações</th></tr></thead>
+                <tbody id="lista-fornecedores"></tbody>
+            </table>
+        </div>
+        <!-- Centro de Custo -->
+        <div class="tab-pane fade" id="centro" role="tabpanel">
+            <h4><i class="ri-building-line"></i> Centro de Custo</h4>
+            <form class="row g-2 mb-2" id="form-centro">
+                <div class="col-6"><input type="text" class="form-control" placeholder="Nome" name="nome" required autocomplete="off"></div>
+                <div class="col-5"><input type="text" class="form-control" placeholder="Descrição" name="descricao"></div>
+                <div class="col-1"><button type="submit" class="btn btn-neon w-100"><i class="ri-add-fill"></i></button></div>
+            </form>
+            <table class="table table-neon table-hover">
+                <thead><tr><th>Nome</th><th>Descrição</th><th>Ações</th></tr></thead>
+                <tbody id="lista-centro"></tbody>
+            </table>
+        </div>
+        <!-- Contas Bancárias -->
+        <div class="tab-pane fade" id="banco" role="tabpanel">
+            <h4><i class="ri-bank-card-2-line"></i> Contas Bancárias</h4>
+            <form class="row g-2 mb-2" id="form-banco">
+                <div class="col-2"><input type="text" class="form-control" placeholder="Banco" name="banco" required></div>
+                <div class="col-2"><input type="text" class="form-control" placeholder="Agência" name="agencia"></div>
+                <div class="col-2"><input type="text" class="form-control" placeholder="Conta" name="conta"></div>
+                <div class="col-3"><input type="text" class="form-control" placeholder="Titular" name="titular"></div>
+                <div class="col-2"><input type="text" class="form-control" placeholder="Tipo" name="tipo_conta"></div>
+                <div class="col-1"><button type="submit" class="btn btn-neon w-100"><i class="ri-add-fill"></i></button></div>
+            </form>
+            <table class="table table-neon table-hover">
+                <thead><tr><th>Banco</th><th>Agência</th><th>Conta</th><th>Titular</th><th>Tipo</th><th>Ações</th></tr></thead>
+                <tbody id="lista-banco"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ url_for('static', filename='js/parametros.js') }}"></script>
+{% endblock %}
