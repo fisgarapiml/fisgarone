@@ -48,6 +48,17 @@ def get_menu():
                             "nome": "Fluxo de Caixa",
                             "icone": "ri-flow-chart",
                             "url": url_for('cards_bp.get_cards')
+                        },
+                        {
+                            "nome": "Vendas",
+                            "icone": "ri-bank-line",
+                            "submenu": [
+                                {
+                                    "nome": "Vendas ML",
+                                    "icone": "ri-exchange-line",
+                                    "url": url_for('ml_bp.dashboard_vendas_ml')
+                                }
+                            ]
                         }
                     ]
                 }

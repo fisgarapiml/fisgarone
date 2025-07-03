@@ -1,33 +1,45 @@
 import sqlite3
-import os
 
-# Caminhos dos bancos na raiz
-NOVO_DB = os.path.join(os.path.dirname(__file__), 'fisgarone.db')
-ANTIGO_DB = os.path.join(os.path.dirname(__file__), 'grupo_fisgar.db')  # Troque pelo nome correto!
+ORIGEM = 'grupo_fisgar.db'
+DESTINO = 'fisgarone.db'
+TABELA = 'vendas_ml'
 
-def migrar_contas_a_pagar():
-    conn_novo = sqlite3.connect(NOVO_DB)
-    conn_antigo = sqlite3.connect(ANTIGO_DB)
-    cur_novo = conn_novo.cursor()
-    cur_antigo = conn_antigo.cursor()
+def migrar_tabela_completa(origem_db, destino_db, nome_tabela):
+    # Conectar ao banco de origem e destino
+    con_origem = sqlite3.connect(origem_db)
+    con_destino = sqlite3.connect(destino_db)
+    cur_origem = con_origem.cursor()
+    cur_destino = con_destino.cursor()
 
-    # Busca todos os dados da tabela antiga
-    cur_antigo.execute("SELECT * FROM contas_a_pagar")
-    registros = cur_antigo.fetchall()
+    # Buscar o SQL original da tabela (estrutura exata)
+    cur_origem.execute(f"SELECT sql FROM sqlite_master WHERE type='table' AND name='{nome_tabela}'")
+    ddl = cur_origem.fetchone()
+    if ddl is None:
+        raise Exception(f"Tabela {nome_tabela} não existe no banco de origem!")
 
-    # Prepara a inserção no novo banco
-    if registros:
-        print(f'Migrando {len(registros)} registros...')
-        placeholders = ','.join('?' * len(registros[0]))
-        sql = f"INSERT INTO contas_a_pagar VALUES ({placeholders})"
-        cur_novo.executemany(sql, registros)
-        conn_novo.commit()
-        print('Migração concluída!')
+    # Cria igual no destino, apagando antes se existir
+    cur_destino.execute(f"DROP TABLE IF EXISTS {nome_tabela}")
+    cur_destino.execute(ddl[0])
+    con_destino.commit()
+
+    # Copia todos os dados
+    cur_origem.execute(f"SELECT * FROM {nome_tabela}")
+    linhas = cur_origem.fetchall()
+    if linhas:
+        # Busca nome das colunas na ordem
+        cur_origem.execute(f"PRAGMA table_info({nome_tabela})")
+        colunas = [row[1] for row in cur_origem.fetchall()]
+        placeholders = ",".join(["?"] * len(colunas))
+        cur_destino.executemany(
+            f"INSERT INTO {nome_tabela} VALUES ({placeholders})", linhas
+        )
+        con_destino.commit()
+        print(f"✅ {len(linhas)} registros migrados para {nome_tabela}")
     else:
-        print('Nada para migrar.')
+        print(f"⚠️ Tabela {nome_tabela} está vazia, sem dados migrados.")
 
-    conn_antigo.close()
-    conn_novo.close()
+    con_origem.close()
+    con_destino.close()
 
-if __name__ == '__main__':
-    migrar_contas_a_pagar()
+if __name__ == "__main__":
+    migrar_tabela_completa(ORIGEM, DESTINO, TABELA)
