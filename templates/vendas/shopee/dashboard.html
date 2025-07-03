@@ -1,0 +1,198 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/modal-dashboard.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+  <header class="dashboard-header">
+    <h1><i class="ri-store-line"></i> Dashboard Shopee</h1>
+    <div class="dashboard-cards-top" style="display: flex; justify-content: center; gap: 2rem; margin: 2rem 0 1.2rem 0;">
+  <!-- Lucro -->
+  <div class="top-card lucro">
+    <i class="ri-money-dollar-circle-fill"></i>
+    <div>
+      <div class="top-card-title">Lucro</div>
+      <div class="top-card-value">R$ {{ resumo.lucro }}</div>
+      <div class="top-card-desc">
+        <span style="color:#aaa; font-size:13px;">Mês atual</span>
+      </div>
+      <div class="top-card-compare">
+        <span style="color:#ffa500;"><i class="ri-arrow-up-down-line"></i>
+          {{ resumo.lucro_anterior }}&nbsp;({{ resumo.lucro_var }}%)</span>
+        <span style="color:#aaa; font-size:13px;">Mês anterior</span>
+      </div>
+    </div>
+  </div>
+  <!-- Margem -->
+  <div class="top-card margem">
+    <i class="ri-percent-fill"></i>
+    <div>
+      <div class="top-card-title">Margem de Contribuição</div>
+      <div class="top-card-value">{{ resumo.margem }}%</div>
+      <div class="top-card-desc">
+        <span style="color:#aaa; font-size:13px;">Sobre o faturamento</span>
+      </div>
+      <div class="top-card-compare">
+        <span style="color:#ffa500;"><i class="ri-arrow-up-down-line"></i>
+          {{ resumo.margem_anterior }}%&nbsp;({{ resumo.margem_var }}%)</span>
+        <span style="color:#aaa; font-size:13px;">Mês anterior</span>
+      </div>
+    </div>
+  </div>
+  <!-- Frete Shopee Direta -->
+  <div class="top-card frete">
+    <i class="ri-truck-fill"></i>
+    <div>
+      <div class="top-card-title">Frete Shopee Direta</div>
+      <div class="top-card-value">R$ {{ resumo.frete_shopee_total }}</div>
+      <div class="top-card-desc">
+        <span style="color:#aaa; font-size:13px;">Total (R$8/envio)</span>
+      </div>
+      <div class="top-card-compare">
+        <span style="color:#2196f3;">
+          <i class="ri-shipment-fill"></i>
+          {{ resumo.frete_shopee_qtd }} envios
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+    <div class="filtros-container">
+      <form method="get" class="filtros-form">
+        <div class="filtro-group">
+          <select name="sku" class="form-select">
+            <option value="">Todos os SKUs</option>
+            {% for sku in lista_skus %}
+              <option value="{{ sku }}" {% if filtro_sku == sku %}selected{% endif %}>{{ sku }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="filtro-group">
+          <select name="conta" class="form-select">
+            <option value="">Todas as Contas</option>
+            {% for conta in lista_contas %}
+              <option value="{{ conta }}" {% if filtro_conta == conta %}selected{% endif %}>{{ conta }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="filtro-group">
+          <select name="mes" class="form-select">
+            <option value="">Mês Atual</option>
+            {% for mes in lista_meses %}
+              <option value="{{ mes }}" {% if filtro_mes == mes %}selected{% endif %}>Mês {{ mes }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <button type="submit" class="btn-filtrar">
+          <i class="ri-filter-line"></i> Filtrar
+        </button>
+      </form>
+      <input type="date" name="data_inicio" value="{{ data_inicio or '' }}" class="form-input">
+  <input type="date" name="data_fim" value="{{ data_fim or '' }}" class="form-input">
+  <button type="submit" class="btn-filtrar">
+    <i class="ri-filter-line"></i> Filtrar
+  </button>
+</form>
+    </div>
+  </header>
+
+  <!-- Cards de Métricas -->
+  <section class="metricas-grid">
+    {% for card in [
+      {
+        'titulo': 'Faturamento',
+        'icone': 'ri-money-dollar-circle-line',
+        'valor': resumo.faturamento,
+        'anterior': resumo.faturamento_anterior,
+        'variacao': resumo.faturamento_dif,
+        'extra': 'Período Equiv.: ' + resumo.faturamento_equivalente_pct|string + '%',
+        'progresso': resumo.barras_percentuais.faturamento,
+        'slug': 'faturamento'
+      },
+      {
+        'titulo': 'Unidades',
+        'icone': 'ri-box-line',
+        'valor': resumo.unidades,
+        'anterior': resumo.unidades_anterior,
+        'variacao': resumo.unidades_dif,
+        'progresso': resumo.barras_percentuais.unidades,
+        'slug': 'unidades'
+      },
+      {
+        'titulo': 'Pedidos',
+        'icone': 'ri-shopping-bag-line',
+        'valor': resumo.pedidos,
+        'anterior': resumo.pedidos_anterior,
+        'variacao': resumo.pedidos_dif,
+        'progresso': resumo.barras_percentuais.pedidos,
+        'slug': 'pedidos'
+      },
+      {
+        'titulo': 'Ticket Médio',
+        'icone': 'ri-ticket-line',
+        'valor': resumo.ticket_medio,
+        'anterior': resumo.ticket_medio_anterior,
+        'variacao': resumo.ticket_medio_dif,
+        'progresso': resumo.barras_percentuais.ticket,
+        'slug': 'ticket'
+      }
+    ] %}
+    <div class="metrica-card" style="cursor:pointer" onclick="abrirModal('{{ card.slug }}')">
+      <div class="metrica-header">
+        <i class="{{ card.icone }}"></i>
+        <h3>{{ card.titulo }}</h3>
+      </div>
+      <div class="metrica-valor">{{ card.valor }}</div>
+      <div class="metrica-comparativo">
+        <div>Anterior: {{ card.anterior }}</div>
+        <div class="variacao {% if card.variacao >= 0 %}positiva{% else %}negativa{% endif %}">
+          {{ card.variacao }}%
+        </div>
+        {% if card.extra %}<div>{{ card.extra }}</div>{% endif %}
+      </div>
+      <div class="progress-bar">
+        <div class="progress" style="width: {{ card.progresso }}%"></div>
+      </div>
+    </div>
+    {% endfor %}
+  </section>
+
+  <div class="cardzao-graficos-3d">
+    <section class="graficos-container">
+      <div class="grafico-card grafico-vendas">
+        <h3>Vendas Diárias</h3>
+        <canvas id="graficoVendas"></canvas>
+      </div>
+      <div class="grafico-card grafico-top-produtos">
+        <h3>Top Produtos</h3>
+        <canvas id="graficoTopProdutos"></canvas>
+      </div>
+    </section>
+  </div>
+  <div class="grafico-card grafico-pareto"
+     style="width: 70%; min-width: 420px; max-width: 980px; margin: 22px 0 22px 0; float: left;">
+  <h3>Pareto 80/20</h3>
+  <canvas id="graficoPareto"></canvas>
+</div>
+
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  // Dados JS fornecidos pelo Flask (substitua conforme necessário)
+  const dashboardData = {
+    resumo: {{ resumo | tojson }},
+    vendasDiarias: {{ vendas_diarias | tojson }},
+    topProdutos: {{ top_produtos | tojson }}
+  };
+const paretoData = {{ pareto_produtos | tojson }};
+</script>
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+{% endblock %}

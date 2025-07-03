@@ -1,0 +1,37 @@
+/* Sobrescreve as variáveis para o tema escuro */
+.dark-mode {
+  --bg-primary: #121212;
+  --bg-secondary: #1e1e1e;
+  --text-primary: #e0e0e0;
+  --text-secondary: #a0a0a0;
+  --border-color: rgba(255, 255, 255, 0.1);
+  --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  --neon-effect: 0 0 15px rgba(0, 200, 255, 0.7);
+}
+
+.dark-mode .kpi-card {
+  box-shadow: none;
+  border: 1px solid var(--border-color);
+}
+
+.dark-mode .neon-border::after {
+  background: linear-gradient(135deg, var(--accent-blue), var(--accent-green));
+}
+
+.dark-mode #sales-table th {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.dark-mode #sales-table tr:hover {
+  background-color: rgba(0, 102, 255, 0.1);
+}
+
+.dark-mode .neon-button.secondary {
+  background: var(--bg-secondary);
+  color: var(--accent-green);
+  border: 1px solid var(--accent-green);
+}
+
+.dark-mode .neon-button.secondary:hover {
+  background: rgba(0, 255, 136, 0.1);
+}

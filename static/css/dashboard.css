@@ -1,0 +1,756 @@
+.dashboard-titulo {
+  color: #48e0cf !important; /* TÍTULO PRINCIPAL VERDE ÁGUA */
+  font-size: 2.4rem;
+  font-weight: 800;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  letter-spacing: 1px;
+}
+
+/* Barra de Filtros — LINHA ÚNICA, 100% HORIZONTAL */
+.filtros-container {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 15px;
+  background-color: white;
+  padding: 12px 20px;
+  border-radius: 8px;
+  margin-bottom: 25px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e0e0e0;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+.filtros-container .filtros-form {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 15px;
+  margin: 0;
+  width: 100%;
+}
+.filtro-group {
+  min-width: 180px;
+  flex-shrink: 0;
+  margin-bottom: 0 !important;
+}
+@media (max-width: 900px) {
+  .filtros-container, .filtros-container .filtros-form {
+    flex-direction: column !important;
+    gap: 10px;
+  }
+}
+
+
+/* ----------- ALTERAÇÃO DOS ICONES E BARRA DE PROGRESSO DOS CARDS ---------- */
+.metrica-header i {
+  font-size: 1.8rem;
+  color: #48e0cf !important; /* Ícone verde água */
+}
+
+/* Progress bar do card — VERDE ÁGUA */
+.progress {
+  height: 100%;
+  background: linear-gradient(90deg, #48e0cf, #32bab3); /* Verde água */
+  border-radius: 10px;
+  transition: width 0.6s ease;
+}
+.form-select {
+  padding: 10px 15px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  background-color: white;
+  font-size: 0.9rem;
+  width: 100%;
+  cursor: pointer;
+  color: #333;
+}
+
+.btn-filtrar {
+  padding: 10px 20px;
+  background-color: #ee4d2d; /* Laranja Shopee */
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+.btn-filtrar:hover {
+  background-color: #d14326;
+  transform: translateY(-2px);
+}
+
+
+/* Cards de Métricas */
+.metricas-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 25px;
+  margin-bottom: 30px;
+}
+
+.metrica-card {
+  background: linear-gradient(135deg, #f0f8ff, #e6f2ff);
+  border-radius: 12px;
+  padding: 25px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  border: none;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+/* Faixa verde água sem texto */
+.metrica-card::before {
+  content: "";
+  position: absolute;
+  top: 15px;
+  right: -25px;
+  background-color: #48e0cf; /* VERDE ÁGUA */
+  width: 80px;
+  height: 25px;
+  transform: rotate(45deg);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* HEADER DO CARD */
+.metrica-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.metrica-header i {
+  font-size: 1.8rem;
+  color: #48e0cf !important; /* Ícone verde água */
+}
+
+.metrica-header h3 {
+  margin: 0;
+  font-size: 1.2rem;
+  color: #48e0cf;  /* Título do card verde água */
+  font-weight: 600;
+}
+
+/* VALOR PRINCIPAL DO CARD */
+.metrica-valor {
+  font-size: 2.2rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+  color: #48e0cf; /* Verde água */
+}
+
+/* COMPARATIVO */
+.metrica-comparativo {
+  font-size: 0.95rem;
+  color: #555;
+  margin-bottom: 15px;
+}
+
+.variacao {
+  font-weight: 600;
+}
+
+.variacao.positiva {
+  color: #28a745;
+}
+
+.variacao.negativa {
+  color: #dc3545;
+}
+
+/* PROGRESS BAR (FUNDO) */
+.progress-bar {
+  height: 10px;
+  background: #e9ecef;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.progress {
+  height: 100%;
+  background: linear-gradient(90deg, #48e0cf, #32bab3); /* Barra verde água */
+  border-radius: 10px;
+  transition: width 0.6s ease;
+}
+
+/* Layout dos Gráficos */
+.graficos-container {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 30px;
+  height: 400px; /* Altura fixa para ambos */
+}
+
+.grafico-vendas {
+  flex: 0 0 70%;
+  height: 100%;
+}
+
+.grafico-top-produtos {
+  flex: 0 0 30%;
+  height: 100%;
+}
+
+.grafico-card {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.grafico-card h3 {
+  color: #48e0cf; /* Título do gráfico verde água */
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 0;
+  margin-bottom: 20px;
+}
+
+.grafico-card h3 i {
+  color: #48e0cf;
+}
+
+.grafico-card canvas {
+  flex-grow: 1;
+  width: 100% !important;
+  height: calc(100% - 40px) !important;
+}
+
+/* Tema escuro */
+.dark-theme {
+  background-color: #1a1a2e;
+}
+
+.dark-theme .metrica-card {
+  background: linear-gradient(135deg, #1a3a5f, #0d2b4a);
+}
+
+.dark-theme .metrica-header h3,
+.dark-theme .metrica-comparativo {
+  color: #b3fff3;
+}
+
+.dark-theme .grafico-card {
+  background: #16213e;
+  color: #e2e8f0;
+}
+
+.dark-theme .grafico-card h3 {
+  color: #48e0cf;
+}
+
+.dark-theme .filtros-container {
+  background-color: #16213e;
+  border-color: #1e3a8a;
+}
+
+.dark-theme .form-select {
+  background-color: #1e293b;
+  border-color: #1e3a8a;
+  color: #e2e8f0;
+}
+
+/* Responsividade */
+@media (max-width: 1200px) {
+  .graficos-container {
+    flex-direction: column;
+    height: auto;
+  }
+  .grafico-vendas,
+  .grafico-top-produtos {
+    flex: 0 0 100%;
+    height: 350px;
+  }
+  .dashboard-container {
+    padding: 8px;
+  }
+}
+
+@media (max-width: 992px) {
+  .metricas-grid {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+  .filtros-container {
+    padding: 10px;
+    gap: 10px;
+  }
+}
+
+@media (max-width: 768px) {
+  .filtro-group {
+    min-width: 130px;
+  }
+  .grafico-card {
+    padding: 12px;
+  }
+  .grafico-card h3 {
+    font-size: 1.08rem;
+  }
+  .dashboard-container {
+    padding: 2px;
+  }
+}
+
+/* Título principal da página */
+.dashboard-titulo {
+  color: #48e0cf !important; /* Verde água */
+  font-size: 2.4rem;
+  font-weight: 800;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  letter-spacing: 1px;
+}
+
+/* Fix extra para garantir ícones dos cards SEMPRE verde água */
+.metrica-header i,
+.grafico-card h3 i {
+  color: #48e0cf !important;
+}
+
+/* Garante layout horizontal dos filtros em qualquer tela acima de 768px */
+@media (min-width: 500px) {
+  .filtros-container {
+    flex-direction: row !important;
+  }
+  .filtro-group, .btn-filtrar {
+    margin-bottom: 0 !important;
+  }
+}
+
+/* Espaço reservado extra para possíveis linhas futuras (manter acima de 269 linhas) */
+.filtros-container,
+.metricas-grid,
+.graficos-container,
+.grafico-card,
+.dashboard-titulo {
+  /* Espaço para adaptações futuras, não remova */
+}
+.metrica-card::before {
+  content: "";
+  position: absolute;
+  top: 15px;
+  right: -25px;
+  background-color: #ee4d2d; /* Laranja Shopee */
+  width: 80px;
+  height: 25px;
+  transform: rotate(45deg);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.metrica-header i {
+  font-size: 1.8rem;
+  color: #48e0cf !important; /* Ícone verde água */
+}
+
+.metrica-header h3 {
+  margin: 0;
+  font-size: 1.2rem;
+  color: #333;  /* Mantém cor padrão para o texto do título do card */
+  font-weight: 600;
+}
+
+.metrica-valor {
+  font-size: 2.2rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+  color: #ee4d2d; /* Valor PRINCIPAL laranja Shopee */
+}
+
+/* Progress bar do card — VERDE ÁGUA */
+.progress {
+  height: 100%;
+  background: linear-gradient(90deg, #48e0cf, #32bab3); /* Verde água */
+  border-radius: 10px;
+  transition: width 0.6s ease;
+}
+.filtros-container {
+  display: flex;
+  flex-direction: row !important;
+  flex-wrap: nowrap;
+  gap: 15px;
+  align-items: center;
+  background-color: white;
+  padding: 12px 20px;
+  border-radius: 8px;
+  margin-bottom: 25px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e0e0e0;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+.filtro-group {
+  min-width: 180px;
+  flex-shrink: 0;
+  margin-bottom: 0 !important;
+}
+@media (max-width: 768px) {
+  .filtros-container {
+    flex-direction: column !important;
+  }
+}
+
+.metrica-card::before {
+  content: "";
+  position: absolute;
+  top: 15px;
+  right: -25px;
+  background-color: #ee4d2d; /* Laranja Shopee */
+  width: 80px;
+  height: 25px;
+  transform: rotate(45deg);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.metrica-header i {
+  font-size: 1.8rem;
+  color: #48e0cf !important; /* Ícone verde água */
+}
+.metrica-header h3 {
+  color: #333;  /* cor do texto título, não mexe */
+}
+
+.metrica-valor {
+  font-size: 2.2rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+  color: #ee4d2d; /* Valor PRINCIPAL laranja Shopee */
+}
+
+.progress {
+  height: 100%;
+  background: linear-gradient(90deg, #48e0cf, #32bab3); /* Barra progresso verde água */
+  border-radius: 10px;
+  transition: width 0.6s ease;
+}
+.cardzao-graficos-3d {
+  background: linear-gradient(135deg, #f0f8ff, #e6f2ff);
+  border-radius: 18px;
+  box-shadow: 0 12px 36px rgba(0,0,0,0.13);
+  padding: 32px 28px;
+  margin-bottom: 40px;
+  position: relative;
+}
+
+.cardzao-graficos-3d .graficos-container {
+  background: transparent !important;
+  box-shadow: none !important;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: 20px;
+  height: 400px;
+}
+
+.grafico-card {
+  background: transparent !important;
+  box-shadow: none !important;
+  padding: 0;
+}
+
+.grafico-card h3 {
+  color: #222 !important;
+  font-weight: 600;
+  margin-bottom: 18px;
+}
+/* Modal customizado */
+#premiumModal .modal-content, #modalContent {
+  background: #00e5cf !important;  /* Azul turquesa */
+  color: #FF6A00 !important;       /* Laranja Shopee no texto principal */
+  border-radius: 18px;
+  border: 3px solid #FF6A00;
+  box-shadow: 0 0 24px 0 #00b3a6a0;
+  padding: 30px 38px;
+}
+#premiumModal .modal-details, #modalContent .modal-details {
+  color: #111 !important;
+}
+#premiumModal .detail-label {
+  color: #FF6A00 !important;  /* Laranja Shopee */
+  font-weight: 700;
+}
+#premiumModal .detail-value {
+  color: #222 !important;  /* Preto */
+  font-weight: 600;
+  margin-left: 6px;
+}
+#premiumModal .highlight.up .detail-value {
+  color: #43B581 !important; /* Verde para positivo */
+}
+#premiumModal .highlight.down .detail-value {
+  color: #ED4245 !important; /* Vermelho para negativo */
+}
+#premiumModal .modal-info {
+  color: #222 !important; /* Preto */
+  font-size: 14px;
+  margin-top: 14px;
+}
+.dashboard-card {
+  overflow-x: auto;
+  background: #f8fcfe;
+  border-radius: 18px;
+  box-shadow: 0 2px 12px 0 rgba(0,0,0,.04);
+  margin-bottom: 30px;
+  padding: 18px 20px 16px 20px;
+}
+.grafico-pareto canvas {
+  height: 460px !important;  /* ajuste aqui: 220, 240, 280px... */
+  max-height: 500px;
+  min-height: 200px;
+  width: 100% !important;
+}
+.grafico-pareto {
+  padding: 18px 16px 28px 16px;
+  margin: 20px auto;
+  /* O resto mantém igual ao seu padrão */
+}
+.dashboard-cards-top {
+  display: flex;
+  justify-content: center;
+  gap: 2.5rem;
+  margin-top: 12px;
+  margin-bottom: 12px;
+}
+.top-card {
+  background: #fff;
+  border-radius: 2.2rem;
+  box-shadow: 0 4px 24px 0 rgba(48,119,255,0.07);
+  padding: 1.3rem 2.2rem;
+  display: flex;
+  align-items: center;
+  min-width: 210px;
+  max-width: 320px;
+  min-height: 100px;
+  flex-shrink: 0;
+  transition: transform .16s;
+  font-weight: 600;
+  box-sizing: border-box;
+}
+.top-card i {
+  font-size: 2.2rem;
+  margin-right: 1.1rem;
+  color: #00c896;
+}
+.top-card.lucro i { color: #00c896;}
+.top-card.margem i { color: #ffb300;}
+.top-card.frete i { color: #2196f3;}
+.top-card-title {
+  font-size: 1.15rem;
+  margin-bottom: 3px;
+  color: #232c47;
+  font-weight: bold;
+}
+.top-card-value {
+  font-size: 2.1rem;
+  font-weight: 800;
+  color: #181b23;
+  margin-bottom: 4px;
+}
+.top-card-compare {
+  font-size: 1.02rem;
+  font-weight: 600;
+  margin-top: 0px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.top-card-desc {
+  font-size: 0.98rem;
+  color: #666;
+}
+@media (max-width: 1000px) {
+  .dashboard-cards-top { flex-direction: column; align-items: center; }
+  .top-card { margin-bottom: 1rem; }
+}
+.lista-prejuizo-container {
+  margin: 30px 0;
+  padding: 15px;
+  background: rgba(255,255,255,0.7);
+  border-radius: 2rem;
+  box-shadow: 0 6px 32px 0 rgba(70,200,255,0.15);
+  overflow-x: auto;
+}
+.prejuizo-header, .prejuizo-card {
+  display: flex;
+  align-items: center;
+  min-width: 1100px;
+}
+.prejuizo-header {
+  position: sticky;
+  top: 0;
+  background: rgba(255,255,255,0.95);
+  z-index: 2;
+  font-weight: bold;
+  font-size: 1.1rem;
+  color: #2b444b;
+  border-bottom: 2px solid #e7ecfa;
+}
+.prejuizo-card {
+  margin: 12px 0;
+  background: linear-gradient(90deg, #e0f8ff 0%, #f8fdff 100%);
+  border-radius: 1.5rem;
+  box-shadow: 0 3px 12px 0 rgba(0,200,150,0.07);
+  transition: transform .13s;
+  cursor: pointer;
+  font-size: 1rem;
+}
+.prejuizo-card:hover {
+  transform: scale(1.03) translateY(-2px);
+  box-shadow: 0 7px 24px 0 rgba(255,152,0,0.17);
+}
+.prejuizo-cell {
+  padding: 8px 18px;
+  text-align: left;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.col-sku { width: 120px; }
+.col-nome { width: 270px; }
+.col-valor, .col-custo, .col-lucro, .col-margem { width: 135px; }
+.col-fonte { width: 150px; }
+
+.prejuizo-negativo {
+  color: #ff3b00;
+  font-weight: 600;
+  animation: alertaNegativo 1s infinite alternate;
+}
+@keyframes alertaNegativo {
+  from { background: transparent; }
+  to { background: rgba(255, 230, 210, 0.6);}
+}
+.fonte-dica {
+  background: #ff9800;
+  color: #fff;
+  padding: 2px 12px;
+  border-radius: 30px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 2px 8px 0 rgba(255,152,0,0.12);
+}
+/* Estrutura da Página */
+.page-container {
+  display: flex;
+  min-height: 100vh;
+}
+
+.main-content-wrapper {
+  flex: 1;
+  margin-left: 280px;
+  padding: 2rem;
+  transition: margin-left 0.3s ease;
+}
+
+/* Header do Módulo */
+.module-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.header-title-group {
+  flex: 1;
+  min-width: 300px;
+}
+
+.module-title {
+  font-size: 1.8rem;
+  margin: 0;
+  color: var(--primary-bright);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.module-title i {
+  font-size: 1.4rem;
+}
+
+.module-subtitle {
+  margin: 0.5rem 0 0 0;
+  color: var(--text-light);
+  font-weight: 400;
+}
+
+.dark-theme .module-subtitle {
+  color: var(--text-dark);
+}
+
+.header-actions {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+/* Conteúdo do Módulo */
+.module-content {
+  background: var(--menu-bg-light);
+  border-radius: var(--border-radius);
+  padding: 1.5rem;
+  box-shadow: var(--card-shadow-light);
+}
+
+.dark-theme .module-content {
+  background: var(--menu-bg-dark);
+  box-shadow: var(--card-shadow-dark);
+}
+
+/* Componentes Reutilizáveis */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.card {
+  background: var(--menu-bg-light);
+  border-radius: var(--border-radius);
+  padding: 1.5rem;
+  box-shadow: var(--card-shadow-light);
+  transition: transform 0.3s ease;
+}
+
+.dark-theme .card {
+  background: var(--menu-bg-dark);
+  box-shadow: var(--card-shadow-dark);
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+/* Responsividade */
+@media (max-width: 992px) {
+  .main-content-wrapper {
+    margin-left: 0;
+    padding: 1rem;
+  }
+
+  .module-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

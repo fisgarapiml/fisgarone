@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel Full ML - {{ account_name }}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/full_ml.css') }}" rel="stylesheet">
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block sidebar">
+                <div class="sidebar-header">
+                    <h4 class="text-center neon-text">Neon Finance</h4>
+                    <h5 class="text-center">Painel Full ML</h5>
+                </div>
+                <div class="sidebar-account text-center mb-4">
+                    <i class="fas fa-store fa-2x mb-2"></i>
+                    <h5>{{ account_name }}</h5>
+                </div>
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#dashboard-section">
+                            <i class="fas fa-tachometer-alt me-2"></i>Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#sales-section">
+                            <i class="fas fa-shopping-cart me-2"></i>Vendas
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#inventory-section">
+                            <i class="fas fa-boxes me-2"></i>Estoque
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#products-section">
+                            <i class="fas fa-tags me-2"></i>Produtos
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#metrics-section">
+                            <i class="fas fa-chart-line me-2"></i>Métricas
+                        </a>
+                    </li>
+                </ul>
+                <div class="sidebar-footer mt-auto">
+                    <button id="refresh-data" class="btn btn-outline-primary btn-sm w-100">
+                        <i class="fas fa-sync-alt me-1"></i> Atualizar Dados
+                    </button>
+                </div>
+            </nav>
+
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h1 class="h2 neon-text">Dashboard Mercado Livre</h1>
+                    <div class="btn-toolbar mb-2 mb-md-0">
+                        <div class="btn-group me-2">
+                            <button class="btn btn-sm btn-outline-secondary">Hoje</button>
+                            <button class="btn btn-sm btn-outline-secondary">7 dias</button>
+                            <button class="btn btn-sm btn-outline-primary">30 dias</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="alerts-container"></div>
+
+                <section id="dashboard-section">
+                    <div class="row mb-4">
+                        <div class="col-md-3">
+                            <div class="card metric-card">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between">
+                                        <div>
+                                            <h6 class="card-title text-muted">Faturamento</h6>
+                                            <h3 class="card-value">R$ <span id="total-sales">{{ "%.2f"|format(data.metrics.total_vendas|default(0)) }}</span></h3>
+                                        </div>
+                                        <div class="icon-circle bg-primary">
+                                            <i class="fas fa-dollar-sign"></i>
+                                        </div>
+                                    </div>
+                                    <p class="card-text"><small class="text-success"><i class="fas fa-arrow-up"></i> 12% último mês</small></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card metric-card">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between">
+                                        <div>
+                                            <h6 class="card-title text-muted">Pedidos</h6>
+                                            <h3 class="card-value"><span id="total-orders">{{ data.metrics.total_pedidos|default(0) }}</span></h3>
+                                        </div>
+                                        <div class="icon-circle bg-success">
+                                            <i class="fas fa-shopping-bag"></i>
+                                        </div>
+                                    </div>
+                                    <p class="card-text"><small class="text-success"><i class="fas fa-arrow-up"></i> 8% último mês</small></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card metric-card">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between">
+                                        <div>
+                                            <h6 class="card-title text-muted">Ticket Médio</h6>
+                                            <h3 class="card-value">R$ <span id="avg-order">{{ "%.2f"|format(data.metrics.ticket_medio|default(0)) }}</span></h3>
+                                        </div>
+                                        <div class="icon-circle bg-info">
+                                            <i class="fas fa-receipt"></i>
+                                        </div>
+                                    </div>
+                                    <p class="card-text"><small class="text-danger"><i class="fas fa-arrow-down"></i> 3% último mês</small></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card metric-card">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between">
+                                        <div>
+                                            <h6 class="card-title text-muted">Conversão</h6>
+                                            <h3 class="card-value"><span id="conversion-rate">0.0</span>%</h3>
+                                        </div>
+                                        <div class="icon-circle bg-warning">
+                                            <i class="fas fa-exchange-alt"></i>
+                                        </div>
+                                    </div>
+                                    <p class="card-text"><small class="text-success"><i class="fas fa-arrow-up"></i> 2% último mês</small></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mb-4">
+                        <div class="col-md-8">
+                            <div class="card chart-card">
+                                <div class="card-header">
+                                    <h6>Faturamento Mensal</h6>
+                                </div>
+                                <div class="card-body">
+                                    <canvas id="salesChart" height="250"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card chart-card">
+                                <div class="card-header">
+                                    <h6>Status dos Anúncios</h6>
+                                </div>
+                                <div class="card-body">
+                                    <canvas id="productsStatusChart" height="250"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="sales-section" class="mb-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5><i class="fas fa-shopping-cart me-2"></i>Últimas Vendas</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>ID Pedido</th>
+                                            <th>Data</th>
+                                            <th>Produto</th>
+                                            <th>Total</th>
+                                            <th>SKU</th>
+                                            <th>Ações</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% if data and data.recent_sales %}
+                                            {% for sale in data.recent_sales %}
+                                                <tr>
+                                                    <td>{{ sale.operation_id }}</td>
+                                                    <td>{{ sale.date_created }}</td>
+                                                    <td>{{ sale.nome }}</td>
+                                                    <td>R$ {{ "%.2f"|format(sale.total|default(0)) }}</td>
+                                                    <td>{{ sale.sku }}</td>
+                                                    <td>
+                                                        <button class="btn btn-sm btn-outline-primary">Detalhes</button>
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+                                        {% else %}
+                                            <tr>
+                                                <td colspan="6" class="text-center">Nenhuma venda encontrada</td>
+                                            </tr>
+                                        {% endif %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="inventory-section" class="mb-4">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card h-100">
+                                <div class="card-header bg-warning text-dark">
+                                    <h5><i class="fas fa-exclamation-triangle me-2"></i>Estoque Baixo</h5>
+                                </div>
+                                <div class="card-body">
+                                    {% if data and data.low_stock %}
+                                        <div class="table-responsive">
+                                            <table class="table table-sm">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Produto</th>
+                                                        <th>SKU</th>
+                                                        <th>Vendas (60d)</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {% for product in data.low_stock %}
+                                                        <tr>
+                                                            <td>{{ product.nome|truncate(30) }}</td>
+                                                            <td>{{ product.sku }}</td>
+                                                            <td>{{ product.vendas_60d }}</td>
+                                                        </tr>
+                                                    {% endfor %}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    {% else %}
+                                        <p class="text-center text-muted">Nenhum produto com estoque baixo</p>
+                                    {% endif %}
+                                </div>
+                                <div class="card-footer bg-transparent">
+                                    <button class="btn btn-sm btn-outline-warning">Gerar Lista de Reposição</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card h-100">
+                                <div class="card-header bg-danger text-white">
+                                    <h5><i class="fas fa-stopwatch me-2"></i>Estoque Parado</h5>
+                                </div>
+                                <div class="card-body">
+                                    <p class="text-center text-muted">Funcionalidade em desenvolvimento</p>
+                                </div>
+                                <div class="card-footer bg-transparent">
+                                    <button class="btn btn-sm btn-outline-danger">Ações Corretivas</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="products-section" class="mb-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h5><i class="fas fa-tags me-2"></i>Top Produtos</h5>
+                                <div>
+                                    <button class="btn btn-sm btn-outline-primary me-2">Exportar</button>
+                                    <button class="btn btn-sm btn-primary">Análise Completa</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            {% if data and data.top_products %}
+                                <div class="table-responsive">
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Produto</th>
+                                                <th>Vendas</th>
+                                                <th>Preço Médio</th>
+                                                <th>SKU</th>
+                                                <th>Saúde</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for product in data.top_products %}
+                                                <tr>
+                                                    <td>{{ product.nome|truncate(40) }}</td>
+                                                    <td>{{ product.vendas }}</td>
+                                                    <td>R$ {{ "%.2f"|format(product.preco_medio|default(0)) }}</td>
+                                                    <td>{{ product.sku }}</td>
+                                                    <td>
+                                                        <div class="progress" style="height: 6px;">
+                                                            <div class="progress-bar bg-success" style="width: 85%"></div>
+                                                        </div>
+                                                        <small>85%</small>
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            {% else %}
+                                <p class="text-center text-muted">Nenhum dado de produto disponível</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </section>
+
+                <section id="metrics-section">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5><i class="fas fa-chart-line me-2"></i>Métricas de Desempenho</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h6>Vendas por Dia</h6>
+                                    <canvas id="dailySalesChart" height="200"></canvas>
+                                </div>
+                                <div class="col-md-6">
+                                    <h6>Produtos Mais Vendidos</h6>
+                                    <canvas id="topProductsChart" height="200"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <div class="modal fade" id="loadingModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body text-center p-4">
+                    <div class="spinner-border text-primary mb-3" role="status">
+                        <span class="visually-hidden">Carregando...</span>
+                    </div>
+                    <h5>Atualizando dados do Mercado Livre</h5>
+                    <p class="text-muted">Isso pode levar alguns instantes...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script src="{{ url_for('static', filename='js/full_ml.js') }}"></script>
+    <script>
+        {% if data %}
+            const salesChartData = {
+                labels: {{ data.sales_chart|map(attribute='dia')|list|tojson }},
+                datasets: [{
+                    label: 'Vendas',
+                    data: {{ data.sales_chart|map(attribute='total_vendas')|list|tojson }},
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }]
+            };
+
+            const topProductsData = {
+                labels: {{ data.top_products|map(attribute='nome')|list|tojson }},
+                datasets: [{
+                    label: 'Vendas',
+                    data: {{ data.top_products|map(attribute='vendas')|list|tojson }},
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            };
+
+            // Inicializa gráficos
+            initializeCharts(salesChartData, topProductsData);
+        {% endif %}
+
+        // Atualização periódica
+        setInterval(function() {
+            $('#refresh-data').click();
+        }, 300000); // 5 minutos
+    </script>
+</body>
+</html>

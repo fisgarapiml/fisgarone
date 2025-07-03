@@ -1,0 +1,193 @@
+{% extends "base.html" %}
+{% block title %}Vendas Mercado Livre | Fisgar{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/vendas_ml_dashboard.css') }}">
+
+<div class="fisgar-dashboard-ml">
+    <div class="dashboard-header-ml">
+        <h1 class="ml-azul-titulo" style="display: flex; align-items: center; gap: 12px;">
+            <img src="{{ url_for('static', filename='images/logoml.png') }}" alt="Mercado Livre" style="height: 36px; margin-right: 6px;">
+            Mercado Livre
+        </h1>
+        <form method="get" class="dashboard-filtros-ml">
+    <select name="mes">
+        <option value="">Mês</option>
+        {% for m in meses %}
+        <option value="{{ m }}" {% if m == mes_select %}selected{% endif %}>{{ m }}</option>
+        {% endfor %}
+    </select>
+    <select name="status">
+        <option value="">Situação</option>
+        {% for status_value, status_label in status_options %}
+            <option value="{{ status_value }}" {% if status_value == status_select %}selected{% endif %}>{{ status_label }}</option>
+        {% endfor %}
+    </select>
+    <select name="conta">
+        <option value="">Conta</option>
+        {% for c in contas %}
+            <option value="{{ c }}" {% if c == conta_select %}selected{% endif %}>{{ c }}</option>
+        {% endfor %}
+    </select>
+    <select name="sku">
+        <option value="">SKU</option>
+        {% for s in skus %}
+            <option value="{{ s }}" {% if s == sku_select %}selected{% endif %}>{{ s }}</option>
+        {% endfor %}
+    </select>
+    <select name="title">
+        <option value="">Produto</option>
+        {% for t in titles %}
+            <option value="{{ t }}" {% if t == title_select %}selected{% endif %}>{{ t }}</option>
+        {% endfor %}
+    </select>
+    <button type="submit" class="btn-fisgar-neon">Filtrar</button>
+</form>
+
+    </div>
+
+   <div class="fisgar-cards-row">
+
+    <!-- FATURAMENTO -->
+    <div class="fisgar-card neon-yellow">
+        <div class="ml-triangulo"></div>
+        <div class="fisgar-card-label ml-azul-titulo">Faturamento</div>
+        <div class="fisgar-card-value ml-azul-titulo">
+            R$ {{ "{:,.2f}".format(faturamento or 0).replace(",", "X").replace(".", ",").replace("X", ".") }}
+        </div>
+        <div class="valor-anterior">
+            Mês anterior:
+            <span>
+                R$ {{ "{:,.2f}".format(faturamento_ant or 0).replace(",", "X").replace(".", ",").replace("X", ".") }}
+            </span>
+        </div>
+        <div class="fisgar-card-variacao {% if (faturamento_var or 0) >= 0 %}variacao-positivo{% else %}variacao-negativo{% endif %}">
+            {% if (faturamento_var or 0) >= 0 %}
+                <span class="seta">&#9650;</span>
+            {% else %}
+                <span class="seta">&#9660;</span>
+            {% endif %}
+            {{ faturamento_var or 0 }}%
+            <span class="txt">vs mês anterior</span>
+        </div>
+    </div>
+
+    <!-- UNIDADES VENDIDAS -->
+    <div class="fisgar-card neon-yellow">
+        <div class="ml-triangulo"></div>
+        <div class="fisgar-card-label ml-azul-titulo">Unidades Vendidas</div>
+        <div class="fisgar-card-value ml-azul-titulo">{{ unidades or 0 }}</div>
+        <div class="valor-anterior">
+            Mês anterior: <span>{{ unidades_ant or 0 }}</span>
+        </div>
+        <div class="fisgar-card-variacao {% if (unidades_var or 0) >= 0 %}variacao-positivo{% else %}variacao-negativo{% endif %}">
+            {% if (unidades_var or 0) >= 0 %}
+                <span class="seta">&#9650;</span>
+            {% else %}
+                <span class="seta">&#9660;</span>
+            {% endif %}
+            {{ unidades_var or 0 }}%
+            <span class="txt">vs mês anterior</span>
+        </div>
+    </div>
+
+    <!-- PEDIDOS -->
+    <div class="fisgar-card neon-yellow">
+        <div class="ml-triangulo"></div>
+        <div class="fisgar-card-label ml-azul-titulo">Pedidos</div>
+        <div class="fisgar-card-value ml-azul-titulo">{{ pedidos or 0 }}</div>
+        <div class="valor-anterior">
+            Mês anterior: <span>{{ pedidos_ant or 0 }}</span>
+        </div>
+        <div class="fisgar-card-variacao {% if (pedidos_var or 0) >= 0 %}variacao-positivo{% else %}variacao-negativo{% endif %}">
+            {% if (pedidos_var or 0) >= 0 %}
+                <span class="seta">&#9650;</span>
+            {% else %}
+                <span class="seta">&#9660;</span>
+            {% endif %}
+            {{ pedidos_var or 0 }}%
+            <span class="txt">vs mês anterior</span>
+        </div>
+    </div>
+
+    <!-- TICKET MÉDIO -->
+    <div class="fisgar-card neon-yellow">
+        <div class="ml-triangulo"></div>
+        <div class="fisgar-card-label ml-azul-titulo">Ticket Médio</div>
+        <div class="fisgar-card-value ml-azul-titulo">
+            R$ {{ "{:,.2f}".format(ticket_medio or 0).replace(",", "X").replace(".", ",").replace("X", ".") }}
+        </div>
+        <div class="valor-anterior">
+            Mês anterior:
+            <span>
+                R$ {{ "{:,.2f}".format(ticket_medio_ant or 0).replace(",", "X").replace(".", ",").replace("X", ".") }}
+            </span>
+        </div>
+        <div class="fisgar-card-variacao {% if (ticket_var or 0) >= 0 %}variacao-positivo{% else %}variacao-negativo{% endif %}">
+            {% if (ticket_var or 0) >= 0 %}
+                <span class="seta">&#9650;</span>
+            {% else %}
+                <span class="seta">&#9660;</span>
+            {% endif %}
+            {{ ticket_var or 0 }}%
+            <span class="txt">vs mês anterior</span>
+        </div>
+    </div>
+</div>
+
+
+    <!-- GRÁFICOS COM TÍTULOS AZUIS -->
+    <div class="graficos-ml-flex">
+        <div class="grafico-grande">
+            <h4 class="ml-azul-titulo">Vendas Diárias</h4>
+            <div class="grafico-wrapper">
+                <canvas id="vendasDiaChart"></canvas>
+            </div>
+        </div>
+        <div class="grafico-pequeno">
+            <h4 class="ml-azul-titulo">Top 10 SKUs Vendidos</h4>
+            <div class="grafico-wrapper">
+                <canvas id="top10Chart"></canvas>
+            </div>
+        </div>
+    </div>
+
+<script>
+    window.top10Labels = {{ top10['sku']|default([])|tojson }};
+    window.top10Data = {{ top10['valor']|default([])|tojson }};
+    window.top10Unidades = {{ top10['unidades']|default([])|tojson }};
+
+    window.vendasDiaLabels = {{ vendas_dia['dia']|tojson }};
+    window.vendasDiaData = {{ vendas_dia['faturamento']|tojson }};
+    window.vendasDiaAntData = {{ vendas_dia['faturamento_ant']|tojson }};
+</script>
+
+<!-- MODAL FILTRO (INSIRA EXATAMENTE ABAIXO DOS GRÁFICOS, ANTES DO FIM DO BLOCK CONTENT) -->
+<div id="modalFiltro" style="display:none;position:fixed;z-index:9999;left:0;top:0;width:100vw;height:100vh;background:rgba(0,0,0,0.4)">
+  <div style="background:#fff;margin:60px auto;padding:30px;border-radius:12px;max-width:900px;min-height:320px;position:relative" id="modalContent">
+    <button onclick="fecharModal()" style="position:absolute;top:10px;right:20px;font-size:1.6em;background:none;border:none;cursor:pointer;">&times;</button>
+    <div id="modalDados"></div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+<script src="{{ url_for('static', filename='js/vendas_ml_dashboard.js') }}"></script>
+
+<script>
+// Funções globais para modal
+function abrirModalFiltro(filtro) {
+  fetch('/api/vendas_filtradas?filtro=' + encodeURIComponent(filtro))
+    .then(res => res.text())
+    .then(html => {
+      document.getElementById('modalDados').innerHTML = html;
+      document.getElementById('modalFiltro').style.display = 'block';
+    });
+}
+function fecharModal() {
+  document.getElementById('modalFiltro').style.display = 'none';
+}
+</script>
+{% endblock %}

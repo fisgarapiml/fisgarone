@@ -56,7 +56,7 @@ def close_db_connection(exception):
         db.close()
 
 
-# Registro de blueprints (Seu código original, com a adição do Shopee Dashboard)
+# Registro de blueprints (Seu código original, com a adição do shopee Dashboard)
 from modulos.home.home import bp_home
 app.register_blueprint(bp_home)
 

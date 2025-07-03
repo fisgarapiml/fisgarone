@@ -1,0 +1,176 @@
+:root {
+    --primary-color: #00c8ff;
+    --secondary-color: #0095ff;
+    --dark-color: #1a1a2e;
+    --light-color: #f8f9fa;
+    --success-color: #28a745;
+    --danger-color: #dc3545;
+    --warning-color: #ffc107;
+    --info-color: #17a2b8;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f5f7fa;
+    color: #333;
+}
+
+/* Sidebar Styles */
+.sidebar {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    color: white;
+    min-height: 100vh;
+    padding: 20px 0;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar-header {
+    padding: 0 20px 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.sidebar-account {
+    padding: 15px;
+    background: rgba(0, 200, 255, 0.1);
+    border-radius: 8px;
+    margin: 0 15px 15px;
+    border: 1px solid rgba(0, 200, 255, 0.2);
+}
+
+.nav-link {
+    color: rgba(255, 255, 255, 0.7);
+    padding: 10px 20px;
+    margin: 5px 0;
+    border-radius: 4px;
+    transition: all 0.3s;
+}
+
+.nav-link:hover, .nav-link.active {
+    color: white;
+    background: rgba(0, 200, 255, 0.2);
+}
+
+.nav-link.active {
+    border-left: 3px solid var(--primary-color);
+}
+
+.nav-link i {
+    width: 20px;
+    text-align: center;
+}
+
+/* Card Styles */
+.card {
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s, box-shadow 0.3s;
+    margin-bottom: 20px;
+    background-color: white;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+    background-color: white;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    font-weight: 600;
+    border-radius: 10px 10px 0 0 !important;
+}
+
+.metric-card {
+    border-left: 4px solid var(--primary-color);
+}
+
+.metric-card .card-value {
+    font-weight: 700;
+    color: var(--dark-color);
+}
+
+.icon-circle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+
+.chart-card {
+    height: 100%;
+}
+
+/* Neon Text Effect */
+.neon-text {
+    color: var(--primary-color);
+    text-shadow: 0 0 5px rgba(0, 200, 255, 0.5),
+                 0 0 10px rgba(0, 200, 255, 0.3),
+                 0 0 15px rgba(0, 200, 255, 0.2);
+}
+
+/* Table Styles */
+.table {
+    color: #333;
+}
+
+.table-hover tbody tr:hover {
+    background-color: rgba(0, 200, 255, 0.05);
+}
+
+/* Buttons */
+.btn-outline-primary {
+    color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.btn-outline-primary:hover {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.btn-primary:hover {
+    background-color: var(--secondary-color);
+    border-color: var(--secondary-color);
+}
+
+/* Progress Bars */
+.progress {
+    border-radius: 3px;
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+/* Badges */
+.badge {
+    font-weight: 500;
+    padding: 5px 8px;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .sidebar {
+        min-height: auto;
+    }
+    
+    .metric-card {
+        margin-bottom: 15px;
+    }
+}
+
+/* Loading Animation */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.spinner-border {
+    animation: spin 0.75s linear infinite;
+}

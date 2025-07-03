@@ -14,7 +14,7 @@ contas_a_pagar_bp = Blueprint('contas_a_pagar_bp', __name__)
 
 mapeamento_categorias = {
     "Café da Manhã": "Alimentação",
-    "Reembolsos": "Custo de Vendas",
+    "Reembolsos": "Custo de vendas",
     "Procuradoria PGFN": "Impostos",
     "Inmetro 40x25": "Insumos",
     "DAS de Parcelamento": "Dívidas Parceladas",

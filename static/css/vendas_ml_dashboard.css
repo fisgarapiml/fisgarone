@@ -1,0 +1,467 @@
+/* ==== RESET PADRÃO ==== */
+body, html {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    background: #f7f9fb;
+    color: #23272A;
+    font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+body.dark-mode, .dashboard-fisgar-body.dark-mode {
+    background: #11151b;
+    color: #fff;
+}
+
+a { color: inherit; text-decoration: none; }
+h1, h4, h3 { font-weight: 900; letter-spacing: -.5px; }
+
+/* ==== HEADER & FILTROS ==== */
+.dashboard-header-ml {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 32px;
+    gap: 20px;
+}
+.dashboard-header-ml h1 {
+    font-size: 2.2rem;
+    color: #7D3CFF;
+    margin: 0;
+}
+.dashboard-filtros-ml {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+.dashboard-filtros-ml select, .dashboard-filtros-ml button {
+    border-radius: 8px;
+    padding: 8px 13px;
+    border: none;
+    outline: none;
+    font-size: 1.04rem;
+    font-weight: 600;
+    background: #fff;
+    color: #222;
+    box-shadow: 0 1px 5px #00e0ff12;
+    transition: box-shadow .18s;
+}
+.dashboard-filtros-ml select:focus, .dashboard-filtros-ml button:focus {
+    box-shadow: 0 2px 12px #7d3cff2a;
+}
+.dashboard-filtros-ml button {
+    background: #00e0ff;
+    color: #fff;
+    font-weight: 900;
+    cursor: pointer;
+    letter-spacing: .04em;
+    box-shadow: 0 2px 8px #00e0ff23;
+    border: none;
+}
+body.dark-mode .dashboard-filtros-ml select,
+body.dark-mode .dashboard-filtros-ml button {
+    background: #181f2b;
+    color: #fff;
+}
+body.dark-mode .dashboard-filtros-ml button {
+    background: #7D3CFF;
+    color: #fff;
+}
+
+/* ==== CARDS NEON ==== */
+.fisgar-cards-row {
+    display: flex;
+    gap: 28px;
+    margin: 0 0 28px 0;
+    flex-wrap: wrap;
+}
+.fisgar-card {
+    flex: 1 1 210px;
+    background: #fff;
+    border-radius: 28px;
+    box-shadow: 0 7px 38px -12px #00e0ff33, 0 2px 24px -6px #1113;
+    padding: 36px 32px 32px 32px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    min-width: 210px;
+    min-height: 135px;
+    margin-bottom: 12px;
+    position: relative;
+    overflow: hidden;
+    border: none;
+    transition: box-shadow .25s, transform .2s;
+    z-index: 1;
+}
+.fisgar-card:hover {
+    box-shadow: 0 13px 44px 0 #00e0ff66, 0 6px 28px -8px #1116;
+    transform: scale(1.033);
+}
+body.dark-mode .fisgar-card, .dashboard-fisgar-body.dark-mode .fisgar-card {
+    background: #181f2b;
+    color: #fff;
+    box-shadow: 0 7px 38px -12px #00e0ff88, 0 2px 24px -6px #222b;
+}
+
+/* Neon borders – Fisgar Style */
+.neon-blue { box-shadow: 0 0 0 6px #00e0ff33, 0 8px 38px -10px #00e0ff77, 0 1px 20px -7px #1111; border-left: 9px solid #00e0ff;}
+.neon-purple { box-shadow: 0 0 0 6px #7d3cff33, 0 8px 38px -10px #7d3cff77, 0 1px 20px -7px #1111; border-left: 9px solid #7d3cff;}
+.neon-orange { box-shadow: 0 0 0 6px #ff880033, 0 8px 38px -10px #ff880077, 0 1px 20px -7px #1111; border-left: 9px solid #ff8800;}
+.neon-yellow { box-shadow: 0 0 0 6px #fff50033, 0 8px 38px -10px #fff50077, 0 1px 20px -7px #1111; border-left: 9px solid #fff500;}
+.neon-pink { box-shadow: 0 0 0 6px #ff29b733, 0 8px 38px -10px #ff29b777, 0 1px 20px -7px #1111; border-left: 9px solid #ff29b7;}
+.neon-green { box-shadow: 0 0 0 6px #39ff1433, 0 8px 38px -10px #39ff1477, 0 1px 20px -7px #1111; border-left: 9px solid #39ff14;}
+
+/* Títulos e valores */
+.fisgar-card-label {
+    font-size: 1.10rem;
+    font-weight: 700;
+    opacity: .75;
+    margin-bottom: 7px;
+    text-shadow: 0 1px 3px #00e0ff22;
+}
+.fisgar-card-value {
+    font-size: 2.55rem;
+    font-weight: 900;
+    letter-spacing: -2px;
+    color: #1d2547;
+    text-shadow: 0 2px 16px #fff4, 0 1px 3px #2222;
+    margin-bottom: 0;
+    line-height: 1.09;
+}
+body.dark-mode .fisgar-card-value, .dashboard-fisgar-body.dark-mode .fisgar-card-value {
+    color: #fff;
+    text-shadow: 0 2px 16px #00e0ff66, 0 1px 3px #000a;
+}
+
+/* ==== GRÁFICOS NEON ==== */
+.graficos-ml {
+    display: flex;
+    gap: 22px;
+    margin-bottom: 32px;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    background: transparent;
+}
+.grafico-area {
+    background: #fff;
+    border-radius: 18px;
+    padding: 16px 16px 10px 16px;
+    box-shadow: 0 2px 12px #00e0ff15;
+    flex: 1 1 0;
+    min-width: 0;
+    margin-bottom: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    max-width: 33%;
+    transition: background .3s;
+}
+body.dark-mode .grafico-area,
+.dashboard-fisgar-body.dark-mode .grafico-area {
+    background: #23272A;
+}
+.grafico-area h4 {
+    color: #7D3CFF;
+    font-size: 1.13rem;
+    font-weight: 800;
+    margin-bottom: 10px;
+    background: none;
+}
+.grafico-wrapper {
+    width: 100%;
+    height: 260px;
+    position: relative;
+    background: transparent;
+}
+.grafico-wrapper canvas {
+    width: 100% !important;
+    height: 100% !important;
+    max-height: 260px;
+    background: transparent !important;
+    display: block;
+}
+@media (max-width: 1200px) {
+    .graficos-ml { flex-direction: column; gap: 18px; }
+    .grafico-area { max-width: 100%; margin-bottom: 18px;}
+    .fisgar-cards-row { flex-direction: column; gap: 20px;}
+    .fisgar-card { min-width: 0; width: 100%; }
+}
+
+/* ==== TABELAS (opcional futuro) ==== */
+.tabela-detalhada {
+    margin-top: 26px;
+    overflow-x: auto;
+}
+.tabela-detalhada table {
+    width: 100%;
+    border-spacing: 0;
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px #00e0ff10;
+    background: #fff;
+}
+.tabela-detalhada th, .tabela-detalhada td {
+    padding: 12px 16px;
+    text-align: left;
+    font-size: 1.05rem;
+}
+.tabela-detalhada th {
+    background: #00e0ff14;
+    color: #7D3CFF;
+    font-weight: 800;
+}
+.tabela-detalhada tr:nth-child(even) {
+    background: #f5f8fc;
+}
+.tabela-detalhada tr:hover {
+    background: #00e0ff0b;
+}
+body.dark-mode .tabela-detalhada table { background: #181f2b; }
+body.dark-mode .tabela-detalhada th { background: #7d3cff22; color: #fff; }
+body.dark-mode .tabela-detalhada td { color: #fff; }
+body.dark-mode .tabela-detalhada tr:nth-child(even) { background: #23272A; }
+body.dark-mode .tabela-detalhada tr:hover { background: #7d3cff18; }
+
+.ml-azul-titulo {
+    color: #1259c3 !important;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+}
+.fisgar-card-variacao {
+    font-size: 0.97em;
+    margin-top: 6px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+.variacao-positivo { color: #27ae60; }
+.variacao-negativo { color: #e74c3c; }
+.fisgar-card-variacao .seta {
+    font-size: 1.18em;
+    font-weight: 900;
+    margin-right: 2px;
+    vertical-align: middle;
+}
+.fisgar-card-variacao .txt {
+    font-size: 0.83em;
+    font-weight: 400;
+    margin-left: 6px;
+    color: #787878;
+}
+.ml-borda-azul {
+    border-left: 6px solid #1259c3 !important;
+    /* Ou #0076be para mais neon */
+    box-shadow: 0 2px 10px #1259c355;
+}
+.valor-anterior {
+    font-size: 0.93em;
+    margin-top: 2px;
+    color: #1259c3;
+    font-weight: 500;
+}
+.fisgar-card-variacao {
+    font-size: 0.97em;
+    margin-top: 6px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+.variacao-positivo { color: #27ae60; }
+.variacao-negativo { color: #e74c3c; }
+.fisgar-card-variacao .seta {
+    font-size: 1.18em;
+    font-weight: 900;
+    margin-right: 2px;
+    vertical-align: middle;
+}
+.fisgar-card-variacao .txt {
+    font-size: 0.83em;
+    font-weight: 400;
+    margin-left: 6px;
+    color: #787878;
+}
+.fisgar-card {
+    position: relative;
+    /* O resto dos seus estilos permanece igual */
+}
+
+.ml-triangulo {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    border-top: 42px solid #1259c3;  /* Azul Mercado Livre */
+    border-right: 42px solid transparent;
+    border-radius: 2px 0 0 0;
+    z-index: 2;
+}
+.graficos-ml {
+    display: flex;
+    gap: 32px;
+    justify-content: space-between;
+    margin-top: 32px;
+    flex-wrap: wrap;
+}
+.grafico-area {
+    background: #fafdff;
+    border-radius: 22px;
+    padding: 20px 20px 14px 20px;
+    box-shadow: 0 2px 18px #b3e5fc30;
+    min-width: 370px;
+    flex: 1 1 0;
+    max-width: 450px;
+}
+.grafico-area h4 {
+    font-size: 1.27em;
+    color: #1259c3;
+    font-weight: 700;
+    margin-bottom: 12px;
+}
+.grafico-wrapper {
+    width: 100%;
+    min-height: 265px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+@media (max-width: 1200px) {
+    .graficos-ml { flex-direction: column; gap: 20px; }
+    .grafico-area { min-width: unset; max-width: 100%; }
+}
+.graficos-ml-flex {
+    display: flex;
+    width: 100%;
+    gap: 28px;
+    margin-top: 32px;
+}
+.grafico-grande {
+    flex: 0 0 67%;
+    min-width: 0;
+    background: #fafdff;
+    border-radius: 22px;
+    padding: 24px 22px 22px 22px;
+    box-shadow: 0 2px 18px #b3e5fc30;
+    display: flex;
+    flex-direction: column;
+}
+.grafico-pequeno {
+    flex: 0 0 33%;
+    min-width: 0;
+    background: #fafdff;
+    border-radius: 22px;
+    padding: 24px 22px 22px 22px;
+    box-shadow: 0 2px 18px #b3e5fc30;
+    display: flex;
+    flex-direction: column;
+}
+.grafico-area h4,
+.grafico-grande h4,
+.grafico-pequeno h4 {
+    font-size: 1.22em;
+    color: #1259c3;
+    font-weight: 700;
+    margin-bottom: 12px;
+}
+.grafico-wrapper {
+    flex: 1 1 auto;
+    min-height: 400px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+@media (max-width: 1050px) {
+    .graficos-ml-flex { flex-direction: column; gap: 18px; }
+    .grafico-grande, .grafico-pequeno { flex: 1 1 100%; max-width: 100%; }
+}
+/* Adicione ao seu CSS existente */
+.grafico-medio {
+    flex: 0 0 48%;
+    min-width: 0;
+    background: #fafdff;
+    border-radius: 22px;
+    padding: 24px 22px 22px 22px;
+    box-shadow: 0 2px 18px #b3e5fc30;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Estilo para tooltips avançados */
+.tooltip-avancado {
+    position: absolute;
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 14px;
+    pointer-events: none;
+    z-index: 100;
+    max-width: 300px;
+    display: none;
+}
+
+/* Estilo para cards interativos */
+.fisgar-card-interativo {
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.fisgar-card-interativo:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+}
+
+/* Estilo para tabelas detalhadas */
+.tabela-detalhada-ml {
+    margin-top: 30px;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.tabela-detalhada-ml th {
+    background-color: #1259c3;
+    color: white;
+    font-weight: 600;
+}
+
+.tabela-detalhada-ml tr:nth-child(even) {
+    background-color: #f8f9fa;
+}
+
+.tabela-detalhada-ml tr:hover {
+    background-color: #e9f0ff;
+}
+
+/* Responsividade adicional */
+@media (max-width: 768px) {
+    .grafico-medio {
+        flex: 0 0 100%;
+    }
+
+    .fisgar-card {
+        min-width: 100%;
+    }
+}
+.dashboard-filtros-ml {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+    justify-content: flex-start;
+    margin-bottom: 20px;
+}
+.dashboard-filtros-ml select {
+    max-width: 180px; /* ajuste para seu layout, 180-220px é bom */
+    min-width: 80px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+.dashboard-filtros-ml button {
+    min-width: 90px;
+}

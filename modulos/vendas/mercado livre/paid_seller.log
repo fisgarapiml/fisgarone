@@ -1,0 +1,31 @@
+2025-06-05 10:15:29,839 - INFO - Iniciando processo de sincronização de pagamentos do seller
+2025-06-05 10:15:29,847 - INFO - Banco de dados inicializado com sucesso
+2025-06-05 10:15:29,847 - INFO - Iniciando sincronização para conta TOYS
+2025-06-05 10:15:29,850 - INFO - Nenhum pedido encontrado para conta TOYS nos últimos 60 dias
+2025-06-05 10:15:29,850 - INFO - Iniciando sincronização para conta COMERCIAL
+2025-06-05 10:15:29,852 - INFO - Nenhum pedido encontrado para conta COMERCIAL nos últimos 60 dias
+2025-06-05 10:15:29,852 - INFO - Iniciando sincronização para conta PESCA
+2025-06-05 10:15:29,854 - INFO - Nenhum pedido encontrado para conta PESCA nos últimos 60 dias
+2025-06-05 10:15:29,854 - INFO - Iniciando sincronização para conta CAMPING
+2025-06-05 10:15:29,856 - INFO - Nenhum pedido encontrado para conta CAMPING nos últimos 60 dias
+2025-06-05 10:15:29,856 - INFO - Processo de sincronização concluído
+2025-06-05 12:25:53,192 - INFO - Iniciando sincronização de pagamentos
+2025-06-05 12:25:53,195 - INFO - Iniciando sincronização para TOYS
+2025-06-05 12:25:53,196 - INFO - Nenhum pedido para sincronizar em TOYS
+2025-06-05 12:25:53,196 - INFO - Iniciando sincronização para COMERCIAL
+2025-06-05 12:25:53,196 - INFO - Nenhum pedido para sincronizar em COMERCIAL
+2025-06-05 12:25:53,197 - INFO - Iniciando sincronização para PESCA
+2025-06-05 12:25:53,197 - INFO - Nenhum pedido para sincronizar em PESCA
+2025-06-05 12:25:53,197 - INFO - Iniciando sincronização para CAMPING
+2025-06-05 12:25:53,197 - INFO - Nenhum pedido para sincronizar em CAMPING
+2025-06-05 12:25:53,198 - INFO - Sincronização concluída
+2025-06-05 12:57:02,678 - INFO - Iniciando sincronização de pagamentos
+2025-06-05 12:57:02,686 - INFO - Iniciando sincronização para conta TOYS
+2025-06-05 12:57:02,686 - INFO - Nenhum pedido para sincronizar em TOYS
+2025-06-05 12:57:02,687 - INFO - Iniciando sincronização para conta COMERCIAL
+2025-06-05 12:57:02,687 - INFO - Nenhum pedido para sincronizar em COMERCIAL
+2025-06-05 12:57:02,687 - INFO - Iniciando sincronização para conta PESCA
+2025-06-05 12:57:02,687 - INFO - Nenhum pedido para sincronizar em PESCA
+2025-06-05 12:57:02,687 - INFO - Iniciando sincronização para conta CAMPING
+2025-06-05 12:57:02,687 - INFO - Nenhum pedido para sincronizar em CAMPING
+2025-06-05 12:57:02,687 - INFO - Sincronização concluída
