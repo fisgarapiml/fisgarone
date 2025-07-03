@@ -22,6 +22,11 @@
         <!-- Categorias -->
         <div class="tab-pane fade show active" id="categorias" role="tabpanel">
             <h4><i class="ri-price-tag-3-line"></i> Categorias</h4>
+            <div class="mb-2">
+                <button type="button" class="btn btn-secondary btn-sm" onclick="abrirSugestoes('categorias')">
+                    <i class="ri-lightbulb-flash-line"></i> Sugestões do Histórico
+                </button>
+            </div>
             <form class="row g-2 mb-2" id="form-categoria">
                 <div class="col-7 col-md-5">
                     <input type="text" class="form-control" placeholder="Nome da Categoria" name="nome" required autocomplete="off">
@@ -41,6 +46,11 @@
         <!-- Fornecedores -->
         <div class="tab-pane fade" id="fornecedores" role="tabpanel">
             <h4><i class="ri-truck-line"></i> Fornecedores</h4>
+            <div class="mb-2">
+                <button type="button" class="btn btn-secondary btn-sm" onclick="abrirSugestoes('fornecedor')">
+                    <i class="ri-lightbulb-flash-line"></i> Sugestões do Histórico
+                </button>
+            </div>
             <form class="row g-2 mb-2" id="form-fornecedor">
                 <div class="col-5"><input type="text" class="form-control" placeholder="Nome" name="nome" required autocomplete="off"></div>
                 <div class="col-3"><input type="text" class="form-control" placeholder="CNPJ" name="cnpj"></div>
@@ -56,6 +66,11 @@
         <!-- Centro de Custo -->
         <div class="tab-pane fade" id="centro" role="tabpanel">
             <h4><i class="ri-building-line"></i> Centro de Custo</h4>
+            <div class="mb-2">
+                <button type="button" class="btn btn-secondary btn-sm" onclick="abrirSugestoes('centro_de_custo')">
+                    <i class="ri-lightbulb-flash-line"></i> Sugestões do Histórico
+                </button>
+            </div>
             <form class="row g-2 mb-2" id="form-centro">
                 <div class="col-6"><input type="text" class="form-control" placeholder="Nome" name="nome" required autocomplete="off"></div>
                 <div class="col-5"><input type="text" class="form-control" placeholder="Descrição" name="descricao"></div>
@@ -69,6 +84,11 @@
         <!-- Contas Bancárias -->
         <div class="tab-pane fade" id="banco" role="tabpanel">
             <h4><i class="ri-bank-card-2-line"></i> Contas Bancárias</h4>
+            <div class="mb-2">
+                <button type="button" class="btn btn-secondary btn-sm" onclick="abrirSugestoes('banco_pagamento')">
+                    <i class="ri-lightbulb-flash-line"></i> Sugestões do Histórico
+                </button>
+            </div>
             <form class="row g-2 mb-2" id="form-banco">
                 <div class="col-2"><input type="text" class="form-control" placeholder="Banco" name="banco" required></div>
                 <div class="col-2"><input type="text" class="form-control" placeholder="Agência" name="agencia"></div>
@@ -83,6 +103,24 @@
             </table>
         </div>
     </div>
+</div>
+
+<!-- Modal universal para sugestões -->
+<div class="modal fade" id="modal-sugestoes" tabindex="-1">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content" style="background:#222a4c;color:#fff;">
+      <div class="modal-header">
+        <h5 class="modal-title"><i class="ri-list-check"></i> Sugestões do Histórico</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <div id="lista-sugestoes"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-neon" onclick="salvarSugestoes()">Salvar Selecionados</button>
+      </div>
+    </div>
+  </div>
 </div>
 {% endblock %}
 
