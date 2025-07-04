@@ -2,10 +2,25 @@ import sqlite3
 import pandas as pd
 import os
 
-# Caminho absoluto até a raiz do projeto
-BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
+import os
+
+BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..'))
 DB_PATH = os.path.join(BASE_DIR, 'fisgarone.db')
-PLANILHA_CUSTOS = os.path.join(BASE_DIR, 'Custos Anúncios mercado_livre.xlsx')
+PLANILHA_CUSTOS = os.path.join(BASE_DIR, 'Custos Anúncios mercado livre.xlsx')
+
+print(f"[DEBUG] Banco: {DB_PATH}")
+print(f"[DEBUG] Planilha: {PLANILHA_CUSTOS}")
+
+if not os.path.exists(DB_PATH):
+    print(f"❌ Banco de dados '{DB_PATH}' não encontrado.")
+else:
+    print(f"✅ Banco de dados encontrado!")
+
+if not os.path.exists(PLANILHA_CUSTOS):
+    print(f"❌ Planilha '{PLANILHA_CUSTOS}' não encontrada.")
+else:
+    print(f"✅ Planilha encontrada!")
+
 
 COLUNA_MLB = 'CÓD. VARIAÇÃO CANAL'
 COLUNA_CUSTO = 'CUSTO'

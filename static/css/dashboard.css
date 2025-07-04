@@ -754,3 +754,60 @@
     align-items: flex-start;
   }
 }
+/* Estilos para o gráfico Pareto */
+.pareto-chart-container {
+    margin-top: 30px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.pareto-chart-container .card-header {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #e0e0e0;
+    padding: 15px 20px;
+}
+
+.pareto-chart-container .card-body {
+    padding: 20px;
+    position: relative;
+}
+
+.pareto-chart-container .card-footer {
+    background-color: #f8f9fa;
+    border-top: 1px solid #e0e0e0;
+    padding: 10px 20px;
+}
+
+.legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    font-size: 13px;
+    color: #555;
+}
+
+.color-block {
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+    margin-right: 8px;
+    border-radius: 3px;
+}
+
+.bar-color {
+    background-color: #4e73df;
+}
+
+.line-color {
+    background-color: #1cc88a;
+}
+
+.top20-color {
+    background-color: #e74a3b;
+}

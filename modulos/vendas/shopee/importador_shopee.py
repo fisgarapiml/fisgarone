@@ -13,7 +13,7 @@ from dotenv import load_dotenv
 # Configuração ABSOLUTA de caminhos - garantindo que sempre busque na raiz do projeto
 ROOT_DIR = os.path.abspath(
     os.path.join(os.path.dirname(__file__), '..', '..', '..'))  # Volta 3 níveis para chegar na raiz
-DB_PATH = os.path.join(ROOT_DIR, 'grupo_fisgar.db')
+DB_PATH = os.path.join(ROOT_DIR, 'fisgarone.db')
 ENV_PATH = os.path.join(ROOT_DIR, '.env')  # Agora SEMPRE na raiz do projeto
 
 # Verificação explícita dos arquivos antes de continuar

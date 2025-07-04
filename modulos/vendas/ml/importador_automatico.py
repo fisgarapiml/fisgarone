@@ -10,14 +10,12 @@ from flask import Blueprint
 from dotenv import load_dotenv
 from pathlib import Path
 
-# Caminho absoluto para a raiz do projeto
-BASE_DIR = Path(__file__).resolve().parents[2]
-DB_PATH = str(BASE_DIR / 'fisgarone.db')
-ENV_PATH = str(BASE_DIR / '.env')
+# Caminho absoluto para raiz do projeto (ajuste se o seu não for C:/fisgarone/)
+DB_PATH = "C:/fisgarone/fisgarone.db"
+ENV_PATH = "C:/fisgarone/.env"
 
+load_dotenv(dotenv_path=ENV_PATH, override=True)
 
-# Carregar variáveis do arquivo .env
-load_dotenv()
 
 importador_automatico_bp = Blueprint('importador_automatico_bp', __name__)
 

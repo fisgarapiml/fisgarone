@@ -5,7 +5,7 @@ import json
 from datetime import datetime
 
 def criar_tabela_vendas_shopee():
-    db_path = r"C:\grupo\grupo_fisgar.db"
+    db_path = r"C:\fisgarone\fisgarone.db"
 
     if not os.path.exists(db_path):
         raise FileNotFoundError(f"Banco de dados não encontrado: {db_path}")
@@ -77,7 +77,7 @@ def criar_tabela_vendas_shopee():
     )
 
     # Alimenta preço de custo a partir da planilha externa
-    caminho_custos = r"C:\grupo\Custos Anúncios Shopee.xlsx"
+    caminho_custos = r"C:\fisgarone\Custos Anúncios Shopee.xlsx"
     custos_df = pd.read_excel(caminho_custos)
     custos_df = custos_df.rename(columns={
         custos_df.columns[3]: 'SKU',

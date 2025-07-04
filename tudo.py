@@ -1,45 +1,52 @@
+import os
 import sqlite3
 
-ORIGEM = 'grupo_fisgar.db'
-DESTINO = 'fisgarone.db'
-TABELA = 'vendas_ml'
+# Caminho ABSOLUTO para a raiz do projeto
+import os
+DB_PATH = os.path.abspath("fisgarone.db")
+print(f"DEBUG DB_PATH: {DB_PATH}")
 
-def migrar_tabela_completa(origem_db, destino_db, nome_tabela):
-    # Conectar ao banco de origem e destino
-    con_origem = sqlite3.connect(origem_db)
-    con_destino = sqlite3.connect(destino_db)
-    cur_origem = con_origem.cursor()
-    cur_destino = con_destino.cursor()
 
-    # Buscar o SQL original da tabela (estrutura exata)
-    cur_origem.execute(f"SELECT sql FROM sqlite_master WHERE type='table' AND name='{nome_tabela}'")
-    ddl = cur_origem.fetchone()
-    if ddl is None:
-        raise Exception(f"Tabela {nome_tabela} não existe no banco de origem!")
+# Conexão
+conn = sqlite3.connect(DB_PATH)
+cur = conn.cursor()
 
-    # Cria igual no destino, apagando antes se existir
-    cur_destino.execute(f"DROP TABLE IF EXISTS {nome_tabela}")
-    cur_destino.execute(ddl[0])
-    con_destino.commit()
+# Criação da tabela repasses_ml
+cur.execute('''
+CREATE TABLE IF NOT EXISTS repasses_ml (
+    "ID Pedido" TEXT PRIMARY KEY,
+    "Preco Unitario" REAL,
+    "Data da Venda" TEXT,
+    "Quantidade" INTEGER,
+    "Tipo Logistica" TEXT,
+    "Situacao" TEXT,
+    "Taxa Fixa ML" REAL,
+    "Comissoes" REAL,
+    "Frete Seller" REAL
+)
+''')
+conn.commit()
 
-    # Copia todos os dados
-    cur_origem.execute(f"SELECT * FROM {nome_tabela}")
-    linhas = cur_origem.fetchall()
-    if linhas:
-        # Busca nome das colunas na ordem
-        cur_origem.execute(f"PRAGMA table_info({nome_tabela})")
-        colunas = [row[1] for row in cur_origem.fetchall()]
-        placeholders = ",".join(["?"] * len(colunas))
-        cur_destino.executemany(
-            f"INSERT INTO {nome_tabela} VALUES ({placeholders})", linhas
-        )
-        con_destino.commit()
-        print(f"✅ {len(linhas)} registros migrados para {nome_tabela}")
-    else:
-        print(f"⚠️ Tabela {nome_tabela} está vazia, sem dados migrados.")
+# MIGRAÇÃO dos dados da vendas_ml para repasses_ml
+cur.execute('''
+INSERT OR REPLACE INTO repasses_ml (
+    "ID Pedido", "Preco Unitario", "Data da Venda", "Quantidade", "Tipo Logistica",
+    "Situacao", "Taxa Fixa ML", "Comissoes", "Frete Seller"
+)
+SELECT 
+    "ID Pedido",
+    "Preco Unitario",
+    "Data da Venda",
+    "Quantidade",
+    "Tipo Logistica",
+    "Situacao",
+    "Taxa Fixa ML",
+    "Comissoes",
+    COALESCE("Frete Seller", 0)  -- Ajuste: se não existir coluna, crie antes!
+FROM vendas_ml
+''')
+conn.commit()
 
-    con_origem.close()
-    con_destino.close()
+print("✅ Tabela repasses_ml criada e populada com sucesso.")
 
-if __name__ == "__main__":
-    migrar_tabela_completa(ORIGEM, DESTINO, TABELA)
+conn.close()

@@ -6,7 +6,7 @@ from datetime import datetime
 
 def criar_tabela_vendas_shopee():
     base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..'))
-    db_path = os.path.join(base_dir, 'grupo_fisgar.db')
+    db_path = os.path.join(base_dir, 'fisgarone.db')
 
     if not os.path.exists(db_path):
         raise FileNotFoundError(f"Banco de dados não encontrado: {db_path}")

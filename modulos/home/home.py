@@ -48,25 +48,37 @@ def get_menu():
                             "nome": "Fluxo de Caixa",
                             "icone": "ri-flow-chart",
                             "url": url_for('cards_bp.get_cards')
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "titulo": "Vendas",
+            "icone": "ri-shopping-cart-line",
+            "itens": [
+                {
+                    "nome": "Vendas",
+                    "icone": "ri-bank-line",
+                    "submenu": [
+                        {
+                            "nome": "Mercado Livre",
+                            "icone": "ri-store-2-line",
+                            "url": url_for('ml_bp.dashboard_vendas_ml')
                         },
                         {
-                            "nome": "Vendas",
-                            "icone": "ri-bank-line",
-                            "submenu": [
-                                {
-                                    "nome": "Vendas ML",
-                                    "icone": "ri-exchange-line",
-                                    "url": url_for('ml_bp.dashboard_vendas_ml')
-                                }
-                            ]
+                            "nome": "Shopee",
+                            "icone": "ri-shopping-bag-3-line",
+                            "url": url_for('shopee_bp.dashboard_shopee')
                         }
+                        # Adicione outros marketplaces aqui
                     ]
                 }
             ]
         }
     ]
-
     return jsonify(menu)
+
 
 @bp_home.route('/debug-routes')
 def debug_routes():
