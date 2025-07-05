@@ -1,52 +1,33 @@
-import os
 import sqlite3
 
-# Caminho ABSOLUTO para a raiz do projeto
-import os
-DB_PATH = os.path.abspath("fisgarone.db")
-print(f"DEBUG DB_PATH: {DB_PATH}")
+DB_PATH = "C:/fisgarone/fisgarone.db"
 
+with sqlite3.connect(DB_PATH) as conn:
+    cursor = conn.cursor()
 
-# Conexão
-conn = sqlite3.connect(DB_PATH)
-cur = conn.cursor()
+    # Adicionar coluna (se ainda não existe)
+    try:
+        cursor.execute('ALTER TABLE repasses_ml ADD COLUMN "Total da Venda" REAL')
+    except sqlite3.OperationalError:
+        pass  # Já existe
 
-# Criação da tabela repasses_ml
-cur.execute('''
-CREATE TABLE IF NOT EXISTS repasses_ml (
-    "ID Pedido" TEXT PRIMARY KEY,
-    "Preco Unitario" REAL,
-    "Data da Venda" TEXT,
-    "Quantidade" INTEGER,
-    "Tipo Logistica" TEXT,
-    "Situacao" TEXT,
-    "Taxa Fixa ML" REAL,
-    "Comissoes" REAL,
-    "Frete Seller" REAL
-)
-''')
-conn.commit()
+    try:
+        cursor.execute('ALTER TABLE repasses_ml ADD COLUMN "Total Custo" REAL')
+    except sqlite3.OperationalError:
+        pass
 
-# MIGRAÇÃO dos dados da vendas_ml para repasses_ml
-cur.execute('''
-INSERT OR REPLACE INTO repasses_ml (
-    "ID Pedido", "Preco Unitario", "Data da Venda", "Quantidade", "Tipo Logistica",
-    "Situacao", "Taxa Fixa ML", "Comissoes", "Frete Seller"
-)
-SELECT 
-    "ID Pedido",
-    "Preco Unitario",
-    "Data da Venda",
-    "Quantidade",
-    "Tipo Logistica",
-    "Situacao",
-    "Taxa Fixa ML",
-    "Comissoes",
-    COALESCE("Frete Seller", 0)  -- Ajuste: se não existir coluna, crie antes!
-FROM vendas_ml
-''')
-conn.commit()
+    try:
+        cursor.execute('ALTER TABLE repasses_ml ADD COLUMN "Valor do Repasse" REAL')
+    except sqlite3.OperationalError:
+        pass
 
-print("✅ Tabela repasses_ml criada e populada com sucesso.")
-
-conn.close()
+    # Atualizar as colunas com os cálculos
+    cursor.execute("""
+        UPDATE repasses_ml
+        SET
+            "Total da Venda" = "Preco Unitario" * "Quantidade",
+            "Total Custo" = COALESCE("Taxa Fixa ML",0) + COALESCE("Comissoes",0) + COALESCE("Frete Seller",0),
+            "Valor do Repasse" = ("Preco Unitario" * "Quantidade") - (COALESCE("Taxa Fixa ML",0) + COALESCE("Comissoes",0) + COALESCE("Frete Seller",0))
+    """)
+    conn.commit()
+print('Atualizado!')
