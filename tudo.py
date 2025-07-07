@@ -1,33 +1,16 @@
+import os
 import sqlite3
+import pandas as pd
 
-DB_PATH = "C:/fisgarone/fisgarone.db"
+DB_PATH = r"C:\fisgarone\fisgarone.db"
+PLANILHA = r"C:\fisgarone\Custos Anúncios Shopee.xlsx"
 
-with sqlite3.connect(DB_PATH) as conn:
-    cursor = conn.cursor()
+def importar_custos():
+    custos_df = pd.read_excel(PLANILHA)
+    custos_df.columns = [col.strip().upper() for col in custos_df.columns]
+    custos_df = custos_df.rename(columns={'SKU': 'SKU', 'CUSTO': 'Custo'})
+    custos_df[['SKU', 'Custo']].to_sql('custo_shopee', sqlite3.connect(DB_PATH), if_exists='replace', index=False)
+    print(f"✅ Tabela 'custo_shopee' criada/atualizada com {len(custos_df)} SKUs.")
 
-    # Adicionar coluna (se ainda não existe)
-    try:
-        cursor.execute('ALTER TABLE repasses_ml ADD COLUMN "Total da Venda" REAL')
-    except sqlite3.OperationalError:
-        pass  # Já existe
-
-    try:
-        cursor.execute('ALTER TABLE repasses_ml ADD COLUMN "Total Custo" REAL')
-    except sqlite3.OperationalError:
-        pass
-
-    try:
-        cursor.execute('ALTER TABLE repasses_ml ADD COLUMN "Valor do Repasse" REAL')
-    except sqlite3.OperationalError:
-        pass
-
-    # Atualizar as colunas com os cálculos
-    cursor.execute("""
-        UPDATE repasses_ml
-        SET
-            "Total da Venda" = "Preco Unitario" * "Quantidade",
-            "Total Custo" = COALESCE("Taxa Fixa ML",0) + COALESCE("Comissoes",0) + COALESCE("Frete Seller",0),
-            "Valor do Repasse" = ("Preco Unitario" * "Quantidade") - (COALESCE("Taxa Fixa ML",0) + COALESCE("Comissoes",0) + COALESCE("Frete Seller",0))
-    """)
-    conn.commit()
-print('Atualizado!')
+if __name__ == "__main__":
+    importar_custos()

@@ -66,6 +66,7 @@ from modulos.financeiro.cards import cards_bp
 from modulos.financeiro.lancamento_manual import lancamento_manual_bp
 from modulos.financeiro.contas_edicao import contas_edicao_bp
 from modulos.financeiro.parametros import parametros_bp
+from modulos.financeiro.entradas_dashboard import entradas_bp
 
 # Vendas
 from modulos.vendas.ml.ml import ml_bp
@@ -77,6 +78,7 @@ app.register_blueprint(cards_bp, url_prefix='/financeiro/cards')
 app.register_blueprint(lancamento_manual_bp, url_prefix='/financeiro/lancamentos')
 app.register_blueprint(contas_edicao_bp)
 app.register_blueprint(parametros_bp)
+app.register_blueprint(entradas_bp)
 
 # Vendas
 app.register_blueprint(ml_bp)

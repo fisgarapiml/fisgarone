@@ -1,0 +1,67 @@
+body.bg-neon-light {
+    background: linear-gradient(120deg, #f6fcff 0%, #e8f7ff 100%);
+    min-height: 100vh;
+    font-family: 'Inter', Arial, sans-serif;
+}
+.neon-title {
+    color: #00CFFF;
+    text-shadow: 0 0 10px #00CFFF88, 0 0 30px #00CFFF22;
+    letter-spacing: 1.2px;
+    font-weight: 700;
+    font-size: 1.45rem;
+}
+.text-celeste { color: #00CFFF !important; }
+.bg-celeste { background: #00CFFF !important; color: #fff !important; }
+.card.neon-card {
+    border: none;
+    border-radius: 18px;
+    box-shadow: 0 2px 16px #00cfff28, 0 0 1px #00CFFF60;
+    background: #fff;
+    transition: box-shadow 0.3s;
+}
+.card.neon-card:hover {
+    box-shadow: 0 8px 32px #00cfff60, 0 0 2px #00CFFF88;
+    transform: translateY(-3px) scale(1.03);
+}
+.card-icon i {
+    color: #00CFFF;
+    text-shadow: 0 0 4px #00CFFF66, 0 0 10px #00CFFF44;
+}
+.table-neon thead th {
+    color: #00CFFF;
+    font-weight: 600;
+    border: none;
+    background: none;
+    letter-spacing: 0.5px;
+}
+.table-neon tbody tr {
+    border-radius: 12px;
+    background: #f4fcff;
+    margin-bottom: 4px;
+    transition: box-shadow .2s;
+}
+.table-neon tbody tr:hover {
+    box-shadow: 0 2px 10px #00cfff14;
+    background: #eafdff;
+}
+.btn-outline-celeste {
+    border-color: #00CFFF !important;
+    color: #00CFFF !important;
+    transition: .15s;
+}
+.btn-outline-celeste:hover,
+.btn-outline-celeste:focus {
+    background: #00CFFF !important;
+    color: #fff !important;
+    box-shadow: 0 0 5px #00CFFF99;
+}
+.badge.bg-celeste {
+    background: #00CFFF !important;
+    color: #fff !important;
+}
+@media (max-width: 991px) {
+    .card.neon-card { margin-bottom: 20px; }
+}
+::-webkit-scrollbar-thumb { background: #00CFFF33; border-radius: 10px; }
+::-webkit-scrollbar-track { background: #f4fcff; }
+::-webkit-scrollbar { width: 9px; }
