@@ -6,10 +6,10 @@ import json
 
 def get_token_shop_level():
     # Dados fornecidos
-    code = "4e595155426a5778685a6a56454d4763"  # 🔁 Substitua pelo seu code real
-    partner_id = 2010089
-    partner_key = "4c6b4e414348774877567349434f534d7365454f75467471646c597341654975"
-    shop_id = 412851426
+    code = "634f435847524f6d6d744a714b46524a"  # 🔁 Substitua pelo seu code real
+    partner_id = 2009954
+    partner_key = "shpk775675716e56724d56636f584e756f6264644b794e7654596272474b426b"
+    shop_id = 383162027
 
     # === Configuração de autenticação
     timestamp = int(time.time())

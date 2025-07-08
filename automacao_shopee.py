@@ -27,35 +27,82 @@ MAX_RETRIES = 3
 
 def atualizar_entradas_financeiras(cursor):
     """
-    Atualiza ou insere as entradas financeiras a partir da tabela de repasses_shopee.
+    Atualiza ou insere as entradas financeiras a partir da tabela repasses_shopee,
+    com cálculo do valor_liquido e origem_conta padronizada.
     """
+    # Primeiro, garante que as colunas existam (caso sejam novas)
     cursor.execute("""
-        SELECT PEDIDO_ID, DATA, DATA_ENTREGA, VALOR_TOTAL, COMISSAO_UNITARIA, TAXA_FIXA, STATUS_PEDIDO
+        PRAGMA table_info(entradas_financeiras)
+    """)
+    colunas = [col[1] for col in cursor.fetchall()]
+    if 'valor_liquido' not in colunas:
+        cursor.execute("ALTER TABLE entradas_financeiras ADD COLUMN valor_liquido REAL")
+    if 'frete' not in colunas:
+        cursor.execute("ALTER TABLE entradas_financeiras ADD COLUMN frete REAL")
+    if 'origem_conta' not in colunas:
+        cursor.execute("ALTER TABLE entradas_financeiras ADD COLUMN origem_conta TEXT")
+
+    # Busca os repasses da Shopee (com frete incluso)
+    cursor.execute("""
+        SELECT 
+            PEDIDO_ID, 
+            DATA, 
+            DATA_REPASSE,  -- <-- Use esta!
+            VALOR_TOTAL, 
+            COMISSAO_UNITARIA, 
+            TAXA_FIXA,
+            REPASSE_ENVIO,
+            STATUS_PEDIDO,
+            TIPO_CONTA
         FROM repasses_shopee
     """)
-    for row in cursor.fetchall():
-        cursor.execute("""
-            INSERT INTO entradas_financeiras 
-            (tipo, pedido_id, data_venda, data_liberacao, valor_total, comissoes, taxas, status)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-            ON CONFLICT(pedido_id, tipo) DO UPDATE SET
-                data_venda=excluded.data_venda,
-                data_liberacao=excluded.data_liberacao,
-                valor_total=excluded.valor_total,
-                comissoes=excluded.comissoes,
-                taxas=excluded.taxas,
-                status=excluded.status
-        """, (
-            'shopee',
-            row[0],    # pedido_id
-            row[1],    # data_venda
-            row[2],    # data_liberacao
-            row[3],    # valor_total
-            row[4],    # comissoes
-            row[5],    # taxas
-            row[6],    # status
-        ))
 
+    for row in cursor.fetchall():
+        try:
+            # Cálculo do valor_liquido (total - custos)
+            valor_total = float(row[3]) if row[3] else 0
+            comissoes = float(row[4]) if row[4] else 0
+            taxas = float(row[5]) if row[5] else 0
+            frete = float(row[6]) if row[6] else 0
+            valor_liquido = valor_total - (comissoes + taxas + frete)  # Fórmula crítica
+
+            # Traduz a conta (ex: "TOYS" → "Toys", "COMERCIAL" → "Comercial")
+            origem_conta = traduzir_valores("Conta", row[8]) if row[8] else 'Desconhecido'
+
+            # Insere ou atualiza o registro (com todos os campos)
+            cursor.execute("""
+                INSERT OR REPLACE INTO entradas_financeiras 
+                (tipo, pedido_id, data_venda, data_liberacao, 
+                 valor_total, valor_liquido, comissoes, taxas, frete, 
+                 status, origem_conta)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                ON CONFLICT(pedido_id, tipo) DO UPDATE SET
+                    data_venda = excluded.data_venda,
+                    data_liberacao = excluded.data_liberacao,
+                    valor_total = excluded.valor_total,
+                    valor_liquido = excluded.valor_liquido,
+                    comissoes = excluded.comissoes,
+                    taxas = excluded.taxas,
+                    frete = excluded.frete,
+                    status = excluded.status,
+                    origem_conta = excluded.origem_conta
+            """, (
+                'shopee',
+                row[0],    # PEDIDO_ID
+                row[1],    # DATA (venda)
+                row[2],    # DATA_ENTREGA (liberação)
+                valor_total,
+                valor_liquido,  # Calculado
+                comissoes,
+                taxas,
+                frete,
+                'Recebido' if row[7] == 'COMPLETED' else 'Pendente',  # STATUS_PEDIDO
+                origem_conta  # Já traduzida
+            ))
+            print(f"✓ Shopee: Pedido {row[0]} (Líquido: R${valor_liquido:.2f})", end='\r')
+
+        except Exception as e:
+            print(f"\n✗ Erro no pedido {row[0]}: {str(e)}")
 def get_env_variable(account_type, var_type):
     var_map = {
         'PARTNER_ID': f'SHOPEE_PARTNER_ID_{account_type}',
@@ -464,15 +511,31 @@ def processar_vendas_shopee():
     conn.close()
     print("✅ Tabela 'vendas_shopee' atualizada com sucesso.")
 
+
 def processar_repasses_shopee():
     conn = sqlite3.connect(DB_PATH)
     vendas = pd.read_sql_query("SELECT * FROM vendas_shopee", conn)
-    colunas_repasses = ['PEDIDO_ID', 'DATA', 'VALOR_TOTAL', 'DATA_ENTREGA', 'COMISSAO_UNITARIA', 'TAXA_FIXA', 'STATUS_PEDIDO']
-    repasses = vendas[colunas_repasses].drop_duplicates(subset=['PEDIDO_ID'])
+    colunas_repasses = [
+        'PEDIDO_ID', 'DATA', 'VALOR_TOTAL', 'COMISSAO_UNITARIA',
+        'TAXA_FIXA', 'STATUS_PEDIDO', 'TRANSPORTADORA'
+    ]
+    repasses = vendas[colunas_repasses].drop_duplicates(subset=['PEDIDO_ID']).copy()
+
+    # Calcula DATA_REPASSE conforme regra
+    def calcular_data_repasse(row):
+        data_base = pd.to_datetime(row['DATA'])
+        if row['TRANSPORTADORA'] == 'Shopee Entrega Direta':
+            return (data_base + pd.Timedelta(days=7)).strftime('%Y-%m-%d')
+        else:
+            return (data_base + pd.Timedelta(days=15)).strftime('%Y-%m-%d')
+
+    repasses['DATA_REPASSE'] = repasses.apply(calcular_data_repasse, axis=1)
+
+    # Salva a nova tabela, incluindo DATA_REPASSE
     repasses.to_sql("repasses_shopee", conn, if_exists="replace", index=False)
     print(f"✅ Tabela 'repasses_shopee' atualizada com {len(repasses)} repasses.")
 
-    # Aqui você cria o cursor e chama a função de atualização ANTES de fechar/commitar:
+    # Atualiza as entradas financeiras (agora, use DATA_REPASSE como base de data!)
     cursor = conn.cursor()
     atualizar_entradas_financeiras(cursor)
     conn.commit()

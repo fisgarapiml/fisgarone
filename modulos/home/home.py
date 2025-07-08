@@ -30,6 +30,11 @@ def get_menu():
                     "icone": "ri-bank-line",
                     "submenu": [
                         {
+                            "nome": "Entradas",
+                            "icone": "ri-arrow-down-line",
+                            "url": url_for('financeiro.dashboard')  # <-- AJUSTE AQUI se seu endpoint for diferente!
+                        },
+                        {
                             "nome": "Contas a Pagar",
                             "icone": "ri-money-dollar-circle-line",
                             "url": url_for('contas_a_pagar_bp.contas_a_pagar')
@@ -53,6 +58,7 @@ def get_menu():
                 }
             ]
         },
+
         {
             "titulo": "Vendas",
             "icone": "ri-shopping-cart-line",

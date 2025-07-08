@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/entradas_neon.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="financeiro-container">
+
+    <!-- Cabeçalho -->
+    <div class="financeiro-header">
+        <h1><i class="ri-bar-chart-2-fill"></i> Entradas Financeiras</h1>
+    </div>
+
+    <!-- Filtros Dinâmicos -->
+    <form id="filtros-entradas" class="filtros-container" method="get" autocomplete="off">
+        <div class="filtro">
+            <label for="data_ini">De:</label>
+            <input type="date" id="data_ini" name="data_ini" value="{{ request.args.get('data_ini', '') }}">
+        </div>
+        <div class="filtro">
+            <label for="data_fim">Até:</label>
+            <input type="date" id="data_fim" name="data_fim" value="{{ request.args.get('data_fim', '') }}">
+        </div>
+        <div class="filtro">
+            <label for="canal">Canal:</label>
+            <select id="canal" name="canal">
+                <option value="">Todos</option>
+                <option value="shopee" {% if request.args.get('canal') == 'shopee' %}selected{% endif %}>Shopee</option>
+                <option value="mercado" {% if request.args.get('canal') == 'mercado' %}selected{% endif %}>Mercado Livre</option>
+            </select>
+        </div>
+        <div class="filtro">
+            <label for="status">Status:</label>
+            <select id="status" name="status">
+                <option value="">Todos</option>
+                <option value="recebido" {% if request.args.get('status') == 'recebido' %}selected{% endif %}>Recebido</option>
+                <option value="pendente" {% if request.args.get('status') == 'pendente' %}selected{% endif %}>Pendente</option>
+                <option value="processed" {% if request.args.get('status') == 'processed' %}selected{% endif %}>Processado</option>
+            </select>
+        </div>
+        <div class="filtro">
+            <label for="pedido_id">Pedido:</label>
+            <input type="text" id="pedido_id" name="pedido_id" placeholder="ID do pedido" value="{{ request.args.get('pedido_id', '') }}">
+        </div>
+        <div class="filtro">
+            <button type="submit" class="btn-filtrar"><i class="ri-search-2-line"></i> Filtrar</button>
+        </div>
+    </form>
+
+    <!-- Cards Resumo -->
+    <div class="cards-container">
+        {% for card in cards %}
+        <div class="financeiro-card">
+            <div class="card-value">R$ {{ "%.2f"|format(card.value) }}</div>
+            <div class="card-title">{{ card.title }}</div>
+            {% if card.title == 'Entradas Totais' %}
+            <div class="card-subtitle">A Receber R$ {{ "%.2f"|format(cards[1].value) }}</div>
+            {% elif card.title == 'Mercado Livre' %}
+            <div class="card-subtitle">Régasse ML</div>
+            {% elif card.title == 'Shopee' %}
+            <div class="card-subtitle">Morgan Meida</div>
+            {% elif card.title == 'Recebido Hoje' %}
+            <div class="card-subtitle">Previsão hoje</div>
+            {% endif %}
+            <div class="card-icon"><i class="{{ card.icon }}"></i></div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Gráficos -->
+    <div class="graficos-container">
+        <div class="grafico-card">
+            <h3><i class="ri-line-chart-fill"></i> Eletrônico de Entradas</h3>
+            <div class="grafico-wrapper">
+                <canvas id="evolucaoChart"></canvas>
+            </div>
+        </div>
+
+        <div class="grafico-card">
+            <h3><i class="ri-pie-chart-2-fill"></i> Por Canal</h3>
+            <div class="grafico-wrapper">
+                <canvas id="canalChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tabela -->
+    <div class="tabela-container">
+        <h3><i class="ri-history-line"></i> Últimas Entradas</h3>
+        <div class="tabela-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Data</th>
+                        <th>Canal</th>
+                        <th>Pedido</th>
+                        <th>Valor</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for entrada in entradas %}
+                    <tr>
+                        <td>{{ entrada.data }}</td>
+                        <td><span class="badge {{ entrada.canal|lower|replace(' ', '-') }}">{{ entrada.canal }}</span></td>
+                        <td>{{ entrada.pedido_id }}</td>
+                        <td>R$ {{ "%.2f"|format(entrada.valor) }}</td>
+                        <td><span class="status {{ entrada.status|lower }}">{{ entrada.status }}</span></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{{ url_for('static', filename='js/entradas_neon.js') }}"></script>
+{% endblock %}
