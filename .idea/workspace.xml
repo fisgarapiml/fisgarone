@@ -6,23 +6,14 @@
   <component name="ChangeListManager">
     <list default="true" id="ca85e026-f341-44f9-89ab-74e6332c5b99" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/fisgarone.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/automacao_shopee.py" beforeDir="false" afterPath="$PROJECT_DIR$/automacao_shopee.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/fisgarone.db" beforeDir="false" afterPath="$PROJECT_DIR$/fisgarone.db" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/fisgarone.sqbpro" beforeDir="false" afterPath="$PROJECT_DIR$/fisgarone.sqbpro" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modulos/financeiro/entradas_dashboard.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modulos/home/home.py" beforeDir="false" afterPath="$PROJECT_DIR$/modulos/home/home.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/processamento_automato_ml.py" beforeDir="false" afterPath="$PROJECT_DIR$/processamento_automato_ml.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/shopee_code.py" beforeDir="false" afterPath="$PROJECT_DIR$/shopee_code.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/css/contas_a_pagar.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/css/contas_a_pagar.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/css/entradas_neon.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/css/entradas_neon.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/js/entradas_neon.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/js/entradas_neon.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/financeiro/entradas_dashboard.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tudo.py" beforeDir="false" afterPath="$PROJECT_DIR$/tudo.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Include/site/python3.10/greenlet/greenlet.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Include/site/python3.12/greenlet/greenlet.h" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/Brotli-1.1.0.dist-info/INSTALLER" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/Brotli-1.1.0.dist-info/LICENSE" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/Brotli-1.1.0.dist-info/METADATA" beforeDir="false" />
@@ -128,23 +119,23 @@
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/PIL/_avif.pyi" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/PIL/_binary.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/PIL/_deprecate.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/PIL/_imaging.cp310-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/PIL/_imaging.cp312-win_amd64.pyd" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/PIL/_imaging.pyi" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/PIL/_imagingcms.cp310-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/PIL/_imagingcms.cp312-win_amd64.pyd" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/PIL/_imagingcms.pyi" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/PIL/_imagingft.cp310-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/PIL/_imagingft.cp312-win_amd64.pyd" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/PIL/_imagingft.pyi" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/PIL/_imagingmath.cp310-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/PIL/_imagingmath.cp312-win_amd64.pyd" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/PIL/_imagingmath.pyi" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/PIL/_imagingmorph.cp310-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/PIL/_imagingmorph.cp312-win_amd64.pyd" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/PIL/_imagingmorph.pyi" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/PIL/_imagingtk.cp310-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/PIL/_imagingtk.cp312-win_amd64.pyd" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/PIL/_imagingtk.pyi" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/PIL/_tkinter_finder.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/PIL/_typing.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/PIL/_util.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/PIL/_version.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/PIL/_webp.cp310-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/PIL/_webp.cp312-win_amd64.pyd" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/PIL/_webp.pyi" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/PIL/features.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/PIL/py.typed" beforeDir="false" />
@@ -155,10 +146,8 @@
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/PySocks-1.7.1.dist-info/RECORD" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/PySocks-1.7.1.dist-info/WHEEL" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/PySocks-1.7.1.dist-info/top_level.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/_brotli.cp310-win_amd64.pyd" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/_cffi_backend.cp310-win_amd64.pyd" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/_distutils_hack/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/_distutils_hack/override.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/_brotli.cp312-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/_cffi_backend.cp312-win_amd64.pyd" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/aiohappyeyeballs-2.6.1.dist-info/INSTALLER" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/aiohappyeyeballs-2.6.1.dist-info/LICENSE" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/aiohappyeyeballs-2.6.1.dist-info/METADATA" beforeDir="false" />
@@ -187,21 +176,21 @@
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/aiohttp/_cparser.pxd" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/aiohttp/_find_header.pxd" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/aiohttp/_headers.pxi" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/aiohttp/_http_parser.cp310-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/aiohttp/_http_parser.cp312-win_amd64.pyd" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/aiohttp/_http_parser.pyx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/aiohttp/_http_writer.cp310-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/aiohttp/_http_writer.cp312-win_amd64.pyd" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/aiohttp/_http_writer.pyx" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/aiohttp/_websocket/.hash/mask.pxd.hash" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/aiohttp/_websocket/.hash/mask.pyx.hash" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/aiohttp/_websocket/.hash/reader_c.pxd.hash" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/aiohttp/_websocket/__init__.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/aiohttp/_websocket/helpers.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/aiohttp/_websocket/mask.cp310-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/aiohttp/_websocket/mask.cp312-win_amd64.pyd" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/aiohttp/_websocket/mask.pxd" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/aiohttp/_websocket/mask.pyx" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/aiohttp/_websocket/models.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/aiohttp/_websocket/reader.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/aiohttp/_websocket/reader_c.cp310-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/aiohttp/_websocket/reader_c.cp312-win_amd64.pyd" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/aiohttp/_websocket/reader_c.pxd" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/aiohttp/_websocket/reader_c.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/aiohttp/_websocket/reader_py.py" beforeDir="false" />
@@ -261,15 +250,6 @@
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/aiosignal-1.4.0.dist-info/top_level.txt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/aiosignal/__init__.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/aiosignal/py.typed" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/async_timeout-5.0.1.dist-info/INSTALLER" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/async_timeout-5.0.1.dist-info/LICENSE" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/async_timeout-5.0.1.dist-info/METADATA" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/async_timeout-5.0.1.dist-info/RECORD" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/async_timeout-5.0.1.dist-info/WHEEL" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/async_timeout-5.0.1.dist-info/top_level.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/async_timeout-5.0.1.dist-info/zip-safe" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/async_timeout/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/async_timeout/py.typed" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/attr/__init__.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/attr/__init__.pyi" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/attr/_cmp.py" beforeDir="false" />
@@ -375,9 +355,9 @@
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/charset_normalizer/cli/__main__.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/charset_normalizer/constant.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/charset_normalizer/legacy.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/charset_normalizer/md.cp310-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/charset_normalizer/md.cp312-win_amd64.pyd" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/charset_normalizer/md.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/charset_normalizer/md__mypyc.cp310-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/charset_normalizer/md__mypyc.cp312-win_amd64.pyd" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/charset_normalizer/models.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/charset_normalizer/py.typed" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/charset_normalizer/utils.py" beforeDir="false" />
@@ -453,7 +433,6 @@
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/dateutil/zoneinfo/__init__.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/dateutil/zoneinfo/dateutil-zoneinfo.tar.gz" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/dateutil/zoneinfo/rebuild.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/distutils-precedence.pth" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/dotenv/__init__.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/dotenv/__main__.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/dotenv/cli.py" beforeDir="false" />
@@ -475,18 +454,6 @@
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/et_xmlfile/__init__.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/et_xmlfile/incremental_tree.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/et_xmlfile/xmlfile.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/exceptiongroup-1.3.0.dist-info/INSTALLER" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/exceptiongroup-1.3.0.dist-info/METADATA" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/exceptiongroup-1.3.0.dist-info/RECORD" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/exceptiongroup-1.3.0.dist-info/WHEEL" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/exceptiongroup-1.3.0.dist-info/licenses/LICENSE" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/exceptiongroup/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/exceptiongroup/_catch.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/exceptiongroup/_exceptions.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/exceptiongroup/_formatting.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/exceptiongroup/_suppress.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/exceptiongroup/_version.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/exceptiongroup/py.typed" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/flask-3.1.0.dist-info/INSTALLER" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/flask-3.1.0.dist-info/LICENSE.txt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/flask-3.1.0.dist-info/METADATA" beforeDir="false" />
@@ -570,7 +537,7 @@
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/fontTools/cu2qu/benchmark.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/fontTools/cu2qu/cli.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/fontTools/cu2qu/cu2qu.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/fontTools/cu2qu/cu2qu.cp310-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/fontTools/cu2qu/cu2qu.cp312-win_amd64.pyd" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/fontTools/cu2qu/cu2qu.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/fontTools/cu2qu/errors.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/fontTools/cu2qu/ufo.py" beforeDir="false" />
@@ -589,7 +556,7 @@
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/fontTools/feaLib/builder.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/fontTools/feaLib/error.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/fontTools/feaLib/lexer.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/fontTools/feaLib/lexer.cp310-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/fontTools/feaLib/lexer.cp312-win_amd64.pyd" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/fontTools/feaLib/lexer.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/fontTools/feaLib/location.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/fontTools/feaLib/lookupDebugInfo.py" beforeDir="false" />
@@ -609,7 +576,7 @@
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/fontTools/misc/__init__.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/fontTools/misc/arrayTools.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/fontTools/misc/bezierTools.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/fontTools/misc/bezierTools.cp310-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/fontTools/misc/bezierTools.cp312-win_amd64.pyd" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/fontTools/misc/bezierTools.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/fontTools/misc/classifyTools.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/fontTools/misc/cliTools.py" beforeDir="false" />
@@ -666,7 +633,7 @@
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/fontTools/pens/freetypePen.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/fontTools/pens/hashPointPen.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/fontTools/pens/momentsPen.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/fontTools/pens/momentsPen.cp310-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/fontTools/pens/momentsPen.cp312-win_amd64.pyd" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/fontTools/pens/momentsPen.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/fontTools/pens/perimeterPen.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/fontTools/pens/pointInsidePen.py" beforeDir="false" />
@@ -690,7 +657,7 @@
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/fontTools/qu2cu/benchmark.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/fontTools/qu2cu/cli.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/fontTools/qu2cu/qu2cu.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/fontTools/qu2cu/qu2cu.cp310-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/fontTools/qu2cu/qu2cu.cp312-win_amd64.pyd" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/fontTools/qu2cu/qu2cu.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/fontTools/subset/__init__.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/fontTools/subset/__main__.py" beforeDir="false" />
@@ -857,7 +824,7 @@
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/fontTools/varLib/interpolatableTestStartingPoint.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/fontTools/varLib/interpolate_layout.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/fontTools/varLib/iup.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/fontTools/varLib/iup.cp310-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/fontTools/varLib/iup.cp312-win_amd64.pyd" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/fontTools/varLib/iup.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/fontTools/varLib/merger.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/fontTools/varLib/models.py" beforeDir="false" />
@@ -891,7 +858,7 @@
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/frozenlist-1.7.0.dist-info/top_level.txt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/frozenlist/__init__.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/frozenlist/__init__.pyi" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/frozenlist/_frozenlist.cp310-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/frozenlist/_frozenlist.cp312-win_amd64.pyd" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/frozenlist/_frozenlist.pyx" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/frozenlist/py.typed" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/greenlet-3.2.2.dist-info/INSTALLER" beforeDir="false" />
@@ -920,7 +887,7 @@
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/greenlet/TThreadStateDestroy.cpp" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/greenlet/TUserGreenlet.cpp" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/greenlet/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/greenlet/_greenlet.cp310-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/greenlet/_greenlet.cp312-win_amd64.pyd" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/greenlet/greenlet.cpp" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/greenlet/greenlet.h" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/greenlet/greenlet_allocator.hpp" beforeDir="false" />
@@ -964,8 +931,8 @@
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/greenlet/slp_platformselect.h" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/greenlet/tests/__init__.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/greenlet/tests/_test_extension.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/greenlet/tests/_test_extension.cp310-win_amd64.pyd" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/greenlet/tests/_test_extension_cpp.cp310-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/greenlet/tests/_test_extension.cp312-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/greenlet/tests/_test_extension_cpp.cp312-win_amd64.pyd" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/greenlet/tests/_test_extension_cpp.cpp" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/greenlet/tests/fail_clearing_run_switches.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/greenlet/tests/fail_cpp_exception.py" beforeDir="false" />
@@ -1122,10 +1089,10 @@
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/lxml-5.4.0.dist-info/top_level.txt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/lxml/ElementInclude.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/lxml/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/lxml/_elementpath.cp310-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/lxml/_elementpath.cp312-win_amd64.pyd" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/lxml/_elementpath.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/lxml/apihelpers.pxi" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/lxml/builder.cp310-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/lxml/builder.cp312-win_amd64.pyd" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/lxml/builder.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/lxml/classlookup.pxi" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/lxml/cleanup.pxi" beforeDir="false" />
@@ -1134,7 +1101,7 @@
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/lxml/docloader.pxi" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/lxml/doctestcompare.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/lxml/dtd.pxi" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/lxml/etree.cp310-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/lxml/etree.cp312-win_amd64.pyd" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/lxml/etree.h" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/lxml/etree.pyx" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/lxml/etree_api.h" beforeDir="false" />
@@ -1147,7 +1114,7 @@
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/lxml/html/builder.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/lxml/html/clean.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/lxml/html/defs.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/lxml/html/diff.cp310-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/lxml/html/diff.cp312-win_amd64.pyd" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/lxml/html/diff.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/lxml/html/formfill.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/lxml/html/html5parser.py" beforeDir="false" />
@@ -1266,7 +1233,7 @@
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/lxml/lxml.etree.h" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/lxml/lxml.etree_api.h" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/lxml/nsclasses.pxi" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/lxml/objectify.cp310-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/lxml/objectify.cp312-win_amd64.pyd" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/lxml/objectify.pyx" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/lxml/objectpath.pxi" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/lxml/parser.pxi" beforeDir="false" />
@@ -1276,7 +1243,7 @@
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/lxml/pyclasslookup.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/lxml/readonlytree.pxi" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/lxml/relaxng.pxi" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/lxml/sax.cp310-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/lxml/sax.cp312-win_amd64.pyd" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/lxml/sax.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/lxml/saxparser.pxi" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/lxml/schematron.pxi" beforeDir="false" />
@@ -1292,7 +1259,7 @@
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/markupsafe/__init__.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/markupsafe/_native.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/markupsafe/_speedups.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/markupsafe/_speedups.cp310-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/markupsafe/_speedups.cp312-win_amd64.pyd" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/markupsafe/_speedups.pyi" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/markupsafe/py.typed" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/multidict-6.6.3.dist-info/INSTALLER" beforeDir="false" />
@@ -1304,10 +1271,10 @@
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/multidict/__init__.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/multidict/_abc.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/multidict/_compat.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/multidict/_multidict.cp310-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/multidict/_multidict.cp312-win_amd64.pyd" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/multidict/_multidict_py.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/multidict/py.typed" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy-2.2.5-cp310-cp310-win_amd64.whl" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy-2.2.5-cp312-cp312-win_amd64.whl" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy-2.2.5.dist-info/DELVEWHEEL" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy-2.2.5.dist-info/INSTALLER" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy-2.2.5.dist-info/LICENSE.txt" beforeDir="false" />
@@ -1348,27 +1315,27 @@
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/_core/_machar.pyi" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/_core/_methods.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/_core/_methods.pyi" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/_core/_multiarray_tests.cp310-win_amd64.lib" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/_core/_multiarray_tests.cp310-win_amd64.pyd" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/_core/_multiarray_umath.cp310-win_amd64.lib" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/_core/_multiarray_umath.cp310-win_amd64.pyd" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/_core/_operand_flag_tests.cp310-win_amd64.lib" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/_core/_operand_flag_tests.cp310-win_amd64.pyd" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/_core/_rational_tests.cp310-win_amd64.lib" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/_core/_rational_tests.cp310-win_amd64.pyd" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/_core/_simd.cp310-win_amd64.lib" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/_core/_simd.cp310-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/_core/_multiarray_tests.cp312-win_amd64.lib" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/_core/_multiarray_tests.cp312-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/_core/_multiarray_umath.cp312-win_amd64.lib" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/_core/_multiarray_umath.cp312-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/_core/_operand_flag_tests.cp312-win_amd64.lib" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/_core/_operand_flag_tests.cp312-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/_core/_rational_tests.cp312-win_amd64.lib" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/_core/_rational_tests.cp312-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/_core/_simd.cp312-win_amd64.lib" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/_core/_simd.cp312-win_amd64.pyd" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/_core/_simd.pyi" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/_core/_string_helpers.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/_core/_string_helpers.pyi" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/_core/_struct_ufunc_tests.cp310-win_amd64.lib" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/_core/_struct_ufunc_tests.cp310-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/_core/_struct_ufunc_tests.cp312-win_amd64.lib" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/_core/_struct_ufunc_tests.cp312-win_amd64.pyd" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/_core/_type_aliases.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/_core/_type_aliases.pyi" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/_core/_ufunc_config.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/_core/_ufunc_config.pyi" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/_core/_umath_tests.cp310-win_amd64.lib" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/_core/_umath_tests.cp310-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/_core/_umath_tests.cp312-win_amd64.lib" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/_core/_umath_tests.cp312-win_amd64.pyd" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/_core/arrayprint.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/_core/arrayprint.pyi" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/_core/cversions.py" beforeDir="false" />
@@ -1603,133 +1570,6 @@
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/core/umath.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/ctypeslib.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/ctypeslib.pyi" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/__init__.pyi" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/_shell_utils.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/armccompiler.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/ccompiler.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/ccompiler_opt.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/checks/cpu_asimd.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/checks/cpu_asimddp.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/checks/cpu_asimdfhm.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/checks/cpu_asimdhp.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/checks/cpu_avx.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/checks/cpu_avx2.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/checks/cpu_avx512_clx.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/checks/cpu_avx512_cnl.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/checks/cpu_avx512_icl.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/checks/cpu_avx512_knl.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/checks/cpu_avx512_knm.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/checks/cpu_avx512_skx.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/checks/cpu_avx512_spr.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/checks/cpu_avx512cd.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/checks/cpu_avx512f.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/checks/cpu_f16c.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/checks/cpu_fma3.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/checks/cpu_fma4.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/checks/cpu_neon.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/checks/cpu_neon_fp16.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/checks/cpu_neon_vfpv4.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/checks/cpu_popcnt.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/checks/cpu_rvv.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/checks/cpu_sse.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/checks/cpu_sse2.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/checks/cpu_sse3.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/checks/cpu_sse41.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/checks/cpu_sse42.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/checks/cpu_ssse3.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/checks/cpu_sve.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/checks/cpu_vsx.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/checks/cpu_vsx2.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/checks/cpu_vsx3.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/checks/cpu_vsx4.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/checks/cpu_vx.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/checks/cpu_vxe.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/checks/cpu_vxe2.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/checks/cpu_xop.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/checks/extra_avx512bw_mask.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/checks/extra_avx512dq_mask.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/checks/extra_avx512f_reduce.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/checks/extra_vsx3_half_double.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/checks/extra_vsx4_mma.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/checks/extra_vsx_asm.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/checks/test_flags.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/command/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/command/autodist.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/command/bdist_rpm.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/command/build.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/command/build_clib.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/command/build_ext.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/command/build_py.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/command/build_scripts.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/command/build_src.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/command/config.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/command/config_compiler.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/command/develop.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/command/egg_info.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/command/install.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/command/install_clib.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/command/install_data.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/command/install_headers.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/command/sdist.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/conv_template.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/core.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/cpuinfo.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/exec_command.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/extension.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/fcompiler/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/fcompiler/absoft.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/fcompiler/arm.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/fcompiler/compaq.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/fcompiler/environment.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/fcompiler/fujitsu.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/fcompiler/g95.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/fcompiler/gnu.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/fcompiler/hpux.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/fcompiler/ibm.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/fcompiler/intel.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/fcompiler/lahey.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/fcompiler/mips.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/fcompiler/nag.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/fcompiler/none.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/fcompiler/nv.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/fcompiler/pathf95.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/fcompiler/pg.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/fcompiler/sun.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/fcompiler/vast.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/from_template.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/fujitsuccompiler.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/intelccompiler.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/lib2def.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/line_endings.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/log.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/mingw/gfortran_vs2003_hack.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/mingw32ccompiler.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/misc_util.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/msvc9compiler.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/msvccompiler.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/npy_pkg_config.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/numpy_distribution.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/pathccompiler.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/system_info.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/tests/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/tests/test_build_ext.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/tests/test_ccompiler_opt.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/tests/test_ccompiler_opt_conf.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/tests/test_exec_command.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/tests/test_fcompiler.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/tests/test_fcompiler_gnu.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/tests/test_fcompiler_intel.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/tests/test_fcompiler_nagfor.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/tests/test_from_template.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/tests/test_log.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/tests/test_mingw32ccompiler.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/tests/test_misc_util.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/tests/test_npy_pkg_config.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/tests/test_shell_utils.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/tests/test_system_info.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/tests/utilities.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/distutils/unixccompiler.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/doc/ufuncs.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/dtypes.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/dtypes.pyi" beforeDir="false" />
@@ -1897,8 +1737,8 @@
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/fft/_helper.pyi" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/fft/_pocketfft.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/fft/_pocketfft.pyi" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/fft/_pocketfft_umath.cp310-win_amd64.lib" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/fft/_pocketfft_umath.cp310-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/fft/_pocketfft_umath.cp312-win_amd64.lib" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/fft/_pocketfft_umath.cp312-win_amd64.pyd" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/fft/helper.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/fft/helper.pyi" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/fft/tests/__init__.py" beforeDir="false" />
@@ -2003,11 +1843,11 @@
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/linalg/__init__.pyi" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/linalg/_linalg.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/linalg/_linalg.pyi" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/linalg/_umath_linalg.cp310-win_amd64.lib" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/linalg/_umath_linalg.cp310-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/linalg/_umath_linalg.cp312-win_amd64.lib" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/linalg/_umath_linalg.cp312-win_amd64.pyd" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/linalg/_umath_linalg.pyi" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/linalg/lapack_lite.cp310-win_amd64.lib" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/linalg/lapack_lite.cp310-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/linalg/lapack_lite.cp312-win_amd64.lib" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/linalg/lapack_lite.cp312-win_amd64.pyd" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/linalg/lapack_lite.pyi" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/linalg/linalg.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/linalg/linalg.pyi" beforeDir="false" />
@@ -2086,11 +1926,11 @@
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/random/__init__.pxd" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/random/__init__.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/random/__init__.pyi" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/random/_bounded_integers.cp310-win_amd64.lib" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/random/_bounded_integers.cp310-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/random/_bounded_integers.cp312-win_amd64.lib" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/random/_bounded_integers.cp312-win_amd64.pyd" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/random/_bounded_integers.pxd" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/random/_common.cp310-win_amd64.lib" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/random/_common.cp310-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/random/_common.cp312-win_amd64.lib" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/random/_common.cp312-win_amd64.pyd" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/random/_common.pxd" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/random/_examples/cffi/extending.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/random/_examples/cffi/parse.py" beforeDir="false" />
@@ -2099,31 +1939,31 @@
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/random/_examples/cython/meson.build" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/random/_examples/numba/extending.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/random/_examples/numba/extending_distributions.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/random/_generator.cp310-win_amd64.lib" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/random/_generator.cp310-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/random/_generator.cp312-win_amd64.lib" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/random/_generator.cp312-win_amd64.pyd" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/random/_generator.pyi" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/random/_mt19937.cp310-win_amd64.lib" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/random/_mt19937.cp310-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/random/_mt19937.cp312-win_amd64.lib" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/random/_mt19937.cp312-win_amd64.pyd" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/random/_mt19937.pyi" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/random/_pcg64.cp310-win_amd64.lib" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/random/_pcg64.cp310-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/random/_pcg64.cp312-win_amd64.lib" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/random/_pcg64.cp312-win_amd64.pyd" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/random/_pcg64.pyi" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/random/_philox.cp310-win_amd64.lib" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/random/_philox.cp310-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/random/_philox.cp312-win_amd64.lib" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/random/_philox.cp312-win_amd64.pyd" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/random/_philox.pyi" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/random/_pickle.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/random/_pickle.pyi" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/random/_sfc64.cp310-win_amd64.lib" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/random/_sfc64.cp310-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/random/_sfc64.cp312-win_amd64.lib" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/random/_sfc64.cp312-win_amd64.pyd" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/random/_sfc64.pyi" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/random/bit_generator.cp310-win_amd64.lib" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/random/bit_generator.cp310-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/random/bit_generator.cp312-win_amd64.lib" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/random/bit_generator.cp312-win_amd64.pyd" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/random/bit_generator.pxd" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/random/bit_generator.pyi" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/random/c_distributions.pxd" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/random/lib/npyrandom.lib" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/random/mtrand.cp310-win_amd64.lib" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/random/mtrand.cp310-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/random/mtrand.cp312-win_amd64.lib" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/random/mtrand.cp312-win_amd64.pyd" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/random/mtrand.pyi" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/random/tests/__init__.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/numpy/random/tests/data/__init__.py" beforeDir="false" />
@@ -2582,136 +2422,136 @@
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_config/display.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_config/localization.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/algos.cp310-win_amd64.lib" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/algos.cp310-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/algos.cp312-win_amd64.lib" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/algos.cp312-win_amd64.pyd" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/algos.pyi" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/arrays.cp310-win_amd64.lib" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/arrays.cp310-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/arrays.cp312-win_amd64.lib" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/arrays.cp312-win_amd64.pyd" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/arrays.pyi" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/byteswap.cp310-win_amd64.lib" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/byteswap.cp310-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/byteswap.cp312-win_amd64.lib" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/byteswap.cp312-win_amd64.pyd" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/byteswap.pyi" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/groupby.cp310-win_amd64.lib" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/groupby.cp310-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/groupby.cp312-win_amd64.lib" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/groupby.cp312-win_amd64.pyd" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/groupby.pyi" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/hashing.cp310-win_amd64.lib" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/hashing.cp310-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/hashing.cp312-win_amd64.lib" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/hashing.cp312-win_amd64.pyd" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/hashing.pyi" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/hashtable.cp310-win_amd64.lib" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/hashtable.cp310-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/hashtable.cp312-win_amd64.lib" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/hashtable.cp312-win_amd64.pyd" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/hashtable.pyi" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/index.cp310-win_amd64.lib" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/index.cp310-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/index.cp312-win_amd64.lib" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/index.cp312-win_amd64.pyd" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/index.pyi" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/indexing.cp310-win_amd64.lib" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/indexing.cp310-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/indexing.cp312-win_amd64.lib" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/indexing.cp312-win_amd64.pyd" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/indexing.pyi" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/internals.cp310-win_amd64.lib" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/internals.cp310-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/internals.cp312-win_amd64.lib" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/internals.cp312-win_amd64.pyd" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/internals.pyi" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/interval.cp310-win_amd64.lib" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/interval.cp310-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/interval.cp312-win_amd64.lib" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/interval.cp312-win_amd64.pyd" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/interval.pyi" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/join.cp310-win_amd64.lib" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/join.cp310-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/join.cp312-win_amd64.lib" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/join.cp312-win_amd64.pyd" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/join.pyi" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/json.cp310-win_amd64.lib" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/json.cp310-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/json.cp312-win_amd64.lib" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/json.cp312-win_amd64.pyd" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/json.pyi" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/lib.cp310-win_amd64.lib" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/lib.cp310-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/lib.cp312-win_amd64.lib" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/lib.cp312-win_amd64.pyd" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/lib.pyi" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/missing.cp310-win_amd64.lib" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/missing.cp310-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/missing.cp312-win_amd64.lib" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/missing.cp312-win_amd64.pyd" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/missing.pyi" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/ops.cp310-win_amd64.lib" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/ops.cp310-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/ops.cp312-win_amd64.lib" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/ops.cp312-win_amd64.pyd" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/ops.pyi" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/ops_dispatch.cp310-win_amd64.lib" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/ops_dispatch.cp310-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/ops_dispatch.cp312-win_amd64.lib" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/ops_dispatch.cp312-win_amd64.pyd" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/ops_dispatch.pyi" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/pandas_datetime.cp310-win_amd64.lib" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/pandas_datetime.cp310-win_amd64.pyd" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/pandas_parser.cp310-win_amd64.lib" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/pandas_parser.cp310-win_amd64.pyd" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/parsers.cp310-win_amd64.lib" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/parsers.cp310-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/pandas_datetime.cp312-win_amd64.lib" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/pandas_datetime.cp312-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/pandas_parser.cp312-win_amd64.lib" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/pandas_parser.cp312-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/parsers.cp312-win_amd64.lib" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/parsers.cp312-win_amd64.pyd" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/parsers.pyi" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/properties.cp310-win_amd64.lib" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/properties.cp310-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/properties.cp312-win_amd64.lib" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/properties.cp312-win_amd64.pyd" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/properties.pyi" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/reshape.cp310-win_amd64.lib" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/reshape.cp310-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/reshape.cp312-win_amd64.lib" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/reshape.cp312-win_amd64.pyd" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/reshape.pyi" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/sas.cp310-win_amd64.lib" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/sas.cp310-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/sas.cp312-win_amd64.lib" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/sas.cp312-win_amd64.pyd" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/sas.pyi" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/sparse.cp310-win_amd64.lib" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/sparse.cp310-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/sparse.cp312-win_amd64.lib" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/sparse.cp312-win_amd64.pyd" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/sparse.pyi" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/testing.cp310-win_amd64.lib" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/testing.cp310-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/testing.cp312-win_amd64.lib" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/testing.cp312-win_amd64.pyd" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/testing.pyi" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/tslib.cp310-win_amd64.lib" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/tslib.cp310-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/tslib.cp312-win_amd64.lib" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/tslib.cp312-win_amd64.pyd" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/tslib.pyi" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/tslibs/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/tslibs/base.cp310-win_amd64.lib" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/tslibs/base.cp310-win_amd64.pyd" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/tslibs/ccalendar.cp310-win_amd64.lib" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/tslibs/ccalendar.cp310-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/tslibs/base.cp312-win_amd64.lib" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/tslibs/base.cp312-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/tslibs/ccalendar.cp312-win_amd64.lib" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/tslibs/ccalendar.cp312-win_amd64.pyd" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/tslibs/ccalendar.pyi" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/tslibs/conversion.cp310-win_amd64.lib" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/tslibs/conversion.cp310-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/tslibs/conversion.cp312-win_amd64.lib" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/tslibs/conversion.cp312-win_amd64.pyd" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/tslibs/conversion.pyi" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/tslibs/dtypes.cp310-win_amd64.lib" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/tslibs/dtypes.cp310-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/tslibs/dtypes.cp312-win_amd64.lib" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/tslibs/dtypes.cp312-win_amd64.pyd" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/tslibs/dtypes.pyi" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/tslibs/fields.cp310-win_amd64.lib" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/tslibs/fields.cp310-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/tslibs/fields.cp312-win_amd64.lib" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/tslibs/fields.cp312-win_amd64.pyd" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/tslibs/fields.pyi" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/tslibs/nattype.cp310-win_amd64.lib" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/tslibs/nattype.cp310-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/tslibs/nattype.cp312-win_amd64.lib" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/tslibs/nattype.cp312-win_amd64.pyd" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/tslibs/nattype.pyi" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/tslibs/np_datetime.cp310-win_amd64.lib" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/tslibs/np_datetime.cp310-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/tslibs/np_datetime.cp312-win_amd64.lib" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/tslibs/np_datetime.cp312-win_amd64.pyd" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/tslibs/np_datetime.pyi" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/tslibs/offsets.cp310-win_amd64.lib" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/tslibs/offsets.cp310-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/tslibs/offsets.cp312-win_amd64.lib" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/tslibs/offsets.cp312-win_amd64.pyd" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/tslibs/offsets.pyi" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/tslibs/parsing.cp310-win_amd64.lib" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/tslibs/parsing.cp310-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/tslibs/parsing.cp312-win_amd64.lib" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/tslibs/parsing.cp312-win_amd64.pyd" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/tslibs/parsing.pyi" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/tslibs/period.cp310-win_amd64.lib" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/tslibs/period.cp310-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/tslibs/period.cp312-win_amd64.lib" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/tslibs/period.cp312-win_amd64.pyd" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/tslibs/period.pyi" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/tslibs/strptime.cp310-win_amd64.lib" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/tslibs/strptime.cp310-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/tslibs/strptime.cp312-win_amd64.lib" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/tslibs/strptime.cp312-win_amd64.pyd" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/tslibs/strptime.pyi" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/tslibs/timedeltas.cp310-win_amd64.lib" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/tslibs/timedeltas.cp310-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/tslibs/timedeltas.cp312-win_amd64.lib" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/tslibs/timedeltas.cp312-win_amd64.pyd" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/tslibs/timedeltas.pyi" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/tslibs/timestamps.cp310-win_amd64.lib" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/tslibs/timestamps.cp310-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/tslibs/timestamps.cp312-win_amd64.lib" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/tslibs/timestamps.cp312-win_amd64.pyd" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/tslibs/timestamps.pyi" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/tslibs/timezones.cp310-win_amd64.lib" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/tslibs/timezones.cp310-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/tslibs/timezones.cp312-win_amd64.lib" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/tslibs/timezones.cp312-win_amd64.pyd" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/tslibs/timezones.pyi" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/tslibs/tzconversion.cp310-win_amd64.lib" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/tslibs/tzconversion.cp310-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/tslibs/tzconversion.cp312-win_amd64.lib" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/tslibs/tzconversion.cp312-win_amd64.pyd" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/tslibs/tzconversion.pyi" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/tslibs/vectorized.cp310-win_amd64.lib" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/tslibs/vectorized.cp310-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/tslibs/vectorized.cp312-win_amd64.lib" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/tslibs/vectorized.cp312-win_amd64.pyd" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/tslibs/vectorized.pyi" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/window/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/window/aggregations.cp310-win_amd64.lib" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/window/aggregations.cp310-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/window/aggregations.cp312-win_amd64.lib" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/window/aggregations.cp312-win_amd64.pyd" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/window/aggregations.pyi" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/window/indexers.cp310-win_amd64.lib" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/window/indexers.cp310-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/window/indexers.cp312-win_amd64.lib" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/window/indexers.cp312-win_amd64.pyd" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/window/indexers.pyi" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/writers.cp310-win_amd64.lib" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/writers.cp310-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/writers.cp312-win_amd64.lib" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/writers.cp312-win_amd64.pyd" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_libs/writers.pyi" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_testing/__init__.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pandas/_testing/_hypothesis.py" beforeDir="false" />
@@ -4573,49 +4413,6 @@
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pip/_vendor/urllib3/util/wait.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pip/_vendor/vendor.txt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pip/py.typed" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pkg_resources/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pkg_resources/_vendor/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pkg_resources/_vendor/appdirs.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pkg_resources/_vendor/importlib_resources/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pkg_resources/_vendor/importlib_resources/_adapters.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pkg_resources/_vendor/importlib_resources/_common.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pkg_resources/_vendor/importlib_resources/_compat.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pkg_resources/_vendor/importlib_resources/_itertools.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pkg_resources/_vendor/importlib_resources/_legacy.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pkg_resources/_vendor/importlib_resources/abc.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pkg_resources/_vendor/importlib_resources/readers.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pkg_resources/_vendor/importlib_resources/simple.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pkg_resources/_vendor/jaraco/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pkg_resources/_vendor/jaraco/context.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pkg_resources/_vendor/jaraco/functools.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pkg_resources/_vendor/jaraco/text/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pkg_resources/_vendor/more_itertools/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pkg_resources/_vendor/more_itertools/more.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pkg_resources/_vendor/more_itertools/recipes.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pkg_resources/_vendor/packaging/__about__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pkg_resources/_vendor/packaging/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pkg_resources/_vendor/packaging/_manylinux.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pkg_resources/_vendor/packaging/_musllinux.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pkg_resources/_vendor/packaging/_structures.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pkg_resources/_vendor/packaging/markers.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pkg_resources/_vendor/packaging/requirements.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pkg_resources/_vendor/packaging/specifiers.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pkg_resources/_vendor/packaging/tags.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pkg_resources/_vendor/packaging/utils.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pkg_resources/_vendor/packaging/version.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pkg_resources/_vendor/pyparsing/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pkg_resources/_vendor/pyparsing/actions.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pkg_resources/_vendor/pyparsing/common.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pkg_resources/_vendor/pyparsing/core.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pkg_resources/_vendor/pyparsing/diagram/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pkg_resources/_vendor/pyparsing/exceptions.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pkg_resources/_vendor/pyparsing/helpers.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pkg_resources/_vendor/pyparsing/results.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pkg_resources/_vendor/pyparsing/testing.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pkg_resources/_vendor/pyparsing/unicode.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pkg_resources/_vendor/pyparsing/util.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pkg_resources/_vendor/zipp.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/pkg_resources/extern/__init__.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/propcache-0.3.2.dist-info/INSTALLER" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/propcache-0.3.2.dist-info/METADATA" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/propcache-0.3.2.dist-info/RECORD" beforeDir="false" />
@@ -4625,7 +4422,7 @@
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/propcache-0.3.2.dist-info/top_level.txt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/propcache/__init__.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/propcache/_helpers.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/propcache/_helpers_c.cp310-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/propcache/_helpers_c.cp312-win_amd64.pyd" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/propcache/_helpers_c.pyx" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/propcache/_helpers_py.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/propcache/api.py" beforeDir="false" />
@@ -4633,7 +4430,7 @@
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/psycopg2/__init__.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/psycopg2/_ipaddress.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/psycopg2/_json.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/psycopg2/_psycopg.cp310-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/psycopg2/_psycopg.cp312-win_amd64.pyd" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/psycopg2/_range.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/psycopg2/errorcodes.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/psycopg2/errors.py" beforeDir="false" />
@@ -5734,203 +5531,6 @@
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/selenium/webdriver/wpewebkit/options.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/selenium/webdriver/wpewebkit/service.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/selenium/webdriver/wpewebkit/webdriver.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools-65.5.0.dist-info/INSTALLER" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools-65.5.0.dist-info/LICENSE" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools-65.5.0.dist-info/METADATA" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools-65.5.0.dist-info/RECORD" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools-65.5.0.dist-info/REQUESTED" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools-65.5.0.dist-info/WHEEL" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools-65.5.0.dist-info/entry_points.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools-65.5.0.dist-info/top_level.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_deprecation_warning.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_distutils/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_distutils/_collections.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_distutils/_functools.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_distutils/_macos_compat.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_distutils/_msvccompiler.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_distutils/archive_util.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_distutils/bcppcompiler.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_distutils/ccompiler.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_distutils/cmd.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_distutils/command/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_distutils/command/_framework_compat.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_distutils/command/bdist.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_distutils/command/bdist_dumb.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_distutils/command/bdist_rpm.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_distutils/command/build.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_distutils/command/build_clib.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_distutils/command/build_ext.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_distutils/command/build_py.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_distutils/command/build_scripts.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_distutils/command/check.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_distutils/command/clean.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_distutils/command/config.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_distutils/command/install.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_distutils/command/install_data.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_distutils/command/install_egg_info.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_distutils/command/install_headers.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_distutils/command/install_lib.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_distutils/command/install_scripts.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_distutils/command/py37compat.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_distutils/command/register.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_distutils/command/sdist.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_distutils/command/upload.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_distutils/config.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_distutils/core.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_distutils/cygwinccompiler.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_distutils/debug.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_distutils/dep_util.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_distutils/dir_util.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_distutils/dist.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_distutils/errors.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_distutils/extension.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_distutils/fancy_getopt.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_distutils/file_util.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_distutils/filelist.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_distutils/log.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_distutils/msvc9compiler.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_distutils/msvccompiler.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_distutils/py38compat.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_distutils/py39compat.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_distutils/spawn.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_distutils/sysconfig.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_distutils/text_file.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_distutils/unixccompiler.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_distutils/util.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_distutils/version.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_distutils/versionpredicate.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_entry_points.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_imp.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_importlib.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_itertools.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_path.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_reqs.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_vendor/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_vendor/importlib_metadata/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_vendor/importlib_metadata/_adapters.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_vendor/importlib_metadata/_collections.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_vendor/importlib_metadata/_compat.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_vendor/importlib_metadata/_functools.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_vendor/importlib_metadata/_itertools.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_vendor/importlib_metadata/_meta.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_vendor/importlib_metadata/_text.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_vendor/importlib_resources/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_vendor/importlib_resources/_adapters.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_vendor/importlib_resources/_common.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_vendor/importlib_resources/_compat.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_vendor/importlib_resources/_itertools.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_vendor/importlib_resources/_legacy.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_vendor/importlib_resources/abc.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_vendor/importlib_resources/readers.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_vendor/importlib_resources/simple.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_vendor/jaraco/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_vendor/jaraco/context.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_vendor/jaraco/functools.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_vendor/jaraco/text/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_vendor/more_itertools/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_vendor/more_itertools/more.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_vendor/more_itertools/recipes.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_vendor/ordered_set.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_vendor/packaging/__about__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_vendor/packaging/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_vendor/packaging/_manylinux.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_vendor/packaging/_musllinux.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_vendor/packaging/_structures.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_vendor/packaging/markers.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_vendor/packaging/requirements.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_vendor/packaging/specifiers.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_vendor/packaging/tags.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_vendor/packaging/utils.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_vendor/packaging/version.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_vendor/pyparsing/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_vendor/pyparsing/actions.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_vendor/pyparsing/common.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_vendor/pyparsing/core.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_vendor/pyparsing/diagram/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_vendor/pyparsing/exceptions.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_vendor/pyparsing/helpers.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_vendor/pyparsing/results.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_vendor/pyparsing/testing.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_vendor/pyparsing/unicode.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_vendor/pyparsing/util.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_vendor/tomli/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_vendor/tomli/_parser.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_vendor/tomli/_re.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_vendor/tomli/_types.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_vendor/typing_extensions.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/_vendor/zipp.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/archive_util.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/build_meta.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/cli-32.exe" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/cli-64.exe" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/cli-arm64.exe" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/cli.exe" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/command/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/command/alias.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/command/bdist_egg.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/command/bdist_rpm.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/command/build.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/command/build_clib.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/command/build_ext.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/command/build_py.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/command/develop.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/command/dist_info.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/command/easy_install.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/command/editable_wheel.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/command/egg_info.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/command/install.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/command/install_egg_info.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/command/install_lib.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/command/install_scripts.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/command/launcher manifest.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/command/py36compat.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/command/register.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/command/rotate.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/command/saveopts.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/command/sdist.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/command/setopt.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/command/test.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/command/upload.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/command/upload_docs.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/config/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/config/_apply_pyprojecttoml.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/config/_validate_pyproject/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/config/_validate_pyproject/error_reporting.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/config/_validate_pyproject/extra_validations.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/config/_validate_pyproject/fastjsonschema_exceptions.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/config/_validate_pyproject/fastjsonschema_validations.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/config/_validate_pyproject/formats.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/config/expand.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/config/pyprojecttoml.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/config/setupcfg.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/dep_util.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/depends.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/discovery.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/dist.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/errors.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/extension.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/extern/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/glob.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/gui-32.exe" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/gui-64.exe" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/gui-arm64.exe" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/gui.exe" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/installer.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/launch.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/logging.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/monkey.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/msvc.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/namespaces.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/package_index.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/py34compat.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/sandbox.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/script (dev).tmpl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/script.tmpl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/unicode_utils.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/version.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/wheel.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/setuptools/windows_support.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/six-1.17.0.dist-info/INSTALLER" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/six-1.17.0.dist-info/LICENSE" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/six-1.17.0.dist-info/METADATA" beforeDir="false" />
@@ -5978,16 +5578,16 @@
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/sqlalchemy/connectors/asyncio.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/sqlalchemy/connectors/pyodbc.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/sqlalchemy/cyextension/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/sqlalchemy/cyextension/collections.cp310-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/sqlalchemy/cyextension/collections.cp312-win_amd64.pyd" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/sqlalchemy/cyextension/collections.pyx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/sqlalchemy/cyextension/immutabledict.cp310-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/sqlalchemy/cyextension/immutabledict.cp312-win_amd64.pyd" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/sqlalchemy/cyextension/immutabledict.pxd" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/sqlalchemy/cyextension/immutabledict.pyx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/sqlalchemy/cyextension/processors.cp310-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/sqlalchemy/cyextension/processors.cp312-win_amd64.pyd" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/sqlalchemy/cyextension/processors.pyx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/sqlalchemy/cyextension/resultproxy.cp310-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/sqlalchemy/cyextension/resultproxy.cp312-win_amd64.pyd" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/sqlalchemy/cyextension/resultproxy.pyx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/sqlalchemy/cyextension/util.cp310-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/sqlalchemy/cyextension/util.cp312-win_amd64.pyd" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/sqlalchemy/cyextension/util.pyx" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/sqlalchemy/dialects/__init__.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/sqlalchemy/dialects/_typing.py" beforeDir="false" />
@@ -7190,6 +6790,38 @@
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/weasyprint/text/fonts.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/weasyprint/text/line_break.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/weasyprint/urls.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/webdriver_manager-4.0.2.dist-info/INSTALLER" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/webdriver_manager-4.0.2.dist-info/LICENSE" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/webdriver_manager-4.0.2.dist-info/METADATA" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/webdriver_manager-4.0.2.dist-info/RECORD" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/webdriver_manager-4.0.2.dist-info/REQUESTED" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/webdriver_manager-4.0.2.dist-info/WHEEL" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/webdriver_manager-4.0.2.dist-info/top_level.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/webdriver_manager/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/webdriver_manager/chrome.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/webdriver_manager/core/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/webdriver_manager/core/archive.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/webdriver_manager/core/config.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/webdriver_manager/core/constants.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/webdriver_manager/core/download_manager.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/webdriver_manager/core/driver.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/webdriver_manager/core/driver_cache.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/webdriver_manager/core/file_manager.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/webdriver_manager/core/http.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/webdriver_manager/core/logger.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/webdriver_manager/core/manager.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/webdriver_manager/core/os_manager.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/webdriver_manager/core/utils.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/webdriver_manager/drivers/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/webdriver_manager/drivers/chrome.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/webdriver_manager/drivers/edge.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/webdriver_manager/drivers/firefox.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/webdriver_manager/drivers/ie.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/webdriver_manager/drivers/opera.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/webdriver_manager/firefox.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/webdriver_manager/microsoft.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/webdriver_manager/opera.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/webdriver_manager/py.typed" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/webencodings-0.5.1.dist-info/DESCRIPTION.rst" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/webencodings-0.5.1.dist-info/INSTALLER" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/webencodings-0.5.1.dist-info/METADATA" beforeDir="false" />
@@ -7329,7 +6961,7 @@
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/yarl/_query.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/yarl/_quoters.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/yarl/_quoting.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/yarl/_quoting_c.cp310-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/yarl/_quoting_c.cp312-win_amd64.pyd" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/yarl/_quoting_c.pyx" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/yarl/_quoting_py.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/yarl/_url.py" beforeDir="false" />
@@ -7347,7 +6979,7 @@
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/zopfli/gzip.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/zopfli/png.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/zopfli/zlib.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/zopfli/zopfli.cp310-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/zopfli/zopfli.cp312-win_amd64.pyd" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Scripts/Activate.ps1" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Scripts/activate" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Scripts/activate.bat" beforeDir="false" />
@@ -7360,7 +6992,7 @@
       <change beforePath="$PROJECT_DIR$/venv/Scripts/normalizer.exe" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Scripts/numpy-config.exe" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Scripts/pip.exe" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Scripts/pip3.10.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Scripts/pip3.12.exe" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Scripts/pip3.exe" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Scripts/pyftmerge.exe" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Scripts/pyftsubset.exe" beforeDir="false" />
@@ -7397,6 +7029,9 @@
   &quot;associatedIndex&quot;: 5
 }</component>
   <component name="ProjectId" id="2zL1XQIcG06eBiMUhBuPDzOrDE5" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -7431,7 +7066,7 @@
       <recent name="C:\fisgarone\modulos\vendas\shopee" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.automacao_shopee">
+  <component name="RunManager" selected="Python.processamento_automato_ml">
     <configuration name="automacao_shopee" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="fisgarone" />
       <option name="ENV_FILES" value="" />
@@ -7544,8 +7179,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.automacao_shopee" />
         <item itemvalue="Python.processamento_automato_ml" />
+        <item itemvalue="Python.automacao_shopee" />
         <item itemvalue="Python.monitor_ml" />
         <item itemvalue="Python.importador_automatico" />
         <item itemvalue="Python.ml" />

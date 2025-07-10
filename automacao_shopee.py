@@ -19,21 +19,24 @@ ENV_PATH = r"C:\fisgarone\.env"
 print("DB Exists?", os.path.exists(DB_PATH))
 print("ENV Exists?", os.path.exists(ENV_PATH))
 
-# Carrega variáveis do .env (só precisa fazer uma vez no topo)
 load_dotenv(ENV_PATH)
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 REQUEST_TIMEOUT = 20
 MAX_RETRIES = 3
 
+def traduzir_valores(coluna, valor):
+    if valor is None:
+        return valor
+    valor = str(valor).upper()
+    if coluna == "Conta":
+        if valor == "TOYS":
+            return "Toys"
+        elif valor == "COMERCIAL":
+            return "Comercial"
+    return valor
+
 def atualizar_entradas_financeiras(cursor):
-    """
-    Atualiza ou insere as entradas financeiras a partir da tabela repasses_shopee,
-    com cálculo do valor_liquido e origem_conta padronizada.
-    """
-    # Primeiro, garante que as colunas existam (caso sejam novas)
-    cursor.execute("""
-        PRAGMA table_info(entradas_financeiras)
-    """)
+    cursor.execute("""PRAGMA table_info(entradas_financeiras)""")
     colunas = [col[1] for col in cursor.fetchall()]
     if 'valor_liquido' not in colunas:
         cursor.execute("ALTER TABLE entradas_financeiras ADD COLUMN valor_liquido REAL")
@@ -42,12 +45,19 @@ def atualizar_entradas_financeiras(cursor):
     if 'origem_conta' not in colunas:
         cursor.execute("ALTER TABLE entradas_financeiras ADD COLUMN origem_conta TEXT")
 
-    # Busca os repasses da Shopee (com frete incluso)
+    # Garante as colunas TIPO_CONTA e REPASSE_ENVIO na repasses_shopee antes de prosseguir
+    cursor.execute("PRAGMA table_info(repasses_shopee)")
+    rep_cols = [col[1] for col in cursor.fetchall()]
+    if 'TIPO_CONTA' not in rep_cols:
+        cursor.execute("ALTER TABLE repasses_shopee ADD COLUMN TIPO_CONTA TEXT")
+    if 'REPASSE_ENVIO' not in rep_cols:
+        cursor.execute("ALTER TABLE repasses_shopee ADD COLUMN REPASSE_ENVIO REAL")
+
     cursor.execute("""
         SELECT 
             PEDIDO_ID, 
             DATA, 
-            DATA_REPASSE,  -- <-- Use esta!
+            DATA_REPASSE,  
             VALOR_TOTAL, 
             COMISSAO_UNITARIA, 
             TAXA_FIXA,
@@ -59,17 +69,12 @@ def atualizar_entradas_financeiras(cursor):
 
     for row in cursor.fetchall():
         try:
-            # Cálculo do valor_liquido (total - custos)
             valor_total = float(row[3]) if row[3] else 0
             comissoes = float(row[4]) if row[4] else 0
             taxas = float(row[5]) if row[5] else 0
             frete = float(row[6]) if row[6] else 0
-            valor_liquido = valor_total - (comissoes + taxas + frete)  # Fórmula crítica
-
-            # Traduz a conta (ex: "TOYS" → "Toys", "COMERCIAL" → "Comercial")
+            valor_liquido = valor_total - (comissoes + taxas + frete)
             origem_conta = traduzir_valores("Conta", row[8]) if row[8] else 'Desconhecido'
-
-            # Insere ou atualiza o registro (com todos os campos)
             cursor.execute("""
                 INSERT OR REPLACE INTO entradas_financeiras 
                 (tipo, pedido_id, data_venda, data_liberacao, 
@@ -88,21 +93,21 @@ def atualizar_entradas_financeiras(cursor):
                     origem_conta = excluded.origem_conta
             """, (
                 'shopee',
-                row[0],    # PEDIDO_ID
-                row[1],    # DATA (venda)
-                row[2],    # DATA_ENTREGA (liberação)
+                row[0],
+                row[1],
+                row[2],
                 valor_total,
-                valor_liquido,  # Calculado
+                valor_liquido,
                 comissoes,
                 taxas,
                 frete,
-                'Recebido' if row[7] == 'COMPLETED' else 'Pendente',  # STATUS_PEDIDO
-                origem_conta  # Já traduzida
+                'Recebido' if row[7] == 'COMPLETED' else 'Pendente',
+                origem_conta
             ))
             print(f"✓ Shopee: Pedido {row[0]} (Líquido: R${valor_liquido:.2f})", end='\r')
-
         except Exception as e:
             print(f"\n✗ Erro no pedido {row[0]}: {str(e)}")
+
 def get_env_variable(account_type, var_type):
     var_map = {
         'PARTNER_ID': f'SHOPEE_PARTNER_ID_{account_type}',
@@ -162,9 +167,6 @@ def serialize_field(field):
 def format_timestamp(timestamp):
     return datetime.fromtimestamp(timestamp, timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
 
-# ===============================
-# TOKENS SHOPEE - BLOCO ROBUSTO
-# ===============================
 def generate_signature(partner_id, path, timestamp, partner_key):
     base_string = f"{partner_id}{path}{timestamp}"
     return hmac.new(
@@ -257,7 +259,6 @@ def atualizar_todos_tokens():
         else:
             print(f"❌ Falha ao atualizar tokens para {account}")
 
-# USE ISSO NO INÍCIO DO FLUXO
 atualizar_todos_tokens()
 
 def fetch_orders(client, last_create_time):
@@ -384,27 +385,21 @@ def update_completed_orders(conn):
             logging.error(f"Erro ao atualizar pedido {order_sn}: {str(e)}")
     conn.commit()
 
-    import sqlite3
-    import pandas as pd
-    import json
-
-    DB_PATH = r"C:\fisgarone\fisgarone.db"
-
 def atualizar_preco_custo_em_vendas_shopee():
-        conn = sqlite3.connect(DB_PATH)
-        cursor = conn.cursor()
-        cursor.execute("""
-            UPDATE vendas_shopee
-            SET PRECO_CUSTO = (
-                SELECT Custo
-                FROM custo_shopee
-                WHERE custo_shopee.SKU = vendas_shopee.SKU
-            )
-            WHERE SKU IN (SELECT SKU FROM custo_shopee)
-        """)
-        conn.commit()
-        conn.close()
-        print("✅ Coluna PRECO_CUSTO atualizada na tabela 'vendas_shopee'.")
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    cursor.execute("""
+        UPDATE vendas_shopee
+        SET PRECO_CUSTO = (
+            SELECT Custo
+            FROM custo_shopee
+            WHERE custo_shopee.SKU = vendas_shopee.SKU
+        )
+        WHERE SKU IN (SELECT SKU FROM custo_shopee)
+    """)
+    conn.commit()
+    conn.close()
+    print("✅ Coluna PRECO_CUSTO atualizada na tabela 'vendas_shopee'.")
 
 def processar_vendas_shopee():
     conn = sqlite3.connect(DB_PATH)
@@ -462,8 +457,9 @@ def processar_vendas_shopee():
         lambda row: row['SKU_VARIACAO'] if pd.notna(row.get('SKU_VARIACAO')) and row['SKU_VARIACAO'] != '' else row.get('SKU_ITEM', ''),
         axis=1
     )
+    if 'TIPO_CONTA' not in final.columns:
+        final['TIPO_CONTA'] = 'Desconhecido'
 
-    # === Puxa o custo real pelo SKU ANTES dos cálculos ===
     conn_custo = sqlite3.connect(DB_PATH)
     df_custo = pd.read_sql_query("SELECT SKU, Custo FROM custo_shopee", conn_custo)
     conn_custo.close()
@@ -471,9 +467,7 @@ def processar_vendas_shopee():
     final.rename(columns={'Custo': 'PRECO_CUSTO'}, inplace=True)
     final['PRECO_CUSTO'] = final['PRECO_CUSTO'].fillna(0)
 
-    # === NOVO: custo total real (unitário * quantidade) ===
     final['CUSTO_TOTAL_REAL'] = (final['PRECO_CUSTO'] * final['QTD_COMPRADA']).round(2)
-
     final['COMISSAO_UNITARIA'] = (final['VALOR_TOTAL'] * 0.22).round(2)
     final['TAXA_FIXA'] = (final['QTD_COMPRADA'] * 4.00).round(2)
     final['TOTAL_COM_FRETE'] = final['VALOR_TOTAL']
@@ -488,7 +482,6 @@ def processar_vendas_shopee():
     final.loc[first_index, 'REPASSE_ENVIO'] = 8
     final['CUSTO_FIXO'] = (final['VALOR_TOTAL'] * 0.13).round(2)
 
-    # === ATENÇÃO: agora usa CUSTO_TOTAL_REAL no cálculo! ===
     final['CUSTO_OP_TOTAL'] = (
         final[['CUSTO_TOTAL_REAL', 'COMISSAO_UNITARIA', 'TAXA_FIXA', 'SM_CONTAS_REAIS']]
         .apply(lambda x: pd.to_numeric(x, errors='coerce')).sum(axis=1)
@@ -500,7 +493,7 @@ def processar_vendas_shopee():
     colunas_finais = [
         'PEDIDO_ID', 'COMPRADOR_ID', 'STATUS_PEDIDO', 'TIPO_CONTA', 'DATA',
         'NOME_ITEM', 'SKU', 'QTD_COMPRADA', 'PRECO_UNITARIO', 'PRECO_CUSTO',
-        'CUSTO_TOTAL_REAL',  # Nova coluna adicionada
+        'CUSTO_TOTAL_REAL',
         'VALOR_TOTAL', 'FRETE_UNITARIO', 'COMISSAO_UNITARIA', 'TAXA_FIXA',
         'TOTAL_COM_FRETE', 'SM_CONTAS_PCT', 'SM_CONTAS_REAIS',
         'TRANSPORTADORA', 'DATA_ENTREGA', 'PRAZO_ENTREGA_DIAS', 'CUSTO_OP_TOTAL',
@@ -511,45 +504,41 @@ def processar_vendas_shopee():
     conn.close()
     print("✅ Tabela 'vendas_shopee' atualizada com sucesso.")
 
-
 def processar_repasses_shopee():
     conn = sqlite3.connect(DB_PATH)
     vendas = pd.read_sql_query("SELECT * FROM vendas_shopee", conn)
+    # Garante TIPO_CONTA e REPASSE_ENVIO na tabela repasses_shopee!
+    if 'TIPO_CONTA' not in vendas.columns:
+        vendas['TIPO_CONTA'] = 'Desconhecido'
+    if 'REPASSE_ENVIO' not in vendas.columns:
+        vendas['REPASSE_ENVIO'] = 0
+
     colunas_repasses = [
         'PEDIDO_ID', 'DATA', 'VALOR_TOTAL', 'COMISSAO_UNITARIA',
-        'TAXA_FIXA', 'STATUS_PEDIDO', 'TRANSPORTADORA'
+        'TAXA_FIXA', 'STATUS_PEDIDO', 'TRANSPORTADORA', 'TIPO_CONTA', 'REPASSE_ENVIO'
     ]
     repasses = vendas[colunas_repasses].drop_duplicates(subset=['PEDIDO_ID']).copy()
-
-    # Calcula DATA_REPASSE conforme regra
     def calcular_data_repasse(row):
         data_base = pd.to_datetime(row['DATA'])
         if row['TRANSPORTADORA'] == 'Shopee Entrega Direta':
             return (data_base + pd.Timedelta(days=7)).strftime('%Y-%m-%d')
         else:
             return (data_base + pd.Timedelta(days=15)).strftime('%Y-%m-%d')
-
     repasses['DATA_REPASSE'] = repasses.apply(calcular_data_repasse, axis=1)
-
-    # Salva a nova tabela, incluindo DATA_REPASSE
     repasses.to_sql("repasses_shopee", conn, if_exists="replace", index=False)
     print(f"✅ Tabela 'repasses_shopee' atualizada com {len(repasses)} repasses.")
 
-    # Atualiza as entradas financeiras (agora, use DATA_REPASSE como base de data!)
     cursor = conn.cursor()
     atualizar_entradas_financeiras(cursor)
     conn.commit()
     conn.close()
 
-
 def main():
     print("\n=== AUTOMAÇÃO SHOPEE: INÍCIO ===")
-    # 1. Verifica estrutura do banco
     conn = sqlite3.connect(DB_PATH)
     check_and_update_schema(conn)
     conn.close()
     print("[OK] Estrutura das tabelas garantida.")
-    # 2. Baixa vendas
     print("[PASSO 1] Buscando pedidos/vendas da Shopee...")
     for conta in ["COMERCIAL", "TOYS"]:
         try:
@@ -563,10 +552,8 @@ def main():
         except Exception as e:
             logging.error(f"Erro na conta {conta}: {str(e)}", exc_info=True)
     print("[OK] Tabela 'pedidos' atualizada.")
-    # 3. Gera vendas_shopee (normaliza e agrega)
     print("[PASSO 2] Processando vendas_shopee (normalizando, agregando, custos etc)...")
     processar_vendas_shopee()
-    # 4. Atualiza repasses_shopee
     print("[PASSO 3] Atualizando repasses_shopee...")
     processar_repasses_shopee()
     print("=== FINALIZADO ===")
