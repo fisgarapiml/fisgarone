@@ -579,138 +579,176 @@ def atualizar_traducoes_existentes() -> None:
         conn.commit()
 
 
+def format_date_to_br(data_str):
+    """Converte data para formato DD/MM/YYYY"""
+    if not data_str:
+        return None
+    try:
+        if '-' in data_str:
+            parts = data_str.split('-')
+            if len(parts) == 3:
+                return f"{parts[2]}/{parts[1]}/{parts[0]}"
+        return data_str
+    except:
+        return data_str
+
+
 def migrar_para_repasses_ml():
     print("[PASSO 3] Migrando dados essenciais para repasses_ml...")
+    try:
+        with sqlite3.connect(DB_PATH) as conn:
+            cursor = conn.cursor()
 
-    with sqlite3.connect(DB_PATH) as conn:
-        cursor = conn.cursor()
+            # Limpar tabela mantendo a estrutura
+            cursor.execute('DELETE FROM repasses_ml')
 
-        # Verifica se as colunas necessárias existem em vendas_ml
-        cursor.execute("PRAGMA table_info(vendas_ml)")
-        vendas_cols = [c[1] for c in cursor.fetchall()]
-        required = [
-            "ID Pedido", "Data da Venda", "Conta", "Preco Unitario", "Quantidade",
-            "Taxa Fixa ML", "Comissoes", "Custo Lista Frete", "Data Liberacao"
-        ]
-        missing = [c for c in required if c not in vendas_cols]
-        if missing:
-            print("❌ Faltando colunas na vendas_ml:", missing)
-            return
+            # Inserir dados usando os nomes exatos das colunas
+            cursor.execute('''
+                INSERT INTO repasses_ml (
+                    "ID Pedido", "Preco Unitario", "Data da Venda", "Quantidade",
+                    "Tipo Logistica", "Taxa Fixa ML", "Comissoes", "Frete Seller",
+                    "Data Liberacao"
+                )
+                SELECT
+                    "ID Pedido",
+                    "Preco Unitario",
+                    "Data da Venda",
+                    "Quantidade",
+                    "Tipo Logistica",
+                    "Taxa Fixa ML",
+                    "Comissoes",
+                    CASE WHEN "Preco Unitario" >= 79 THEN "Frete Seller" ELSE 0 END,
+                    "Data Liberacao"
+                FROM vendas_ml
+                WHERE "ID Pedido" IS NOT NULL
+            ''')
+            conn.commit()
 
-        # Migra os dados aplicando a regra do frete_seller
-        cursor.execute('''
-            INSERT OR REPLACE INTO repasses_ml (
-                "ID Pedido", "Data da Venda", "Conta", "Preco Unitario", "Quantidade",
-                "Taxa Fixa ML", "Comissoes", "Frete Seller", "Data Liberacao"
-            )
-            SELECT
-                "ID Pedido", "Data da Venda", "Conta", "Preco Unitario", "Quantidade",
-                "Taxa Fixa ML", "Comissoes",
-                CASE WHEN "Preco Unitario" >= 79 THEN "Custo Lista Frete" ELSE 0 END AS "Frete Seller",
-                "Data Liberacao"
-            FROM vendas_ml
-            WHERE "ID Pedido" IS NOT NULL
-        ''')
-        conn.commit()
+            # Calcular colunas derivadas
+            calcular_colunas_repasses()
 
-    print("Migração finalizada: repasses_ml alimentado com frete_seller conforme regra dos R$79,00.")
+            # Atualizar datas de repasse
+            atualizar_data_repasse_ml()
 
+        print("✓ Migração finalizada: repasses_ml alimentado corretamente")
 
-def calcular_colunas_repasses() -> None:
-    """Calcula colunas derivadas na tabela repasses_ml."""
-    with sqlite3.connect(DB_PATH) as conn:
-        cursor = conn.cursor()
-
-        cursor.execute('''
-            UPDATE repasses_ml SET
-                "Total da Venda" = ROUND(COALESCE("Preco Unitario", 0) * COALESCE("Quantidade", 0), 2),
-                "Total Custo" = ROUND(COALESCE("Taxa Fixa ML", 0) + COALESCE("Comissoes", 0) + COALESCE("Frete Seller", 0), 2),
-                "Valor do Repasse" = ROUND(COALESCE("Total da Venda", 0) - COALESCE("Total Custo", 0), 2)
-        ''')
-        conn.commit()
-
-def atualizar_data_repasse_ml() -> None:
-    """Calcula a data de repasse baseada no tipo de logística."""
-    with sqlite3.connect(DB_PATH) as conn:
-        cursor = conn.cursor()
-
-        cursor.execute('''
-            UPDATE repasses_ml SET
-                "DATA_REPASSE" = CASE
-                    WHEN "Tipo Logistica" = 'Flex' THEN 
-                        date(substr("Data da Venda", 7, 4) || '-' || 
-                             substr("Data da Venda", 4, 2) || '-' || 
-                             substr("Data da Venda", 1, 2), '+7 days')
-                    WHEN "Tipo Logistica" = 'Full' THEN 
-                        date(substr("Data da Venda", 7, 4) || '-' || 
-                             substr("Data da Venda", 4, 2) || '-' || 
-                             substr("Data da Venda", 1, 2), '+10 days')
-                    ELSE 
-                        date(substr("Data da Venda", 7, 4) || '-' || 
-                             substr("Data da Venda", 4, 2) || '-' || 
-                             substr("Data da Venda", 1, 2), '+20 days')
-                END
-        ''')
-        conn.commit()
+    except Exception as e:
+        print(f"✗ Erro na migração para repasses_ml: {str(e)}")
+        raise
 
 
-def atualizar_entradas_financeiras_ml() -> None:
-    """Atualiza a tabela entradas_financeiras evitando duplicações."""
-    with sqlite3.connect(DB_PATH) as conn:
-        cursor = conn.cursor()
+def calcular_colunas_repasses():
+    """Calcula colunas derivadas na tabela repasses_ml"""
+    try:
+        with sqlite3.connect(DB_PATH) as conn:
+            cursor = conn.cursor()
 
-        # Criar tabela temporária para evitar duplicação
-        cursor.execute('''
-            CREATE TEMPORARY TABLE temp_entradas AS
-            SELECT DISTINCT
-                'ml' as tipo,
-                "ID Pedido" as pedido_id,
-                "Data da Venda" as data_venda,
-                "Data Liberacao" as data_liberacao,
-                "Preco Unitario" * "Quantidade" as valor_total,
-                ("Preco Unitario" * "Quantidade") - ("Taxa Fixa ML" + "Comissoes" + "Frete Seller") as valor_liquido,
-                "Comissoes" as comissoes,
-                "Taxa Fixa ML" as taxas,
-                "Frete Seller" as frete,
-                CASE WHEN "Data Liberacao" IS NOT NULL AND "Data Liberacao" != '' 
-                     THEN 'Recebido' ELSE 'Pendente' END as status,
-                "Conta" as origem_conta,
-                '' as observacoes,
-                CASE
-                    WHEN "Tipo Logistica" = 'Flex' THEN 
-                        date(substr("Data da Venda", 7, 4) || '-' || 
-                             substr("Data da Venda", 4, 2) || '-' || 
-                             substr("Data da Venda", 1, 2), '+7 days')
-                    WHEN "Tipo Logistica" = 'Full' THEN 
-                        date(substr("Data da Venda", 7, 4) || '-' || 
-                             substr("Data da Venda", 4, 2) || '-' || 
-                             substr("Data da Venda", 1, 2), '+10 days')
-                    ELSE 
-                        date(substr("Data da Venda", 7, 4) || '-' || 
-                             substr("Data da Venda", 4, 2) || '-' || 
-                             substr("Data da Venda", 1, 2), '+20 days')
-                END as data_repasse
-            FROM vendas_ml
-            WHERE "ID Pedido" IS NOT NULL
-        ''')
+            cursor.execute('''
+                UPDATE repasses_ml SET
+                    "Total da Venda" = ROUND(COALESCE("Preco Unitario", 0) * COALESCE("Quantidade", 0), 2),
+                    "Total Custo" = ROUND(COALESCE("Taxa Fixa ML", 0) + COALESCE("Comissoes", 0) + COALESCE("Frete Seller", 0), 2),
+                    "Valor do Repasse" = ROUND(COALESCE("Preco Unitario", 0) * COALESCE("Quantidade", 0) - 
+                                              (COALESCE("Taxa Fixa ML", 0) + COALESCE("Comissoes", 0) + COALESCE("Frete Seller", 0)), 2)
+            ''')
+            conn.commit()
 
-        # Limpar a tabela principal
-        cursor.execute('DELETE FROM entradas_financeiras WHERE tipo = "ml"')
+    except Exception as e:
+        print(f"✗ Erro ao calcular colunas de repasse: {str(e)}")
+        raise
 
-        # Inserir os dados da temporária
-        cursor.execute('''
-            INSERT INTO entradas_financeiras (
-                tipo, pedido_id, data_venda, data_liberacao,
-                valor_total, valor_liquido, comissoes, taxas, frete,
-                status, origem_conta, observacoes, data_repasse
-            )
-            SELECT * FROM temp_entradas
-        ''')
 
-        # Limpar a tabela temporária
-        cursor.execute('DROP TABLE temp_entradas')
-        conn.commit()
-# --- Pipeline Principal ---
+def atualizar_data_repasse_ml():
+    """Calcula a data de repasse baseada no tipo de logística"""
+    try:
+        with sqlite3.connect(DB_PATH) as conn:
+            cursor = conn.cursor()
+
+            cursor.execute('''
+                UPDATE repasses_ml SET
+                    "DATA_REPASSE" = CASE
+                        WHEN "Tipo Logistica" = 'Flex' THEN 
+                            date(substr("Data da Venda", 7, 4) || '-' || 
+                                 substr("Data da Venda", 4, 2) || '-' || 
+                                 substr("Data da Venda", 1, 2), '+7 days')
+                        WHEN "Tipo Logistica" = 'Full' THEN 
+                            date(substr("Data da Venda", 7, 4) || '-' || 
+                                 substr("Data da Venda", 4, 2) || '-' || 
+                                 substr("Data da Venda", 1, 2), '+10 days')
+                        ELSE 
+                            date(substr("Data da Venda", 7, 4) || '-' || 
+                                 substr("Data da Venda", 4, 2) || '-' || 
+                                 substr("Data da Venda", 1, 2), '+20 days')
+                    END
+            ''')
+            conn.commit()
+
+    except Exception as e:
+        print(f"✗ Erro ao atualizar datas de repasse: {str(e)}")
+        raise
+
+
+def atualizar_entradas_financeiras_ml():
+    """ATENÇÃO: Esta é a versão renomeada de popular_entradas_de_vendas_ml()"""
+    print("\n[PASSO 4] Atualizando entradas financeiras...")
+    try:
+        with sqlite3.connect(DB_PATH) as conn:
+            conn.row_factory = sqlite3.Row
+            cursor = conn.cursor()
+
+            # Verificar se existem vendas para processar
+            cursor.execute("""
+                SELECT 
+                    v."ID Pedido" as pedido_id, 
+                    v."Data da Venda" as data_venda, 
+                    v."Preco Unitario" as valor_bruto, 
+                    v."Comissoes" as comissao, 
+                    v."Taxa Fixa ML" as taxas,
+                    r."DATA_REPASSE" as data_repasse,
+                    v."Frete Seller" as frete
+                FROM vendas_ml v
+                LEFT JOIN repasses_ml r ON v."ID Pedido" = r."ID Pedido"
+                WHERE NOT EXISTS (
+                    SELECT 1 FROM entradas_financeiras e 
+                    WHERE e.pedido_id = v."ID Pedido" AND e.tipo = 'ml'
+                )
+            """)
+            vendas = cursor.fetchall()
+
+            if not vendas:
+                print("✓ Nenhuma nova venda do ML para processar")
+                return
+
+            # Inserir na tabela entradas_financeiras
+            for venda in vendas:
+                valor_liquido = float(venda['valor_bruto'] or 0) - float(venda['comissao'] or 0) - float(
+                    venda['taxas'] or 0)
+
+                cursor.execute("""
+                    INSERT INTO entradas_financeiras (
+                        tipo, pedido_id, data_venda, data_liberacao,
+                        valor_total, valor_liquido, 
+                        comissoes, taxas, frete, status
+                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                """, (
+                    'ml',
+                    venda['pedido_id'],
+                    venda['data_venda'],
+                    venda['data_repasse'],
+                    venda['valor_bruto'],
+                    valor_liquido,
+                    venda['comissao'],
+                    venda['taxas'],
+                    venda['frete'],
+                    'COMPLETED' if venda['data_repasse'] else 'PENDING'
+                ))
+
+            conn.commit()
+            print(f"✓ Processadas {len(vendas)} vendas do Mercado Livre")
+
+    except Exception as e:
+        print(f"✗ Erro ao processar vendas do ML: {str(e)}")
+        raise
+
 async def process_account(account: Dict[str, Any], session: aiohttp.ClientSession) -> None:
     """Processa uma conta individual com tratamento de token."""
     api_url = os.getenv("API_URL")
@@ -748,7 +786,6 @@ async def process_account(account: Dict[str, Any], session: aiohttp.ClientSessio
             )
         else:
             print(f"Falha ao renovar token para conta {account['nome']}")
-
 async def pipeline_completo() -> None:
     """Executa todo o fluxo de processamento."""
     print("=== INICIANDO PROCESSAMENTO MERCADO LIVRE ===")

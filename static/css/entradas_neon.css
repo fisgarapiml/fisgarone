@@ -232,3 +232,101 @@ tr:hover td {
         min-width: 0;
     }
 }
+/* Adicione ao seu arquivo CSS existente */
+
+/* Estado de loading */
+#cards-container.loading .financeiro-card {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+#cards-container.loading::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 40px;
+    height: 40px;
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #3498db;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    z-index: 10;
+}
+
+@keyframes spin {
+    0% { transform: translate(-50%, -50%) rotate(0deg); }
+    100% { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* Mensagem de dados vazios */
+.no-data {
+    text-align: center;
+    color: #6c757d;
+    padding: 20px !important;
+}
+
+/* Máscara de data */
+.date-input {
+    text-align: center;
+}
+/* Estilo para os inputs com máscara */
+.date-mask {
+    text-align: center;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    width: 120px;
+}
+
+/* Estado de loading */
+#cards-container.loading {
+    position: relative;
+}
+
+#cards-container.loading::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 40px;
+    height: 40px;
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #3498db;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    z-index: 10;
+}
+
+@keyframes spin {
+    0% { transform: translate(-50%, -50%) rotate(0deg); }
+    100% { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* Mensagem de dados vazios */
+.no-data {
+    text-align: center;
+    color: #6c757d;
+    padding: 20px !important;
+}
+
+/* Ajustes nos filtros */
+.filtros-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.filtro {
+    display: flex;
+    flex-direction: column;
+    min-width: 150px;
+}
+
+.filtro label {
+    margin-bottom: 5px;
+    font-weight: 500;
+}

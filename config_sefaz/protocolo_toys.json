@@ -1,0 +1,10 @@
+{
+    "protocolo": "13520250710062503001",
+    "chave": "3525073806105400013055001000000001112345678",
+    "data_autorizacao": "2025-07-10 06:25:03",
+    "status": "Autorizada",
+    "xml_original": "nfe_teste.xml",
+    "ambiente": "Produção",
+    "cnpj_emitente": "38.061.054\/0001-30",
+    "valor_total": "R$ 5.299,00"
+}
