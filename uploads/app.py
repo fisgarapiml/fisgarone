@@ -75,7 +75,7 @@ from modulos.financeiro.contas_a_pagar import contas_a_pagar_bp
 from modulos.financeiro.cards import cards_bp
 from modulos.financeiro.lancamento_manual import lancamento_manual_bp
 from modulos.financeiro.contas_edicao import contas_edicao_bp
-from modulos.financeiro.dashboard import dashboard
+from modulos.financeiro.dashboard_finance import dashboard
 
 app.register_blueprint(contas_a_pagar_bp, url_prefix='/contas-a-pagar')
 app.register_blueprint(cards_bp, url_prefix='/financeiro/cards')

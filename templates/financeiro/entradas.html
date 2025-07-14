@@ -25,19 +25,19 @@
                    value="{{ request.args.get('data_fim', '') }}" class="date-mask">
         </div>
         <div class="filtro">
-    <label for="canal">Canal:</label>
-    <select id="canal" name="canal">
-        <option value="">Todos</option>
-        {% if canais %}  <!-- Verificação adicional para segurança -->
-            {% for canal in canais %}
-            <option value="{{ canal }}"
-                    {% if request.args.get('canal') == canal %}selected{% endif %}>
-                {{ canal }}
-            </option>
-            {% endfor %}
-        {% endif %}
-    </select>
-</div>
+            <label for="canal">Canal:</label>
+            <select id="canal" name="canal">
+                <option value="">Todos</option>
+                {% if canais %}
+                    {% for canal in canais %}
+                        <option value="{{ canal }}"
+                            {% if request.args.get('canal') == canal %}selected{% endif %}>
+                            {{ canal }}
+                        </option>
+                    {% endfor %}
+                {% endif %}
+            </select>
+        </div>
         <div class="filtro">
             <label for="status">Status:</label>
             <select id="status" name="status">
@@ -65,9 +65,9 @@
             {% if card.title == 'Entradas Totais' %}
             <div class="card-subtitle">A Receber R$ {{ "%.2f"|format(cards[1].value) }}</div>
             {% elif card.title == 'Mercado Livre' %}
-            <div class="card-subtitle">Régasse ML</div>
+            <div class="card-subtitle">Repasse ML</div>
             {% elif card.title == 'Shopee' %}
-            <div class="card-subtitle">Morgan Meida</div>
+            <div class="card-subtitle">Repasse Shopee</div>
             {% elif card.title == 'Recebido Hoje' %}
             <div class="card-subtitle">Previsão hoje</div>
             {% endif %}

@@ -41,7 +41,7 @@ COLUNA_LUCRO_REAL_PCT = 'Lucro Real %'
 ALIQUOTAS = {
     'COMERCIAL': 7.06,
     'PESCA': 5.54,
-    'SHOP': 9.27,
+    'SHOP': 10.03,
     'CAMPING': 4.00
 }
 

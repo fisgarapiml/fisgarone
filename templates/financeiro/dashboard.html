@@ -1,0 +1,259 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard Financeiro - Fisgarone{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard_finance.css') }}">
+{% endblock %}
+
+{% block content %}
+    <div class="dashboard-container">
+        <!-- Header -->
+        <header class="dashboard-header">
+            <div class="header-content">
+                <div class="header-left">
+                    <h1 class="dashboard-title">
+                        <i class="ri-dashboard-3-line"></i>
+                        Dashboard Financeiro
+                    </h1>
+                    <p class="dashboard-subtitle">Visão completa das finanças da empresa</p>
+                </div>
+                <div class="header-right">
+                    <div class="header-actions">
+                        <button class="btn-refresh" onclick="refreshDashboard()">
+                            <i class="ri-refresh-line"></i>
+                            Atualizar
+                        </button>
+                        <div class="period-selector">
+                            <select id="periodSelect" onchange="changePeriod()">
+                                <option value="mes">Este Mês</option>
+                                <option value="trimestre">Trimestre</option>
+                                <option value="ano">Este Ano</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="dashboard-main">
+            <!-- Cards de Resumo -->
+            <section class="summary-cards">
+                <div class="card-grid">
+                    <div class="summary-card card-entradas">
+                        <div class="card-icon">
+                            <i class="ri-arrow-down-circle-fill"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>Total de Entradas</h3>
+                            <p class="card-value" id="totalEntradas">R$ 0,00</p>
+                            <span class="card-subtitle">Este mês</span>
+                        </div>
+                        <div class="card-trend positive">
+                            <i class="ri-arrow-up-line"></i>
+                            <span id="trendEntradas">0%</span>
+                        </div>
+                    </div>
+
+                    <div class="summary-card card-saidas">
+                        <div class="card-icon">
+                            <i class="ri-arrow-up-circle-fill"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>Total de Saídas</h3>
+                            <p class="card-value" id="totalSaidas">R$ 0,00</p>
+                            <span class="card-subtitle">Este mês</span>
+                        </div>
+                        <div class="card-trend negative">
+                            <i class="ri-arrow-down-line"></i>
+                            <span id="trendSaidas">0%</span>
+                        </div>
+                    </div>
+
+                    <div class="summary-card card-saldo">
+                        <div class="card-icon">
+                            <i class="ri-wallet-3-fill"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>Saldo Atual</h3>
+                            <p class="card-value" id="saldoAtual">R$ 0,00</p>
+                            <span class="card-subtitle">Entradas - Saídas</span>
+                        </div>
+                        <div class="card-trend" id="trendSaldo">
+                            <i class="ri-subtract-line"></i>
+                            <span>0%</span>
+                        </div>
+                    </div>
+
+                    <div class="summary-card card-vencidas">
+                        <div class="card-icon">
+                            <i class="ri-alarm-warning-fill"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>Contas Vencidas</h3>
+                            <p class="card-value" id="contasVencidas">R$ 0,00</p>
+                            <span class="card-subtitle">Requer atenção</span>
+                        </div>
+                        <div class="card-trend urgent">
+                            <i class="ri-error-warning-line"></i>
+                            <span id="qtdVencidas">0</span>
+                        </div>
+                    </div>
+
+                    <div class="summary-card card-hoje">
+                        <div class="card-icon">
+                            <i class="ri-calendar-todo-fill"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>Vencimento Hoje</h3>
+                            <p class="card-value" id="contasHoje">R$ 0,00</p>
+                            <span class="card-subtitle">Para pagamento</span>
+                        </div>
+                        <div class="card-trend warning">
+                            <i class="ri-time-line"></i>
+                            <span id="qtdHoje">0</span>
+                        </div>
+                    </div>
+
+                    <div class="summary-card card-pendentes">
+                        <div class="card-icon">
+                            <i class="ri-hourglass-fill"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>Entradas Pendentes</h3>
+                            <p class="card-value" id="entradasPendentes">R$ 0,00</p>
+                            <span class="card-subtitle">A receber</span>
+                        </div>
+                        <div class="card-trend pending">
+                            <i class="ri-time-line"></i>
+                            <span id="qtdPendentes">0</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Gráficos Principais -->
+            <section class="charts-section">
+                <div class="charts-grid">
+                    <!-- Fluxo de Caixa -->
+                    <div class="chart-container">
+                        <div class="chart-header">
+                            <h3>
+                                <i class="ri-line-chart-line"></i>
+                                Fluxo de Caixa (12 meses)
+                            </h3>
+                            <div class="chart-controls">
+                                <button class="chart-btn active" data-chart="fluxo" data-type="line">
+                                    <i class="ri-line-chart-line"></i>
+                                </button>
+                                <button class="chart-btn" data-chart="fluxo" data-type="bar">
+                                    <i class="ri-bar-chart-line"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="chart-content">
+                            <canvas id="fluxoCaixaChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Categorias de Despesas -->
+                    <div class="chart-container">
+                        <div class="chart-header">
+                            <h3>
+                                <i class="ri-pie-chart-line"></i>
+                                Despesas por Categoria
+                            </h3>
+                            <div class="chart-controls">
+                                <button class="chart-btn active" data-chart="despesas" data-type="doughnut">
+                                    <i class="ri-donut-chart-line"></i>
+                                </button>
+                                <button class="chart-btn" data-chart="despesas" data-type="bar">
+                                    <i class="ri-bar-chart-line"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="chart-content">
+                            <canvas id="categoriasChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Canais de Receita -->
+                    <div class="chart-container">
+                        <div class="chart-header">
+                            <h3>
+                                <i class="ri-funds-line"></i>
+                                Receitas por Canal
+                            </h3>
+                            <div class="chart-controls">
+                                <button class="chart-btn active" data-chart="receitas" data-type="doughnut">
+                                    <i class="ri-donut-chart-line"></i>
+                                </button>
+                                <button class="chart-btn" data-chart="receitas" data-type="bar">
+                                    <i class="ri-bar-chart-line"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="chart-content">
+                            <canvas id="canaisChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Evolução Mensal -->
+                    <div class="chart-container chart-wide">
+                        <div class="chart-header">
+                            <h3>
+                                <i class="ri-stock-line"></i>
+                                Evolução Mensal - Entradas vs Saídas
+                            </h3>
+                            <div class="chart-controls">
+                                <button class="chart-btn active" data-chart="evolucao" data-type="line">
+                                    <i class="ri-line-chart-line"></i>
+                                </button>
+                                <button class="chart-btn" data-chart="evolucao" data-type="bar">
+                                    <i class="ri-bar-chart-line"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="chart-content">
+                            <canvas id="evolucaoChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Últimas Transações -->
+            <section class="transactions-section">
+                <div class="section-header">
+                    <h3>
+                        <i class="ri-exchange-line"></i>
+                        Últimas Transações
+                    </h3>
+                    <div class="section-actions">
+                        <button class="btn-filter" onclick="filterTransactions('all')">Todas</button>
+                        <button class="btn-filter" onclick="filterTransactions('entrada')">Entradas</button>
+                        <button class="btn-filter" onclick="filterTransactions('saida')">Saídas</button>
+                    </div>
+                </div>
+                <div class="transactions-container">
+                    <div class="transactions-list" id="transactionsList">
+                        <!-- Transações serão carregadas via JavaScript -->
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner">
+            <div class="spinner"></div>
+            <p>Carregando dados financeiros...</p>
+        </div>
+    </div>
+
+   {% endblock %}
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/dashboard_finance.js') }}"></script>
+{% endblock %}
+

@@ -30,9 +30,14 @@ def get_menu():
                     "icone": "ri-bank-line",
                     "submenu": [
                         {
+                            "nome": "Dashboard Financeiro",
+                            "icone": "ri-dashboard-3-line",
+                            "url": url_for('dashboard_financeiro.dashboard_finance')
+                        },
+                        {
                             "nome": "Entradas",
                             "icone": "ri-arrow-down-line",
-                            "url": url_for('financeiro.dashboard')  # <-- AJUSTE AQUI se seu endpoint for diferente!
+                            "url": url_for('financeiro.dashboard')
                         },
                         {
                             "nome": "Contas a Pagar",
@@ -77,13 +82,13 @@ def get_menu():
                             "icone": "ri-shopping-bag-3-line",
                             "url": url_for('shopee_bp.dashboard_shopee')
                         }
-                        # Adicione outros marketplaces aqui
                     ]
                 }
             ]
         }
     ]
     return jsonify(menu)
+
 
 
 @bp_home.route('/debug-routes')

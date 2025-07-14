@@ -1,39 +1,31 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Inicializar máscaras de data
+    // Máscara de data
     if (typeof Inputmask !== 'undefined') {
         Inputmask('99/99/9999').mask('.date-mask');
     }
 
-    // Formatter para moeda BRL
+    // Formatter moeda BRL
     const currencyFormatter = new Intl.NumberFormat('pt-BR', {
         style: 'currency',
         currency: 'BRL'
     });
 
-    // Função para converter data frontend (DD/MM/YYYY) para SQL (YYYY-MM-DD)
+    // Converte DD/MM/YYYY → YYYY-MM-DD
     function convertToSQLDate(dateStr) {
         if (!dateStr) return '';
-
-        // Se já está no formato YYYY-MM-DD
-        if (dateStr.match(/^\d{4}-\d{2}-\d{2}$/)) {
-            return dateStr;
-        }
-
-        // Converte de DD/MM/YYYY para YYYY-MM-DD
+        if (dateStr.match(/^\d{4}-\d{2}-\d{2}$/)) return dateStr;
         const [day, month, year] = dateStr.split('/');
         return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
     }
 
-    // Função principal para buscar dados
+    // Buscar dados e atualizar tela
     function buscarDados() {
         const form = document.getElementById('filtros-entradas');
         const formData = new FormData(form);
         const params = new URLSearchParams();
 
-        // Processar cada campo do formulário
         formData.forEach((value, key) => {
             if (value) {
-                // Converter datas para formato SQL
                 if (key === 'data_ini' || key === 'data_fim') {
                     params.append(key, convertToSQLDate(value));
                 } else {
@@ -42,11 +34,9 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
 
-        // Mostrar estado de loading
+        // Loading visual nos cards
         const cardsContainer = document.getElementById('cards-container');
-        if (cardsContainer) {
-            cardsContainer.classList.add('loading');
-        }
+        if (cardsContainer) cardsContainer.classList.add('loading');
 
         fetch(`/financeiro/entradas/dados?${params.toString()}`)
             .then(response => {
@@ -54,7 +44,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 return response.json();
             })
             .then(data => {
-                // Atualizar todos os componentes da interface
                 atualizarCards(data.cards);
                 renderEvolucaoChart(data.evolucao);
                 renderCanalChart(data.pizza);
@@ -65,25 +54,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 alert('Erro ao carregar dados. Tente novamente.');
             })
             .finally(() => {
-                if (cardsContainer) {
-                    cardsContainer.classList.remove('loading');
-                }
+                if (cardsContainer) cardsContainer.classList.remove('loading');
             });
     }
 
-    // Atualizar cards com animação
-    function atualizarCards(cards) {
-        if (!cards || !Array.isArray(cards)) return;
-
-        cards.forEach((card, index) => {
-            const cardElement = document.querySelector(`.financeiro-card:nth-child(${index + 1}) .card-value`);
-            if (cardElement) {
-                animateValue(cardElement, 0, card.value, 1000);
-            }
-        });
-    }
-
-    // Animação de contagem nos valores
+    // Animação dos cards
     function animateValue(element, start, end, duration) {
         let startTimestamp = null;
         const step = (timestamp) => {
@@ -91,22 +66,37 @@ document.addEventListener('DOMContentLoaded', function() {
             const progress = Math.min((timestamp - startTimestamp) / duration, 1);
             const value = Math.floor(progress * (end - start) + start);
             element.textContent = currencyFormatter.format(value);
-            if (progress < 1) {
-                window.requestAnimationFrame(step);
-            }
+            if (progress < 1) window.requestAnimationFrame(step);
         };
         window.requestAnimationFrame(step);
     }
 
-    // Renderizar gráfico de evolução
+    // Atualizar cards (cards vem ordenados: total, a receber, ml, shopee, hoje)
+    function atualizarCards(cards) {
+        if (!cards || !Array.isArray(cards)) return;
+        document.querySelectorAll('.financeiro-card').forEach((cardDiv, idx) => {
+            const card = cards[idx];
+            if (!card) return;
+            const val = typeof card.value === "number" ? card.value : 0;
+            const cardValue = cardDiv.querySelector('.card-value');
+            if (cardValue) animateValue(cardValue, 0, val, 900);
+
+            // Atualizar ícone e títulos
+            if (cardDiv.querySelector('.card-icon i') && card.icon) {
+                cardDiv.querySelector('.card-icon i').className = card.icon;
+            }
+            if (cardDiv.querySelector('.card-title')) {
+                cardDiv.querySelector('.card-title').textContent = card.title;
+            }
+        });
+    }
+
+    // Gráfico de evolução (linha)
     function renderEvolucaoChart(evolucaoData) {
         const ctx = document.getElementById('evolucaoChart');
         if (!ctx) return;
 
-        // Destruir gráfico anterior se existir
-        if (window.evolucaoChartObj) {
-            window.evolucaoChartObj.destroy();
-        }
+        if (window.evolucaoChartObj) window.evolucaoChartObj.destroy();
 
         window.evolucaoChartObj = new Chart(ctx.getContext('2d'), {
             type: 'line',
@@ -116,7 +106,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     label: 'Valor Recebido',
                     data: evolucaoData.data || [],
                     borderColor: '#4e73df',
-                    backgroundColor: 'rgba(78, 115, 223, 0.05)',
+                    backgroundColor: 'rgba(78,115,223,0.07)',
                     borderWidth: 2,
                     tension: 0.3,
                     fill: true
@@ -136,32 +126,31 @@ document.addEventListener('DOMContentLoaded', function() {
                 scales: {
                     y: {
                         beginAtZero: true,
-                        ticks: {
-                            callback: value => currencyFormatter.format(value)
-                        }
+                        ticks: { callback: value => currencyFormatter.format(value) }
                     }
                 }
             }
         });
     }
 
-    // Renderizar gráfico de pizza por canal
+    // Gráfico pizza/canais (por canal/origem_conta)
     function renderCanalChart(pizzaData) {
         const ctx = document.getElementById('canalChart');
         if (!ctx) return;
 
-        // Destruir gráfico anterior se existir
-        if (window.canalChartObj) {
-            window.canalChartObj.destroy();
-        }
+        if (window.canalChartObj) window.canalChartObj.destroy();
 
+        // Paleta para 4 canais, pode expandir
+        const cores = [
+            '#4e73df', '#1cc88a', '#36b9cc', '#f6c23e', '#ff6384', '#6f42c1', '#ea7c69'
+        ];
         window.canalChartObj = new Chart(ctx.getContext('2d'), {
             type: 'doughnut',
             data: {
                 labels: pizzaData.labels || [],
                 datasets: [{
                     data: pizzaData.data || [],
-                    backgroundColor: ['#4e73df', '#1cc88a', '#36b9cc', '#f6c23e'],
+                    backgroundColor: cores.slice(0, pizzaData.labels.length),
                     borderWidth: 0
                 }]
             },
@@ -182,10 +171,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     },
                     legend: {
                         position: 'right',
-                        labels: {
-                            usePointStyle: true,
-                            padding: 20
-                        }
+                        labels: { usePointStyle: true, padding: 20 }
                     }
                 },
                 cutout: '70%'
@@ -197,17 +183,13 @@ document.addEventListener('DOMContentLoaded', function() {
     function atualizarTabela(entradas) {
         const tbody = document.querySelector('.tabela-wrapper tbody');
         if (!tbody) return;
-
-        // Limpar tabela
         tbody.innerHTML = '';
 
-        // Mensagem para dados vazios
         if (!entradas || entradas.length === 0) {
             tbody.innerHTML = '<tr><td colspan="5" class="no-data">Nenhuma entrada encontrada para os filtros selecionados</td></tr>';
             return;
         }
 
-        // Popular tabela com novos dados
         entradas.forEach(e => {
             const tr = document.createElement('tr');
             tr.innerHTML = `
@@ -221,7 +203,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Evento de submit do formulário
+    // Submit filtros
     const filtrosForm = document.getElementById('filtros-entradas');
     if (filtrosForm) {
         filtrosForm.addEventListener('submit', function(e) {
@@ -230,6 +212,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Buscar dados iniciais ao carregar a página
+    // Carrega dados iniciais
     buscarDados();
 });

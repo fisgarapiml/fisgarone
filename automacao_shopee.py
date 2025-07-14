@@ -12,6 +12,31 @@ from datetime import datetime, timedelta, timezone
 from dotenv import load_dotenv
 from pyshopee2 import Client
 
+def data_br_safe(val):
+    """
+    Recebe string, timestamp ou datetime e retorna sempre DD/MM/YYYY.
+    Se não der parse, retorna string vazia.
+    """
+    if not val:
+        return ""
+    if isinstance(val, datetime):
+        return val.strftime("%d/%m/%Y")
+    if isinstance(val, (int, float)):
+        # Trata timestamps (epoch)
+        try:
+            return datetime.fromtimestamp(val, timezone.utc).strftime("%d/%m/%Y")
+        except Exception:
+            return ""
+    if isinstance(val, str):
+        val = val.strip()[:10]
+        for fmt in ("%Y-%m-%d", "%d-%m-%Y", "%d/%m/%Y", "%Y/%m/%d"):
+            try:
+                return datetime.strptime(val, fmt).strftime("%d/%m/%Y")
+            except Exception:
+                continue
+    return ""
+
+
 # === CONFIGURAÇÕES ===
 DB_PATH = r"C:\fisgarone\fisgarone.db"
 ENV_PATH = r"C:\fisgarone\.env"
@@ -67,14 +92,20 @@ def atualizar_entradas_financeiras(cursor):
         FROM repasses_shopee
     """)
 
+    # Atualize na função atualizar_entradas_financeiras(cursor)
     for row in cursor.fetchall():
         try:
             valor_total = float(row[3]) if row[3] else 0
             comissoes = float(row[4]) if row[4] else 0
             taxas = float(row[5]) if row[5] else 0
             frete = float(row[6]) if row[6] else 0
-            valor_liquido = valor_total - (comissoes + taxas + frete)
+            valor_liquido = float(row[3] or 0) - float(row[4] or 0) - float(row[5] or 0)
             origem_conta = traduzir_valores("Conta", row[8]) if row[8] else 'Desconhecido'
+
+            # *** ADICIONE AQUI para forçar o formato ***
+            data_venda_br = data_br_safe(row[1])
+            data_liberacao_br = data_br_safe(row[2])
+
             cursor.execute("""
                 INSERT OR REPLACE INTO entradas_financeiras 
                 (tipo, pedido_id, data_venda, data_liberacao, 
@@ -94,8 +125,8 @@ def atualizar_entradas_financeiras(cursor):
             """, (
                 'shopee',
                 row[0],
-                row[1],
-                row[2],
+                data_venda_br,  # <-- AQUI
+                data_liberacao_br,  # <-- E AQUI
                 valor_total,
                 valor_liquido,
                 comissoes,
@@ -107,6 +138,7 @@ def atualizar_entradas_financeiras(cursor):
             print(f"✓ Shopee: Pedido {row[0]} (Líquido: R${valor_liquido:.2f})", end='\r')
         except Exception as e:
             print(f"\n✗ Erro no pedido {row[0]}: {str(e)}")
+
 
 def get_env_variable(account_type, var_type):
     var_map = {
@@ -558,5 +590,52 @@ def main():
     processar_repasses_shopee()
     print("=== FINALIZADO ===")
 
+def padronizar_datas_vendas_shopee():
+        from datetime import datetime
+        import sqlite3
+
+        print("[PADRÃO BR] Padronizando datas da tabela vendas_shopee...")
+        try:
+            with sqlite3.connect(DB_PATH) as conn:
+                conn.row_factory = sqlite3.Row
+                cursor = conn.cursor()
+
+                cursor.execute("SELECT rowid, DATA, DATA_ENTREGA FROM vendas_shopee")
+                registros = cursor.fetchall()
+
+                for row in registros:
+                    rowid = row['rowid']
+                    data_formatada = ""
+                    data_entrega_formatada = ""
+
+                    try:
+                        if row['DATA']:
+                            data_formatada = datetime.fromisoformat(row['DATA']).strftime('%d/%m/%Y')
+                    except:
+                        pass
+
+                    try:
+                        if row['DATA_ENTREGA']:
+                            data_entrega_formatada = datetime.fromisoformat(row['DATA_ENTREGA']).strftime('%d/%m/%Y')
+                    except:
+                        pass
+
+                    cursor.execute("""
+                        UPDATE vendas_shopee SET
+                            DATA = ?, 
+                            DATA_ENTREGA = ?
+                        WHERE rowid = ?
+                    """, (data_formatada, data_entrega_formatada, rowid))
+
+                conn.commit()
+                print(f"✓ Datas padronizadas com sucesso: {len(registros)} registros atualizados")
+
+        except Exception as e:
+            print(f"✗ Erro ao padronizar datas: {str(e)}")
+            raise
+
+
 if __name__ == "__main__":
     main()
+    padronizar_datas_vendas_shopee()
+

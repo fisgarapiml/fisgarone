@@ -24,6 +24,20 @@ load_dotenv(dotenv_path=ENV_PATH, override=True)
 # Blueprint Flask
 importador_automatico_bp = Blueprint('importador_automatico_bp', __name__)
 
+def data_br_safe(val):
+    """Garante string data em formato brasileiro DD/MM/YYYY ou vazio."""
+    from datetime import datetime
+    if not val or not isinstance(val, str):
+        return ""
+    for fmt in ("%Y-%m-%d", "%Y/%m/%d", "%Y-%m-%d %H:%M:%S", "%d/%m/%Y", "%d-%m-%Y"):
+        try:
+            d = datetime.strptime(val[:10], fmt)
+            return d.strftime("%d/%m/%Y")
+        except Exception:
+            continue
+    return val if "/" in val else ""
+
+
 # --- Funções Auxiliares ---
 def traduzir_valores(coluna: str, valor: Any) -> Any:
     """Traduz valores específicos de colunas para PT-BR com tratamento para tipos numéricos."""
@@ -392,17 +406,17 @@ async def process_order_item(item: Dict[str, Any],
             "Taxa Fixa ML": round(taxa_fixa_ml, 2),
             "Comissoes": round(comissoes, 2),
             "Comissao (%)": comissao_percent,
-            "Preço Custo ML": round(preco_custo_ml, 2),
+            "Preço Custo ML": round(preco_custo_ml, 0),
             "Custo Total Calculado": round(custo_total_calculado, 2),
             "Aliquota (%)": aliquota_percent,
             "Imposto R$": round(imposto_r, 2),
             "Frete Comprador": round(frete_comprador, 2),
             "Frete Seller": round(frete_seller, 2),
             "Custo Operacional": round(custo_operacional, 2),
-            "Total Custo Operacional": round(total_custo_operacional, 2),
-            "MC Total": round(mc_total, 2),
-            "Custo Fixo": round(custo_fixo, 2),
-            "Lucro Real": round(lucro_real, 2),
+            "Total Custo Operacional": round(total_custo_operacional, 0),
+            "MC Total": round(mc_total, 0),
+            "Custo Fixo": round(custo_fixo, 0),
+            "Lucro Real": round(lucro_real, 0),
             "Lucro Real %": lucro_real_percent
         }
 
@@ -579,18 +593,147 @@ def atualizar_traducoes_existentes() -> None:
         conn.commit()
 
 
+from datetime import datetime
+
 def format_date_to_br(data_str):
-    """Converte data para formato DD/MM/YYYY"""
-    if not data_str:
-        return None
+    """Força data em qualquer formato para DD/MM/YYYY. Retorna vazio se não der parse."""
+    if not data_str or not isinstance(data_str, str):
+        return ""
+    for fmt in ("%Y-%m-%d", "%d-%m-%Y", "%d/%m/%Y", "%Y/%m/%d", "%Y-%m-%d %H:%M:%S"):
+        try:
+            d = datetime.strptime(data_str[:10], fmt)
+            return d.strftime("%d/%m/%Y")
+        except Exception:
+            continue
+    # Se for datetime completo, tenta extrair só a parte da data:
     try:
-        if '-' in data_str:
-            parts = data_str.split('-')
-            if len(parts) == 3:
-                return f"{parts[2]}/{parts[1]}/{parts[0]}"
-        return data_str
-    except:
-        return data_str
+        d = datetime.fromisoformat(data_str[:10])
+        return d.strftime("%d/%m/%Y")
+    except Exception:
+        pass
+    return ""
+
+# EXEMPLOS:
+print(format_date_to_br("2024-07-02"))       # 02/07/2024
+print(format_date_to_br("2024/07/02"))       # 02/07/2024
+print(format_date_to_br("02/07/2024"))       # 02/07/2024
+print(format_date_to_br("02-07-2024"))       # 02/07/2024
+print(format_date_to_br("2024-07-02 10:00:00")) # 02/07/2024
+print(format_date_to_br(None))               # ''
+print(format_date_to_br(""))                 # ''
+
+
+def atualizar_preco_custo_ml():
+    """
+    Executa uma sequência de cálculos na tabela vendas_ml para atualizar todos os
+    campos financeiros de forma correta e sequencial.
+    """
+    print("\n[PASSO 2] Atualizando cálculos financeiros em vendas_ml...")
+    try:
+        with sqlite3.connect(DB_PATH) as conn:
+            cursor = conn.cursor()
+
+            # 1. PREÇO CUSTO ML: Custo da tabela 'custos_ml' x quantidade da venda.
+            cursor.execute("""
+                UPDATE vendas_ml
+                SET "Preço Custo ML" = (
+                    SELECT COALESCE(c.Custo, 0) * COALESCE(vendas_ml.Quantidade, 0)
+                    FROM custos_ml c
+                    WHERE UPPER(c.MLB) = UPPER(vendas_ml.MLB)
+                )
+                WHERE EXISTS (
+                    SELECT 1 FROM custos_ml c2 WHERE UPPER(c2.MLB) = UPPER(vendas_ml.MLB)
+                )
+            """)
+
+            # 2. ALÍQUOTAS (%): Define a alíquota de imposto baseada na conta.
+            for conta, aliquota in {
+                'COMERCIAL': 7.06, 'PESCA': 5.54, 'SHOP': 10.03, 'CAMPING': 4.00, 'TOYS': 9.27
+            }.items():
+                cursor.execute("""
+                    UPDATE vendas_ml SET "Aliquota (%)" = ? WHERE UPPER(Conta) = ?
+                """, (aliquota, conta.upper()))
+
+            # 3. IMPOSTO R$: Calcula o valor do imposto.
+            cursor.execute("""
+                UPDATE vendas_ml
+                SET "Imposto R$" = ROUND(
+                    COALESCE("Preco Unitario", 0) * COALESCE(Quantidade, 0) * COALESCE("Aliquota (%)", 0) / 100, 2
+                )
+            """)
+
+            # 4. FRETES: Divide o custo do frete entre Seller e Comprador baseado no preço.
+            cursor.execute("""
+                UPDATE vendas_ml
+                SET
+                    "Frete Seller" = CASE
+                        WHEN COALESCE("Preco Unitario", 0) >= 79 THEN COALESCE("Custo Lista Frete", 0)
+                        ELSE 0
+                    END,
+                    "Frete Comprador" = CASE
+                        WHEN COALESCE("Preco Unitario", 0) < 79 THEN COALESCE("Custo Total Frete", 0)
+                        ELSE 0
+                    END
+            """)
+
+            # 5. CUSTO OPERACIONAL: Calcula um custo operacional percentual.
+            cursor.execute("""
+                UPDATE vendas_ml
+                SET "Custo Operacional" = ROUND(
+                    COALESCE("Preco Unitario", 0) * COALESCE(Quantidade, 0) * 0.04, 2
+                )
+            """)
+
+            # 6. TOTAL CUSTO OPERACIONAL: Soma todos os custos variáveis.
+            cursor.execute("""
+                UPDATE vendas_ml
+                SET "Total Custo Operacional" =
+                    COALESCE("Preço Custo ML", 0) +
+                    COALESCE("Imposto R$", 0) +
+                    COALESCE("Custo Operacional", 0) +
+                    COALESCE("Comissoes", 0) +
+                    COALESCE("Taxa Fixa ML", 0) +
+                    COALESCE("Frete Seller", 0)
+            """)
+
+            # 7. CÁLCULOS FINAIS: Margem de Contribuição, Custo Fixo e Lucro Real.
+            # Esta é a etapa crucial que corrige o erro.
+            cursor.execute("""
+                UPDATE vendas_ml
+                SET
+                    "MC Total" = ROUND(
+                        (COALESCE("Preco Unitario", 0) * COALESCE(Quantidade, 0)) - COALESCE("Total Custo Operacional", 0), 2
+                    ),
+                    "Custo Fixo" = ROUND(
+                        (COALESCE("Preco Unitario", 0) * COALESCE(Quantidade, 0)) * 0.13, 2
+                    )
+            """)
+
+            # Agora, com "MC Total" e "Custo Fixo" já salvos, calculamos o Lucro Real.
+            cursor.execute("""
+                UPDATE vendas_ml
+                SET
+                    "Lucro Real" = ROUND(COALESCE("MC Total", 0) - COALESCE("Custo Fixo", 0), 2)
+            """)
+
+            # Finalmente, calculamos a porcentagem do Lucro Real.
+            cursor.execute("""
+                UPDATE vendas_ml
+                SET
+                    "Lucro Real %" = CASE
+                        WHEN (COALESCE("Preco Unitario", 0) * COALESCE(Quantidade, 0)) > 0 THEN
+                            ROUND((COALESCE("Lucro Real", 0) / (COALESCE("Preco Unitario", 0) * COALESCE(Quantidade, 0))) * 100, 2)
+                        ELSE 0
+                    END
+            """)
+
+            conn.commit()
+            print("✅ Todos os cálculos foram atualizados com sucesso em vendas_ml.")
+
+    except sqlite3.Error as e:
+        print(f"✗ Erro ao atualizar cálculos no banco de dados: {e}")
+        # Você pode querer relançar a exceção se este for um erro crítico
+        # raise e
 
 
 def migrar_para_repasses_ml():
@@ -605,21 +748,22 @@ def migrar_para_repasses_ml():
             # Inserir dados usando os nomes exatos das colunas
             cursor.execute('''
                 INSERT INTO repasses_ml (
-                    "ID Pedido", "Preco Unitario", "Data da Venda", "Quantidade",
-                    "Tipo Logistica", "Taxa Fixa ML", "Comissoes", "Frete Seller",
-                    "Data Liberacao"
-                )
-                SELECT
-                    "ID Pedido",
-                    "Preco Unitario",
-                    "Data da Venda",
-                    "Quantidade",
-                    "Tipo Logistica",
-                    "Taxa Fixa ML",
-                    "Comissoes",
-                    CASE WHEN "Preco Unitario" >= 79 THEN "Frete Seller" ELSE 0 END,
-                    "Data Liberacao"
-                FROM vendas_ml
+    "ID Pedido", "Preco Unitario", "Data da Venda", "Quantidade",
+    "Tipo Logistica", "Taxa Fixa ML", "Comissoes", "Frete Seller",
+    "Data Liberacao", "Conta"
+)
+SELECT
+    "ID Pedido",
+    "Preco Unitario",
+    "Data da Venda",
+    "Quantidade",
+    "Tipo Logistica",
+    "Taxa Fixa ML",
+    "Comissoes",
+    CASE WHEN "Preco Unitario" >= 79 THEN "Custo Lista Frete" ELSE 0 END,
+    "Data Liberacao",
+    "Conta"
+FROM vendas_ml
                 WHERE "ID Pedido" IS NOT NULL
             ''')
             conn.commit()
@@ -688,29 +832,34 @@ def atualizar_data_repasse_ml():
 
 
 def atualizar_entradas_financeiras_ml():
-    """ATENÇÃO: Esta é a versão renomeada de popular_entradas_de_vendas_ml()"""
-    print("\n[PASSO 4] Atualizando entradas financeiras...")
+    """
+    Alimenta entradas_financeiras usando sempre DATA_REPASSE de repasses_ml como data_liberacao.
+    'origem_conta' será preenchido com o valor da coluna 'Conta' da tabela repasses_ml.
+    """
+    print("\n[PASSO 4] Atualizando entradas financeiras (ML)...")
     try:
         with sqlite3.connect(DB_PATH) as conn:
             conn.row_factory = sqlite3.Row
             cursor = conn.cursor()
 
-            # Verificar se existem vendas para processar
+            # Seleciona os pedidos do ML que ainda não estão em entradas_financeiras
             cursor.execute("""
                 SELECT 
-                    v."ID Pedido" as pedido_id, 
-                    v."Data da Venda" as data_venda, 
-                    v."Preco Unitario" as valor_bruto, 
-                    v."Comissoes" as comissao, 
-                    v."Taxa Fixa ML" as taxas,
-                    r."DATA_REPASSE" as data_repasse,
-                    v."Frete Seller" as frete
-                FROM vendas_ml v
-                LEFT JOIN repasses_ml r ON v."ID Pedido" = r."ID Pedido"
-                WHERE NOT EXISTS (
-                    SELECT 1 FROM entradas_financeiras e 
-                    WHERE e.pedido_id = v."ID Pedido" AND e.tipo = 'ml'
-                )
+    v."ID Pedido" AS pedido_id, 
+    v."Preco Unitario" AS valor_bruto, 
+    v."Comissoes" AS comissao, 
+    v."Taxa Fixa ML" AS taxas,
+    v."Frete Seller" AS frete,
+    r."DATA_REPASSE" AS data_repasse,
+    r."Conta" AS conta,
+    r."Valor do Repasse" AS valor_liquido  -- ✅ Correto: esta é a origem de valor_liquido
+FROM vendas_ml v
+LEFT JOIN repasses_ml r ON v."ID Pedido" = r."ID Pedido"
+WHERE NOT EXISTS (
+    SELECT 1 FROM entradas_financeiras e 
+    WHERE e.pedido_id = v."ID Pedido" AND e.tipo = 'ml'
+)
+
             """)
             vendas = cursor.fetchall()
 
@@ -718,36 +867,33 @@ def atualizar_entradas_financeiras_ml():
                 print("✓ Nenhuma nova venda do ML para processar")
                 return
 
-            # Inserir na tabela entradas_financeiras
             for venda in vendas:
-                valor_liquido = float(venda['valor_bruto'] or 0) - float(venda['comissao'] or 0) - float(
-                    venda['taxas'] or 0)
-
+                valor_liquido = float(venda['valor_liquido'] or 0)
                 cursor.execute("""
                     INSERT INTO entradas_financeiras (
-                        tipo, pedido_id, data_venda, data_liberacao,
+                        tipo, pedido_id, data_liberacao,
                         valor_total, valor_liquido, 
-                        comissoes, taxas, frete, status
+                        comissoes, taxas, frete, status, origem_conta
                     ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """, (
                     'ml',
                     venda['pedido_id'],
-                    venda['data_venda'],
                     venda['data_repasse'],
                     venda['valor_bruto'],
                     valor_liquido,
                     venda['comissao'],
                     venda['taxas'],
                     venda['frete'],
-                    'COMPLETED' if venda['data_repasse'] else 'PENDING'
+                    'COMPLETED' if venda['data_repasse'] else 'PENDING',
+                    venda['conta'],  # ← Agora corretamente gravado em origem_conta
                 ))
-
             conn.commit()
-            print(f"✓ Processadas {len(vendas)} vendas do Mercado Livre")
+            print(f"✓ Processadas {len(vendas)} vendas do Mercado Livre (data_liberacao = DATA_REPASSE)")
 
     except Exception as e:
         print(f"✗ Erro ao processar vendas do ML: {str(e)}")
         raise
+
 
 async def process_account(account: Dict[str, Any], session: aiohttp.ClientSession) -> None:
     """Processa uma conta individual com tratamento de token."""
@@ -840,6 +986,29 @@ async def pipeline_completo() -> None:
 
     print("=== PROCESSAMENTO CONCLUÍDO COM SUCESSO ===")
 
+def padronizar_datas_banco():
+        import sqlite3
+        with sqlite3.connect(DB_PATH) as conn:
+            cursor = conn.cursor()
+            for tabela, campo in [
+                ("vendas_ml", "Data da Venda"),
+                ("vendas_ml", "Data Liberacao"),
+                ("repasses_ml", "Data da Venda"),
+                ("repasses_ml", "Data Liberacao"),
+                ("repasses_ml", "DATA_REPASSE"),
+                ("entradas_financeiras", "data_venda"),
+                ("entradas_financeiras", "data_liberacao"),
+                ("entradas_financeiras", "data_repasse"),
+            ]:
+                cursor.execute(f"SELECT rowid, \"{campo}\" FROM {tabela}")
+                for rowid, valor in cursor.fetchall():
+                    novo = data_br_safe(valor)
+                    cursor.execute(f"UPDATE {tabela} SET \"{campo}\" = ? WHERE rowid = ?", (novo, rowid))
+            conn.commit()
+
+
 # --- Ponto de Entrada ---
 if __name__ == "__main__":
     asyncio.run(pipeline_completo())
+    atualizar_preco_custo_ml()
+    padronizar_datas_banco()
